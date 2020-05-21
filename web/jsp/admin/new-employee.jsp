@@ -122,32 +122,32 @@
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
                         <option selected disabled value="">Choose...</option>
-                        <option>Italy</option>
+                        <option>ITALY</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="Region">Region</label>
                     <select class="custom-select" name="region" id="Region" required>
                         <option selected disabled value="">Choose...</option>
-                        <option>Abruzzo</option>
-                        <option>Basilicata</option>
-                        <option>Calabria</option>
-                        <option>Emilia-Romagna</option>
-                        <option>Friuli-Venezia-Giulia</option>
-                        <option>Lazio</option>
-                        <option>Liguria</option>
-                        <option>Lombardia</option>
-                        <option>Marche</option>
-                        <option>Molise</option>
-                        <option>Piemonte</option>
-                        <option>Puglia</option>
-                        <option>Sardegna</option>
-                        <option>Sicilia</option>
-                        <option>Toscana</option>
-                        <option>Trentino-Alto-Adige</option>
-                        <option>Umbria</option>
-                        <option>Valle d'Aosta</option>
-                        <option>Veneto</option>
+                        <option>ABRUZZO</option>
+                        <option>BASILICATA</option>
+                        <option>CALABRIA</option>
+                        <option>EMILIA-ROMAGNA</option>
+                        <option>FRIULI-VENEZIA-GIULIA</option>
+                        <option>LAZIO</option>
+                        <option>LIGURIA</option>
+                        <option>LOMBARDIA</option>
+                        <option>MARCHE</option>
+                        <option>MOLISE</option>
+                        <option>PIEMONTE</option>
+                        <option>PUGLIA</option>
+                        <option>SARDEGNA</option>
+                        <option>SICILIA</option>
+                        <option>TOSCANA</option>
+                        <option>TRENTINO-ALTO-ADIGE</option>
+                        <option>UMBRIA</option>
+                        <option>VALLE D'AOSTA</option>
+                        <option>VENETO</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
