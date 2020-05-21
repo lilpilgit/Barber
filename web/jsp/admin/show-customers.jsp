@@ -1,8 +1,28 @@
-<%@ page import="model.dao.StructureDAO" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.dao.DAOFactory" %>
+<%@ page import="model.mo.Customer" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    /* Prendo l'ArrayList<Customer> di tutti gli impiegati */
+    boolean areCustomers = false;
+    ArrayList<Customer> customers = (ArrayList<Customer>) request.getAttribute("customers");
+    if (customers != null && customers.size() != 0)
+        areCustomers = true;
+
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo cliente è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di cancellazione/modifica ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+
 
 %>
 <!doctype html>
@@ -39,9 +59,11 @@
     <main class="page-content">
         <div class="row justify-content-center">
             <div class="col-auto">
+                <%if (areCustomers) {%>
                 <table class="table-bordered">
                     <thead>
                     <tr>
+                        <th scope="col">N°</th>
                         <th scope="col">Id</th>
                         <th scope="col">Email</th>
                         <th scope="col">Address</th>
@@ -52,30 +74,50 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <%
+                        int i = 1; /* contatore per il numero di impiegati */
+
+                        for (Customer c : customers) {
+                    %>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Pinco@pallino.com</td>
-                        <td>Italy,Piemonte,Torino,Via Degli Aranci,3</td>
-                        <td>Cristina</td>
-                        <td>2.846</td>
-                        <td>Ciao</td>
+                        <th scope="row"><%=i%>
+                        </th>
+                        <td><%=c.getId()%>
+                        </td>
+                        <td><%=c.getUser().getEmail()%>
+                        </td>
+                        <td><%=c.getUser().getAddress()%>
+                        </td>
+                        <td><%=c.getUser().getPhone()%>
+                        </td>
+                        <td><%=c.getNumBookedReservations()%>
+                        </td>
+                        <td><%=c.getNumOrderedProduct()%>
+                        </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: red;" > <i class="fas fa-ban"></i></button>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i></button>
                             <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
+                    <%}%>
                     </tbody>
                 </table>
+                <%} else {%>
+                <h1>Non ci sono dipendenti mi disp...</h1>
+                <%}%>
             </div>
         </div>
     </main>
 </div>
 
-
 <script>
     function onLoadFunctionalities() {
         /* TODO impostare il pulsante Customers su hover in modo da fare l'highlight*/
+
+        <%if(resultPresent){%>
+        showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
+        <%}%>
     }
 
     window.addEventListener('load', onLoadFunctionalities);
