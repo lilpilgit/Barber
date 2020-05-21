@@ -6,7 +6,6 @@ import services.config.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 public class MySQLJDBCDAOFactory extends DAOFactory {
 
@@ -66,6 +65,11 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
     @Override
     public EmployeeDAO getEmployeeDAO() {
         return new EmployeeDAOMySQLJDBCImpl(connection);
+    }
+
+    @Override
+    public CustomerDAO getCustomerDAO() {
+        return new CustomerDAOMySQLJDBCImp(connection);
     }
 
     @Override

@@ -24,6 +24,8 @@ public abstract class DAOFactory {
 
     public abstract EmployeeDAO getEmployeeDAO();
 
+    public abstract CustomerDAO getCustomerDAO();
+
     public abstract StructureDAO getStructureDAO();
 
     public abstract UserDAO getUserDAO();
