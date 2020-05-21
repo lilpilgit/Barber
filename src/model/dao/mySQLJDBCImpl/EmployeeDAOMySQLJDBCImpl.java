@@ -337,6 +337,12 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
             throw new RuntimeException(e);
         }
         try {
+            employee.getUser().setEmail(rs.getString("EMAIL")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setEmail(rs.getString(\"EMAIL\"));");
+            throw new RuntimeException(e);
+        }
+        try {
             employee.getUser().setPassword(rs.getString("PASSWORD")); /*  COLONNA DELLA TABELLA USER */
         } catch (SQLException e) {
             System.err.println("Errore nella employee.getUser().setPassword(rs.getString(\"PASSWORD\"));");
