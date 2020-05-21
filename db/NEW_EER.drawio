@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-05-20T12:05:12.642Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/81.0.4044.138 Chrome/81.0.4044.138 Safari/537.36" etag="aRzrNEZJ2uQaoVjVB1vG" version="13.1.3" type="github">
+<mxfile host="app.diagrams.net" modified="2020-05-21T14:35:42.645Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/81.0.4044.138 Chrome/81.0.4044.138 Safari/537.36" etag="cOePpLLqSw5JnpKB7IAO" version="13.1.3" type="github">
   <diagram id="pIivQVcWycitdcD2H4Fz" name="Page-1">
-    <mxGraphModel dx="852" dy="590" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="3" pageWidth="827" pageHeight="1169" math="0" shadow="0" extFonts="Quicksand^https://fonts.googleapis.com/css?family=Quicksand|Gruppo^https://fonts.googleapis.com/css?family=Gruppo|Pompiere^https://fonts.googleapis.com/css?family=Pompiere">
+    <mxGraphModel dx="782" dy="708" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="3" pageWidth="827" pageHeight="1169" math="0" shadow="0" extFonts="Quicksand^https://fonts.googleapis.com/css?family=Quicksand|Gruppo^https://fonts.googleapis.com/css?family=Gruppo|Pompiere^https://fonts.googleapis.com/css?family=Pompiere">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -629,7 +629,7 @@
         </mxCell>
         <mxCell id="pAP4_yveE0BskdrrooYN-21" value="N" style="resizable=0;html=1;align=right;verticalAlign=top;" parent="pAP4_yveE0BskdrrooYN-20" connectable="0" vertex="1">
           <mxGeometry x="1" relative="1" as="geometry">
-            <mxPoint x="-7" y="19.5" as="offset" />
+            <mxPoint y="-20.5" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="pAP4_yveE0BskdrrooYN-22" value="IN_WISHLIST" style="rhombus;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">

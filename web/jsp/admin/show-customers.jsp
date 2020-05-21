@@ -38,16 +38,6 @@
     <!--Main content of the page-->
     <main class="page-content">
 
-
-
-
-
-
-
-
-
-
-
                     <table class="table-bordered">
                         <thead>
                         <tr>
@@ -76,19 +66,6 @@
                         </tr>
                         </tbody>
                     </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     </main>
