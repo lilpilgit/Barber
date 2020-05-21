@@ -14,7 +14,7 @@
             success = true;
         }
     }
-    /* Prendo il parametro "structure" che mi permette di settare il value dell'input hidden con name="structure" */
+    /* Prendo il parametro "structure" che mi permette di settare il value dell'input field readonly con name="structure" */
     Structure structure = null;
     boolean structurePresent = false;
     if(request.getAttribute("structure") != null){
@@ -63,7 +63,7 @@
                 <div class="text-center">
                     <label for="Structure">You are entering a new employee for the structure:</label>
                     <input type="text" id="Structure"
-                           value="<%="ID:{" + structure.getId() + "}_" + structure.getName()%>" readonly>
+                           value="<%="ID:{" + structure.getId() + "}  " + structure.getName()%>" readonly>
                 </div><%}%>
             </div>
             <div class="form-row">

@@ -3,10 +3,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     /* Prendo l'ArrayList<Employee> di tutti gli impiegati */
-    boolean noEmployees = true;
+    boolean areEmployees = false;
     ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
     if (employees != null && employees.size() != 0)
-        noEmployees = false;
+        areEmployees = true;
 %>
 <!doctype html>
 <html lang="en">
@@ -49,7 +49,7 @@
                 </form>
             </div>
         </nav>
-        <%if (noEmployees) {%>
+        <%if (areEmployees) {%>
         <table class="table-bordered">
             <thead>
             <tr>

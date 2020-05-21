@@ -233,9 +233,7 @@ public class Staff {
         structureDAO = daoFactory.getStructureDAO();
 
         /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
-/*
         structure = structureDAO.fetchStructure();
-*/
 
         /* Scarico dal DB l'intera lista dei dipendenti */
         employees = employeeDAO.fetchAll();
@@ -256,6 +254,7 @@ public class Staff {
         /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
 
         request.setAttribute("employees", employees);
+        request.setAttribute("structure", structure);
         request.setAttribute("viewUrl", "admin/show-employees");
 
 
