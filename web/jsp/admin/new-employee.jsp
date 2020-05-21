@@ -109,7 +109,12 @@
                            required>
                 </div>
             </div>
+
             <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="City">City</label>
+                    <input type="text" class="form-control" name="city" id="City" required>
+                </div>
                 <div class="col-md-4 mb-3">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
@@ -146,10 +151,6 @@
             </div>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required>
-                </div>
-                <div class="col-md-4 mb-3">
                     <label for="Address">Address</label>
                     <input type="text" class="form-control" name="address" id="Address" required>
                 </div>
@@ -157,6 +158,12 @@
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number">
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label for="More-address-info">+ Address Info</label>
+                    <input type="text" class="form-control" name="house_number" id="More-address-info">
+                </div>
+
+
             </div>
             <button type="submit" id="submit_new_employee" class="btn btn-primary" name="submit"
                     value="add_new_employee">Add new Employee
