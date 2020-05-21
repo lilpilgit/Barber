@@ -25,16 +25,32 @@ public class Staff {
         /**
          * Set viewUrl to the JSP <new-employee> to show the data entry form of the new employee.
          * */
-/*        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
-        StructureDAO structureDAO = daoFactory.getStructureDAO();*/
-/*
-        request.setAttribute("viewUrl", "admin/new-employee");
-*/
-        request.setAttribute("viewUrl", "admin/prova");
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Staff.addEmployee ==> daoFactory.beginTransaction();");
+        }
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = structureDAO.fetchStructure();
 
-/*
-        request.setAttribute("structure", structureDAO.fetchStructure());
-*/
+        try {
+            /* committo la transazione */
+            daoFactory.commitTransaction();
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT DELLA TRANSAZIONE");
+        } finally {
+            /*  chiudo la transazione */
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+        }
+
+        /* Setto gli attributi della request */
+        request.setAttribute("viewUrl", "admin/new-employee"); /* bisogna visualizzare new-employee.jsp */
+
+        request.setAttribute("structure", structure);
     }
 
     public static void addEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {

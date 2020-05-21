@@ -1,0 +1,832 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Ubuntu', sans-serif;
+    color: #222;
+}
+
+
+
+.button {
+    border-radius: 12px !important;
+    color: black;
+    align-content: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 6px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    opacity: 85%;
+    padding-top: 8px;
+}
+
+.myrounded {
+    border-radius: 40px;
+}
+
+.button1 {
+    background-color: white;
+}
+
+.button1:hover {
+    background-color: rgb(201, 197, 126);
+    color: darkred;
+    border-radius: 20px !important;
+    border: 2px solid black;
+}
+
+.button2 {
+    background-color: rgb(201, 197, 126);
+    text-decoration: none !important;
+    border-radius: 20px;
+    font-size: 30px;
+    border: 2px solid black;
+    padding: 4px 8px 4px 8px;
+}
+
+.button2:hover {
+    background-color: rgb(201, 197, 126);
+    border-radius: 25px !important;
+}
+
+.active2 {
+    background-color: rgb(201, 197, 126);
+    color: black !important;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+.active3 {
+    background-color: rgb(201, 197, 126);
+    border-radius: 5px;
+}
+
+.navbar {
+    height: auto;
+    background-color: white;
+    border-bottom: 2px solid black;
+}
+
+.login {
+    padding: 2px 0 2px 6px;
+    margin-top: auto;
+    margin-right: 8px;
+    color: rgb(201, 197, 126);
+    font-size: 2.3em;
+}
+
+.basket {
+    padding: 2px 10px 2px 6px;
+    margin: auto;
+    color: rgb(201, 197, 126);
+    font-size: 2.2em;
+}
+
+
+.navbar-nav a:hover {
+    text-decoration: none;
+    color: #000000;
+}
+
+.navbar-brand img {
+    max-height: 65px;
+    margin-left: auto;
+    padding-top: 0;
+    opacity: 85%;
+}
+
+.nav-link {
+    font-size: 1.2em !important;
+}
+
+.collapse {
+    background-color: white;
+    transition: none;
+}
+
+.fixit {
+    margin: auto;
+    overflow: auto;
+    text-align: left;
+    width: 75%;
+}
+
+.carousel-height {
+    text-align: center;
+    margin: auto;
+    height: auto;
+}
+
+.carousel-inner img {
+    size: auto;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-caption p {
+    font-size: 150%;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 10px #000;
+}
+
+.padding {
+    padding-bottom: 2rem;
+}
+
+.welcome {
+    width: 75%;
+    margin: 0 auto;
+    padding-top: 2rem;
+}
+
+.welcome hr {
+    border-top: 2px solid #b4b4b4;
+    width: 95%;
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+}
+
+.welcome p {
+    text-align: center;
+}
+
+.profile-img {
+    max-height: 160px;
+    float: right;
+    padding-left: 10px;
+}
+
+.prova {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.fast {
+    color: #e54d26;
+    opacity: 80%;
+}
+
+.cheap {
+    color: #563d7c;
+    opacity: 80%;
+}
+
+.love {
+    padding-top: 15px;
+    color: #2163af;
+    opacity: 80%;
+}
+
+.fa-code, .fa-bold, .fa-css3 {
+    font-size: 4em;
+    margin: 1rem;
+}
+
+.fun {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.gif {
+    max-width: 100%;
+}
+
+.fa-facebook {
+    color: #3b5998;
+}
+
+.fa-twitter {
+    color: #00aced;
+}
+
+.fa-google-plus-g {
+    color: #dd4b39;
+}
+
+.fa-youtube {
+    color: #bb0000;
+}
+
+.fa-instagram {
+    color: #517fa4;
+}
+
+.fa-facebook:hover,
+.fa-twitter:hover,
+.fa-google-plus-g:hover,
+.fa-youtube:hover,
+.fa-instagram:hover {
+    color: #d5d5d5;
+}
+
+.social a {
+    font-size: 2.5em;
+    padding: 4.5px;
+}
+
+footer {
+    background-color: #3f3f3f;
+    color: #d5d5d5;
+    border-top: 2px solid black;
+}
+
+footer img {
+    height: 4.8rem;
+}
+
+footer p {
+    font-size: 0.8em;
+}
+
+hr.light {
+    border-top: 1px solid #d5d5d5;
+    width: 75%;
+    margin-top: .8rem;
+    margin-bottom: 1rem;
+}
+
+hr.light-100 {
+    border-top: 1px solid #d5d5d5;
+    width: 100%;
+    margin-top: .8rem;
+    margin-bottom: 1rem;
+}
+
+
+/* ----------------------------------------- flag-icon -------------------------------------------*/
+
+.flag-icon-background {
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+.flag-icon {
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    position: relative;
+    display: inline-block;
+    width: 1.33333333em;
+    line-height: 1em;
+
+}
+
+.flag-icon:before {
+    content: "\00a0";
+}
+
+.flag-icon.flag-icon-squared {
+    width: 1em;
+}
+
+.flag-icon-it {
+    background-image: url(../../img/flag/it.svg);
+    margin-right: 6px;
+}
+
+.flag-icon-gb {
+    background-image: url(../../img/flag/gb.svg);
+    margin-right: 6px;
+}
+
+/* ------------------------------------------------- SHOP PAGE ------------------------------------------------------ */
+
+
+.button3 {
+    background: #ededed linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+    border-radius: 6px;
+    border: 1px solid #d6bcd6;
+    display: block;
+    cursor: pointer;
+    color: #202224;
+    font-size: 18px;
+    padding: 2px 5px 2px 5px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #e1e2ed;
+    height: 31px;
+}
+
+.button3:hover {
+    background: #bab1ba linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+    color: #1e1c18;
+}
+
+.button3:active {
+    position: relative;
+    top: 1px;
+}
+
+.no-products-container {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.no-products-title {
+    font-weight: bold;
+    font-size: 3em;
+    padding: 25px;
+}
+
+.no-products-thumb {
+    vertical-align: middle;
+    height: 120px;
+    width: 120px;
+}
+
+.no-products-container p {
+    margin-top: 30px;
+    font-style: italic;
+}
+
+
+/* ------------------------------------------------- PRODUCT PAGE --------------------------------------------------- */
+
+.card-img-top {
+    width: auto !important;
+    /*height: 300px !important;*/
+}
+
+.tab-content img {
+    width: auto !important;
+/*    height: 700px !important;*/
+}
+
+
+.main {
+    margin-left: 5px;
+}
+
+.counter {
+    height: 38px;
+    width: 60px;
+    border-radius: 0 !important;
+    text-align: center;
+}
+
+.up_count {
+    width: 45px;
+    margin-bottom: 5px;
+    margin-left: 1px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.down_count {
+    width: 45px;
+    margin-bottom: 5px;
+    margin-right: -4px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+img {
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+.preview {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 996px) {
+    .preview {
+        margin-bottom: 20px;
+    }
+}
+
+.preview-pic {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+}
+
+.preview-thumbnail.nav-tabs {
+    border: none;
+    margin-top: 15px;
+}
+
+.preview-thumbnail.nav-tabs li {
+    width: 18%;
+    margin-right: 2.5%;
+}
+
+.preview-thumbnail.nav-tabs li img {
+    max-width: 100%;
+    display: block;
+}
+
+.preview-thumbnail.nav-tabs li a {
+    padding: 0;
+    margin: 0;
+}
+
+.preview-thumbnail.nav-tabs li:last-of-type {
+    margin-right: 0;
+}
+
+.tab-content {
+    overflow: hidden;
+}
+
+.tab-content img {
+    max-width: 100%;
+    max-height: 100%;
+    -webkit-animation-name: opacity;
+    animation-name: opacity;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.tab-content-shop img {
+    max-width: 100%;
+    max-height: 100%;
+    -webkit-animation-name: opacity;
+    animation-name: opacity;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-top: 50px;
+    padding-bottom: 200px;
+    margin: auto;
+}
+
+.card {
+    background: #eee;
+    padding: 3em;
+    line-height: 1.5em;
+    height: 500px;
+}
+
+.card2 {
+    background: #eee;
+    padding: 3em;
+    line-height: 1.5em;
+}
+
+.toBottom {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
+
+@media screen and (min-width: 997px) {
+    .wrapper {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}
+
+.details {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.colors {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+}
+
+.old-price {
+    color: #706b72;
+    text-decoration: line-through;
+    font-size: 1em;
+}
+
+.discounted-price {
+    font-size: 1.4em;
+}
+
+.product-title, .price, .sizes, .colors {
+    text-transform: UPPERCASE;
+    font-weight: bold;
+}
+
+.checked, .price span {
+    color: #ff9f1a;
+}
+
+.product-title, .rating, .product-description, .price, .vote, .sizes {
+    margin-bottom: 15px;
+}
+
+.product-title {
+    margin-top: 0;
+}
+
+.size {
+    margin-right: 10px;
+}
+
+.size:first-of-type {
+    margin-left: 40px;
+}
+
+.color {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    height: 2em;
+    width: 2em;
+    border-radius: 2px;
+}
+
+.color:first-of-type {
+    margin-left: 20px;
+}
+
+.add-to-cart, .like {
+    background: #ff9f1a;
+    padding: 1.2em 1.5em;
+    border: none;
+    text-transform: UPPERCASE;
+    font-weight: bold;
+    color: #fff;
+    -webkit-transition: background .3s ease;
+    transition: background .3s ease;
+}
+
+.add-to-cart:hover, .like:hover {
+    background: #b36800;
+    color: #fff;
+}
+
+.not-available {
+    text-align: center;
+    line-height: 2em;
+}
+
+.not-available:before {
+    content: "\f00d";
+    color: #fff;
+}
+
+.orange {
+    background: #ff9f1a;
+}
+
+.green {
+    background: #85ad00;
+}
+
+.blue {
+    background: #0076ad;
+}
+
+.tooltip-inner {
+    padding: 1.3em;
+}
+
+@-webkit-keyframes opacity {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(3);
+        transform: scale(3);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(3);
+        transform: scale(3);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+/*
+ *  Every hr that's descendent of a div with class="card" add this trick to visualize it
+ *  https://github.com/twbs/bootstrap/issues/23032
+ */
+div[class="card"] hr {
+    margin-left: 0;
+    margin-right: 0
+}
+
+/*Note of error when user select a quantity > of quantity available*/
+.max-qta-reached {
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+}
+
+/******************************************************/
+/*This 2 rules remove arrows/spinners from input type.*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/*******************************************************/
+
+/* ------------------------------------------------- LOGIN ---------------------------------------------------------- */
+
+
+.modal {
+    position: absolute;
+    top: 23%;
+    left: 0;
+    height: auto;
+}
+
+.modal-body {
+    background-color: rgba(201, 197, 126, 0.5);
+    padding: 20px;
+    border-bottom: black solid 2px;
+}
+
+.modal-footer {
+    border-top: 0 !important;
+}
+
+/* ------------------------------------------------- CONTACT PAGE --------------------------------------------------- */
+
+.image-contact {
+    position: relative;
+    padding-top: 20px;
+}
+
+.text {
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 187px;
+    width: 100%;
+    color: rgb(203, 200, 107);
+    font-size: 50px;
+}
+
+.contact-form > h1 {
+    color: #706b72;
+}
+
+.back-form-contact {
+    background-color: rgba(201, 197, 126, 0.7);
+    padding: 2.8rem !important;
+}
+
+.btn-contact-form {
+
+    width: 32%;
+    margin: auto;
+    height: 47px;
+    border: 3px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.my-alert {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+/*------------------------------------------------- Media Queries ----------------------------------------------------*/
+
+/* Use only for fine tuning responsive web site*/
+
+@media (max-width: 992px) {
+    .social a {
+        font-size: 2em;
+        padding: 4px;
+    }
+
+    .carousel-height {
+        text-align: center;
+        margin: auto;
+        height: 500px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        top: 45%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 350%;
+    }
+
+    .display-4 {
+        font-size: 200%;
+    }
+
+    .social a {
+        font-size: 3.2em;
+        padding: 1.2rem;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .carousel-caption {
+        top: 40%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 250%;
+    }
+
+    .carousel-indicators {
+        display: none;
+    }
+
+    .display-4 {
+        font-size: 160%;
+    }
+
+    .social a {
+        font-size: 3.5em;
+        padding: .72rem;
+    }
+
+
+}
+
+/*--- Bootstrap Padding Fix --*/
+[class*="col-"] {
+    padding: 0.8rem;
+}
+
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+<div class="page-wrapper chiller-theme toggled">
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img class="img-responsive img-rounded"
+                         src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                         alt="User picture"/>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">John<strong>Smith</strong></span>
+                    <span class="user-role">Administrator</span>
+                </div>
+            </div>
+
+            <!------------------------------------------ sidebar -------------------------------------------------->
+
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>General</span>
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('Staff.showFormNewEmployee')"
+                                class="button-side" type="button" id='showEmployees'>
+                            <i class="fa fa-gem pr-3"></i>
+                            Staff
+                        </button>
+<!--                        <button onclick="setControllerAction('Staff.showEmployees')"
+                                class="button-side" type="button" id='showEmployees'>
+                            <i class="fa fa-gem pr-3"></i>
+                            Staff
+                        </button>-->
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('Customers.showCustomers')"
+                                class="button-side" type="button" id='showCustomers'>
+                            <i class="fa fa-users pr-3"></i>
+                            Customers
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('Products.showProducts')"
+                                class="button-side" type="button" id='showProducts'>
+                            <i class="fa fa-shopping-cart pr-3"></i>
+                            Products
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('Logistics.showLogistics')"
+                                class="button-side" type="button" id='showLogistics'>
+                            <i class="fas fa-shipping-fast pr-3"></i>
+                            Logistics
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('Structure.showStructures')"
+                                class="button-side" type="button" id='showStructures'>
+                            <i class="fas fa-building pr-3"></i>
+                            Structure
+                        </button>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer button-side-footer">
+            <button onclick="setControllerAction('logout')"
+                    class="button-side-footer" type="button" id='logout'>
+                <i class="fa fa-power-off"></i>
+            </button>
+        </div>
+
+    </nav>
+    <form id="controller" method="post">
+        <input type="hidden" name="controllerAction" value="">
+    </form>
+</div>
+<script>
+    function setControllerAction(value) {
+        let form = document.getElementById('controller');
+        form.elements['controllerAction'].value = value;
+        form.submit();
+    }
+</script>

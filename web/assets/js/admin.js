@@ -1,0 +1,109 @@
+/*function enableSidebar() {
+    /!* jQuery for dropdown sidebar menu *!/
+    jQuery(function ($) {
+        $(".sidebar-dropdown > a").on('click', function () {
+            console.log("click");
+            $(".sidebar-submenu").slideUp(200);
+            if (
+                $(this)
+                    .parent()
+                    .hasClass("active")
+            ) {
+                $(".sidebar-dropdown").removeClass("active");
+                $(this)
+                    .parent()
+                    .removeClass("active");
+            } else {
+                $(".sidebar-dropdown").removeClass("active");
+                $(this)
+                    .next(".sidebar-submenu")
+                    .slideDown(200);
+                $(this)
+                    .parent()
+                    .addClass("active");
+            }
+        });
+
+        $("#close-sidebar").on('click', function () {
+            $(".page-wrapper").removeClass("toggled");
+        });
+        $("#show-sidebar").on('click', function () {
+            $(".page-wrapper").addClass("toggled");
+        });
+    });
+}*/
+
+function showResult(toShow, result) {
+
+    if (toShow != 'false') {
+        if (result === 'success')
+            alert("Operazione di inserimento del dipendente effettuata con SUCCESSO.");
+        else if (result === 'fail')
+            alert("L'operazione di inserimento del dipendente ha riscontrato alcuni errori.")
+    }
+}
+
+/*
+
+/!*ALL FUNCTIONS ABOUT STAFF SECTION*!/
+function showFormNewEmployee(xhttp) {
+    if (xhttp.status >= 200 && xhttp.status < 400) {
+        document.getElementById('to-fill').innerHTML = xhttp.responseText;
+    }
+}
+
+/!*FUNCTION TO SHOW ERROR WITH AJAX*!/
+function showAjaxError(xhttp) {
+    if (xhttp.status >= 200 && this.status < 400) {
+        document.getElementById('to-fill').innerHTML = this.responseText;
+    }
+}
+
+/!***********************************!/
+
+function fetchStaffSection(event) {
+
+    let xhttp = new XMLHttpRequest();
+
+    if (event.target.id === 'staff_new_employee') {
+        /!*Show form to insert a new employee into the DB*!/
+        xhttp.open('GET', 'templates/add-employee.html', true);
+        xhttp.onload = function () {
+            showFormNewEmployee(this);
+        };
+    } else if (event.target.id === 'staff_edit_employee') {
+
+    } else if (event.target.id === 'staff_show_employee') {
+
+    } else if (event.target.id === 'staff_del_employee') {
+
+    } else {
+        /!*Show an error message*!/
+        xhttp.open('GET', 'templates/errors/AjaxError.html', true);
+        xhttp.onload = function () {
+            showAjaxError(this);
+        };
+    }
+    xhttp.setRequestHeader("Cache-Control", "max-age=0"); /!*after open xhttp in the if*!/
+    xhttp.send();
+}
+
+function addOnClickListenerBtnSidebar() {
+    /!* * * * * * Staff * * * * * *!/
+    /!*1)Listener on click for: Add new employee*!/
+
+    document.getElementById('staff_new_employee').addEventListener('click', addNewEmployee);
+
+    /!*2)Listener on click for: Edit existing employee*!/
+    document.getElementById('staff_edit_employee').addEventListener('click', fetchStaffSection);
+}
+
+function addNewEmployee() {
+    let xhttp = new XMLHttpRequest();
+    /!*Show form to insert a new employee into the DB*!/
+    xhttp.open('GET', '/manage?controllerAction=Staff.addEmployee', true);
+    xhttp.onload = function () {
+        showFormNewEmployee(this);
+
+    }
+}*/

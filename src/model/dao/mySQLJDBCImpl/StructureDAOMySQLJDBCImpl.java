@@ -4,15 +4,13 @@ import model.dao.StructureDAO;
 import model.mo.Admin;
 import model.mo.Structure;
 import model.mo.User;
-import services.logservice.LogService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class StructureDAOMySQLJDBCImpl implements StructureDAO {
 
@@ -21,7 +19,6 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     private PreparedStatement ps;
     private String query;
     private ResultSet rs;
-    Logger logger = LogService.getApplicationLogger();
 
 
     public StructureDAOMySQLJDBCImpl(Connection connection) {
