@@ -7,6 +7,14 @@
     ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
     if (employees != null && employees.size() != 0)
         areEmployees = true;
+
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo dipendente è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
 %>
 <!doctype html>
 <html lang="en">
@@ -87,16 +95,21 @@
                 <td>
                     <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
                     </button>
-                    <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i>
+                    <button type="button" class="tablebutton" style="color: black;"
+                            onclick="deleteContact(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
                     </button>
                 </td>
             </tr>
             <%}%>
             </tbody>
         </table>
-        <%}else{%>
+        <%} else {%>
         <h1>Non ci sono dipendenti mi disp...</h1>
         <%}%>
+        <form id="delete-contact">
+            <input type="hidden" name="controllerAction" value="">
+            <input type="hidden" name="employeeID" value="">
+        </form>
     </main>
 </div>
 

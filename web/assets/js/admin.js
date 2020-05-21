@@ -34,11 +34,27 @@
 }*/
 
 function showResult(result, message) {
-
+    /**
+     * show alert with message returned from server
+     */
     if (result === 'success')
         alert(message);
     else if (result === 'fail')
         alert(message)
+
+}
+
+function deleteContact(id){
+    /**
+     * for form wirh ID ==> delete-contact, set value of hidden input field with
+     * name="controllerAction" to "Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
+     * with name="employeeID" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="delete-contact" che è proprio della show-employee.jsp */
+    let formEmployeeID = document.getElementById('delete-contact');
+    formEmployeeID.elements['controllerAction'].value = 'Staff.deleteEmployee';
+    formEmployeeID.elements['employeeID'].value = id;
+    formEmployeeID.submit();
 
 }
 
@@ -49,6 +65,9 @@ function toUpperCase(element) {
     element.value = element.value.toUpperCase();
 }
 /*
+
+
+
 
 /!*ALL FUNCTIONS ABOUT STAFF SECTION*!/
 function showFormNewEmployee(xhttp) {

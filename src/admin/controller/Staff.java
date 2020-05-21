@@ -7,6 +7,7 @@ import model.dao.UserDAO;
 import model.exception.NoEmployeeCreatedException;
 import model.mo.Employee;
 import model.mo.Structure;
+import model.mo.User;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -171,7 +172,7 @@ public class Staff {
         System.err.println(structure);
         /* Effettuo l'inserimento del nuovo dipendente */
         try {
-            employeeDAO.insert(userDAO,birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, address, house_number, more_info_address), phone, password);
+            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, address, house_number, more_info_address), phone, password);
             inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
         } catch (NoEmployeeCreatedException e) {
             applicationMessage = e.getMessage();
@@ -226,13 +227,10 @@ public class Staff {
 
     public static void showEmployees(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Instantiates an EmployeeDAO to be able to show ALL employees in Database.
+         * Instantiates a DAOFactory to be able to show ALL employees in Database with call to commonView.
          */
         DAOFactory daoFactory = null;
-        EmployeeDAO employeeDAO = null;
-        StructureDAO structureDAO = null;
-        Structure structure = null;
-        ArrayList<Employee> employees;
+
 
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
         if (daoFactory != null) {
@@ -241,15 +239,7 @@ public class Staff {
             throw new RuntimeException("Errore nel Controller Staff.showEmployees ==> daoFactory.beginTransaction();");
         }
 
-        employeeDAO = daoFactory.getEmployeeDAO();
-
-        structureDAO = daoFactory.getStructureDAO();
-
-        /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
-        structure = structureDAO.fetchStructure();
-
-        /* Scarico dal DB l'intera lista dei dipendenti */
-        employees = employeeDAO.fetchAll();
+        commonView(daoFactory,request);
 
         /* Effettuo le ultime operazioni di commit e poi successiva chiusura della transazione */
         try {
@@ -266,13 +256,95 @@ public class Staff {
 
         /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
 
-        request.setAttribute("employees", employees);
-        request.setAttribute("structure", structure);
         request.setAttribute("viewUrl", "admin/show-employees");
 
 
     }
 
+    public static void deleteEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        /**
+         * Instantiates an EmployeeDAO to be able to delete employee from Database.
+         */
+        Long idToDelete = null; /* id dell'impiegato ricevuto da cancellare*/
+
+        DAOFactory daoFactory = null;
+        UserDAO userDAO = null; /* DAO Necessario per poter effettuare la cancellazione del dipendente */
+        User user = null;
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        boolean deleted = false;
+
+        /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-employees.jsp */
+        idToDelete = Long.valueOf(request.getParameter("employeeID"));
+
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Staff.deleteEmployee ==> daoFactory.beginTransaction();");
+        }
+
+        /* è necessario prendersi solo lo userDAO per poter settare su uno specifico utente il flag DELETED */
+        userDAO = daoFactory.getUserDAO();
+
+        /* trovo l'utente da flaggare come cancellato */
+        user = userDAO.findById(idToDelete);
+
+        /* Effettuo la cancellazione del dipendente usando il metodo delete dello UserDAO in quanto il flag DELETED
+         * è presente solamente nella tabella USER */
+
+        deleted = userDAO.delete(user); /* Se non viene sollevata l'eccezione, l'impiegato è stato cancellato correttamente*/
+
+        /* Chiamo la commonView che si occuperà di di ricaricare la lista dei dipendenti aggiornata, togliendo quelli eliminati
+         *  e scaricare le informazioni riguardo la struttura che stiamo gestendo. È necessario chiamarla in quanto la cancellazione,
+         * a differenza dell'aggiunta non ha una propria pagina, ma consiste nel click di un semplice bottone ( il cestino ) pertanto è
+         * necessario ricaricare la lista dei dipendenti aggiornata ( chiamando appunto la commonView ) e solo settare ( come faccio sotto )
+         * la viewUrl alla pagina show-employee.jsp */
+        commonView(daoFactory,request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
+
+        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
+        try {
+            if (deleted) {
+                /* Se l'impiegato è stato inserito cancellato committo la transazione */
+                daoFactory.commitTransaction();
+                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato cancellato correttamente .*/
+                applicationMessage = "Employee deleted SUCCESSFULLY.";
+
+            } else {
+                /* Altrimenti faccio il rollback della transazione */
+                daoFactory.rollbackTransaction();
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Se viene fatto il rollback della transazione il dipendente non è stato cancellato .*/
+                applicationMessage = "Employee cancellation ERROR.";
+
+            }
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+        } finally {
+            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+        }
+
+
+        /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
+
+        /* 1) il messaggio da visualizzare nella pagina di elenco solo se non è null */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 2) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
+         *     la show-employee.jsp per consentire altre cancellazioni */
+        request.setAttribute("viewUrl", "admin/show-employees");
+        /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        if (deleted) {
+            /* SUCCESS */
+            request.setAttribute("result", "success");
+        } else {
+            /* FAIL */
+            request.setAttribute("result", "fail");
+        }
+    }
 
     private static String formatFinalAddress(String state, String region, String city, String address, String house_number, String more_info_address) {
         String mandatory = state + "," + region + "," + city + "," + address;
@@ -285,4 +357,25 @@ public class Staff {
         return mandatory;
     }
 
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request){
+        EmployeeDAO employeeDAO = null;
+        StructureDAO structureDAO = null;
+        Structure structure = null;
+        ArrayList<Employee> employees = null;
+
+        employeeDAO = daoFactory.getEmployeeDAO();
+
+        structureDAO = daoFactory.getStructureDAO();
+
+        /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
+        structure = structureDAO.fetchStructure();
+
+        /* Scarico dal DB l'intera lista dei dipendenti */
+        employees = employeeDAO.fetchAll();
+
+
+        request.setAttribute("employees", employees);
+        request.setAttribute("structure", structure);
+
+    }
 }

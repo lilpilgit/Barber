@@ -1,6 +1,5 @@
 package model.dao.mySQLJDBCImpl;
 
-import model.dao.DAOFactory;
 import model.dao.EmployeeDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
@@ -284,6 +283,49 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
         }
 
         return employees;
+    }
+
+    @Override
+    public Employee findById(Long id) {
+        Employee employee = new Employee();
+        query = "SELECT * FROM EMPLOYEE JOIN USER U ON EMPLOYEE.ID = U.ID WHERE U.ID = ? AND DELETED = 0;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++,id);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            if (rs.next()) {
+                /*Se true significa che esiste un impiegato con quell'ID*/
+                employee = readEmployeeWithUserFields(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella if(rs.next())");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return employee;
     }
 
     private Employee readEmployeeWithUserFields(ResultSet rs) {

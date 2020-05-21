@@ -35,4 +35,6 @@ public interface EmployeeDAO {
                     String phone,
                     String password) throws NoEmployeeCreatedException;
     ArrayList<Employee> fetchAll();
+
+    Employee findById(Long id);
 }

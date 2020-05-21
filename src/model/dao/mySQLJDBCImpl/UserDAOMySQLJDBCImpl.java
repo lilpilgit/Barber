@@ -4,7 +4,10 @@ import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAOMySQLJDBCImpl implements UserDAO {
 
@@ -44,13 +47,13 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         /*CON TALE QUERY CONTROLLO SE LO USER ESISTE GIÀ ALL'INTERNO DEL DB
          * 2 UTENTI CON LA STESSA EMAIL NON POSSONO ESISTERE PERTANTO CONTROLLO IL CAMPO MAIL*/
         query = "SELECT ID FROM USER WHERE EMAIL = ?;";
-        System.err.println("EMAIL =>>" +  user.getEmail());
-        System.err.println("NAME =>>" +  user.getName());
-        System.err.println("SURNAME =>>" +  user.getSurname());
-        System.err.println("id =>>" +  user.getId());
-        System.err.println("PHONE =>>" +  user.getPhone());
-        System.err.println("ADDRESS =>>" +  user.getAddress());
-        System.err.println("PASSWORD =>>" +  user.getPassword());
+        System.err.println("EMAIL =>>" + user.getEmail());
+        System.err.println("NAME =>>" + user.getName());
+        System.err.println("SURNAME =>>" + user.getSurname());
+        System.err.println("id =>>" + user.getId());
+        System.err.println("PHONE =>>" + user.getPhone());
+        System.err.println("ADDRESS =>>" + user.getAddress());
+        System.err.println("PASSWORD =>>" + user.getPassword());
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
@@ -116,6 +119,161 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps.close();
         } catch (SQLException e) {
             System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User findById(Long id) {
+        User user = new User();
+
+        query = "SELECT * FROM USER WHERE ID = ? AND DELETED = 0;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, id);
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps = connection.prepareStatement(query);");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            if (rs.next()) {
+                /*Se true significa che esiste un impiegato con quell'ID*/
+                user = readUser(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella if(rs.next())");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return user;
+
+    }
+
+    @Override
+    public boolean delete(User user) {
+        /**
+         * Flag by DELETED column a USER as deleted indifferently if is Admin,Customer or Employee
+         *
+         * @return true if delete go correctly otherwise raise exception
+         */
+        query = "UPDATE USER SET DELETED = '1' WHERE ID = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, user.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    private User readUser(ResultSet rs) {
+        /**
+         * Read user attributes from query on single table USER
+         *
+         * @return User object read from result set.
+         */
+        User user = new User();
+
+        try {
+            user.setId(rs.getLong("ID"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getLong(\"ID\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setEmail(rs.getString("EMAIL"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"EMAIL\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setName(rs.getString("NAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"NAME\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setSurname(rs.getString("SURNAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"SURNAME\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setAddress(rs.getString("ADDRESS"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"ADDRESS\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setPhone(rs.getString("PHONE"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"PHONE\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setPassword(rs.getString("PASSWORD"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"PASSWORD\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setIsAdmin(rs.getBoolean("IS_ADMIN"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"IS_ADMIN\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setIsEmployee(rs.getBoolean("IS_EMPLOYEE"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"IS_EMPLOYEE\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setIsCustomer(rs.getBoolean("IS_CUSTOMER"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"IS_CUSTOMER\");");
+            throw new RuntimeException(e);
+        }
+        try {
+            user.setIsDeleted(rs.getBoolean("DELETED"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"DELETED\");");
             throw new RuntimeException(e);
         }
 
