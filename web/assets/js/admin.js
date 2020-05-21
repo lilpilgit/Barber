@@ -44,15 +44,29 @@ function showResult(result, message) {
 
 }
 
-function deleteContact(id){
+function deleteEmployee(id){
     /**
-     * for form wirh ID ==> delete-contact, set value of hidden input field with
+     * for form with ID ==> action, set value of hidden input field with
      * name="controllerAction" to "Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
      * with name="employeeID" to parameter id
      */
-    /* Setto la controllerAction usando il form con id="delete-contact" che è proprio della show-employee.jsp */
-    let formEmployeeID = document.getElementById('delete-contact');
+    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
+    let formEmployeeID = document.getElementById('action');
     formEmployeeID.elements['controllerAction'].value = 'Staff.deleteEmployee';
+    formEmployeeID.elements['employeeID'].value = id;
+    formEmployeeID.submit();
+
+}
+
+function editEmployee(id){
+    /**
+     * for form with ID ==> action, set value of hidden input field with
+     * name="controllerAction" to "Staff.editEmployee" and set value of hidden input field (of show-employee.jsp)
+     * with name="employeeID" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
+    let formEmployeeID = document.getElementById('action');
+    formEmployeeID.elements['controllerAction'].value = 'Staff.showFormEditEmployee';
     formEmployeeID.elements['employeeID'].value = id;
     formEmployeeID.submit();
 

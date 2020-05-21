@@ -25,7 +25,7 @@ public class Staff {
 
     public static void showFormNewEmployee(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Set viewUrl to the JSP <new-employee> to show the data entry form of the new employee.
+         * Set viewUrl to the JSP <new-edit-employee> to show the data entry form of the new employee.
          * */
         DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
         if (daoFactory != null) {
@@ -50,7 +50,7 @@ public class Staff {
         }
 
         /* Setto gli attributi della request */
-        request.setAttribute("viewUrl", "admin/new-employee"); /* bisogna visualizzare new-employee.jsp */
+        request.setAttribute("viewUrl", "admin/new-edit-employee"); /* bisogna visualizzare new-edit-employee.jsp */
 
         request.setAttribute("structure", structure);
     }
@@ -69,7 +69,7 @@ public class Staff {
         String state;
         String region;
         String city;
-        String address;
+        String street;
         String house_number;
         String more_info_address;
         String submit; /*mi aspetto che il value sia "add_new_employee"*/
@@ -134,7 +134,7 @@ public class Staff {
         email = request.getParameter("email");/*required*/
         name = request.getParameter("name");/*required*/
         surname = request.getParameter("surname");/*required*/
-        address = request.getParameter("address");/*required*/
+        street = request.getParameter("street");/*required*/
         state = request.getParameter("state"); /*required*/
         region = request.getParameter("region");/*required*/
         city = request.getParameter("city");/*required*/
@@ -172,7 +172,7 @@ public class Staff {
         System.err.println(structure);
         /* Effettuo l'inserimento del nuovo dipendente */
         try {
-            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, address, house_number, more_info_address), phone, password);
+            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, street, house_number, more_info_address), phone, password);
             inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
         } catch (NoEmployeeCreatedException e) {
             applicationMessage = e.getMessage();
@@ -206,13 +206,13 @@ public class Staff {
             System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
         }
 
-        /* Setto gli attributi della request che verranno processati dalla new-employee.jsp */
+        /* Setto gli attributi della request che verranno processati dalla new-edit-employee.jsp */
 
         /* 1) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 2) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
          *     form per consentire un nuovo inserimento */
-        request.setAttribute("viewUrl", "admin/new-employee");
+        request.setAttribute("viewUrl", "admin/new-edit-employee");
         /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (inserted) {
             /* SUCCESS */
@@ -239,7 +239,7 @@ public class Staff {
             throw new RuntimeException("Errore nel Controller Staff.showEmployees ==> daoFactory.beginTransaction();");
         }
 
-        commonView(daoFactory,request);
+        commonView(daoFactory, request);
 
         /* Effettuo le ultime operazioni di commit e poi successiva chiusura della transazione */
         try {
@@ -299,7 +299,7 @@ public class Staff {
          * a differenza dell'aggiunta non ha una propria pagina, ma consiste nel click di un semplice bottone ( il cestino ) pertanto è
          * necessario ricaricare la lista dei dipendenti aggiornata ( chiamando appunto la commonView ) e solo settare ( come faccio sotto )
          * la viewUrl alla pagina show-employee.jsp */
-        commonView(daoFactory,request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
+        commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
 
         /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
         try {
@@ -346,18 +346,64 @@ public class Staff {
         }
     }
 
-    private static String formatFinalAddress(String state, String region, String city, String address, String house_number, String more_info_address) {
-        String mandatory = state + "," + region + "," + city + "," + address;
-        /*TODO migliorare le perfomance di questa parte o comunque la logica dei passaggio dei parametri*/
-        if (house_number.length() != 0)
-            mandatory = mandatory + "," + house_number;
-        if (more_info_address.length() != 0)
-            mandatory = mandatory + "," + more_info_address;
+    public static void showFormEditEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        /**
+         * Set viewUrl to the JSP <new-edit-employee> to show the data entry form of the existent employee.
+         * Send employee to modify as attribute of the request, to fill in new-edit-employee.jsp automatically
+         * field with data of existent employee.
+         * */
+        Long idToEdit = null; /* Id dell'impiegato da modificare */
+        idToEdit = Long.valueOf(request.getParameter("employeeID"));
+        Employee employeeToEdit = null; /* oggetto di classe Employee che deve essere passato alla pagina del form di inserimento/modifica */
 
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Staff.showFormEditEmployee ==> daoFactory.beginTransaction();");
+        }
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = structureDAO.fetchStructure();
+
+        EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
+        employeeToEdit = employeeDAO.findById(idToEdit);
+
+        try {
+            /* committo la transazione */
+            daoFactory.commitTransaction();
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT DELLA TRANSAZIONE");
+        } finally {
+            /*  chiudo la transazione */
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+        }
+
+        /* Setto gli attributi della request */
+        /* 1) il viewUrl che il dispatcher dovrà visualizzare nel browser */
+        request.setAttribute("viewUrl", "admin/new-edit-employee"); /* bisogna visualizzare new-edit-employee.jsp */
+        /* 2) i dati della struttura sulla quale si sta operando da mostrare nella pagina new-edit-employee.jsp */
+        request.setAttribute("structure", structure);
+        /* 3) l'oggetto impiegato che deve essere modificato */
+        request.setAttribute("employeeToModify", employeeToEdit);
+    }
+
+    private static String formatFinalAddress(String state, String region, String city, String street, String house_number, String more_info_address) {
+        String mandatory = state + "|" + region + "|" + city + "|" + street;
+        if (house_number.length() != 0)
+            mandatory = mandatory + "|" + house_number;
+        else
+            mandatory = mandatory + "|" + " "; /* aggiungo comunque la virgola così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
+        if (more_info_address.length() != 0)
+            mandatory = mandatory + "|" + more_info_address;
+        else
+            mandatory = mandatory + "|" + " ";
         return mandatory;
     }
 
-    private static void commonView(DAOFactory daoFactory, HttpServletRequest request){
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
         EmployeeDAO employeeDAO = null;
         StructureDAO structureDAO = null;
         Structure structure = null;

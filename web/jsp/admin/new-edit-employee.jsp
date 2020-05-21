@@ -1,3 +1,4 @@
+<%@ page import="model.mo.Employee" %>
 <%@ page import="model.mo.Structure" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -23,6 +24,24 @@
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+
+    /* Prendo il parametro "employeeToModify" che è l'oggetto employee che mi permette di ottenere i campi da settare
+     * e dunque modificare a volontà all'interno della pagina */
+    Employee employeeToEdit = null;
+    if (request.getAttribute("employeeToModify") != null) {
+        employeeToEdit = (Employee) request.getAttribute("employeeToModify");
+    }
+
+    /* Setto una stringa da usare all'interno dell html per decidere se devo mostrare campi vuoti ( inserimento nuovo
+     * impiegato) o campi già riempiti ( modifica impiegato esistente ) */
+    String action = (employeeToEdit != null) ? "modify" : "insert";
+
+    String[] splittedAddress = null;
+    /* Splitto sulla virgola il campo address dell'utente per poterlo visualizzare in ogni campo della form */
+    if (employeeToEdit != null) {
+        String address = employeeToEdit.getUser().getAddress();
+        splittedAddress = address.split("\\|");
     }
 
 %>
@@ -63,7 +82,9 @@
             <div class="form-row">
                 <%if (structurePresent) {%>
                 <div class="text-center">
-                    <label for="Structure">You are entering a new employee for the structure:</label>
+                    <label for="Structure">You are <%=(action.equals("modify")) ? "modifying an " : "entering an"%>
+                        employee for the
+                        structure:</label>
                     <input type="text" id="Structure"
                            value="<%="ID:{" + structure.getId() + "}  " + structure.getName()%>" readonly>
                 </div>
@@ -75,11 +96,15 @@
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="Name">First name</label>
-                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required oninput="toUpperCase(this)">
+                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getName() : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="Surname">Last name</label>
-                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required oninput="toUpperCase(this)">
+                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getSurname() : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
             </div>
             <!-- TODO Dare la possibilita' al dipendente di modificare la password -->
@@ -87,18 +112,22 @@
                 <div class="col-md-4">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getEmail() : ""%>"
                            required>
-                    <small id="emailHelp" class="form-text text-muted">A random password will be sent to that
-                        email</small>
+                    <%if (!action.equals("modify")) {%><small id="emailHelp" class="form-text text-muted">A random
+                    password will be sent to that
+                    email</small><%}%>
                 </div>
                 <div class="col-md-4">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getPhone() : ""%>"
                            class="form-control">
                 </div>
                 <div class="col-md-4">
                     <label for="Hire-Date">Hire Date</label>
-                    <input type="date" class="form-control" name="hire_date" id="Hire-Date" required>
+                    <input type="date" class="form-control" name="hire_date" id="Hire-Date" required
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getHireDate() : ""%>">
                 </div>
             </div>
             <br>
@@ -107,12 +136,14 @@
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="Birth-Date">Birth Date</label>
-                    <input type="date" class="form-control" name="birth_date" id="Birth-Date" required>
+                    <input type="date" class="form-control" name="birth_date" id="Birth-Date" required
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getBirthDate() : ""%>">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
                     <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
-                           required oninput="toUpperCase(this)">
+                           required value="<%=(action.equals("modify")) ? employeeToEdit.getFiscalCode() : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
             </div>
             <div class="form-row">
@@ -150,27 +181,34 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required oninput="toUpperCase(this)">
+                    <input type="text" class="form-control" name="city" id="City" required
+                           value="<%=(action.equals("modify")) ? splittedAddress[2] : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="Address">Address</label>
-                    <input type="text" class="form-control" name="address" id="Address" required oninput="toUpperCase(this)">
+                    <label for="Street">Street</label>
+                    <input type="text" class="form-control" name="street" id="Street" required
+                           value="<%=(action.equals("modify")) ? splittedAddress[3] : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="More-info-address">+ Address Info</label>
-                    <input type="text" class="form-control" name="more_info_address" id="More-info-address">
+                    <input type="text" class="form-control" name="more_info_address" id="More-info-address"
+                           value="<%=(action.equals("modify")) ? splittedAddress[4] : ""%>">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0">
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
+                           value="<%=(action.equals("modify")) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
             <button type="submit" id="submit_new_employee" class="btn btn-primary" name="submit"
-                    value="add_new_employee">Add new Employee
+                    value="add_new_employee">Send
             </button>
-            <input type="hidden" name="controllerAction" value="Staff.addEmployee">
+            <input type="hidden" name="controllerAction"
+                   value="<%=(action.equals("modify")) ? "Staff.editEmployee" : "Staff.addEmployee"%>">
         </form>
     </main>
 </div>

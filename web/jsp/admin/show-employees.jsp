@@ -85,7 +85,7 @@
                 for (Employee e : employees) {
             %>
             <tr>
-                <th scope="row"><%=i%>
+                <th scope="row"><%=i++%>
                 </th>
                 <td><%=e.getId()%>
                 </td>
@@ -100,10 +100,11 @@
                 <td><%=e.getUser().getAddress()%>
                 </td>
                 <td>
-                    <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
+                    <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                            onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                     </button>
                     <button type="button" class="tablebutton" style="color: black;"
-                            onclick="deleteContact(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
+                            onclick="deleteEmployee(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
                     </button>
                 </td>
             </tr>
@@ -111,9 +112,9 @@
             </tbody>
         </table>
         <%} else {%>
-        <h1>Non ci sono dipendenti mi disp...</h1>
+        <h1>No employee to show.</h1>
         <%}%>
-        <form id="delete-contact">
+        <form method="post" id="action">
             <input type="hidden" name="controllerAction" value="">
             <input type="hidden" name="employeeID" value="">
         </form>

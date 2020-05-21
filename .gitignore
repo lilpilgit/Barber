@@ -16,3 +16,5 @@
 /.idea/shelf/
 #Ignore words added locally to personal dictionaries
 /.idea/dictionaries/
+#Ignore inspectionProfiles
+/.idea/inspectionProfiles/
