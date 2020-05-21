@@ -11,3 +11,5 @@
 /.idea/dataSources.xml
 /.idea/dataSources.local.xml
 /.idea/dataSources/
+#Ignore file of configuration
+/src/services/
