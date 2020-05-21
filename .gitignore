@@ -7,3 +7,7 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 /out/
+#Ignore file related to Database
+/.idea/dataSources.xml
+/.idea/dataSources.local.xml
+/.idea/dataSources/
