@@ -1,8 +1,10 @@
 package admin.controller;
 
+import model.dao.DAOFactory;
+import services.config.Configuration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class Customers {
 
@@ -10,13 +12,24 @@ public class Customers {
 
     }
 
-    public static void manageCustomer(HttpServletRequest request, HttpServletResponse response) {
-        /* SI OCCUPA DI RICHIAMARE LA JSP IN CUI E' CONTENUTO IL FORM PER VISUALIZZARE TUTTI I CLIENTI RIFERITI AD UNA
-           CERTA STRUTTURA CHE HANNO ACQUISTI O PRENOTAZIONI IN CORSO
+    public static void showCustomers(HttpServletRequest request, HttpServletResponse response) {
+        /*
+         * Instantiates an CustomerDAO to be able to show ALL customers in Database.
          */
+        DAOFactory daoFactory = null;
 
-        request.setAttribute("viewUrl", "admin/manage-customer");
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Customers.showCustomers ==> daoFactory.beginTransaction();");
+        }
+
+
+        /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
+
+        request.setAttribute("viewUrl", "admin/show-customers");
+
+
     }
-
-
 }
