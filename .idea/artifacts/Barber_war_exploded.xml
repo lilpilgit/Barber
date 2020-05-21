@@ -7,6 +7,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Barber" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-8.0.17" />
+          <element id="library" level="project" name="commons-fileupload-1" />
+          <element id="library" level="project" name="commons-io-2" />
+        </element>
       </element>
     </root>
   </artifact>
