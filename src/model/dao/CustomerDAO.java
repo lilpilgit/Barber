@@ -2,6 +2,8 @@ package model.dao;
 
 import model.mo.Customer;
 
+import java.util.ArrayList;
+
 public interface CustomerDAO {
     /*
      * questi metodi rappresentano la business logic per l'oggetto CUSTOMER
@@ -15,4 +17,6 @@ public interface CustomerDAO {
      *
      * @return all the products that must be shown in the showcase of the homepage
      */
+
+    ArrayList<Customer> fetchAll();
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Customer {
     private User user;
+    private Long id;
     private Integer numBookedReservations;
     private Integer numOrderedProduct;
     private Boolean isBlocked;
@@ -14,21 +15,11 @@ public class Customer {
     private ArrayList<Cart> carts;
     private ArrayList<Booking> bookings;
 
-    public Customer(User user, Integer numBookedReservations, Integer numOrderedProduct, Boolean isBlocked, ArrayList<Product> products, ArrayList<Wishlist> wishlists, ArrayList<Cart> carts, ArrayList<Booking> bookings) {
-        this.user = user;
-        this.numBookedReservations = numBookedReservations;
-        this.numOrderedProduct = numOrderedProduct;
-        this.isBlocked = isBlocked;
-        this.products = products;
-        this.wishlists = wishlists;
-        this.carts = carts;
-        this.bookings = bookings;
-    }
-
     @Override
     public String toString() {
         return "Customer{" +
                 "user=" + user +
+                ", id=" + id +
                 ", numBookedReservations=" + numBookedReservations +
                 ", numOrderedProduct=" + numOrderedProduct +
                 ", isBlocked=" + isBlocked +
@@ -45,6 +36,14 @@ public class Customer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getNumBookedReservations() {

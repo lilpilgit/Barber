@@ -260,7 +260,7 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
         }
 
         try {
-            while (rs.next()) { /* Fin tanto che esiste un'impiegato */
+            while (rs.next()) { /* Fin tanto che esiste un impiegato */
                 employees.add(readEmployeeWithUserFields(rs));
             }
         } catch (SQLException e) {
