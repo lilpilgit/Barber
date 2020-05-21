@@ -33,16 +33,21 @@
     });
 }*/
 
-function showResult(toShow, result) {
+function showResult(result, message) {
 
-    if (toShow != 'false') {
-        if (result === 'success')
-            alert("Operazione di inserimento del dipendente effettuata con SUCCESSO.");
-        else if (result === 'fail')
-            alert("L'operazione di inserimento del dipendente ha riscontrato alcuni errori.")
-    }
+    if (result === 'success')
+        alert(message);
+    else if (result === 'fail')
+        alert(message)
+
 }
 
+function toUpperCase(element) {
+    /**
+     * set the value of input selected  by ID to upperCase
+     */
+    element.value = element.value.toUpperCase();
+}
 /*
 
 /!*ALL FUNCTIONS ABOUT STAFF SECTION*!/

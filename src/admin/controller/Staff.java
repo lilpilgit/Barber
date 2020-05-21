@@ -3,6 +3,7 @@ package admin.controller;
 import model.dao.DAOFactory;
 import model.dao.EmployeeDAO;
 import model.dao.StructureDAO;
+import model.dao.UserDAO;
 import model.exception.NoEmployeeCreatedException;
 import model.mo.Employee;
 import model.mo.Structure;
@@ -29,7 +30,7 @@ public class Staff {
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
-            throw new RuntimeException("Errore nel Controller Staff.addEmployee ==> daoFactory.beginTransaction();");
+            throw new RuntimeException("Errore nel Controller Staff.showFormNewEmployee ==> daoFactory.beginTransaction();");
         }
         StructureDAO structureDAO = daoFactory.getStructureDAO();
         Structure structure = structureDAO.fetchStructure();
@@ -74,11 +75,12 @@ public class Staff {
         String password; /*password generata nel controller e NON proveniente dal form*/
 
         DAOFactory daoFactory = null;
-        EmployeeDAO employeeDAO = null;
-        StructureDAO structureDAO = null;
+        EmployeeDAO employeeDAO = null; /* DAO Necessario per poter effettuare l'inserimento del dipendente */
+        StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento del dipendente */
+        UserDAO userDAO = null; /* DAO Necessario per poter effettuare l'inserimento del dipendente */
         Structure structure = null;
 
-        String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
 
         /*        List<FileItem> items = (List<FileItem>) request.getAttribute("items");
@@ -159,16 +161,48 @@ public class Staff {
         employeeDAO = daoFactory.getEmployeeDAO();
 
         structureDAO = daoFactory.getStructureDAO();
+        /* è necessario prendersi uno userDAO per poter verificare/inserire all'interno del metodo
+         * insert dell'EmployeeDAO se l'utente esiste già e fare tutto le query di inserimento dell'utente necessarie
+         * */
+        userDAO = daoFactory.getUserDAO();
 
         /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
         structure = structureDAO.fetchStructure();
+        System.err.println(structure);
         /* Effettuo l'inserimento del nuovo dipendente */
         try {
-            employeeDAO.insert(birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, address, house_number, more_info_address), phone, password);
+            employeeDAO.insert(userDAO,birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, address, house_number, more_info_address), phone, password);
             inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
         } catch (NoEmployeeCreatedException e) {
             applicationMessage = e.getMessage();
             e.printStackTrace();
+        }
+
+        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
+        try {
+            if (inserted) {
+                /* Se l'impiegato è stato inserito correttamente committo la transazione */
+                daoFactory.commitTransaction();
+                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato inserito correttamente .*/
+                applicationMessage = "Employee inserted SUCCESSFULLY.";
+
+            } else {
+                /* Altrimenti faccio il rollback della transazione */
+                daoFactory.rollbackTransaction();
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Se viene fatto il rollback della transazione il dipendente non è stato inserito .*/
+                applicationMessage = "Employee insertion ERROR.";
+
+            }
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+        } finally {
+            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
         }
 
         /* Setto gli attributi della request che verranno processati dalla new-employee.jsp */
@@ -182,33 +216,12 @@ public class Staff {
         if (inserted) {
             /* SUCCESS */
             request.setAttribute("result", "success");
-
         } else {
             /* FAIL */
             request.setAttribute("result", "fail");
         }
         /* 4) l'UNICA struttura da mostrare all'interno del text-field readonly */
         request.setAttribute("structure", structure);
-
-
-        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
-        try {
-            if (inserted) {
-                /* Se l'impiegato è stato inserito correttamente committo la transazione */
-                daoFactory.commitTransaction();
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-            } else {
-                /* Altrimenti faccio il rollback della transazione */
-                daoFactory.rollbackTransaction();
-                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-            }
-        } catch (Exception e) {
-            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-        } finally {
-            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
-            daoFactory.closeTransaction();
-            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
-        }
     }
 
     public static void showEmployees(HttpServletRequest request, HttpServletResponse response) {

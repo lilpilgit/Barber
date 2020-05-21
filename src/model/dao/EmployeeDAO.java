@@ -23,7 +23,8 @@ public interface EmployeeDAO {
      * @return all the products that must be shown in the showcase of the homepage
      */
 
-    Employee insert(LocalDate birthDate,
+    Employee insert(UserDAO userDAO,
+                    LocalDate birthDate,
                     String fiscalCode,
                     LocalDate hireDate,
                     Structure structure,

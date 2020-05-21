@@ -37,8 +37,8 @@
     <!--Main content of the page-->
     <main class="page-content">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
-            <button onclick="setControllerAction('Staff.addEmployee')"
-                    class="button-side" type="button" id='showProducts'>
+            <button onclick="setControllerAction('Staff.showFormNewEmployee')"
+                    class="button-side" type="button" id='showFormNewEmployee'>
                 <i class="fas fa-user-plus pr-3"></i>
                 Add New Employee
             </button>

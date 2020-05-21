@@ -3,24 +3,28 @@
 <%
     /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo dipendente è andato a buon fine o meno*/
     String result = null;
-    if(request.getAttribute("result") != null){
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
         result = (String) request.getAttribute("result");
+        resultPresent = true;
     }
-    boolean show = false;
-    boolean success = false;
-    if (result != null) {
-        show = true;
-        if (result == "success") {
-            success = true;
-        }
-    }
+
     /* Prendo il parametro "structure" che mi permette di settare il value dell'input field readonly con name="structure" */
     Structure structure = null;
     boolean structurePresent = false;
-    if(request.getAttribute("structure") != null){
+    if (request.getAttribute("structure") != null) {
         /* SE MI È STATO PASSATO L'ATTRIBUTO structure */
         structure = (Structure) request.getAttribute("structure");
         structurePresent = true;
+    }
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di inserimento ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    boolean applicationMessagePresent = false;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");
+        applicationMessagePresent = true;
     }
 
 %>
@@ -59,21 +63,25 @@
 
         <form id='form_add_employee' method="post" class="needs-validation">
             <div class="form-row">
-                <%if(structurePresent){%>
+                <%if (structurePresent) {%>
                 <div class="text-center">
                     <label for="Structure">You are entering a new employee for the structure:</label>
                     <input type="text" id="Structure"
                            value="<%="ID:{" + structure.getId() + "}  " + structure.getName()%>" readonly>
-                </div><%}%>
+                </div>
+                <%}%>
             </div>
+            <br>
+            <hr>
+            <br>
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="Name">First name</label>
-                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required>
+                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="Surname">Last name</label>
-                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required>
+                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required oninput="toUpperCase(this)">
                 </div>
             </div>
             <!-- TODO Dare la possibilita' al dipendente di modificare la password -->
@@ -106,15 +114,10 @@
                 <div class="col-md-4 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
                     <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
-                           required>
+                           required oninput="toUpperCase(this)">
                 </div>
             </div>
-
             <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required>
-                </div>
                 <div class="col-md-4 mb-3">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
@@ -145,25 +148,26 @@
                         <option>Umbria</option>
                         <option>Valle d'Aosta</option>
                         <option>Veneto</option>
-
                     </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="City">City</label>
+                    <input type="text" class="form-control" name="city" id="City" required oninput="toUpperCase(this)">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="Address">Address</label>
-                    <input type="text" class="form-control" name="address" id="Address" required>
+                    <input type="text" class="form-control" name="address" id="Address" required oninput="toUpperCase(this)">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="More-info-address">+ Address Info</label>
+                    <input type="text" class="form-control" name="more_info_address" id="More-info-address">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number">
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0">
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="More-address-info">+ Address Info</label>
-                    <input type="text" class="form-control" name="house_number" id="More-address-info">
-                </div>
-
-
             </div>
             <button type="submit" id="submit_new_employee" class="btn btn-primary" name="submit"
                     value="add_new_employee">Add new Employee
@@ -177,7 +181,9 @@
 <script>
     function onLoadFunctionalities() {
         /*addOnClickListenerBtnSidebar();*/
-        /*showResult("<%=show%>", "<%=result%>");*/
+        <%if(resultPresent){%>
+        showResult("<%=result%>", "Messaggio:\n<%=applicationMessage%>");
+        <%}%>
     }
 
     window.addEventListener('load', onLoadFunctionalities);

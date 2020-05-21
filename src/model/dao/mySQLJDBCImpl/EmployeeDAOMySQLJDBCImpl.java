@@ -28,7 +28,8 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
 
     /**/
     @Override
-    public Employee insert(LocalDate birthDate,
+    public Employee insert(UserDAO userDAO,
+                           LocalDate birthDate,
                            String fiscalCode,
                            LocalDate hireDate,
                            Structure structure,
@@ -45,6 +46,7 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
          * already exists (in which case raises a NoEmployeeCreatedException), inserts the user with ID manually
          * increased on the COUNTER table and only if no exception is raised, inserts the <Employee employee> object
          * in the EMPLOYEE table.
+         *
          * @return Return the object inserted correctly in the DB otherwise raise an exception.
          * */
 
@@ -63,8 +65,8 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
 
         /*CON TALE QUERY CONTROLLO SE L'IMPIEGATO ESISTE GIÀ ALL'INTERNO DELLA STRUTTURA SPECIFICATA NEL PARAMETRO*/
         query
-                = " SELECT ID "
-                + " FROM EMPLOYEE E INNER JOIN USER U ON E.ID = U.ID "
+                = " SELECT EMPLOYEE.ID "
+                + " FROM EMPLOYEE INNER JOIN USER U ON EMPLOYEE.ID = U.ID "
                 + " WHERE "
                 + " DELETED = 0 AND "
                 + " FISCAL_CODE = ? AND"
@@ -172,18 +174,12 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
 
         /*              MOLTO IMPORTANTE !!!!!
             Viene prima aggiunto l'utente e se l'inserimento è andato a buon fine verrà aggiunto anche l'impiegato
-            con lo stesso ID
+            con lo stesso ID. Notare che viene usato lo userDAO istanziato nella transazione dal controller,
+            perché deve essere uno userDAO istanziato all'interno della medesima transazione con il DB
          */
-        DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL);
-        UserDAO userDao;
-        if (df != null) {
-            userDao = df.getUserDAO();
-        } else {
-            throw new NoEmployeeCreatedException("EmployeeDAOJDBCImpl.insert: Il tentativo di inserimento di un impiegato non è andato a buon fine.");
-        }
 
         try {
-            User user = userDao.insert(newId, email, name, surname, address, phone, password, false, true, false);
+            User user = userDAO.insert(newId, email, name, surname, address, phone, password, false, true, false);
             /*                                                                                    ^^^^^^^^^^^^^^ ==> STIAMO INSERENDO UN UTENTE COME IMPIEGATO!!!*/
             /*Setto l'unico campo rimanente che risulta essere user all'interno dell'oggetto employee da inserire nel DB*/
             employee.setUser(user);

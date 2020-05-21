@@ -14,3 +14,5 @@
 #Ignore file of configuration
 /src/services/
 /.idea/shelf/
+#Ignore words added locally to personal dictionaries
+/.idea/dictionaries/

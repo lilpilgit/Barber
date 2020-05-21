@@ -71,7 +71,7 @@ public class Dispatcher extends HttpServlet {
         Class<?> controllerClass = null;
         try {
             controllerClass = Class.forName("admin.controller." + splittedAction[0]);
-            System.err.println("DISPATCHER ==> controllerClass + " + controllerClass.getName());
+            System.err.println("DISPATCHER ==> controllerClass :" + controllerClass.getName());
             //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER");

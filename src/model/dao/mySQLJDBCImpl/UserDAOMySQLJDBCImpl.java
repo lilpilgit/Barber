@@ -44,7 +44,13 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         /*CON TALE QUERY CONTROLLO SE LO USER ESISTE GIÀ ALL'INTERNO DEL DB
          * 2 UTENTI CON LA STESSA EMAIL NON POSSONO ESISTERE PERTANTO CONTROLLO IL CAMPO MAIL*/
         query = "SELECT ID FROM USER WHERE EMAIL = ?;";
-
+        System.err.println("EMAIL =>>" +  user.getEmail());
+        System.err.println("NAME =>>" +  user.getName());
+        System.err.println("SURNAME =>>" +  user.getSurname());
+        System.err.println("id =>>" +  user.getId());
+        System.err.println("PHONE =>>" +  user.getPhone());
+        System.err.println("ADDRESS =>>" +  user.getAddress());
+        System.err.println("PASSWORD =>>" +  user.getPassword());
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
