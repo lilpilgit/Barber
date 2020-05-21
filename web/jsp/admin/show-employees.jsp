@@ -49,51 +49,55 @@
                 </form>
             </div>
         </nav>
-        <%if (areEmployees) {%>
-        <table class="table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">N°</th>
-                <th scope="col">ID</th>
-                <th scope="col">Surname</th>
-                <th scope="col">Name</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Email</th>
-                <th scope="col">Address</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <%
-                int i = 1; /* contatore per il numero di impiegati */
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <%if (areEmployees) {%>
+                <table class="table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        int i = 1; /* contatore per il numero di impiegati */
 
-                for (Employee e : employees) {
-            %>
-            <tr>
-                <th scope="row"><%=i%>
-                </th>
-                <td><%=e.getId()%>
-                </td>
-                <td><%=e.getUser().getSurname()%>
-                </td>
-                <td><%=e.getUser().getName()%>
-                </td>
-                <td><%=e.getUser().getPhone()%>
-                </td>
-                <td><%=e.getUser().getEmail()%>
-                </td>
-                <td><%=e.getUser().getAddress()%>
-                </td>
-                <td>
-                    <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
-                    </button>
-                    <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i>
-                    </button>
-                </td>
-            </tr>
-            <%}%>
-            </tbody>
-        </table>
+                        for (Employee e : employees) {
+                    %>
+                    <tr>
+                        <th scope="row"><%=i%>
+                        </th>
+                        <td><%=e.getId()%>
+                        </td>
+                        <td><%=e.getUser().getSurname()%>
+                        </td>
+                        <td><%=e.getUser().getName()%>
+                        </td>
+                        <td><%=e.getUser().getPhone()%>
+                        </td>
+                        <td><%=e.getUser().getEmail()%>
+                        </td>
+                        <td><%=e.getUser().getAddress()%>
+                        </td>
+                        <td>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <%}else{%>
         <h1>Non ci sono dipendenti mi disp...</h1>
         <%}%>
@@ -103,7 +107,7 @@
 
 <script>
     function onLoadFunctionalities() {
-
+        /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
     }
 
     window.addEventListener('load', onLoadFunctionalities);

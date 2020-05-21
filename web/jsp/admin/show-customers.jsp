@@ -37,44 +37,45 @@
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
-
-                    <table class="table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Num Booked</th>
-                            <th scope="col">Num Order</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Pinco@pallino.com</td>
-                            <td>Italy,Piemonte,Torino,Via Degli Aranci,3</td>
-                            <td>Cristina</td>
-                            <td>2.846</td>
-                            <td>Ciao</td>
-                            <td>
-                                <button type="button" class="tablebutton" style="color: red;" > <i class="fas fa-ban"></i></button>
-                                <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i></button>
-                                <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <table class="table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Num Booked</th>
+                        <th scope="col">Num Order</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Pinco@pallino.com</td>
+                        <td>Italy,Piemonte,Torino,Via Degli Aranci,3</td>
+                        <td>Cristina</td>
+                        <td>2.846</td>
+                        <td>Ciao</td>
+                        <td>
+                            <button type="button" class="tablebutton" style="color: red;" > <i class="fas fa-ban"></i></button>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i></button>
+                            <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 </div>
 
 
 <script>
     function onLoadFunctionalities() {
-        enableSidebar();
+        /* TODO impostare il pulsante Customers su hover in modo da fare l'highlight*/
     }
 
     window.addEventListener('load', onLoadFunctionalities);
