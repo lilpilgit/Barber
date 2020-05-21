@@ -15,6 +15,13 @@
         result = (String) request.getAttribute("result");
         resultPresent = true;
     }
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di cancellazione/modifica ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
 %>
 <!doctype html>
 <html lang="en">
@@ -116,7 +123,11 @@
 
 <script>
     function onLoadFunctionalities() {
+        /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
 
+        <%if(resultPresent){%>
+        showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
+        <%}%>
     }
 
     window.addEventListener('load', onLoadFunctionalities);
