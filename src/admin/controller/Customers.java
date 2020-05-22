@@ -64,7 +64,7 @@ public class Customers {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean deleted = false;
 
-        /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-employees.jsp */
+        /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-customer.jsp */
         idToDelete = Long.valueOf(request.getParameter("CustomerID"));
 
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
