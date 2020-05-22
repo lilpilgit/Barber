@@ -83,8 +83,8 @@ body {
 
 @media screen and (min-width: 768px) {
     .page-wrapper.toggled .page-content {
-        padding-left: 300px;
-        padding-right: 40px;
+        padding-left: 275px;
+        padding-right: 15px;
     }
 }
 /*----------------show sidebar button----------------*/
@@ -559,7 +559,7 @@ table i {
 
 }
 
-.tablebutton {
+.tablebutton, .trashbutton{
     position: relative;
     padding: 2px 8px;
     margin: 3px 0;
@@ -572,6 +572,11 @@ table i {
 
 .tablebutton:hover {
     border: 2px solid #3e4042;
+    top: 0;
+}
+
+.trashbutton:hover {
+    color: red;
     top: 0;
 }
 
