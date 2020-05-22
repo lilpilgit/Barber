@@ -155,8 +155,23 @@ body {
 /*--------------------sidebar-header----------------------*/
 
 .sidebar-wrapper .sidebar-header {
-    padding: 20px;
+    padding: 10px;
     overflow: hidden;
+}
+
+.user-pic {
+    position: relative;
+}
+
+.user-pic button {
+    position: absolute;
+    bottom:-12px;
+    right: -12px;
+}
+
+.user-pic .fa-user-edit {
+
+    color: #818894;
 }
 
 .sidebar-wrapper .sidebar-header .user-pic {
@@ -169,6 +184,7 @@ body {
 }
 
 .sidebar-wrapper .sidebar-header .user-pic img {
+    display: block;
     object-fit: cover;
     height: 100%;
     width: 100%;
@@ -574,6 +590,12 @@ table i {
 .tablebutton:hover {
     border: 2px solid #3e4042;
     top: 0;
+}
+
+.editadminbutton {
+    position: absolute;
+    color: red;
+    z-index: 100;
 }
 
 
