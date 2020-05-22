@@ -1,5 +1,6 @@
 package admin.controller;
 
+import common.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.EmployeeDAO;
 import model.dao.StructureDAO;
@@ -173,7 +174,7 @@ public class Staff {
         System.err.println(structure);
         /* Effettuo l'inserimento del nuovo dipendente */
         try {
-            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, street, cap, house_number), phone, password);
+            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password);
             inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
         } catch (NoEmployeeCreatedException e) {
             applicationMessage = e.getMessage();
@@ -395,21 +396,8 @@ public class Staff {
         /**
          * Instantiates an EmployeeDAO to be able to edit the existing employee in Database.
          */
-        String name;
-        String surname;
-        String email;
-        String phone;
-        LocalDate hire_date;
-        LocalDate birth_date;
-        String fiscal_code;
-        String state;
-        String region;
-        String city;
-        String street;
-        String house_number;
-        String cap;
+
         String submit; /*mi aspetto che il value sia "edit_employee"*/
-        String password; /*password generata nel controller e NON proveniente dal form*/
 
         DAOFactory daoFactory = null;
         EmployeeDAO employeeDAO = null; /* DAO Necessario per poter effettuare la modifica del dipendente */
@@ -422,43 +410,20 @@ public class Staff {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
 
-        /* Fetching dei parametri provenienti dal form di inserimento/modifica e salvataggio nelle variabili locali */
-        name = request.getParameter("name");/*required*/
-        surname = request.getParameter("surname");/*required*/
-        email = request.getParameter("email");/*required*/
-        phone = request.getParameter("phone");/*required*/
-        /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
-         * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
-         * */
-        hire_date = LocalDate.parse(request.getParameter("hire_date"));/*required*/
-        birth_date = LocalDate.parse(request.getParameter("birth_date"));/*required*/
-        fiscal_code = request.getParameter("fiscal_code");/*required*/
-        state = request.getParameter("state"); /*required*/
-        region = request.getParameter("region");/*required*/
-        city = request.getParameter("city");/*required*/
-        street = request.getParameter("street");/*required*/
-        house_number = request.getParameter("house_number");/*not required*/
-        cap = request.getParameter("cap");/*not required*/
-        /*   CREAZIONE DELLA PASSWORD SUPER SICURA!!!  */
-        password = "password";
-        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_employee"*/
+//        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_employee"*/
 
 
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
-            throw new RuntimeException("Errore nel Controller Staff.addEmployee ==> daoFactory.beginTransaction();");
+            throw new RuntimeException("Errore nel Controller Staff.editEmployee ==> daoFactory.beginTransaction();");
         }
 
         employeeDAO = daoFactory.getEmployeeDAO();
 
         structureDAO = daoFactory.getStructureDAO();
-        /* è necessario prendersi uno userDAO per poter verificare/inserire all'interno del metodo
-         * insert dell'EmployeeDAO se esiste un utente con i dati coincidenti con quelli nuovi, infatti devo
-         * negare la possibilità di modificare un dipendente con dati di un altro dipendente
-         * */
-        userDAO = daoFactory.getUserDAO();
+
 
         /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo update() su employeeDAO ) */
         structure = structureDAO.fetchStructure();
@@ -475,19 +440,21 @@ public class Staff {
         /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
          * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
 
-        employeeToEdit.getUser().setName(name); /* attributo della tabella USER */
-        employeeToEdit.getUser().setSurname(surname); /* attributo della tabella USER */
-        employeeToEdit.getUser().setEmail(email); /* attributo della tabella USER */
-        employeeToEdit.getUser().setPhone(phone); /* attributo della tabella USER */
-        employeeToEdit.getUser().setAddress(formatFinalAddress(state, region, city, street, cap, house_number)); /* attributo della tabella USER */
-        employeeToEdit.getUser().setName(name); /* attributo della tabella USER */
+        /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
+         * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
+         * */
+        employeeToEdit.getUser().setName(request.getParameter("name")); /* attributo della tabella USER */
+        employeeToEdit.getUser().setSurname(request.getParameter("surname")); /* attributo della tabella USER */
+        employeeToEdit.getUser().setEmail(request.getParameter("email")); /* attributo della tabella USER */
+        employeeToEdit.getUser().setPhone(request.getParameter("phone")); /* attributo della tabella USER */
+        employeeToEdit.getUser().setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number"))); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsAdmin(false); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsEmployee(true); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsCustomer(false); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsDeleted(false); /* attributo della tabella USER */
-        employeeToEdit.setBirthDate(birth_date); /* attributo della tabella EMPLOYEE */
-        employeeToEdit.setHireDate(hire_date); /* attributo della tabella EMPLOYEE */
-        employeeToEdit.setFiscalCode(fiscal_code); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setBirthDate(LocalDate.parse(request.getParameter("birth_date"))); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setHireDate(LocalDate.parse(request.getParameter("hire_date"))); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setFiscalCode(request.getParameter("fiscal_code")); /* attributo della tabella EMPLOYEE */
         employeeToEdit.setStructure(structure); /* attributo della tabella EMPLOYEE */
 
         /* Effettuo la modifica del dipendente */
@@ -551,15 +518,6 @@ public class Staff {
         }
         /* 5) l'UNICA struttura da mostrare all'interno del text-field readonly */
         request.setAttribute("structure", structure);
-    }
-
-    private static String formatFinalAddress(String state, String region, String city, String street, String cap, String house_number) {
-        String mandatory = state + "|" + region + "|" + city + "|" + cap + "|" + street;
-        if (!house_number.equals(" "))
-            mandatory = mandatory + "|" + house_number + "|"; /*!!! IMPORTANTE METTERE LA PIPE ALLA FINE ALTRIMENTI LO SPLIT NON FUNZIONA*/
-        else
-            mandatory = mandatory + "|" + " " + "|"; /* aggiungo comunque la | così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
-        return mandatory;
     }
 
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {

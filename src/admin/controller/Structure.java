@@ -2,22 +2,21 @@ package admin.controller;
 
 import model.dao.DAOFactory;
 import model.dao.StructureDAO;
-import model.mo.Structure;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class Structures {
+public class Structure {
 
-    private Structures() {
+    private Structure() {
 
     }
 
-    public static void showStructures(HttpServletRequest request, HttpServletResponse response) {
+    public static void showStructure(HttpServletRequest request, HttpServletResponse response) {
         /*
-         * Instantiates an StructuresDAO to be able to show ALL Structures in Database.
+         * Instantiates an StructuresDAO to be able to show Structure in Database.
          */
         DAOFactory daoFactory = null;
 
@@ -25,7 +24,7 @@ public class Structures {
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
-            throw new RuntimeException("Errore nel Controller Structures.showStructures ==> daoFactory.beginTransaction();");
+            throw new RuntimeException("Errore nel Controller Structure.showStructure ==> daoFactory.beginTransaction();");
         }
 
         commonView(daoFactory,request);
@@ -44,22 +43,26 @@ public class Structures {
         }
 
 
-        /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
+        /* Setto gli attributi della request che verranno processati dalla edit-structure.jsp */
 
-        request.setAttribute("viewUrl", "admin/show-structures");
+        request.setAttribute("viewUrl", "admin/edit-structure");
+
+    }
+
+    public static void editStructure(HttpServletRequest request, HttpServletResponse response){
 
     }
 
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request){
         StructureDAO structureDAO = null;
-        Structure structure = null;
+        model.mo.Structure structure = null;
 
         structureDAO = daoFactory.getStructureDAO();
 
-        /* Scarico dal DB l'intera lista dei clienti */
+        /* Scarico dal DB la struttura */
         structure = structureDAO.fetchStructure();
 
-        request.setAttribute("structure", structure);
+        request.setAttribute("structureToModify", structure);
     }
 }
 

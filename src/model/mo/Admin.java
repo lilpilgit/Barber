@@ -5,8 +5,11 @@ import java.util.ArrayList;
 
 public class Admin {
     private User user;
+    /*memorizzo l'id che setterò dopo che avrò aggiornato la tabella counter*/
+    private Long id;
     private LocalDate birthDate;
     private String fiscalCode;
+
 
     /* 1 : N */
     private ArrayList<Structure> structures;
@@ -15,6 +18,7 @@ public class Admin {
     public String toString() {
         return "Admin{" +
                 "user=" + user +
+                ", id=" + id +
                 ", birthDate=" + birthDate +
                 ", fiscalCode='" + fiscalCode + '\'' +
                 ", structures=" + structures +
@@ -27,6 +31,15 @@ public class Admin {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getBirthDate() {

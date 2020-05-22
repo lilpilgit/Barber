@@ -234,7 +234,7 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
     public boolean update(Employee employee) throws DuplicatedObjectException {
         /**
          * The entity employee has an ID that appears to be FOREIGN KEYS of the PRIMARY KEYS <ID> of the USER entity,
-         * therefore this method checked if the employee that we want to modify, have same fiscal of another existent
+         * therefore this method checked if the employee that we want to modify, have same fiscal code of another existent
          * employee and in this case raises a NoEmployeeCreatedException, therefore change attributes in USER & EMPLOYEE
          * tables.
          *
@@ -504,38 +504,66 @@ public class EmployeeDAOMySQLJDBCImpl implements EmployeeDAO {
             System.err.println("Errore nella employee.getUser().setPassword(rs.getString(\"PASSWORD\"));");
             throw new RuntimeException(e);
         }
-        /* I CAMPI IS_ADMIN, IS_EMPLOYEE, IS_CUSTOMER, DELETED sono stati tralasciati volontariamente */
-
+        try {
+            employee.getUser().setPassword(rs.getString("PASSWORD")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setPassword(rs.getString(\"PASSWORD\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            employee.getUser().setIsAdmin(rs.getBoolean("IS_ADMIN")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setIsAdmin(rs.getBoolean(\"IS_ADMIN\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            employee.getUser().setIsEmployee(rs.getBoolean("IS_EMPLOYEE")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setIsEmployee(rs.getBoolean(\"IS_EMPLOYEE\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            employee.getUser().setIsCustomer(rs.getBoolean("IS_CUSTOMER")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setIsCustomer(rs.getBoolean(\"IS_CUSTOMER\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            employee.getUser().setIsDeleted(rs.getBoolean("DELETED")); /*  COLONNA DELLA TABELLA USER */
+        } catch (SQLException e) {
+            System.err.println("Errore nella employee.getUser().setIsDeleted(rs.getBoolean(\"DELETED\"));");
+            throw new RuntimeException(e);
+        }
         /*              FINE DATI TABELLA USER                */
         /*              INIZIO DATI TABELLA EMPLOYEE          */
         try {
             employee.setId(rs.getLong("EMPLOYEE.ID"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"ID\")");
+            System.err.println("Errore nella employee.setId(rs.getLong(\"EMPLOYEE.ID\"));");
             throw new RuntimeException(e);
         }
         try {
             employee.getStructure().setId(rs.getLong("ID_STRUCTURE")); /* Setto solamente l'ID della struttura che poi inserirò all'interno dell'oggetto employee*/
         } catch (SQLException e) {
-            System.err.println("Errore nella employee.getUser().setId(rs.getLong(\"ID\")");
+            System.err.println("Errore nella employee.getStructure().setId(rs.getLong(\"ID_STRUCTURE\"))");
             throw new RuntimeException(e);
         }
         try {
             employee.setBirthDate(rs.getObject("BIRTH_DATE", LocalDate.class));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getObject(\"BIRTH_DATE\",LocalDate.class)");
+            System.err.println("Errore nella employee.setBirthDate(rs.getObject(\"BIRTH_DATE\", LocalDate.class));");
             throw new RuntimeException(e);
         }
         try {
             employee.setFiscalCode(rs.getString("FISCAL_CODE"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"FISCAL_CODE\")");
+            System.err.println("Errore nella employee.setFiscalCode(rs.getString(\"FISCAL_CODE\"));");
             throw new RuntimeException(e);
         }
         try {
             employee.setHireDate(rs.getObject("HIRE_DATE", LocalDate.class));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getObject(\"HIRE_DATE\", LocalDate.class)");
+            System.err.println("Errore nella employee.setHireDate(rs.getObject(\"HIRE_DATE\", LocalDate.class));");
             throw new RuntimeException(e);
         }
 

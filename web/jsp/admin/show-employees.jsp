@@ -2,6 +2,9 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    String user = "Employee";
+    String controller = "Staff";
+
     /* Prendo l'ArrayList<Employee> di tutti gli impiegati */
     boolean areEmployees = false;
     ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
@@ -127,9 +130,10 @@
         </div>
     </main>
 </div>
+
 <input type="hidden" id="tmpIdDel" value="">
 <!--MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
-<div class="modal fade" id="alertDeleteEmp" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="alert<%=user%>>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
