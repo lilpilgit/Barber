@@ -102,7 +102,7 @@
                         </td>
                         <td><%=p.getInsertDate()%>
                         </td>
-                        <td><%=p.getShowcase()%>
+                        <td><i class="<%=(p.getShowcase()) ? "fas fa-check checked" : "fas fa-times unchecked"%>"></i>
                         </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify">

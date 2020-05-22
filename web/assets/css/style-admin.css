@@ -586,6 +586,13 @@ table i {
     z-index: 100;
 }
 
+.checked {
+    color: limegreen;
+}
+
+.unchecked {
+    color: red;
+}
 
 
 
