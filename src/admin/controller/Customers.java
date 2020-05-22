@@ -65,7 +65,7 @@ public class Customers {
         boolean deleted = false;
 
         /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-employees.jsp */
-        idToDelete = Long.valueOf(request.getParameter("employeeID"));
+        idToDelete = Long.valueOf(request.getParameter("CustomerID"));
 
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
         if (daoFactory != null) {
@@ -135,6 +135,10 @@ public class Customers {
             /* FAIL */
             request.setAttribute("result", "fail");
         }
+
+        System.err.println("Chiamato con successo");
+
+        System.err.println("Mi aspetto ==> " + request.getParameter("CustomerID"));
     }
 
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request){
