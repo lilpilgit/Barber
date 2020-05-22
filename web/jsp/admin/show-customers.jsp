@@ -80,7 +80,7 @@
                         for (Customer c : customers) {
                     %>
                     <tr>
-                        <th scope="row"><%=i%>
+                        <th scope="row"><%=i++%>
                         </th>
                         <td><%=c.getId()%>
                         </td>
