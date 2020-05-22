@@ -84,6 +84,6 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
 
     @Override
     public AdminDAO getAdminDAO() {
-        return new AdminDAOMySQLJDBCImp(connection);
+        return new AdminDAOMySQLJDBCImpl(connection);
     }
 }

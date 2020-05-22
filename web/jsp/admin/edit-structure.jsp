@@ -20,7 +20,6 @@
 
     /* Prendo il parametro "structureToModify" che è l'oggetto structure che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
-    /*TODO A SESSIONE IMPLEMENTATA, VERRÀ PRESO L'ID DALLA SESSIONE PASSATA COME ATTRIBUTO DELLA REQUEST DAL CONTROLLER*/
     Structure structureToEdit = null;
     if (request.getAttribute("structureToModify") != null) {
         structureToEdit = (Structure) request.getAttribute("structureToModify");
@@ -176,8 +175,6 @@
             </button>
             <input type="hidden" name="controllerAction"
                    value="Structure.editStructure">
-            <input type="hidden" name="structureId" value="<%=structureToEdit.getId()%>"/>
-
         </form>
     </main>
 </div>

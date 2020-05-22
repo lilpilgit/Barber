@@ -1,14 +1,12 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
+import model.exception.DuplicatedObjectException;
 import model.mo.Admin;
 import model.mo.Structure;
 import model.mo.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class StructureDAOMySQLJDBCImpl implements StructureDAO {
@@ -42,7 +40,7 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
         }
 
         try {
-           System.err.println("prima di rs.next()");
+            System.err.println("prima di rs.next()");
             if (rs.next()) { /* Esiste una struttura con quell'ID */
                 structure = readStructure(rs);
             }
@@ -68,6 +66,63 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
         return structure;
     }
 
+    @Override
+    public boolean update(Structure structure) {
+        /**
+         * Update infos about UNIQUE structure in DB
+         *
+         * @return Return true if the object is updated correctly in the DB otherwise raise an exception.
+         * */
+
+        /* Aggiorniamo i dati di structure */
+        query
+                = " UPDATE STRUCTURE S"
+                + " SET "
+                + "  ADDRESS = ?,"
+                + "  OPENING_TIME = ?,"
+                + "  CLOSING_TIME = ?,"
+                + "  SLOT = ?,"
+                + "  NAME = ?,"
+                + "  PHONE = ?"
+                + " WHERE"
+                + "  S.ID = ?;";
+
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, structure.getAddress());
+            ps.setString(i++, structure.getOpeningTime());
+            ps.setString(i++, structure.getClosingTime());
+            ps.setString(i++, structure.getSlot());
+            ps.setString(i++, structure.getName());
+            ps.setString(i++, structure.getPhone());
+            ps.setLong(i++,structure.getId());
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*Chiudo il preparedStatement*/
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /* se non è stata sollevata alcuna eccezione fin qui, ritorno true perché significa
+         * che l'aggiornamento di STRUCTURE è andato a buon fine */
+        return true;
+    }
+
     private Structure readStructure(ResultSet rs) {
 
         Structure structure = new Structure();
@@ -85,43 +140,43 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
         try {
             structure.setAddress(rs.getString("ADDRESS"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"PRODUCER\")");
+            System.err.println("Errore nella structure.setAddress(rs.getString(\"ADDRESS\"));");
             throw new RuntimeException(e);
         }
         try {
             structure.setOpeningTime(rs.getString("OPENING_TIME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"OPENING_TIME\")");
+            System.err.println("Errore nella structure.setOpeningTime(rs.getString(\"OPENING_TIME\"));");
             throw new RuntimeException(e);
         }
         try {
             structure.setClosingTime(rs.getString("CLOSING_TIME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"CLOSING_TIME\")");
+            System.err.println("Errore nella structure.setClosingTime(rs.getString(\"CLOSING_TIME\"));");
             throw new RuntimeException(e);
         }
         try {
-            structure.setSlot(rs.getString("SLOT"));
+                structure.setSlot(rs.getString("SLOT"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"SLOT\")");
+            System.err.println("Errore nella structure.setSlot(rs.getString(\"SLOT\"));");
             throw new RuntimeException(e);
         }
         try {
             structure.setName(rs.getString("NAME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"NAME\")");
+            System.err.println("Errore nella structure.setName(rs.getString(\"NAME\"));");
             throw new RuntimeException(e);
         }
         try {
             structure.setPhone(rs.getString("PHONE"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getString(\"PHONE\")");
+            System.err.println("Errore nella structure.setPhone(rs.getString(\"PHONE\"));");
             throw new RuntimeException(e);
         }
         try {
             structure.getAdmin().getUser().setId(rs.getLong("ID_ADMIN")); /*TODO : da controllare*/
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getBoolean(\"SHOWCASE\")");
+            System.err.println("Errore nella structure.getAdmin().getUser().setId(rs.getLong(\"ID_ADMIN\"));");
             throw new RuntimeException(e);
         }
 

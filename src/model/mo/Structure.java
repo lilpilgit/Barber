@@ -1,5 +1,6 @@
 package model.mo;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class Structure {
@@ -9,6 +10,7 @@ public class Structure {
     private String openingTime;
     private String closingTime;
     private String slot;        /* This is necessary for scanning the booking appointments */
+                        /*TODO:controllare per quale cazzo di motivo se uso Time sia qui che nel DB che nell'html va in eccezione*/
     private String name;
     private String phone;
 

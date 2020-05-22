@@ -10,4 +10,6 @@ public interface StructureDAO {
      */
 
     Structure fetchStructure();
+
+    boolean update(Structure structure);
 }

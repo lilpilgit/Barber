@@ -8,14 +8,14 @@ import model.mo.User;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class AdminDAOMySQLJDBCImp implements AdminDAO {
+public class AdminDAOMySQLJDBCImpl implements AdminDAO {
 
     private Connection connection;
     private PreparedStatement ps;
     private String query;
     private ResultSet rs;
 
-    public AdminDAOMySQLJDBCImp(Connection connection) {
+    public AdminDAOMySQLJDBCImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -71,7 +71,7 @@ public class AdminDAOMySQLJDBCImp implements AdminDAO {
          * admin and in this case raises a NoEmployeeCreatedException, therefore change attributes in USER & ADMIN
          * tables.
          *
-         * @return Return the object updated correctly in the DB otherwise raise an exception.
+         * @return Return true if the object is updated correctly in the DB otherwise raise an exception.
          * */
 
         boolean exist; /* flag per sapere se esiste già un'admin con gli stessi dati */
