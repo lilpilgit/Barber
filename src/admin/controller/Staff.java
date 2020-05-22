@@ -479,7 +479,7 @@ public class Staff {
         employeeToEdit.getUser().setSurname(surname); /* attributo della tabella USER */
         employeeToEdit.getUser().setEmail(email); /* attributo della tabella USER */
         employeeToEdit.getUser().setPhone(phone); /* attributo della tabella USER */
-        employeeToEdit.getUser().setAddress(formatFinalAddress(state, region, city, street, house_number, cap)); /* attributo della tabella USER */
+        employeeToEdit.getUser().setAddress(formatFinalAddress(state, region, city, street, cap, house_number)); /* attributo della tabella USER */
         employeeToEdit.getUser().setName(name); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsAdmin(false); /* attributo della tabella USER */
         employeeToEdit.getUser().setIsEmployee(true); /* attributo della tabella USER */
@@ -555,10 +555,10 @@ public class Staff {
 
     private static String formatFinalAddress(String state, String region, String city, String street, String cap, String house_number) {
         String mandatory = state + "|" + region + "|" + city + "|" + cap + "|" + street;
-        if (house_number.length() != 0)
-            mandatory = mandatory + "|" + house_number;
+        if (!house_number.equals(" "))
+            mandatory = mandatory + "|" + house_number + "|"; /*!!! IMPORTANTE METTERE LA PIPE ALLA FINE ALTRIMENTI LO SPLIT NON FUNZIONA*/
         else
-            mandatory = mandatory + "|" + " "; /* aggiungo comunque la | così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
+            mandatory = mandatory + "|" + " " + "|"; /* aggiungo comunque la | così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
         return mandatory;
     }
 

@@ -38,10 +38,12 @@
     String action = (employeeToEdit != null) ? "modify" : "insert";
 
     String[] splittedAddress = null;
-    /* Splitto sulla virgola il campo address dell'utente per poterlo visualizzare in ogni campo della form */
+    int splittedAddressLength = 0;
+    /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
     if (employeeToEdit != null) {
         String address = employeeToEdit.getUser().getAddress();
         splittedAddress = address.split("\\|");
+        splittedAddressLength = splittedAddress.length;
     }
 
 %>
@@ -201,7 +203,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number" min="0"
-                           value="<%=(action.equals("modify")) ? splittedAddress[5] : ""%>">
+                           value="<%=(action.equals("modify") && splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
             <button type="submit" id="submit-new-edit-employee" class="btn btn-primary" name="submit"
