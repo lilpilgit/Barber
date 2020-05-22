@@ -4,6 +4,7 @@ import model.dao.DAOFactory;
 import model.dao.EmployeeDAO;
 import model.dao.StructureDAO;
 import model.dao.UserDAO;
+import model.exception.DuplicatedObjectException;
 import model.exception.NoEmployeeCreatedException;
 import model.mo.Employee;
 import model.mo.Structure;
@@ -71,7 +72,7 @@ public class Staff {
         String city;
         String street;
         String house_number;
-        String more_info_address;
+        String cap;
         String submit; /*mi aspetto che il value sia "add_new_employee"*/
         String password; /*password generata nel controller e NON proveniente dal form*/
 
@@ -138,8 +139,8 @@ public class Staff {
         state = request.getParameter("state"); /*required*/
         region = request.getParameter("region");/*required*/
         city = request.getParameter("city");/*required*/
+        cap = request.getParameter("cap");/*required*/
         house_number = request.getParameter("house_number");/*not required*/
-        more_info_address = request.getParameter("more_info_address");/*not required*/
         phone = request.getParameter("phone");/*required*/
         /*   CREAZIONE DELLA PASSWORD SUPER SICURA!!!  */
         password = "password";
@@ -172,7 +173,7 @@ public class Staff {
         System.err.println(structure);
         /* Effettuo l'inserimento del nuovo dipendente */
         try {
-            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, street, house_number, more_info_address), phone, password);
+            employeeDAO.insert(userDAO, birth_date, fiscal_code, hire_date, structure, email, name, surname, formatFinalAddress(state, region, city, street, cap, house_number), phone, password);
             inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
         } catch (NoEmployeeCreatedException e) {
             applicationMessage = e.getMessage();
@@ -294,7 +295,7 @@ public class Staff {
 
         deleted = userDAO.delete(user); /* Se non viene sollevata l'eccezione, l'impiegato è stato cancellato correttamente*/
 
-        /* Chiamo la commonView che si occuperà di di ricaricare la lista dei dipendenti aggiornata, togliendo quelli eliminati
+        /* Chiamo la commonView che si occuperà di ricaricare la lista dei dipendenti aggiornata, togliendo quelli eliminati
          *  e scaricare le informazioni riguardo la struttura che stiamo gestendo. È necessario chiamarla in quanto la cancellazione,
          * a differenza dell'aggiunta non ha una propria pagina, ma consiste nel click di un semplice bottone ( il cestino ) pertanto è
          * necessario ricaricare la lista dei dipendenti aggiornata ( chiamando appunto la commonView ) e solo settare ( come faccio sotto )
@@ -390,16 +391,174 @@ public class Staff {
         request.setAttribute("employeeToModify", employeeToEdit);
     }
 
-    private static String formatFinalAddress(String state, String region, String city, String street, String house_number, String more_info_address) {
-        String mandatory = state + "|" + region + "|" + city + "|" + street;
+    public static void editEmployee(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Instantiates an EmployeeDAO to be able to edit the existing employee in Database.
+         */
+        String name;
+        String surname;
+        String email;
+        String phone;
+        LocalDate hire_date;
+        LocalDate birth_date;
+        String fiscal_code;
+        String state;
+        String region;
+        String city;
+        String street;
+        String house_number;
+        String cap;
+        String submit; /*mi aspetto che il value sia "edit_employee"*/
+        String password; /*password generata nel controller e NON proveniente dal form*/
+
+        DAOFactory daoFactory = null;
+        EmployeeDAO employeeDAO = null; /* DAO Necessario per poter effettuare la modifica del dipendente */
+        StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare la modifica del dipendente */
+        UserDAO userDAO = null; /* DAO Necessario per poter effettuare la modifica del dipendente */
+        Structure structure = null;
+        Employee employeeToEdit = null;
+        Employee originalEmployee = null; /* l'oggetto intatto ancora con i campi non modificati */
+
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        boolean edited = false;
+
+        /* Fetching dei parametri provenienti dal form di inserimento/modifica e salvataggio nelle variabili locali */
+        name = request.getParameter("name");/*required*/
+        surname = request.getParameter("surname");/*required*/
+        email = request.getParameter("email");/*required*/
+        phone = request.getParameter("phone");/*required*/
+        /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
+         * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
+         * */
+        hire_date = LocalDate.parse(request.getParameter("hire_date"));/*required*/
+        birth_date = LocalDate.parse(request.getParameter("birth_date"));/*required*/
+        fiscal_code = request.getParameter("fiscal_code");/*required*/
+        state = request.getParameter("state"); /*required*/
+        region = request.getParameter("region");/*required*/
+        city = request.getParameter("city");/*required*/
+        street = request.getParameter("street");/*required*/
+        house_number = request.getParameter("house_number");/*not required*/
+        cap = request.getParameter("cap");/*not required*/
+        /*   CREAZIONE DELLA PASSWORD SUPER SICURA!!!  */
+        password = "password";
+        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_employee"*/
+
+
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Staff.addEmployee ==> daoFactory.beginTransaction();");
+        }
+
+        employeeDAO = daoFactory.getEmployeeDAO();
+
+        structureDAO = daoFactory.getStructureDAO();
+        /* è necessario prendersi uno userDAO per poter verificare/inserire all'interno del metodo
+         * insert dell'EmployeeDAO se esiste un utente con i dati coincidenti con quelli nuovi, infatti devo
+         * negare la possibilità di modificare un dipendente con dati di un altro dipendente
+         * */
+        userDAO = daoFactory.getUserDAO();
+
+        /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo update() su employeeDAO ) */
+        structure = structureDAO.fetchStructure();
+        System.err.println(structure);
+
+        /* In caso di modifica, il form contiene un campo hidden con name="employeeId" che mi viene
+         * passato dalla JSP e consente di poter scaricare dal DB l'impiegato con quel determinato ID */
+        originalEmployee = employeeDAO.findById(Long.valueOf(request.getParameter("employeeId")));
+
+        /* Li tratto come oggetti separati così da poter decideree alla fine, in base all'esito dell'update
+         * quale passare alla pagina new-edit-employee.jsp */
+        employeeToEdit = employeeDAO.findById(Long.valueOf(request.getParameter("employeeId")));
+
+        /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
+         * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
+
+        employeeToEdit.getUser().setName(name); /* attributo della tabella USER */
+        employeeToEdit.getUser().setSurname(surname); /* attributo della tabella USER */
+        employeeToEdit.getUser().setEmail(email); /* attributo della tabella USER */
+        employeeToEdit.getUser().setPhone(phone); /* attributo della tabella USER */
+        employeeToEdit.getUser().setAddress(formatFinalAddress(state, region, city, street, house_number, cap)); /* attributo della tabella USER */
+        employeeToEdit.getUser().setName(name); /* attributo della tabella USER */
+        employeeToEdit.getUser().setIsAdmin(false); /* attributo della tabella USER */
+        employeeToEdit.getUser().setIsEmployee(true); /* attributo della tabella USER */
+        employeeToEdit.getUser().setIsCustomer(false); /* attributo della tabella USER */
+        employeeToEdit.getUser().setIsDeleted(false); /* attributo della tabella USER */
+        employeeToEdit.setBirthDate(birth_date); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setHireDate(hire_date); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setFiscalCode(fiscal_code); /* attributo della tabella EMPLOYEE */
+        employeeToEdit.setStructure(structure); /* attributo della tabella EMPLOYEE */
+
+        /* Effettuo la modifica del dipendente */
+        try {
+            edited = employeeDAO.update(employeeToEdit);/* Se non viene sollevata l'eccezione, l'impiegato è stato modificato correttamente*/
+
+        } catch (DuplicatedObjectException e) {
+            applicationMessage = e.getMessage();
+            e.printStackTrace();
+        }
+
+        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
+        try {
+            if (edited) {
+                /* Se l'impiegato è stato modificato correttamente committo la transazione */
+                daoFactory.commitTransaction();
+                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato modificato correttamente .*/
+                applicationMessage = "Employee modified SUCCESSFULLY.";
+
+            } else {
+                /* Altrimenti faccio il rollback della transazione */
+                daoFactory.rollbackTransaction();
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Se viene fatto il rollback della transazione il dipendente non è stato modificato .*/
+                applicationMessage = "Employee modification ERROR.";
+
+            }
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+        } finally {
+            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+        }
+
+        /* Setto gli attributi della request che verranno processati dalla new-edit-employee.jsp */
+
+        /* 1) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 2) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+         *     form per consentire ulteriori modifiche sul medesimo impiegato */
+        request.setAttribute("viewUrl", "admin/new-edit-employee");
+        /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        if (edited) {
+            /* SUCCESS */
+            request.setAttribute("result", "success");
+        } else {
+            /* FAIL */
+            request.setAttribute("result", "fail");
+        }
+        /* 4) l'impiegato che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
+        if (edited) {
+            /* SUCCESS */
+            request.setAttribute("employeeToModify", employeeToEdit);
+        } else {
+            /* FAIL */
+            request.setAttribute("employeeToModify", originalEmployee);
+        }
+        /* 5) l'UNICA struttura da mostrare all'interno del text-field readonly */
+        request.setAttribute("structure", structure);
+    }
+
+    private static String formatFinalAddress(String state, String region, String city, String street, String cap, String house_number) {
+        String mandatory = state + "|" + region + "|" + city + "|" + cap + "|" + street;
         if (house_number.length() != 0)
             mandatory = mandatory + "|" + house_number;
         else
-            mandatory = mandatory + "|" + " "; /* aggiungo comunque la virgola così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
-        if (more_info_address.length() != 0)
-            mandatory = mandatory + "|" + more_info_address;
-        else
-            mandatory = mandatory + "|" + " ";
+            mandatory = mandatory + "|" + " "; /* aggiungo comunque la | così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
         return mandatory;
     }
 

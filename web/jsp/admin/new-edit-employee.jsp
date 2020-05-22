@@ -188,15 +188,15 @@
             </div>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="Street">Street</label>
-                    <input type="text" class="form-control" name="street" id="Street" required
-                           value="<%=(action.equals("modify")) ? splittedAddress[3] : ""%>"
-                           oninput="toUpperCase(this)">
+                    <label for="Cap">CAP</label>
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                           value="<%=(action.equals("modify")) ? splittedAddress[3] : ""%>">
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="More-info-address">+ Address Info</label>
-                    <input type="text" class="form-control" name="more_info_address" id="More-info-address"
-                           value="<%=(action.equals("modify")) ? splittedAddress[4] : ""%>">
+                    <label for="Street">Street</label>
+                    <input type="text" class="form-control" name="street" id="Street" required
+                           value="<%=(action.equals("modify")) ? splittedAddress[4] : ""%>"
+                           oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="House-number">House number</label>
@@ -204,11 +204,14 @@
                            value="<%=(action.equals("modify")) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
-            <button type="submit" id="submit_new_employee" class="btn btn-primary" name="submit"
-                    value="add_new_employee">Send
+            <button type="submit" id="submit-new-edit-employee" class="btn btn-primary" name="submit"
+                    value="<%=(action.equals("modify")) ? "edit_employee" : "add_new_employee"%>">Send
             </button>
             <input type="hidden" name="controllerAction"
                    value="<%=(action.equals("modify")) ? "Staff.editEmployee" : "Staff.addEmployee"%>">
+            <%if (action.equals("modify")) {%>
+            <input type="hidden" name="employeeId" value="<%=employeeToEdit.getId()%>"/>
+            <%}%>
         </form>
     </main>
 </div>
@@ -218,7 +221,11 @@
     function onLoadFunctionalities() {
         /*addOnClickListenerBtnSidebar();*/
         /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
-
+        /* Setto come selected tra le option di state e region quella uguale al valore dell'impiegato da modificare */
+        <%if(action.equals("modify")){%>
+        setSelectedAttribute("State", "<%=splittedAddress[0]%>");
+        setSelectedAttribute("Region","<%=splittedAddress[1]%>")
+        <%}%>
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>

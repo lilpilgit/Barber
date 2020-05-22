@@ -1,5 +1,6 @@
 package model.dao;
 
+import model.exception.DuplicatedObjectException;
 import model.exception.NoEmployeeCreatedException;
 import model.mo.Employee;
 import model.mo.Structure;
@@ -34,6 +35,8 @@ public interface EmployeeDAO {
                     String address,
                     String phone,
                     String password) throws NoEmployeeCreatedException;
+    boolean update(Employee employee) throws DuplicatedObjectException;
+
     ArrayList<Employee> fetchAll();
 
     Employee findById(Long id);

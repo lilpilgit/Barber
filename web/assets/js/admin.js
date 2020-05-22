@@ -44,7 +44,7 @@ function showResult(result, message) {
 
 }
 
-function deleteEmployee(id){
+function deleteEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with
      * name="controllerAction" to "Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
@@ -58,7 +58,7 @@ function deleteEmployee(id){
 
 }
 
-function editEmployee(id){
+function editEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with
      * name="controllerAction" to "Staff.editEmployee" and set value of hidden input field (of show-employee.jsp)
@@ -72,12 +72,25 @@ function editEmployee(id){
 
 }
 
+function setSelectedAttribute(id_select, valueFromDb) {
+    let select = document.getElementById(id_select).options;
+
+    for (let option = 0; option < select.length; option++) {
+        if (select[option].text === valueFromDb) {
+            select[option].selected = true;
+            break;
+        }
+
+    }
+}
+
 function toUpperCase(element) {
     /**
      * set the value of input selected  by ID to upperCase
      */
     element.value = element.value.toUpperCase();
 }
+
 /*
 
 
