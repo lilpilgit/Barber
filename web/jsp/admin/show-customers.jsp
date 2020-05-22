@@ -2,6 +2,8 @@
 <%@ page import="model.mo.Customer" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    String user = "Customer";
+
     /* Prendo l'ArrayList<Customer> di tutti gli impiegati */
     boolean areCustomers = false;
     ArrayList<Customer> customers = (ArrayList<Customer>) request.getAttribute("customers");
@@ -95,10 +97,18 @@
                         <td><%=c.getNumOrderedProduct()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: red;" title="Ban">
-                                <i class="fas fa-ban"></i></button>
-                            <button type="button" class="trashbutton" title="Delete">
-                                <i class="far fa-trash-alt"></i></button>
+                            <button type="button" class="tablebutton" style="color: red;" title="Ban"
+                                    data-target="#alertBanCust"
+                                    data-toggle="modal"
+                                    onclick=setTmpId(<%=c.getId()%>)>
+                                <i class="fas fa-ban"></i>
+                            </button>
+                            <button type="button" class="trashbutton" title="Delete"
+                                    data-target="#alertDelete<%=user%>"
+                                    data-toggle="modal"
+                                    onclick=setTmpId(<%=c.getId()%>)>
+                                <i class="far fa-trash-alt"></i>
+                            </button>
                         </td>
                     </tr>
                     <%}%>
@@ -107,10 +117,70 @@
                 <%} else {%>
                 <h1>There are no customers :(</h1>
                 <%}%>
+                <form method="post" id="action">
+                    <input type="hidden" name="controllerAction" value="">
+                    <input type="hidden" name="<%=user%>ID" value="">
+                </form>
             </div>
         </div>
     </main>
 </div>
+
+<input type="hidden" id="tmpIdDel" value="">
+<%--<input type="hidden" id="tmpIdBan" value="">
+<!--MODAL DI CONFERMA BAN CLIENTE-->
+<div class="modal fade" id="alertBanCust" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BanModal" style="color: rgba(211,4,0,0.75)">You are removing
+                    a customer...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to ban a customer.<br><br>Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ultimateBtnBan" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="banCustomer(document.getElementById('tmpIdDel').value)"> Ban Customer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA BAN CLIENTE-->--%>
+
+<!--MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
+<div class="modal fade" id="alertDelete<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DeleteModal" style="color: rgba(211,4,0,0.75)">You are removing
+                    a <%=user%>...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to permanently delete a <%=user%>.<br><br>Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="deleteById(document.getElementById('tmpIdDel').value, <%=user%> )">Delete <%=user%>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
 
 <script>
     function onLoadFunctionalities() {
@@ -119,6 +189,11 @@
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
+    }
+
+    function setTmpId(id) {
+        document.getElementById("tmpIdDel").value = id;
+        console.log("ID SETTATO TMP: " + document.getElementById("tmpIdDel").value);
     }
 
     window.addEventListener('load', onLoadFunctionalities);

@@ -76,7 +76,8 @@
                         <td><%=structure.getClosingTime()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify">
+                                <i class="fas fa-pencil-alt"></i>
                             </button>
                         </td>
                     </tr>

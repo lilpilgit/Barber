@@ -58,6 +58,22 @@ function deleteEmployee(id) {
 
 }
 
+function deleteById(id, user) {
+    /**
+     * for form with ID ==> action, set value of hidden input field with
+     * name="controllerAction" to "Customers.deleteCustomer" and set value of hidden input field (of show-customers.jsp)
+     * with name="customerID" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
+    let formUserID = document.getElementById('action');
+    let index = user.concat("ID");
+    document.getElementById("demo").innerHTML = text3;
+    formUserID.elements['controllerAction'].value = 'Customers.deleteCustomer';
+    formUserID.elements[index].value = id;
+    formUserID.submit();
+
+}
+
 function editEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with
