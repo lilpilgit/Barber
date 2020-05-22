@@ -95,9 +95,10 @@
                         <td><%=c.getNumOrderedProduct()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: red;" > <i class="fas fa-ban"></i></button>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i></button>
-                            <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i></button>
+                            <button type="button" class="tablebutton" style="color: red;" title="Ban">
+                                <i class="fas fa-ban"></i></button>
+                            <button type="button" class="trashbutton" title="Delete">
+                                <i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     <%}%>

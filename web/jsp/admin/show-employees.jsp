@@ -102,10 +102,10 @@
                         <td><%=e.getUser().getAddress()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
                                     onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button type="button" class="trashbutton"
+                            <button type="button" class="trashbutton" title="Delete"
                                     data-target="#alertDeleteEmp"
                                     data-toggle="modal"
                                     onclick=setTmpId(<%=e.getId()%>)>
