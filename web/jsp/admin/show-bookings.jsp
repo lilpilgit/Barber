@@ -2,9 +2,9 @@
 <%@ page import="model.mo.Customer" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-/*
-    */
-/* Prendo l'ArrayList<Customer> di tutti gli impiegati *//*
+    /*
+     */
+    /* Prendo l'ArrayList<Customer> di tutti gli impiegati *//*
 
     boolean areCustomers = false;
     ArrayList<Customer> customers = (ArrayList<Customer>) request.getAttribute("customers");
@@ -12,7 +12,7 @@
         areCustomers = true;
 
     */
-/* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo cliente è andato a buon fine o meno*//*
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo cliente è andato a buon fine o meno*//*
 
     String result = null;
     boolean resultPresent = false;
@@ -22,7 +22,7 @@
     }
 
     */
-/* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di cancellazione/modifica ( se è andata a buon fine o meno) *//*
 
     String applicationMessage = null;
@@ -65,16 +65,19 @@
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+            <div class="form-inline">
+                <label for="Booking-Date" class="pr-2" style="color: #818894;">Select a date: </label>
+                <input type="date" class="form-control" name="booking_date" id="Booking-Date">
+            </div>
+
+        </nav>
+
         <div class="row justify-content-center">
             <div class="col-auto">
 
 
                 <p>Ciaooooo</p>
-
-
-
-
-
 
             </div>
         </div>
