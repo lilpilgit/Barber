@@ -65,59 +65,63 @@
             </div>
         </nav>
         <%if (areEmployees) {%>
-        <table class="table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">N°</th>
-                <th scope="col">ID</th>
-                <th scope="col">Surname</th>
-                <th scope="col">Name</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Email</th>
-                <th scope="col">Address</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <%
-                int i = 1; /* contatore per il numero di impiegati */
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <table class="table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        int i = 1; /* contatore per il numero di impiegati */
 
-                for (Employee e : employees) {
-            %>
-            <tr>
-                <th scope="row"><%=i++%>
-                </th>
-                <td><%=e.getId()%>
-                </td>
-                <td><%=e.getUser().getSurname()%>
-                </td>
-                <td><%=e.getUser().getName()%>
-                </td>
-                <td><%=e.getUser().getPhone()%>
-                </td>
-                <td><%=e.getUser().getEmail()%>
-                </td>
-                <td><%=e.getUser().getAddress()%>
-                </td>
-                <td>
-                    <button type="button" class="tablebutton" style="color: #1ae2dd;"
-                            onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
-                    </button>
-                    <button type="button" class="tablebutton" style="color: black;"
-                            onclick="deleteEmployee(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
-                    </button>
-                </td>
-            </tr>
-            <%}%>
-            </tbody>
-        </table>
-        <%} else {%>
-        <h1>No employee to show.</h1>
-        <%}%>
-        <form method="post" id="action">
-            <input type="hidden" name="controllerAction" value="">
-            <input type="hidden" name="employeeID" value="">
-        </form>
+                        for (Employee e : employees) {
+                    %>
+                    <tr>
+                        <th scope="row"><%=i++%>
+                        </th>
+                        <td><%=e.getId()%>
+                        </td>
+                        <td><%=e.getUser().getSurname()%>
+                        </td>
+                        <td><%=e.getUser().getName()%>
+                        </td>
+                        <td><%=e.getUser().getPhone()%>
+                        </td>
+                        <td><%=e.getUser().getEmail()%>
+                        </td>
+                        <td><%=e.getUser().getAddress()%>
+                        </td>
+                        <td>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                                    onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="tablebutton" style="color: black;"
+                                    onclick="deleteEmployee(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%} else {%>
+                <h1>No employee to show.</h1>
+                <%}%>
+                <form method="post" id="action">
+                    <input type="hidden" name="controllerAction" value="">
+                    <input type="hidden" name="employeeID" value="">
+                </form>
+            </div>
+        </div>
     </main>
 </div>
 

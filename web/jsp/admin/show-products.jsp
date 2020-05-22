@@ -113,9 +113,11 @@
                     <%}%>
                     </tbody>
                 </table>
-                    <%} else {%>
+                <%} else {%>
                 <h1>Non ci sono dipendenti mi disp...</h1>
-                    <%}%>
+                <%}%>
+            </div>
+        </div>
     </main>
 </div>
 
