@@ -106,7 +106,10 @@
                                     onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="trashbutton"
-                                    onclick="deleteEmployee(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
+                                    data-target="#alertDeleteEmp"
+                                    data-toggle="modal"
+                                    onclick=setTmpId(<%=e.getId()%>)>
+                                <i class="far fa-trash-alt"></i>
                             </button>
                         </td>
                     </tr>
@@ -124,6 +127,34 @@
         </div>
     </main>
 </div>
+<input type="hidden" id="tmpIdDel" value="">
+<!--MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
+<div class="modal fade" id="alertDeleteEmp" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle" style="color: rgba(211,4,0,0.75)">You are removing
+                    an employee...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to permanently delete an employee.<br><br>Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="deleteEmployee(document.getElementById('tmpIdDel').value)">Delete
+                    employee
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
 
 
 <script>
@@ -133,6 +164,11 @@
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
+    }
+
+    function setTmpId(id) {
+        document.getElementById("tmpIdDel").value = id;
+        console.log("ID SETTATO TMP: " + document.getElementById("tmpIdDel").value);
     }
 
     window.addEventListener('load', onLoadFunctionalities);
