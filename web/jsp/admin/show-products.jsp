@@ -2,11 +2,26 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    /*    *//* Prendo l'ArrayList<Employee> di tutti gli impiegati *//*
-    boolean areEmployees = false;
-    ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
-    if (employees != null && employees.size() != 0)
-        areEmployees = true;*/
+    /* Prendo l'ArrayList<Product> di tutti i prodotti */
+    boolean areProducts = false;
+    ArrayList<Product> products = (ArrayList<Product>) request.getAttribute("products");
+    if (products != null && products.size() != 0)
+        areProducts = true;
+
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo cliente è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di cancellazione/modifica ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
 %>
 <!doctype html>
 <html lang="en">
@@ -49,7 +64,7 @@
                 </form>
             </div>
         </nav>
-        <%--        <%if (areEmployees) {%>--%>
+        <%if (areProducts) {%>
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table-bordered">
@@ -66,42 +81,41 @@
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-                    <%--            <tbody>
-                                <%
-                                    int i = 1; /* contatore per il numero di impiegati */
+                    <tbody>
+                    <%
+                        int i = 1; /* contatore per il numero di prodotti */
 
-                                    for (Employee e : employees) {
-                                %>
-                                <tr>
-                                    <th scope="row"><%=i%>
-                                    </th>
-                                    <td><%=e.getId()%>
-                                    </td>
-                                    <td><%=e.getUser().getSurname()%>
-                                    </td>
-                                    <td><%=e.getUser().getName()%>
-                                    </td>
-                                    <td><%=e.getUser().getPhone()%>
-                                    </td>
-                                    <td><%=e.getUser().getEmail()%>
-                                    </td>
-                                    <td><%=e.getUser().getAddress()%>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <%}%>
-                                </tbody>--%>
+                        for (Product p : products) {
+                    %>
+                    <tr>
+                        <th scope="row"><%=i++%>
+                        </th>
+                        <td><%=p.getId()%>
+                        </td>
+                        <td><%=p.getName()%>
+                        </td>
+                        <td><%=p.getQuantity()%>
+                        </td>
+                        <td><%=p.getPrice()%>
+                        </td>
+                        <td><%=p.getDiscount()%>
+                        </td>
+                        <td><%=p.getInsertDate()%>
+                        </td>
+                        <td><%=p.getShowcase()%>
+                        </td>
+                        <td>
+                            <button type="button" class="tablebutton" style="color: red;" > <i class="fas fa-ban"></i></button>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i></button>
+                            <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <%}%>
+                    </tbody>
                 </table>
-            </div>
-        </div>
-        <%--        <%}else{%>
+                    <%} else {%>
                 <h1>Non ci sono dipendenti mi disp...</h1>
-                <%}%>--%>
+                    <%}%>
     </main>
 </div>
 
@@ -109,6 +123,9 @@
 <script>
     function onLoadFunctionalities() {
         /* TODO impostare il pulsante Products su hover in modo da fare l'highlight*/
+        <%if(resultPresent){%>
+        showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
+        <%}%>
     }
 
     window.addEventListener('load', onLoadFunctionalities);

@@ -138,7 +138,7 @@ public class Product {
         this.showcase = showcase;
     }
 
-    public Boolean isDeleted() {
+    public Boolean isDeleted(boolean deleted) {
         return isDeleted;
     }
 

@@ -112,6 +112,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return product;
     }
 
+
+    /* TODO SISTEMARE SHOP.JSP ED AGGIORNARE CON METODO MVC */
+
     @Override
     /*
       Returns all product to sale ordered by Most Recent Date of Entry
@@ -155,6 +158,55 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             throw new RuntimeException(e);
         }
         return listProduct;
+    }
+
+
+    /* FUNZIONE AGGIORNATA CON METODO MVC */
+
+    @Override
+    public ArrayList<Product> fetchAllProducts() {
+
+        ArrayList<Product> products = new ArrayList<>();
+        /* Seleziono tutti i prodotti in ordine alfabetico per nome */
+        query = "SELECT * FROM PRODUCT ORDER BY NAME;";
+
+        try {
+            ps = connection.prepareStatement(query);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            while (rs.next()) {
+                products.add(readProduct(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return products;
+
     }
 
     @Override
@@ -377,6 +429,13 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.getBoolean(\"SHOWCASE\")");
             throw new RuntimeException(e);
         }
+        try {
+            product.isDeleted(rs.getBoolean("DELETED"));
+        }  catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
+            throw new RuntimeException(e);
+        }
+
         return product;
     }
 }
