@@ -104,7 +104,7 @@
                     </tbody>
                 </table>
                 <%} else {%>
-                <h1>Non ci sono dipendenti mi disp...</h1>
+                <h1>There are no customers :(</h1>
                 <%}%>
             </div>
         </div>

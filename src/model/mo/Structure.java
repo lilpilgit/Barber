@@ -1,6 +1,6 @@
 package model.mo;
 
-import java.time.Instant;
+import java.util.ArrayList;
 
 public class Structure {
 
@@ -8,11 +8,20 @@ public class Structure {
     private String address;
     private String openingTime;
     private String closingTime;
-    private String slot;
+    private String slot;        /* This is necessary for scanning the booking appointments */
     private String name;
     private String phone;
-    /* N:1 con ADMIN */
+
+    /* 1:1 with ADMIN */
     private Admin admin;
+
+    /* 1:N with EMPLOYEE */
+    private ArrayList<Employee> employees;
+    /* 1:N with BOOKING */
+    private ArrayList<Booking> bookings;
+    /* 1:N with PRODUCT */
+    private ArrayList<Product> products;
+
 
     @Override
     public String toString() {
@@ -25,6 +34,9 @@ public class Structure {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", admin=" + admin +
+                ", employees=" + employees +
+                ", bookings=" + bookings +
+                ", products=" + products +
                 '}';
     }
 
@@ -90,6 +102,30 @@ public class Structure {
 
     public void setAdmin(Admin admin) {
         this.admin = admin;
+    }
+
+    public ArrayList<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(ArrayList<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public ArrayList<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(ArrayList<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
     }
 }
 
