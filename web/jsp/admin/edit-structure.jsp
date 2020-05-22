@@ -74,7 +74,6 @@
                     <label for="Name">Name</label>
                     <input type="text" name="name" id="Name" required
                            value="<%=structureToEdit.getName()%>"
-                           oninput="toUpperCase(this)"
                            class="form-control">
                 </div>
                 <div class="col-md-6 mb-3">
