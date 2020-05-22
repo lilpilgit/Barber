@@ -105,7 +105,7 @@
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button type="button" class="tablebutton trashbutton"
+                            <button type="button" class="trashbutton"
                                     onclick="deleteEmployee(<%=e.getId()%>)"><i class="far fa-trash-alt"></i>
                             </button>
                         </td>
