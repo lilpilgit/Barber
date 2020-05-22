@@ -1,11 +1,8 @@
 package model.mo;
 
-import com.sun.xml.internal.bind.api.CompositeStructure;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Product {
     private Long id;
@@ -21,10 +18,15 @@ public class Product {
     private Boolean showcase;                   /* The product is highlighted ? */
     private Boolean isDeleted;
 
-    /* N : M with Structure */
-    private ArrayList<Structure> structures;
-    /* M : N with Costumer */
-    private ArrayList<Customer> customers;
+    /* N : 1 with Structure */
+    private Structure structure;
+
+    /* M : N with Orders */
+    private ArrayList<Orders> orders;
+    /* M : N with Cart */
+    private ArrayList<Cart> carts;
+    /* M : N with Wishlist */
+    private ArrayList<Wishlist> wishlists;
 
     @Override
     public String toString() {
@@ -41,8 +43,10 @@ public class Product {
                 ", category='" + category + '\'' +
                 ", showcase=" + showcase +
                 ", isDeleted=" + isDeleted +
-                ", structures=" + structures +
-                ", customers=" + customers +
+                ", structure=" + structure +
+                ", orders=" + orders +
+                ", carts=" + carts +
+                ", wishlists=" + wishlists +
                 '}';
     }
 
@@ -134,31 +138,43 @@ public class Product {
         this.showcase = showcase;
     }
 
-    public Boolean Isdeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(Boolean deleted) {
-        this.isDeleted = deleted;
+        isDeleted = deleted;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Structure getStructure() {
+        return structure;
     }
 
-    public ArrayList<Structure> getStructures() {
-        return structures;
+    public void setStructure(Structure structure) {
+        this.structure = structure;
     }
 
-    public void setStructures(ArrayList<Structure> structures) {
-        this.structures = structures;
+    public ArrayList<Orders> getOrders() {
+        return orders;
     }
 
-    public ArrayList<Customer> getCustomers() {
-        return customers;
+    public void setOrders(ArrayList<Orders> orders) {
+        this.orders = orders;
     }
 
-    public void setCustomers(ArrayList<Customer> customers) {
-        this.customers = customers;
+    public ArrayList<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(ArrayList<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public ArrayList<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(ArrayList<Wishlist> wishlists) {
+        this.wishlists = wishlists;
     }
 }
