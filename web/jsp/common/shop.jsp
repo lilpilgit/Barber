@@ -4,7 +4,7 @@
 <%@page import="java.util.ArrayList" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
-    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL);
+    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL, null);
     if (df != null) {
         df.beginTransaction();
     } else {
@@ -53,10 +53,10 @@
 %>
 <!doctype html>
 <html lang="en">
-<jsp:include page="../../templates/head.html"/>
+<%@ include file="/templates/head.html"%>
 <body>
 
-<jsp:include page="../../templates/header.jsp"/>
+<%@ include file="/templates/header.jsp"%>
 
 <!-------------------------------------------- Welcome Our Store --------------------------------------------------------->
 
@@ -140,7 +140,7 @@
         %>
     </div>
 </div>
-<jsp:include page="../../templates/footer.html"/>
+<%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive("showShop");
