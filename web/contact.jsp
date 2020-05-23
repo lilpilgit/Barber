@@ -9,31 +9,9 @@
     String email = request.getParameter("contact_email");
     String message = request.getParameter("contact_message");
 
-    /*TODO 1)BISOGNA VERIFICARE ANCHE DI AVER SELEZIONATO IL NOME DELLA STRUTTURA */
-
     if (name != null && email != null && message != null)
         data = true;
 
-
-    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL);
-    if (df != null) {
-        df.beginTransaction();
-    } else {
-        throw new RuntimeException("ERRORE NELL'IF DA AGGIUSTAREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-    }
-
-    StructureDAO structureDAO = df.getStructureDAO();
-    ArrayList<String> allNameStructure = structureDAO.findAllStructureName();
-
-
-
-    /* ERROR DA GESTIREEEEEEEEEEEEEE */
-    /*test message error*/
-/*    data = false;
-    error = true;*/
-
-    df.commitTransaction();
-    df.closeTransaction();
 %>
 
 <!doctype html>
@@ -104,19 +82,6 @@
                     <label for="contact_email">Email:</label>
                     <input type="email" class="form-control" id="contact_email" placeholder="Your email..."
                            name="contact_email" required>
-                </div>
-                <div class="text-center pt-2">
-                    <select id="structures_select_menu" name="structure">
-                        <%long idStructure = 0;%>
-                        <option selected disabled value="">Structure</option>
-                        <%
-                            for (String structureName : allNameStructure) {
-                                idStructure++;
-                        %>
-                        <option id="category_<%=idStructure%>" value="<%=idStructure%>"><%=structureName%>
-                        </option>
-                        <%}%>
-                    </select>
                 </div>
 
                 <div class="form-group">
