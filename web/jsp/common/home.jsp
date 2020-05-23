@@ -15,8 +15,11 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");/*null se loggato correttamente*/
     }
 
-    /* Prendo l'ArrayList<Product> di tutti i prodotti */
+    /* Prendo l'ArrayList<Product> di tutti i prodotti dal parametro showcase */
     ArrayList<Product> products = null;
+    if (request.getAttribute("showcase") != null) {
+        products = (ArrayList<Product>) request.getAttribute("showcase");
+    }
 
 %>
 <!doctype html>

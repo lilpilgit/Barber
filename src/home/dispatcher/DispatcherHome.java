@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@WebServlet(name = "DispatcherAdmin", urlPatterns = {"/app"})
+@WebServlet(name = "DispatcherHome", urlPatterns = {"/app"})
 public class DispatcherHome extends HttpServlet {
     String controllerAction = null;
     PrintWriter out = null;
