@@ -21,9 +21,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-<jsp:include page="../../templates/head.html"/>
+<jsp:include page="/templates/head.html"/>
 <body>
-<jsp:include page="../../templates/header.html"/>
+<jsp:include page="/templates/header.html"/>
 
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
@@ -42,7 +42,7 @@
             <div class="wrapper row">
                 <div class="preview col-md-6">
                     <div class="preview-pic tab-content text-center">
-                        <div class="tab-pane active" id="pic-1"><img src="../../img/products/<%=product.getPictureName()%>"
+                        <div class="tab-pane active" id="pic-1"><img src="img/products/<%=product.getPictureName()%>"
                                                                      alt="Empty Picture"/></div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
 </div>
 
 
-<jsp:include page="../../templates/footer.html"/>
+<jsp:include page="/templates/footer.html"/>
 <script type="text/javascript">
     function onLoadHandler() {
         setButtonActive("showShop");

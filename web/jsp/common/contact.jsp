@@ -16,15 +16,15 @@
 
 <!doctype html>
 <html lang="en">
-<jsp:include page="../../templates/head.html"/>
+<jsp:include page="/templates/head.html"/>
 <body>
 
-<jsp:include page="../../templates/header.html"/>
+<jsp:include page="/templates/header.html"/>
 
 <!---------------------------------------------- IMAGE CONTACT  ------------------------------------------------------->
 
 <div class="image-contact">
-    <img src="../../img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
+    <img src="/img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
     <div class="text">CONTACT US!</div>
 </div>
 <%if (data) {%>
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<jsp:include page="../../templates/footer.html"/>
+<jsp:include page="/templates/footer.html"/>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive("showContact");

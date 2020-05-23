@@ -4,10 +4,10 @@
 %>
 <!doctype html>
 <html lang="en">
-<jsp:include page="../../templates/head.html"/>
+<jsp:include page="/templates/head.html"/>
 <body>
 
-<jsp:include page="../../templates/header.html"/>
+<jsp:include page="/templates/header.html"/>
 
 
 <br><br>
@@ -17,7 +17,7 @@
 </div>
 
 
-<jsp:include page="../../templates/footer.html"/>
+<jsp:include page="/templates/footer.html"/>
 
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
