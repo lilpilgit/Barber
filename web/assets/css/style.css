@@ -683,6 +683,8 @@ input[type=number] {
     height: auto;
 }
 
+
+
 .modal-body {
     background-color: rgba(201, 197, 126, 0.5);
     padding: 20px;
@@ -775,6 +777,13 @@ input[type=number] {
     }
 
 }
+
+@media (min-width: 576px) {
+    .modal-width  {
+        max-width: 650px;
+    }
+}
+
 
 @media (max-width: 576px) {
 
