@@ -19,4 +19,7 @@ public interface CustomerDAO {
      */
 
     ArrayList<Customer> fetchAll();
+    Customer findById(Long id);
+    boolean blockCustomer(Customer customer);
+    boolean unBlockCustomer(Customer customer);
 }

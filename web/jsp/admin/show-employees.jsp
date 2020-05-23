@@ -109,7 +109,7 @@
                                     onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alertDeleteEmp"
+                                    data-target="#alert<%=user%>"
                                     data-toggle="modal"
                                     onclick=setTmpId(<%=e.getId()%>)>
                                 <i class="far fa-trash-alt"></i>
@@ -133,7 +133,7 @@
 
 <input type="hidden" id="tmpIdDel" value="">
 <!--MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
-<div class="modal fade" id="alert<%=user%>>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="alert<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

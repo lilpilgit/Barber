@@ -77,6 +77,139 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
         return customers;
     }
 
+    @Override
+    public Customer findById(Long id) {
+        Customer customer = new Customer();
+        query = "SELECT * FROM CUSTOMER C WHERE C.ID = ?";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, id);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            if (rs.next()) {
+                /*Se true significa che esiste un cliente con quell'ID*/
+                customer = readCustomer(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella if(rs.next())");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return customer;
+    }
+
+    @Override
+    public boolean blockCustomer(Customer customer) {
+
+        query ="UPDATE CUSTOMER SET BLOCKED = '1' WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, customer.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    public boolean unBlockCustomer(Customer customer) {
+
+        query ="UPDATE CUSTOMER SET BLOCKED = '0' WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, customer.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    private Customer readCustomer(ResultSet rs) {
+        Customer customer = new Customer();
+
+        try {
+            customer.setId(rs.getLong("C.ID"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella customer.setID(rs.getLong(\"C.ID\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            customer.setNumBookedReservations(rs.getInt("C.NUM_BOOKED_RESERVATIONS"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella customer.setNumBookedReservations(rs.getInt(\"C.NUM_BOOKED_RESERVATIONS\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            customer.setNumOrderedProduct(rs.getInt("C.NUM_ORDERED_PRODUCT"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella customer.setNumOrderedProduct(rs.getInt(\"C.NUM_ORDERED_PRODUCT\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            customer.setBlocked(rs.getBoolean("C.BLOCKED"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella customer.setBoolean(rs.getLong(\"C.BLOCKED\")");
+            throw new RuntimeException(e);
+        }
+
+        return customer;
+    }
+
     private Customer readCustomerWithUserFields(ResultSet rs) {
         /**
          * In this case the result set contains the result of a JOIN between customer and user therefore it is possible

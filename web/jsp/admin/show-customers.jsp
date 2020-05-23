@@ -105,7 +105,11 @@
                                     title="<%=blockedStatus ? "Unblock" : "Block"%>"
                                     data-target="#alertBanCust"
                                     data-toggle="modal"
-                                <%--    onclick="<%=blockedStatus ? unBlockById(<%=c.getId()%>, '<%=user%>','<%=controller%>') : blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>') %>">--%>
+                                    onclick=<% if(blockedStatus) { %>
+                                            "unBlockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
+                            <% } else { %>
+                                            "blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
+                            <%}%>
                                 <i class="fas <%=c.getBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"

@@ -86,7 +86,7 @@ function blockById(id, user, controller) {
     formUserID.elements['controllerAction'].value = controller + '.blocked' + user;
     formUserID.elements[index].value = id;
     formUserID.submit();
-    console.log(index);
+    console.log(index + "==> blockById successful called");
 }
 
 function unBlockById(id, user, controller) {
@@ -102,7 +102,7 @@ function unBlockById(id, user, controller) {
     formUserID.elements['controllerAction'].value = controller + '.unBlocked' + user;
     formUserID.elements[index].value = id;
     formUserID.submit();
-    console.log(index);
+    console.log(index + "==> " + controller + ".unBlocked" + user + " for " + id +" Successful called");
 }
 
 
