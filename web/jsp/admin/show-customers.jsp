@@ -4,6 +4,8 @@
 <%
     String user = "Customer";
     String controller = "Customers";
+/*    Customer c = null;
+    Boolean blockedStatus = c.getBlocked();*/
 
     /* Prendo l'ArrayList<Customer> di tutti gli impiegati */
     boolean areCustomers = false;
@@ -81,8 +83,9 @@
                         int i = 1; /* contatore per il numero di impiegati */
 
                         for (Customer c : customers) {
+                            boolean blockedStatus = c.getBlocked();
                     %>
-                    <tr>
+                    <tr class="<%=blockedStatus ? "table-danger" : ""%>">
                         <th scope="row"><%=i++%>
                         </th>
                         <td><%=c.getId()%>
@@ -98,11 +101,12 @@
                         <td><%=c.getNumOrderedProduct()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: red;" title="Ban"
+                            <button type="button" class="tablebutton" style="color: <%=blockedStatus ? "green" : "red"%>;"
+                                    title="<%=blockedStatus ? "Unblock" : "Block"%>"
                                     data-target="#alertBanCust"
                                     data-toggle="modal"
-                                    onclick=setTmpId(<%=c.getId()%>)>
-                                <i class="fas fa-ban"></i>
+                                <%--    onclick="<%=blockedStatus ? unBlockById(<%=c.getId()%>, '<%=user%>','<%=controller%>') : blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>') %>">--%>
+                                <i class="fas <%=c.getBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
                                     data-target="#alert<%=user%>"
@@ -127,7 +131,7 @@
     </main>
 </div>
 
-<input type="hidden" id="tmpIdDel" value="">
+<input type="hidden" id="tmpId" value="">
 
 <!--MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
 <div class="modal fade" id="alert<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -148,7 +152,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpIdDel').value, '<%=user%>','<%=controller%>')">Delete <%=user%>
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=user%>','<%=controller%>')">Delete <%=user%>
                 </button>
             </div>
         </div>
@@ -166,8 +170,8 @@
     }
 
     function setTmpId(id) {
-        document.getElementById("tmpIdDel").value = id;
-        console.log("ID SETTATO TMP: " + document.getElementById("tmpIdDel").value);
+        document.getElementById("tmpId").value = id;
+        console.log("ID SETTATO TMP: " + document.getElementById("tmpId").value);
     }
 
     window.addEventListener('load', onLoadFunctionalities);
