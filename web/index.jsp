@@ -132,7 +132,7 @@
                     <p class="card-text">&euro;<%=product.getPrice()%>
                     </p>
                     <div class="container">
-                    <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
+                    <a href="jsp/common/product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
 <!----------------------------------------------- Link To shop -------------------------------------------------------->
 
 <div class="container text-center">
-    <a class="button button2 text-center" href="shop.jsp">See more...</a>
+    <a class="button button2 text-center" href="jsp/common/shop.jsp">See more...</a>
 </div>
 <div class="container-fluid">
     <div class="row welcome text-center">

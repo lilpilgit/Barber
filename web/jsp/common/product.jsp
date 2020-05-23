@@ -21,40 +21,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!--------------------------------------------- Meta tags --------------------------------------------------------->
-    <meta charset="utf-8">
-
-    <title>UBS United Barber Salon</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" src="assets/js/jquery-3.5.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script type="text/javascript" src="assets/js/main.js"></script>
-
-</head>
+<jsp:include page="../../templates/head.html"/>
 <body>
-<jsp:include page="templates/header.html"/>
+<jsp:include page="../../templates/header.html"/>
 
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
 
 <div class="container pt-5 text-center">
     <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
-    <a class="button button2" href="shop.jsp">Go back to shop</a>
+    <button class="btn btnheader active2" type="button" id='showHome'
+            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+        Go back to shop
+    </button>
 </div>
 
 <div class="container pt-5 pb-5">
@@ -63,7 +42,7 @@
             <div class="wrapper row">
                 <div class="preview col-md-6">
                     <div class="preview-pic tab-content text-center">
-                        <div class="tab-pane active" id="pic-1"><img src="img/products/<%=product.getPictureName()%>"
+                        <div class="tab-pane active" id="pic-1"><img src="../../img/products/<%=product.getPictureName()%>"
                                                                      alt="Empty Picture"/></div>
                     </div>
                 </div>
@@ -110,10 +89,10 @@
 </div>
 
 
-<jsp:include page="templates/footer.html"/>
+<jsp:include page="../../templates/footer.html"/>
 <script type="text/javascript">
     function onLoadHandler() {
-        setButtonActive("shop");
+        setButtonActive("showShop");
         setModalLogin();
         handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
     }

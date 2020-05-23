@@ -3,43 +3,51 @@
     <div class="container-fluid sticky-top">
         <nav class="navbar navbar-expand-md navbar-light ">
             <div class="container">
-                <a class="navbar-brand" href="../../home.jsp"><img src="../../img/homepage/logo_jp2.png"
-                                                              alt="United_Barber_Salon.png"></a>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav ml-auto">
-                        <a id="index" class="button button1 nav-iStem nav-link" href="../../home.jsp">Home <span
-                                class="sr-only">(current)</span></a>
-                        <a id="booking" class="button button1 nav-item nav-link" href="../../booking.jsp">Book!</a>
-                        <a id="shop" class="button button1 nav-item nav-link" href="../../shop.jsp">Shop</a>
-                        <a id="contact" class="button button1 nav-item nav-link" href="../../contact.jsp">Contact</a>
-                        <button class="logged" type="button" id='showCart'>
-                            <i class="fas fa-shopping-basket"></i>
-                        </button>
-                        <button class="logged" type="button" id='showWishlist'>
-                            <i class="fas fa-star"></i>
-                        </button>
-                        <button class="logged" type="button" id='showEdit'
-                                data-target="#alert<%=user%>"
-                                data-toggle="modal">
-                            <i class="fas fa-user"></i>
-                        </button>
+                <span class="navbar-brand"><img src="../../img/homepage/logo_jp2.png" alt="United_Barber_Salon.png"></span>
+
+                <div class="navbar-nav ml-auto">
+                    <button class="btn btnheader" type="button" id='showHome'
+                            onclick="window.location.href = '../../jsp/common/home.jsp'">
+                        Home
+                    </button>
+                    <button class="btn btnheader" type="button" id='showBook'
+                            onclick="window.location.href = '../../jsp/common/book.jsp'">
+                        Book!
+                    </button>
+                    <button class="btn btnheader" type="button" id='showShop'
+                            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+                        Shop
+                    </button>
+                    <button class="btn btnheader" type="button" id='showContact'
+                            onclick="window.location.href = '../../jsp/common/contact.jsp'">
+                        Contact
+                    </button>
+                    <button class="logged" type="button" id='showCart'>
+                        <i class="fas fa-shopping-basket"></i>
+                    </button>
+                    <button class="logged" type="button" id='showWishlist'>
+                        <i class="fas fa-star"></i>
+                    </button>
+                    <button class="logged" type="button" id='showEdit'
+                            data-target="#alert<%=user%>"
+                            data-toggle="modal">
+                        <i class="fas fa-user"></i>
+                    </button>
 
 
-                        <!-- MULTI LANGUAGE -->
+                    <!-- MULTI LANGUAGE -->
 
-<!--                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                <span class="flag-icon flag-icon-gb"></span> ENG
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#"><span class="flag-icon flag-icon-it"></span> ITA</a>
-                            </div>
-                        </div>-->
+                    <!--                        <div class="btn-group">
+                                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="flag-icon flag-icon-gb"></span> ENG
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"><span class="flag-icon flag-icon-it"></span> ITA</a>
+                                                </div>
+                                            </div>-->
 
-
-
-                    </div>
                 </div>
+
             </div>
         </nav>
     </div>

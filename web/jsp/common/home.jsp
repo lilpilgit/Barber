@@ -119,7 +119,10 @@
 <!----------------------------------------------- Link To shop -------------------------------------------------------->
 
 <div class="container text-center">
-    <a class="button button2 text-center" href="shop.jsp">See more...</a>
+    <button class="btn btnheader active2" type="button" id='showHome'
+            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+        See more...
+    </button>
 </div>
 <div class="container-fluid">
     <div class="row welcome text-center">
@@ -165,7 +168,7 @@
 <jsp:include page="../../templates/footer.html"/>
 <script>
     window.onload = function afterPageLoad() {
-        setButtonActive("index");
+        setButtonActive("showHome");
         setModalLogin();
     }
 </script>
