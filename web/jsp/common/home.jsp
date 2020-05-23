@@ -24,9 +24,9 @@
 %>
 <!doctype html>
 <html lang="en">
-<jsp:include page="../../templates/head.html"/>
+<jsp:include page="/templates/head.html"/>
 <body>
-<jsp:include page="../../templates/header.html"/>
+<jsp:include page="/templates/header.html"/>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 
