@@ -1,9 +1,70 @@
+<%@page import="model.mo.Product" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.mo.User" %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%
+    boolean loggedOn = true; /*(Boolean) request.getAttribute("loggedOn");*/
+    User loggedUser = null; /*(User) request.getAttribute("loggedUser");*/
+
+
+    /*    *//* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+ * di login/logout ( se è andata a buon fine o meno) *//*
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");*//*null se loggato correttamente*//*
+    }
+
+    *//* Prendo l'ArrayList<Product> di tutti i prodotti dal parametro showcase *//*
+    ArrayList<Product> products = null;
+    if (request.getAttribute("showcase") != null) {
+        products = (ArrayList<Product>) request.getAttribute("showcase");
+    }*/
+
+%>
+<!doctype html>
+<html lang="en">
+
+<!-- RICORDARSI DI CAMBIARE IL PATH QUANDO SARA' POSSIBILE COLLEGARE LA PAGINA AL DISPATCHER -->
+
+<head>
+    <!--------------------------------------------- Meta tags --------------------------------------------------------->
+    <meta charset="utf-8">
+
+    <title>UBS United Barber Salon</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../../img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon/favicon-16x16.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" src="../../assets/js/jquery-3.5.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="../../assets/js/main.js"></script>
+
+</head>
+
+
+
+
+<body>
+
 <!-------------------------------------------------- Navigation in Header ------------------------------------------------------->
 <header>
     <div class="container-fluid sticky-top">
         <nav class="navbar navbar-expand-md navbar-light ">
             <div class="container">
-                <span class="navbar-brand"><img src="img/homepage/logo_jp2.png" alt="United_Barber_Salon.png"></span>
+                <span class="navbar-brand"><img src="../../img/homepage/logo_jp2.png" alt="United_Barber_Salon.png"></span>
 
                 <div class="navbar-nav ml-auto">
                     <button class="btn btnheader" type="button" id='showHome'
@@ -255,5 +316,146 @@
 </div>
 </div>
 
+<!------------------------------------------------ Shopping Chart ----------------------------------------------------->
+
+<!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
+
+<div class="container py-4">
+    <div class="card">
+        <table class="table table-hover shopping-cart-wrap">
+            <thead class="text-muted">
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col" width="120">Quantity</th>
+                <th scope="col" width="120">Price</th>
+                <th scope="col" width="200" class="text-right">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Size: </dt>
+                                <dd>XXL</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Color: </dt>
+                                <dd>Orange color</dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
+                    <a href="" class="btn btn-outline-danger"> × Remove</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/1.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Size: </dt>
+                                <dd>XXL</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Color: </dt>
+                                <dd>Orange color</dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 35</var>
+                        <small class="text-muted">(USD10 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
+                    <a href="" class="btn btn-outline-danger btn-round"> × Remove</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/2.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Size: </dt>
+                                <dd>XXL</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Color: </dt>
+                                <dd>Orange color</dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 45</var>
+                        <small class="text-muted">(USD15 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
+                    <a href="" class="btn btn-outline-danger btn-round"> × Remove</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div> <!-- card.// -->
+</div>
+</div>
 
 
+
+
+<!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
+
+<%@ include file="/templates/footer.html"%>
+<script>
+    window.onload = function afterPageLoad() {
+        /*  setButtonActive("showCart");*/
+    }
+</script>
+</body>
+</html>

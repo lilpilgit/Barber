@@ -168,7 +168,7 @@
         </div>
     </div>
 </div>
-<jsp:include page="/templates/footer.html"/>
+<%@ include file="/templates/footer.html"%>
 <script>
     window.onload = function afterPageLoad() {
         setButtonActive("showHome");

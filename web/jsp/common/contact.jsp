@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<jsp:include page="/templates/footer.html"/>
+<%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive("showContact");
