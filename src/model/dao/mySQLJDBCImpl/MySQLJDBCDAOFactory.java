@@ -6,10 +6,17 @@ import services.config.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MySQLJDBCDAOFactory extends DAOFactory {
 
     private Connection connection = null;
+    private HashMap factoryParameters = null;
+
+    public MySQLJDBCDAOFactory(HashMap factoryParameters) {
+        this.factoryParameters=factoryParameters;
+    }
 
     @Override
     public void beginTransaction() {

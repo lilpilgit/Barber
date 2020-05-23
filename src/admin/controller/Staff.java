@@ -1,6 +1,6 @@
 package admin.controller;
 
-import common.StaticFunc;
+import functions.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.EmployeeDAO;
 import model.dao.StructureDAO;
@@ -29,7 +29,7 @@ public class Staff {
         /**
          * Set viewUrl to the JSP <new-edit-employee> to show the data entry form of the new employee.
          * */
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -154,7 +154,7 @@ public class Staff {
         submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_employee"*/
 
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -234,7 +234,7 @@ public class Staff {
         DAOFactory daoFactory = null;
 
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -278,7 +278,7 @@ public class Staff {
         /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-employees.jsp */
         idToDelete = Long.valueOf(request.getParameter("employeeID"));
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -358,7 +358,7 @@ public class Staff {
         idToEdit = Long.valueOf(request.getParameter("employeeID"));
         Employee employeeToEdit = null; /* oggetto di classe Employee che deve essere passato alla pagina del form di inserimento/modifica */
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -413,7 +413,7 @@ public class Staff {
 //        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_employee"*/
 
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {

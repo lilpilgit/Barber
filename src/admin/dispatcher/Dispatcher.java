@@ -71,17 +71,17 @@ public class Dispatcher extends HttpServlet {
         Class<?> controllerClass = null;
         try {
             controllerClass = Class.forName("admin.controller." + splittedAction[0]);
-            System.err.println("DISPATCHER ==> controllerClass :" + controllerClass.getName());
+            System.err.println("DISPATCHER MANAGE ==> controllerClass :" + controllerClass.getName());
             //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
         } catch (ClassNotFoundException e) {
-            System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
             e.printStackTrace();
         }
 
         try {
             controllerMethod = controllerClass.getMethod(splittedAction[1], HttpServletRequest.class, HttpServletResponse.class);
         } catch (NoSuchMethodException e) {
-            System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
             e.printStackTrace();
         }
 
@@ -90,7 +90,7 @@ public class Dispatcher extends HttpServlet {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
             e.printStackTrace();
         }
         /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato

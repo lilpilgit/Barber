@@ -126,6 +126,14 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     }
 
     @Override
+    public void update(User loggedUser) {
+        /**
+         * This operation is allowed only in UserDAOCookieImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for DB. Only cookie");
+    }
+
+    @Override
     public User findById(Long id) {
         User user = new User();
 
@@ -200,6 +208,59 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         }
 
         return true;
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        /**
+         * Search user in table USER by Email that is UNIQUE.
+         *
+         * @return object User found if exist otherwise raise exception
+         */
+
+        User user = null;
+
+        query = "SELECT ID FROM USER WHERE EMAIL = ?;";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, email);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+        try {
+            if (rs.next()) {
+                user = readUser(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User findLoggedUser() {
+        /**
+         * This operation is allowed only in UserDAOCookieImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for DB. Only cookie");
     }
 
     private User readUser(ResultSet rs) {

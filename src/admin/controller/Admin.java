@@ -1,30 +1,43 @@
 package admin.controller;
 
-import common.StaticFunc;
-import model.dao.*;
+import functions.StaticFunc;
+import model.dao.AdminDAO;
+import model.dao.DAOFactory;
+import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
+import model.mo.User;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class Admin {
 
     private Admin() {
     }
 
-    public static void showFormEditAdmin(HttpServletRequest request, HttpServletResponse response){
+    public static void showFormEditAdmin(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * SI OCCUPA DI RICHIAMARE LA JSP IN CUI È CONTENUTO IL FORM PER LA MODIFICA DEI PROPRI DATI
+         * Fetch info about logged admin and call edit-admin.jsp
          * */
 
-        /* TODO:CODICE DA RIVEDERE DOPO CHE SARANNO STATE INTRODOTTE LE SESSIONI*/
-        /*TODO prendere l'ID dell'admin da modificare dalla SESSIONE*/
-
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
         model.mo.Admin adminToEdit = null; /* oggetto di classe Admin che deve essere passato alla pagina del form di inserimento/modifica */
+        User loggedUser;
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        /* Inizializzo il cookie di sessione */
+        HashMap sessionFactoryParameters = new HashMap<String, Object>();
+        sessionFactoryParameters.put("request", request);
+        sessionFactoryParameters.put("response", response);
+        sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+        UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+        loggedUser = sessionUserDAO.findLoggedUser(); /* trovo l'id dell'admin attualmente loggato */
+
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -32,29 +45,38 @@ public class Admin {
         }
 
         AdminDAO adminDAO = daoFactory.getAdminDAO();
-        adminToEdit = adminDAO.findById(1L);
+        adminToEdit = adminDAO.findById(loggedUser.getId()); /* l'id lo prendo dal cookie di sessione */
 
         try {
-            /* committo la transazione */
+            /* committo la transazione sul db */
             daoFactory.commitTransaction();
+            /* commit della transazione cookie fittizia */
+            sessionDAOFactory.commitTransaction();
+
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
             System.err.println("ERRORE NEL COMMIT DELLA TRANSAZIONE");
         } finally {
-            /*  chiudo la transazione */
+            /*  chiudo la transazione sul db */
             daoFactory.closeTransaction();
+            /* chiusura della transazione cookie fittizia */
+            sessionDAOFactory.closeTransaction();
             System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
         }
 
         /* Setto gli attributi della request */
-        /* 1) il viewUrl che il dispatcher dovrà visualizzare nel browser */
+        /* 1) Booleano per sapere se è loggato o meno */
+        request.setAttribute("loggedOn",loggedUser!=null);
+        /* 2) Oggetto che specifica quale utente è loggato*/
+        request.setAttribute("loggedUser", loggedUser);
+        /* 3) il viewUrl che il dispatcher dovrà visualizzare nel browser */
         request.setAttribute("viewUrl", "admin/edit-admin"); /* bisogna visualizzare edit-admin.jsp */
-        /* 2) l'oggetto impiegato che deve essere modificato */
-        request.setAttribute("adminToModify",adminToEdit);
+        /* 4) l'oggetto impiegato che deve essere modificato */
+        request.setAttribute("adminToModify", adminToEdit);
     }
 
-    public static void editAdmin(HttpServletRequest request, HttpServletResponse response){
+    public static void editAdmin(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Instantiates an AdminDAO to be able to edit the existing admin in Database.
          */
@@ -73,7 +95,7 @@ public class Admin {
 //        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_admin"*/
 
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -170,8 +192,6 @@ public class Admin {
         }
 
     }
-
-
 
 
 }

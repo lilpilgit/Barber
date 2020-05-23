@@ -1,13 +1,12 @@
 package admin.controller;
 
-import common.StaticFunc;
+import functions.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.StructureDAO;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Time;
 
 
 public class Structure {
@@ -22,7 +21,7 @@ public class Structure {
          */
         DAOFactory daoFactory = null;
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -70,7 +69,7 @@ public class Structure {
 //        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_structure"*/
 
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {

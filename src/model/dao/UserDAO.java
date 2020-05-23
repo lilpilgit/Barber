@@ -21,7 +21,17 @@ public interface UserDAO {
     User insert(Long id, String email, String name, String surname, String address,
                 String phone, String password, Boolean isAdmin, Boolean isEmployee,
                 Boolean isCustomer) throws DuplicatedObjectException;
+
+    void update(User loggedUser);
+
     User findById(Long id);
 
     boolean delete(User user);
+
+    User findByEmail(String email);
+
+    /* Metodi che verranno usati SOLAMENTE nei cookie */
+    User findLoggedUser();
+
+    /* ********************************************** */
 }

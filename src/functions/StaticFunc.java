@@ -1,4 +1,4 @@
-package common;
+package functions;
 
 public class StaticFunc {
 
