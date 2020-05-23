@@ -10,10 +10,12 @@
                             onclick="window.location.href = '../../jsp/common/home.jsp'">
                         Home
                     </button>
+                    <% if (loggedOn) {%>
                     <button class="btn btnheader" type="button" id='showBook'
                             onclick="window.location.href = '../../jsp/common/book.jsp'">
                         Book!
                     </button>
+                    <%}%>
                     <button class="btn btnheader" type="button" id='showShop'
                             onclick="window.location.href = '../../jsp/common/shop.jsp'">
                         Shop
@@ -22,12 +24,14 @@
                             onclick="window.location.href = '../../jsp/common/contact.jsp'">
                         Contact
                     </button>
+                    <% if (loggedOn) {%>
                     <button class="logged" type="button" id='showCart'>
                         <i class="fas fa-shopping-basket"></i>
                     </button>
                     <button class="logged" type="button" id='showWishlist'>
                         <i class="fas fa-star"></i>
                     </button>
+                    <%}%>
                     <button class="logged" type="button" id='showEdit'
                             data-target="#loginModal"
                             data-toggle="modal">

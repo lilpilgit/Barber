@@ -50,7 +50,7 @@
 </head>
 <body>
 
-<jsp:include page="../../templates/admin-sidebar.html"/>
+<jsp:include page="/templates/admin-sidebar.html"/>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">

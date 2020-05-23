@@ -48,7 +48,7 @@
 </head>
 <body>
 
-<jsp:include page="templates/header.html"/>
+<jsp:include page="templates/header.jsp"/>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 

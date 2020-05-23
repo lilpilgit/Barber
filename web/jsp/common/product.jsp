@@ -23,7 +23,7 @@
 <head>
 <jsp:include page="/templates/head.html"/>
 <body>
-<jsp:include page="/templates/header.html"/>
+<jsp:include page="/templates/header.jsp"/>
 
 
 <!--------------------------------------------- Product view ------------------------------------------------------->

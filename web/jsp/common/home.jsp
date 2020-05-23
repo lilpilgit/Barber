@@ -26,7 +26,7 @@
 <html lang="en">
 <%@ include file="/templates/head.html"%>
 <body>
-<%@ include file="/templates/header.html"%>
+<%@ include file="/templates/header.jsp"%>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 
@@ -172,7 +172,6 @@
 <script>
     window.onload = function afterPageLoad() {
         setButtonActive("showHome");
-        setModalLogin();
     }
 </script>
 </body>
