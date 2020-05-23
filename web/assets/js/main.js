@@ -137,12 +137,4 @@ function getSelectedDateOfBooking(date_field) {
 
 }
 
-function setModalLogin() {
-    $('a[href$="#loginModal"]').on("click", function () {
-        $('#loginModal').modal('show');
-    });
-}
-
-
-
 
