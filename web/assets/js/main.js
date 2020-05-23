@@ -4,6 +4,13 @@ function setButtonActive(id) {
     button2active.classList.add("active2");
 }
 
+function showMessage(msg) {
+    /**
+     * Show message with simple alert TODO:migliorare la grafica anche nella funzione omologa in admin.js
+     */
+    alert(msg);
+}
+
 /*
 * Realize the counter of quantity for the product page
 * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase
@@ -137,4 +144,14 @@ function getSelectedDateOfBooking(date_field) {
 
 }
 
+function showResult(result, message) {
+    /**
+     * show alert with message returned from server
+     */
+    if (result === 'success')
+        alert(message);
+    else if (result === 'fail')
+        alert(message)
+
+}
 

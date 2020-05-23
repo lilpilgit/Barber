@@ -1,12 +1,20 @@
 <%@page import="model.mo.Product" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
-    boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
-    User loggedUser = (User) request.getAttribute("loggedUser");
+    /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
+    Boolean loggedOn = null;
+    if (request.getAttribute("loggedOn") != null) {
+        loggedOn = (Boolean) request.getAttribute("loggedOn");
+    }
 
+    /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
+    User loggedUser = null;
+    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+        loggedUser = (User) request.getAttribute("loggedUser");
+    }
 
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di login/logout ( se è andata a buon fine o meno) */
@@ -21,12 +29,24 @@
         products = (ArrayList<Product>) request.getAttribute("showcase");
     }
 
+    /* Prendo il parametro per decidere cosa fare nel caso in cui la registrazione sia andata a buon fine TODO mostrare il modal di login in automatico in base al fatto che registered sia true o meno */
+    Boolean registered = null;
+    if (request.getAttribute("registered") != null) {
+        registered = (Boolean) request.getAttribute("registered");
+    }
+
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Home";
+
+    /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
+    String idBtnAttivo = "showHome";
+
 %>
 <!doctype html>
 <html lang="en">
-<%@ include file="/templates/head.html"%>
+<%@ include file="/templates/head.jsp" %>
 <body>
-<%@ include file="/templates/header.jsp"%>
+<%@ include file="/templates/header.jsp" %>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 
@@ -102,7 +122,7 @@
             <div class="card">
                 <div class="text-center">
                     <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
-                         alt="<%=product.getPictureName()%>"></div>
+                                                       alt="<%=product.getPictureName()%>"></div>
                 </div>
                 <div class="card-body toBottom text-center">
                     <h4 class="card-title"><%=product.getName()%>
@@ -110,7 +130,7 @@
                     <p class="card-text">&euro;<%=product.getPrice()%>
                     </p>
                     <div class="container">
-                    <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
+                        <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
                     </div>
                 </div>
             </div>
@@ -144,35 +164,29 @@
             </div>
 
 
+            <%-- <div class="container py-4">
+                 <button type="button" class="button button2" data-toggle="collapse" data-target="#demo">Check it!
+                 </button>
+             </div>
+             <div id="demo" class="collapse">
 
-           <%-- <div class="container py-4">
-                <button type="button" class="button button2" data-toggle="collapse" data-target="#demo">Check it!
-                </button>
-            </div>
-            <div id="demo" class="collapse">
+                 <!---------------------------------- Show Team ------------------------------------->
 
-                <!---------------------------------- Show Team ------------------------------------->
+                &lt;%&ndash; <div class="container py-3 ml-auto">
+                     <div class="fixit">
+                         <img class="rounded-circle profile-img" src="img/homepage/Long-Beard-Styles.jpg"
+                              alt="BarbaLungaStyles.jpg">
+                         <h2>Mario Rossi</h2>
+                         <p>Our beard expert will amaze you with many ideas for new styles</p>
+                         <br>
+                     </div>
+                 </div>&ndash;%&gt;
+ --%>
 
-               &lt;%&ndash; <div class="container py-3 ml-auto">
-                    <div class="fixit">
-                        <img class="rounded-circle profile-img" src="img/homepage/Long-Beard-Styles.jpg"
-                             alt="BarbaLungaStyles.jpg">
-                        <h2>Mario Rossi</h2>
-                        <p>Our beard expert will amaze you with many ideas for new styles</p>
-                        <br>
-                    </div>
-                </div>&ndash;%&gt;
---%>
-
-            </div>
         </div>
     </div>
 </div>
-<%@ include file="/templates/footer.html"%>
-<script>
-    window.onload = function afterPageLoad() {
-        setButtonActive("showHome");
-    }
-</script>
+</div>
+<%@ include file="/templates/footer.html" %>
 </body>
 </html>

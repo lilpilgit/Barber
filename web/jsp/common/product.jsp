@@ -21,7 +21,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<jsp:include page="/templates/head.html"/>
+<jsp:include page="/templates/head.jsp"/>
 <body>
 <jsp:include page="/templates/header.jsp"/>
 

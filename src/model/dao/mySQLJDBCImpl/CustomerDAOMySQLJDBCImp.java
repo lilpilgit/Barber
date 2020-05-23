@@ -1,13 +1,15 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.CustomerDAO;
+import model.dao.UserDAO;
+import model.exception.DuplicatedObjectException;
+import model.exception.NoCustomerCreatedException;
+import model.exception.NoEmployeeCreatedException;
 import model.mo.Customer;
+import model.mo.Employee;
 import model.mo.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
@@ -20,6 +22,155 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
 
     public CustomerDAOMySQLJDBCImp(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public Customer insert(UserDAO userDAO,
+                           String email, /* [+] attributo della table USER */
+                           String name, /* [+] attributo della table USER */
+                           String surname, /* [+] attributo della table USER */
+                           String address, /* [+] attributo della table USER */
+                           String phone, /* [+] attributo della table USER */
+                           String password /* [+] attributo della table USER */) throws NoCustomerCreatedException {
+        /**
+         * The entity customer has an ID that appears to be FOREIGN KEYS of the PRIMARY KEYS <ID> of the USER entity,
+         * therefore this method checked if the customer with the email passed as parameter (String email)
+         * already exists (in which case raises a NoCustomerCreatedException), inserts the user with ID manually
+         * increased on the COUNTER table and only if no exception is raised, inserts the <Customer customer> object
+         * in the CUSTOMER table.
+         *
+         * @return Return the object inserted correctly in the DB otherwise raise an exception.
+         * */
+
+        /* Per i clienti basta la sola email per poterne verificare l'esistenza nel DB prima di inserirlo
+        * pertanto sfrutto il controllo che viene già fatto nel metodo insert() dello UserDAO*/
+
+        Customer customer = new Customer();
+        Long newId = null;
+
+
+        /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
+         * UN NUOVO CLIENTE DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
+         * NUMERO PER CLIENTI DIVERSI SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
+
+        query = "UPDATE COUNTER SET VALUE = VALUE + 1 WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
+        query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+
+        /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
+        try {
+            rs.next();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
+        try {
+            newId = rs.getLong("VALUE");
+        } catch (SQLException e) {
+            System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
+            throw new RuntimeException(e);
+        } finally {
+            /* IL resultSet una volta letto l'id non serve più in quanto rimane da fare solo l'INSERT di USER e poi CUSTOMER */
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println("Errore nella rs.close();");
+                throw new RuntimeException(e);
+            }
+        }
+
+        /* L'unico campo del cliente che rimane da settare è l'ID. Setto l'id del cliente con il nuovo ID. */
+        customer.setId(newId);
+
+        /*              MOLTO IMPORTANTE !!!!!
+            Viene prima aggiunto l'utente e se l'inserimento è andato a buon fine verrà aggiunto anche il cliente
+            con lo stesso ID. Notare che viene usato lo userDAO istanziato nella transazione dal controller,
+            perché deve essere uno userDAO istanziato all'interno della medesima transazione con il DB
+         */
+
+        try {
+            User user = userDAO.insert(newId, email, name, surname, address, phone, password, false, false, true);
+            /*                                                                                                                ^^^^^^^^^^^^^^ ==> STIAMO INSERENDO UN UTENTE COME CLIENTE!!!*/
+            /*Setto l'unico campo rimanente che risulta essere user all'interno dell'oggetto customer da inserire nel DB*/
+            customer.setUser(user);
+
+        } catch (DuplicatedObjectException e) {
+            throw new NoCustomerCreatedException("CustomerDAOJDBCImpl.insert: Tentativo di inserimento di un cliente già esistente con email : {" + email + "}.");
+        }
+
+        /* Se non è stata sollevata alcuna eccezione fin qui, allora:
+
+                >il CLIENTE NON ESISTE GIÀ
+                >lo USER NON ESISTE GIÀ CON TALE EMAIL
+
+           Pertanto provo a inserirlo nel DB
+        */
+
+        query = "INSERT INTO CUSTOMER(ID, NUM_BOOKED_RESERVATIONS, NUM_ORDERED_PRODUCT,BLOCKED) VALUES(?,0,0,0);";
+        try {                                                                                     //     ^^^^^ CLIENTE APPENA REGISTRATO
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, customer.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+
+        /* Eseguo l'inserimento */
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate()");
+            throw new RuntimeException(e);
+        }
+
+        /*Chiudo il preparedStatement*/
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /*
+         * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe Customer
+         * appena inserito
+         * */
+
+        return customer;
     }
 
     @Override
@@ -125,7 +276,7 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
     @Override
     public boolean blockCustomer(Customer customer) {
 
-        query ="UPDATE CUSTOMER SET BLOCKED = '1' WHERE ID = ?";
+        query = "UPDATE CUSTOMER SET BLOCKED = '1' WHERE ID = ?";
 
         try {
             ps = connection.prepareStatement(query);
@@ -153,7 +304,7 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
 
     public boolean unBlockCustomer(Customer customer) {
 
-        query ="UPDATE CUSTOMER SET BLOCKED = '0' WHERE ID = ?";
+        query = "UPDATE CUSTOMER SET BLOCKED = '0' WHERE ID = ?";
 
         try {
             ps = connection.prepareStatement(query);

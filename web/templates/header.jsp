@@ -88,27 +88,31 @@
                     <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
 
                         <!--Body-->
-                        <div class="modal-body modal-background mb-1">
-                            <div class="row text-center">
-                                <div class="md-form form-sm col-6">
-                                    <input type="email" id="Email"
-                                           name="email"
-                                           class="form-control form-control-sm validate">
-                                    <label data-error="wrong" data-success="right" for="Email">
-                                        <i class="fas fa-envelope prefix"></i> Your email </label>
+                        <form name="logonForm" id="logonForm" method="post">
+                            <div class="modal-body modal-background mb-1">
+                                <div class="row text-center">
+                                    <div class="md-form form-sm col-6">
+                                        <input type="email" id="Email"
+                                               name="email" maxlength="50" required
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="Email">
+                                            <i class="fas fa-envelope prefix"></i> Your email </label>
+                                    </div>
+                                    <div class="md-form form-sm col-6 mb-1">
+                                        <input type="password" id="Password"
+                                               name="password" maxlength="255" required
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="Password">
+                                            <i class="fas fa-lock prefix"></i> Insert password </label>
+                                    </div>
                                 </div>
-                                <div class="md-form form-sm col-6 mb-1">
-                                    <input type="password" id="Password"
-                                           name="password"
-                                           class="form-control form-control-sm validate">
-                                    <label data-error="wrong" data-success="right" for="Password">
-                                        <i class="fas fa-lock prefix"></i> Insert password </label>
+                                <div class="text-center mt-2">
+                                    <button type="submit" form="logonForm" class="btn btn-info">Log in<i
+                                            class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
+                                <input type="hidden" name="controllerAction" value="Home.logon"/>
                             </div>
-                            <div class="text-center mt-2">
-                                <button class="btn btn-info"> Log in <i class="fas fa-sign-in-alt ml-1"></i></button>
-                            </div>
-                        </div>
+                        </form>
                         <!--Footer-->
                         <div class="modal-footer">
                             <div class="options text-center text-md-right mt-1">
@@ -118,124 +122,129 @@
 
                     </div>
                     <!--/.Panel 7-->
+                    <form name="registerForm" id="registerForm" method="post">
+                        <!--Panel 8-->
+                        <div class="tab-pane fade" id="panel8" role="tabpanel">
 
-                    <!--Panel 8-->
-                    <div class="tab-pane fade" id="panel8" role="tabpanel">
+                            <!--Body-->
+                            <div class="modal-body">
 
-                        <!--Body-->
-                        <div class="modal-body">
-
-                            <div class="row">
-                                <div class="md-form form-sm col-4 text-center" >
-                                    <input type="text" class="form-control" name="name" id="Name" required>
-                                    <label data-error="wrong" data-success="right" for="Name">
-                                        <i class="fas fa-user "></i> Name </label>
+                                <div class="row">
+                                    <div class="md-form form-sm col-4 text-center">
+                                        <input type="text" class="form-control" name="name" id="Name" required oninput="this.value=this.value.toUpperCase();">
+                                        <label data-error="wrong" data-success="right" for="Name">
+                                            <i class="fas fa-user "></i> Name </label>
+                                    </div>
+                                    <div class="md-form form-sm col-4 text-center">
+                                        <input type="text" class="form-control" name="surname" id="Surname" required oninput="this.value=this.value.toUpperCase();">
+                                        <label data-error="wrong" data-success="right" for="Surname">
+                                            <i class="fas fa-user "></i> Surname </label>
+                                    </div>
+                                    <div class="md-form form-sm col-4 text-center">
+                                        <input type="email" id="modalLRInput12" name="email"
+                                               class="form-control form-control-sm validate " required>
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">
+                                            <i class="fas fa-envelope prefix"></i> Email </label>
+                                    </div>
                                 </div>
-                                <div class="md-form form-sm col-4 text-center" >
-                                    <input type="text" class="form-control" name="surname" id="Surname" required>
-                                    <label data-error="wrong" data-success="right" for="Surname">
-                                        <i class="fas fa-user "></i> Surname </label>
+
+                                <div class="row">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="password" id="modalLRInput13" name="password" required
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput13">
+                                            <i class="fas fa-lock prefix"></i> Password</label>
+                                    </div>
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="password" id="modalLRInput14" required
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput14">
+                                            <i class="fas fa-lock prefix"></i> Repeat password </label>
+                                    </div>
                                 </div>
-                                <div class="md-form form-sm col-4 text-center">
-                                    <input type="email" id="modalLRInput12" class="form-control form-control-sm validate " required>
-                                    <label data-error="wrong" data-success="right" for="modalLRInput12">
-                                        <i class="fas fa-envelope prefix"></i> Email </label>
+
+                                <div class="row">
+
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="tel" id="modalLRInput15" name="phone"
+                                               class="form-control form-control-sm validate" required>
+                                        <label data-error="wrong" data-success="right" for="modalLRInput15">
+                                            <i class="fas fa-phone"></i> Phone number </label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <select class="custom-select" name="state" id="State" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            <option>ITALY</option>
+                                        </select>
+                                        <label for="State"><i class="fas fa-flag"></i> State</label>
+                                    </div>
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <select class="custom-select" name="region" id="Region" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            <option>ABRUZZO</option>
+                                            <option>BASILICATA</option>
+                                            <option>CALABRIA</option>
+                                            <option>EMILIA-ROMAGNA</option>
+                                            <option>FRIULI-VENEZIA-GIULIA</option>
+                                            <option>LAZIO</option>
+                                            <option>LIGURIA</option>
+                                            <option>LOMBARDIA</option>
+                                            <option>MARCHE</option>
+                                            <option>MOLISE</option>
+                                            <option>PIEMONTE</option>
+                                            <option>PUGLIA</option>
+                                            <option>SARDEGNA</option>
+                                            <option>SICILIA</option>
+                                            <option>TOSCANA</option>
+                                            <option>TRENTINO-ALTO-ADIGE</option>
+                                            <option>UMBRIA</option>
+                                            <option>VALLE D'AOSTA</option>
+                                            <option>VENETO</option>
+                                        </select>
+                                        <label for="Region"><i class="fas fa-map-marker-alt"></i> Region </label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="text" class="form-control" name="city" id="City" required oninput="this.value=this.value.toUpperCase();">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">
+                                            <i class="fas fa-map-marker-alt"></i> City
+                                        </label>
+                                    </div>
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0" oninput="this.value=this.value.toUpperCase();">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput15">
+                                            <i class="fas fa-map-marker-alt"></i> Postal Code
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="text" class="form-control" name="street" id="Street" required oninput="this.value=this.value.toUpperCase();">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">
+                                            <i class="fas fa-map-marker-alt"></i> Street
+                                        </label>
+                                    </div>
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="number" class="form-control" name="house_number" id="House-number"
+                                               min="0">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput15">
+                                            <i class="fas fa-map-marker-alt"></i> House Number
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="password" id="modalLRInput13"
-                                           class="form-control form-control-sm validate">
-                                    <label data-error="wrong" data-success="right" for="modalLRInput13">
-                                        <i class="fas fa-lock prefix"></i> Password</label>
-                                </div>
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="password" id="modalLRInput14"
-                                           class="form-control form-control-sm validate">
-                                    <label data-error="wrong" data-success="right" for="modalLRInput14">
-                                        <i class="fas fa-lock prefix"></i> Repeat password </label>
-                                </div>
+                            <div class="text-center form-sm mt-2">
+                                <button type="submit" form="registerForm" class="btn btn-info">Sign up <i class="fas fa-sign-in-alt ml-1"></i></button>
                             </div>
-
-                            <div class="row">
-
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="tel" id="modalLRInput15" class="form-control form-control-sm validate" required>
-                                    <label data-error="wrong" data-success="right" for="modalLRInput15">
-                                        <i class="fas fa-phone"></i> Phone number </label>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="md-form form-sm col-6 text-center">
-                                    <select class="custom-select" name="state" id="State" required>
-                                        <option selected disabled value="">Choose...</option>
-                                        <option>ITALY</option>
-                                    </select>
-                                    <label for="State"><i class="fas fa-flag"></i> State</label>
-                                </div>
-                                <div class="md-form form-sm col-6 text-center">
-                                    <select class="custom-select" name="region" id="Region" required>
-                                        <option selected disabled value="">Choose...</option>
-                                        <option>ABRUZZO</option>
-                                        <option>BASILICATA</option>
-                                        <option>CALABRIA</option>
-                                        <option>EMILIA-ROMAGNA</option>
-                                        <option>FRIULI-VENEZIA-GIULIA</option>
-                                        <option>LAZIO</option>
-                                        <option>LIGURIA</option>
-                                        <option>LOMBARDIA</option>
-                                        <option>MARCHE</option>
-                                        <option>MOLISE</option>
-                                        <option>PIEMONTE</option>
-                                        <option>PUGLIA</option>
-                                        <option>SARDEGNA</option>
-                                        <option>SICILIA</option>
-                                        <option>TOSCANA</option>
-                                        <option>TRENTINO-ALTO-ADIGE</option>
-                                        <option>UMBRIA</option>
-                                        <option>VALLE D'AOSTA</option>
-                                        <option>VENETO</option>
-                                    </select>
-                                    <label for="Region"><i class="fas fa-map-marker-alt"></i> Region </label>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="text" class="form-control" name="city" id="City" required>
-                                    <label data-error="wrong" data-success="right" for="modalLRInput12">
-                                        <i class="fas fa-map-marker-alt"></i> City
-                                    </label>
-                                </div>
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="number" class="form-control" name="cap" id="Cap" required min="0">
-                                    <label data-error="wrong" data-success="right" for="modalLRInput15">
-                                        <i class="fas fa-map-marker-alt"></i> Postal Code
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="text" class="form-control" name="street" id="Street" required>
-                                    <label data-error="wrong" data-success="right" for="modalLRInput12">
-                                        <i class="fas fa-map-marker-alt"></i> Street
-                                    </label>
-                                </div>
-                                <div class="md-form form-sm col-6 text-center">
-                                    <input type="number" class="form-control" name="house_number" id="House-number" min="0">
-                                    <label data-error="wrong" data-success="right" for="modalLRInput15">
-                                        <i class="fas fa-map-marker-alt"></i> House Number
-                                    </label>
-                                </div>
-                            </div>
+                            <input type="hidden" name="controllerAction" value="Home.register"/>
                         </div>
-                        <div class="text-center form-sm mt-2">
-                            <button class="btn btn-info">Sign up <i class="fas fa-sign-in-alt ml-1"></i></button>
-                        </div>
-
-                    </div>
+                    </form>
                     <!--Footer-->
                     <div class="modal-footer">
                         <div class="options text-right">

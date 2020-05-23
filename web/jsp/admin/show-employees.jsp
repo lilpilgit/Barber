@@ -175,11 +175,6 @@
         <%}%>
     }
 
-    function setTmpId(id) {
-        document.getElementById("tmpIdDel").value = id;
-        console.log("ID SETTATO TMP: " + document.getElementById("tmpIdDel").value);
-    }
-
     window.addEventListener('load', onLoadFunctionalities);
 </script>
 </body>

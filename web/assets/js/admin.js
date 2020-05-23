@@ -44,6 +44,12 @@ function showResult(result, message) {
 
 }
 
+function setTmpId(id) {
+    /**
+     * Set id of object to delete before confirm this action into the modal */
+    document.getElementById("tmpIdDel").value = id;
+}
+
 function deleteEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with

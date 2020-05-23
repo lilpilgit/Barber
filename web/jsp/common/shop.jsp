@@ -53,7 +53,7 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@ include file="/templates/head.html"%>
+<%@ include file="/templates/head.jsp"%>
 <body>
 
 <%@ include file="/templates/header.jsp"%>

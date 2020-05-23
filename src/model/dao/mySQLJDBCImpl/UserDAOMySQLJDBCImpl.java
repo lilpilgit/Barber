@@ -220,7 +220,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
         User user = null;
 
-        query = "SELECT ID FROM USER WHERE EMAIL = ?;";
+        query = "SELECT * FROM USER WHERE EMAIL = ?;";
 
         try {
             ps = connection.prepareStatement(query);
@@ -270,6 +270,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          * @return User object read from result set.
          */
         User user = new User();
+
 
         try {
             user.setId(rs.getLong("ID"));
