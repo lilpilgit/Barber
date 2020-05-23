@@ -24,7 +24,7 @@ public class Customers {
          */
         DAOFactory daoFactory = null;
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -67,7 +67,7 @@ public class Customers {
         /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-customer.jsp */
         idToDelete = Long.valueOf(request.getParameter("CustomerID"));
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -156,7 +156,7 @@ public class Customers {
         /* Fetching dell'id da bloccare proveniente dal form hidden dentro la pagina show-customer.jsp */
         idToBlock = Long.valueOf(request.getParameter("CustomerID"));
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
@@ -241,7 +241,7 @@ public class Customers {
         /* Fetching dell'id da sbloccare proveniente dal form hidden dentro la pagina show-customer.jsp */
         idToUnBlock = Long.valueOf(request.getParameter("CustomerID"));
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {

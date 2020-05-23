@@ -1,22 +1,23 @@
-<%@page import="model.dao.DAOFactory" %>
-<%@page import="model.dao.ProductDAO" %>
 <%@page import="model.mo.Product" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="model.mo.User" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
-    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL);
-    if (df != null) {
-        df.beginTransaction();
-    } else {
-        throw new RuntimeException("ERRORE NELL'IF DA AGGIUSTARE");
+    boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
+    User loggedUser = (User) request.getAttribute("loggedUser");
+
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di login/logout ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");/*null se loggato correttamente*/
     }
-    ProductDAO productDAO = df.getProductDAO();
 
-    ArrayList<Product> products = productDAO.findShowcaseProduct();
+    /* Prendo l'ArrayList<Product> di tutti i prodotti */
+    ArrayList<Product> products = null;
 
-    df.commitTransaction();
-    df.closeTransaction();
 %>
 <!doctype html>
 <html lang="en">

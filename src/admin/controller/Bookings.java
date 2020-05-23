@@ -14,13 +14,13 @@ public class Bookings {
          * Instantiates an CustomerDAO to be able to show ALL customers in Database.
          */
         DAOFactory daoFactory = null;
-
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
-        if (daoFactory != null) {
-            daoFactory.beginTransaction();
-        } else {
-            throw new RuntimeException("Errore nel Controller Bookings.showBookings ==> daoFactory.beginTransaction();");
-        }
+//
+//        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+//        if (daoFactory != null) {
+//            daoFactory.beginTransaction();
+//        } else {
+//            throw new RuntimeException("Errore nel Controller Bookings.showBookings ==> daoFactory.beginTransaction();");
+//        }
 
 /*        commonView(daoFactory,request);
 

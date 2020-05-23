@@ -19,7 +19,7 @@ public class Logistics {
          */
         DAOFactory daoFactory = null;
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL);
+        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
         if (daoFactory != null) {
             daoFactory.beginTransaction();
         } else {
