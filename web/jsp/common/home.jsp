@@ -40,13 +40,13 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="../../img/homepage/img1.jpg" class="d-block w-100 carousel-height" alt="Immagine_1">
+                <img src="img/homepage/img1.jpg" class="d-block w-100 carousel-height" alt="Immagine_1">
             </div>
             <div class="carousel-item">
-                <img src="../../img/homepage/img2.webp" class="d-block w-100 carousel-height" alt="Immagine_2">
+                <img src="img/homepage/img2.webp" class="d-block w-100 carousel-height" alt="Immagine_2">
             </div>
             <div class="carousel-item ">
-                <img src="../../img/homepage/img3.jpg" class="d-block w-100 carousel-height" alt="Immagine_3">
+                <img src="img/homepage/img3.jpg" class="d-block w-100 carousel-height" alt="Immagine_3">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
@@ -101,7 +101,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="text-center">
-                    <div class="tab-content-shop"><img src="../../img/products/<%=product.getPictureName()%>"
+                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
                          alt="<%=product.getPictureName()%>"></div>
                 </div>
                 <div class="card-body toBottom text-center">
@@ -140,7 +140,7 @@
         <div class="col-12">
             <h1 class="display-4">We Are A Big Family</h1>
             <div class="container pb-4 ">
-                <img class="img-thumbnail myrounded" src="../../img/homepage/team.jpg" height="500" alt="Team.jpg">
+                <img class="img-thumbnail myrounded" src="img/homepage/team.jpg" height="500" alt="Team.jpg">
             </div>
 
 
@@ -168,7 +168,7 @@
         </div>
     </div>
 </div>
-<jsp:include page="../../templates/footer.html"/>
+<jsp:include page="/templates/footer.html"/>
 <script>
     window.onload = function afterPageLoad() {
         setButtonActive("showHome");
