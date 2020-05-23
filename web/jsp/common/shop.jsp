@@ -53,38 +53,12 @@
 %>
 <!doctype html>
 <html lang="en">
-<head>
-    <!--------------------------------------------- Meta tags --------------------------------------------------------->
-    <meta charset="utf-8">
-
-    <title>UBS United Barber Salon</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" src="assets/js/jquery-3.5.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script type="text/javascript" src="assets/js/main.js"></script>
-
-</head>
+<jsp:include page="../../templates/head.html"/>
 <body>
 
-<jsp:include page="templates/header.html"/>
+<jsp:include page="../../templates/header.html"/>
 
 <!-------------------------------------------- Welcome Our Store --------------------------------------------------------->
-
 
 <div class="container-fluid text-center pt-5">
     <h1 class="display-3">Welcome To Our Shop!</h1>
@@ -134,7 +108,7 @@
         <div class="no-products-container">
             <h3 class="no-products-title">We are sorry...</h3>
             <div>
-                <img class="no-products-thumb" src="img/shop/empty_warehouse.png" alt="No products present">
+                <img class="no-products-thumb" src="../../img/shop/empty_warehouse.png" alt="No products present">
                 <p>What you requested did not produce any results</p>
             </div>
         </div>
@@ -146,7 +120,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="text-center ">
-                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
+                    <div class="tab-content-shop"><img src="../../img/products/<%=product.getPictureName()%>"
                                                   alt="<%=product.getPictureName()%>"></div>
                 </div>
                 <div class="card-body toBottom text-center">
@@ -166,7 +140,7 @@
         %>
     </div>
 </div>
-<jsp:include page="templates/footer.html"/>
+<jsp:include page="../../templates/footer.html"/>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive("shop");
