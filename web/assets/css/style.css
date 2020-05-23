@@ -66,8 +66,10 @@ html, body {
     border-bottom: 2px solid black;
 }
 
+button:focus {outline:0;}
+
 .logged {
-    border: transparent;
+    border: none;
     background-color: transparent;
     padding: 2px 0 2px 6px;
     margin-top: auto;
@@ -75,6 +77,7 @@ html, body {
     color: rgb(201, 197, 126);
     font-size: 2.3em;
     transition-duration: 0.3s;
+    outline: none;
 }
 
 .logged:hover {
@@ -837,6 +840,21 @@ input[type=number] {
 
 /* ---------------------------------------------- CART CSS ---------------------------------------------------------- */
 
+.btn-outline-gold {
+    color: rgb(201, 197, 126);
+    border-color: #989451;
+}
+
+.btn-outline-gold:hover {
+    color: #fff;
+    background-color: rgb(201, 197, 126);
+    border-color: white;
+}
+.cart-box {
+    background: #eee;
+    padding: 3em;
+    line-height: 1.5em;
+}
 
 .param {
     margin-bottom: 7px;

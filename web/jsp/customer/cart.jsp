@@ -321,7 +321,7 @@
 <!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
 
 <div class="container py-4">
-    <div class="card">
+    <div class="cart-box">
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
@@ -339,12 +339,12 @@
                         <figcaption class="media-body">
                             <h6 class="title text-truncate">Product name goes here </h6>
                             <dl class="param param-inline small">
-                                <dt>Size: </dt>
-                                <dd>XXL</dd>
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
                             </dl>
                             <dl class="param param-inline small">
-                                <dt>Color: </dt>
-                                <dd>Orange color</dd>
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
                             </dl>
                         </figcaption>
                     </figure>
@@ -364,23 +364,36 @@
                     </div> <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
-                    <a href="" class="btn btn-outline-danger"> × Remove</a>
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
+
+
+
+
+
+
+
+
+
+
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/1.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate">Product name goes here </h6>
                             <dl class="param param-inline small">
-                                <dt>Size: </dt>
-                                <dd>XXL</dd>
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
                             </dl>
                             <dl class="param param-inline small">
-                                <dt>Color: </dt>
-                                <dd>Orange color</dd>
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
                             </dl>
                         </figcaption>
                     </figure>
@@ -395,28 +408,31 @@
                 </td>
                 <td>
                     <div class="price-wrap">
-                        <var class="price">USD 35</var>
-                        <small class="text-muted">(USD10 each)</small>
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
                     </div> <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
-                    <a href="" class="btn btn-outline-danger btn-round"> × Remove</a>
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/2.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate">Product name goes here </h6>
                             <dl class="param param-inline small">
-                                <dt>Size: </dt>
-                                <dd>XXL</dd>
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
                             </dl>
                             <dl class="param param-inline small">
-                                <dt>Color: </dt>
-                                <dd>Orange color</dd>
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
                             </dl>
                         </figcaption>
                     </figure>
@@ -431,15 +447,265 @@
                 </td>
                 <td>
                     <div class="price-wrap">
-                        <var class="price">USD 45</var>
-                        <small class="text-muted">(USD15 each)</small>
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
                     </div> <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                    <a title="" href="" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-heart"></i></a>
-                    <a href="" class="btn btn-outline-danger btn-round"> × Remove</a>
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <dl class="param param-inline small">
+                                <dt>Producer: </dt>
+                                <dd>Avaha</dd>
+                            </dl>
+                            <dl class="param param-inline small">
+                                <dt>Discount? </dt>
+                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">USD 145</var>
+                        <small class="text-muted">(USD5 each)</small>
+                    </div> <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-outline-gold"
+                            data-toggle="tooltip"
+                            data-original-title="Save to Wishlist">
+                        <i class="fa fa-heart"></i></button>
+                    <button class="btn btn-outline-danger"> × Remove</button>
+                </td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
             </tbody>
         </table>
     </div> <!-- card.// -->
