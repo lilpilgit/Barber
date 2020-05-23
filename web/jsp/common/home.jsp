@@ -20,35 +20,9 @@
 %>
 <!doctype html>
 <html lang="en">
-<head>
-    <!--------------------------------------------- Meta tags --------------------------------------------------------->
-    <meta charset="utf-8">
-
-    <title>UBS United Barber Salon</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" src="assets/js/jquery-3.5.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script type="text/javascript" src="assets/js/main.js"></script>
-
-</head>
+<jsp:include page="../../templates/head.html"/>
 <body>
-
-<jsp:include page="templates/header.html"/>
+<jsp:include page="../../templates/header.html"/>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 
@@ -62,13 +36,13 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="img/homepage/img1.jpg" class="d-block w-100 carousel-height" alt="Immagine_1">
+                <img src="../../img/homepage/img1.jpg" class="d-block w-100 carousel-height" alt="Immagine_1">
             </div>
             <div class="carousel-item">
-                <img src="img/homepage/img2.webp" class="d-block w-100 carousel-height" alt="Immagine_2">
+                <img src="../../img/homepage/img2.webp" class="d-block w-100 carousel-height" alt="Immagine_2">
             </div>
             <div class="carousel-item ">
-                <img src="img/homepage/img3.jpg" class="d-block w-100 carousel-height" alt="Immagine_3">
+                <img src="../../img/homepage/img3.jpg" class="d-block w-100 carousel-height" alt="Immagine_3">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
@@ -123,7 +97,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="text-center">
-                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
+                    <div class="tab-content-shop"><img src="../../img/products/<%=product.getPictureName()%>"
                          alt="<%=product.getPictureName()%>"></div>
                 </div>
                 <div class="card-body toBottom text-center">
@@ -159,7 +133,7 @@
         <div class="col-12">
             <h1 class="display-4">We Are A Big Family</h1>
             <div class="container pb-4 ">
-                <img class="img-thumbnail myrounded" src="img/homepage/team.jpg" height="500" alt="Team.jpg">
+                <img class="img-thumbnail myrounded" src="../../img/homepage/team.jpg" height="500" alt="Team.jpg">
             </div>
 
 
@@ -187,7 +161,7 @@
         </div>
     </div>
 </div>
-<jsp:include page="templates/footer.html"/>
+<jsp:include page="../../templates/footer.html"/>
 <script>
     window.onload = function afterPageLoad() {
         setButtonActive("index");
