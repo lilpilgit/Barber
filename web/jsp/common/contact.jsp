@@ -78,7 +78,7 @@
 <jsp:include page="../../templates/footer.html"/>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-        setButtonActive("contact");
+        setButtonActive("showContact");
         setModalLogin();
     }
 </script>

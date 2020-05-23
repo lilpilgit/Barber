@@ -30,7 +30,10 @@
 
 <div class="container pt-5 text-center">
     <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
-    <a class="button button2" href="shop.jsp">Go back to shop</a>
+    <button class="btn btnheader active2" type="button" id='showHome'
+            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+        Go back to shop
+    </button>
 </div>
 
 <div class="container pt-5 pb-5">
@@ -89,7 +92,7 @@
 <jsp:include page="../../templates/footer.html"/>
 <script type="text/javascript">
     function onLoadHandler() {
-        setButtonActive("shop");
+        setButtonActive("showShop");
         setModalLogin();
         handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
     }

@@ -143,7 +143,7 @@
 <jsp:include page="../../templates/footer.html"/>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-        setButtonActive("shop");
+        setButtonActive("showShop");
         setModalLogin();
         setUrlFiltered("category_select_menu", "brand_select_menu", "<%=category%>", "<%=brand%>", "filter_btn");
         setSelectedFilter("category_select_menu", "<%=category%>");

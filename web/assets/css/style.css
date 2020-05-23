@@ -7,35 +7,33 @@ html, body {
     color: #222;
 }
 
-
-
-.button {
-    border-radius: 20px !important;
+.btnheader {
+    border-radius: 20px;
     border: 2px solid transparent;
     color: black;
     align-content: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 20px;
     margin: 6px;
-    transition-duration: 0.2s;
+    transition-duration: 0.3s;
     cursor: pointer;
     opacity: 85%;
     padding-top: 8px;
+}
+
+
+.btnheader:hover {
+    background-color: rgb(201, 197, 126);
+    border: 2px solid black;
+    color: black;
 }
 
 .myrounded {
     border-radius: 40px;
 }
 
-.button1 {
-    background-color: white;
-}
 
-.button1:hover {
-    background-color: rgb(201, 197, 126);
-    border: 2px solid black;
-}
 
 .button2 {
     background-color: rgb(201, 197, 126);
@@ -44,6 +42,7 @@ html, body {
     font-size: 30px;
     border: 2px solid black;
     padding: 4px 8px 4px 8px;
+    color: black;
 }
 
 .button2:hover {
@@ -53,8 +52,6 @@ html, body {
 
 .active2 {
     background-color: rgb(201, 197, 126);
-    color: black !important;
-    border-radius: 5px;
     border: 2px solid black;
 }
 

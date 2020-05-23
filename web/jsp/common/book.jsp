@@ -18,6 +18,13 @@
 
 
 <jsp:include page="../../templates/footer.html"/>
+
+<script type="text/javascript">
+    window.onload = function afterPageLoad() {
+        setButtonActive("showBooking");
+        setModalLogin();
+    }
+</script>
 <%--<script type="text/javascript">
 
     window.onload = function afterPageLoad() {
@@ -79,5 +86,6 @@
         /*sumTime();*/
     }
 </script>--%>
+
 </body>
 </html>
