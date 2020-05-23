@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-@WebServlet(name = "Dispatcher", urlPatterns = {"/manage"})
-public class Dispatcher extends HttpServlet {
+@WebServlet(name = "DispatcherAdmin", urlPatterns = {"/manage"})
+public class DispatcherAdmin extends HttpServlet {
     String controllerAction = null;
     PrintWriter out = null;
     Method controllerMethod = null;
@@ -94,7 +94,7 @@ public class Dispatcher extends HttpServlet {
             e.printStackTrace();
         }
         /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
-         * al Dispatcher quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
+         * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
 
         String viewUrl = (String) request.getAttribute("viewUrl");
         RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
