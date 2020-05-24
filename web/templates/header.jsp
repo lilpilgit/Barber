@@ -7,7 +7,7 @@
 
                 <div class="navbar-nav ml-auto">
                     <button class="btn btnheader" type="button" id='showHome'
-                            onclick="window.location.href = '/jsp/common/home.jsp'">
+                            onclick=setNavFormHome('Home.view')>
                         Home
                     </button>
                     <% if (loggedOn) {%>
