@@ -137,8 +137,11 @@
 
                         <div class="modal-body modal-background mb-1">
                             <form name="logonForm" id="logonForm" method="post">
-                                <div class="row text-center pt-4">
-                                    <div class="md-form form-sm col-6">
+                                <div class="text-center pt-3">
+                                    <h3>Log in to buy and book!</h3>
+                                </div>
+                                <div class="row text-center justify-content-center pt-4">
+                                    <div class="md-form form-sm col-5">
                                         <input type="email" id="Email"
                                                name="email" maxlength="50" required
                                                class="form-control form-control-sm validate"
@@ -146,7 +149,7 @@
                                         <label data-error="wrong" data-success="right" for="Email">
                                             <i class="fas fa-envelope prefix"></i> Your email </label>
                                     </div>
-                                    <div class="md-form form-sm col-6 mb-1">
+                                    <div class="md-form form-sm col-5 mb-1">
                                         <input type="password" id="Password"
                                                name="password" maxlength="255" required
                                                class="form-control form-control-sm validate">
@@ -154,7 +157,7 @@
                                             <i class="fas fa-lock prefix"></i> Insert password </label>
                                     </div>
                                 </div>
-                                <div class="text-center mt-2">
+                                <div class="text-center my-2">
                                     <button type="submit" form="logonForm" class="btn btn-info">Log in<i
                                             class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
@@ -181,14 +184,14 @@
                             <!--Body-->
                             <div class="modal-body">
 
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="name" id="Name"
                                                required oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="Name">
                                             <i class="fas fa-user "></i> Name </label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="surname" id="Surname"
                                                required oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="Surname">
@@ -196,14 +199,14 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="password" id="modalLRInput13" name="password" required
                                                class="form-control form-control-sm validate">
                                         <label data-error="wrong" data-success="right" for="modalLRInput13">
                                             <i class="fas fa-lock prefix"></i> Password</label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="password" id="modalLRInput14" required
                                                class="form-control form-control-sm validate">
                                         <label data-error="wrong" data-success="right" for="modalLRInput14">
@@ -211,15 +214,15 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="email" id="modalLRInput12" name="email"
                                                class="form-control form-control-sm validate " required
                                                oninput="this.value=this.value.toLowerCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-envelope prefix"></i> Email </label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="tel" id="modalLRInput15" name="phone"
                                                class="form-control form-control-sm validate" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
@@ -227,15 +230,15 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <select class="custom-select" name="state" id="State" required>
                                             <option selected disabled value="">Choose...</option>
                                             <option>ITALY</option>
                                         </select>
                                         <label for="State"><i class="fas fa-flag"></i> State</label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <select class="custom-select" name="region" id="Region" required>
                                             <option selected disabled value="">Choose...</option>
                                             <option>ABRUZZO</option>
@@ -262,15 +265,15 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="city" id="City" required
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> City
                                         </label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="number" class="form-control" name="cap" id="Cap" required min="0"
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
@@ -278,15 +281,15 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="md-form form-sm col-6 text-center">
+                                <div class="row justify-content-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="street" id="Street" required
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> Street
                                         </label>
                                     </div>
-                                    <div class="md-form form-sm col-6 text-center">
+                                    <div class="md-form form-sm col-5 text-center">
                                         <input type="number" class="form-control" name="house_number" id="House-number"
                                                min="0">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
