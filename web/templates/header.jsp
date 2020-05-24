@@ -51,7 +51,6 @@
                                             </div>-->
 
                 </div>
-
             </div>
         </nav>
     </div>
@@ -61,7 +60,7 @@
 
 <!--Modal: Login / Register Form-->
 <div class="modal fade " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-width cascading-modal" role="document">
+    <div class="modal-dialog modal-width modal-dialog-centered cascading-modal" role="document">
         <!--Content-->
         <div class="modal-content">
 
@@ -88,13 +87,15 @@
                     <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
 
                         <!--Body-->
-                        <form name="logonForm" id="logonForm" method="post">
-                            <div class="modal-body modal-background mb-1">
-                                <div class="row text-center">
+
+                        <div class="modal-body modal-background mb-1">
+                            <form name="logonForm" id="logonForm" method="post">
+                                <div class="row text-center pt-4">
                                     <div class="md-form form-sm col-6">
                                         <input type="email" id="Email"
                                                name="email" maxlength="50" required
-                                               class="form-control form-control-sm validate">
+                                               class="form-control form-control-sm validate"
+                                               oninput="this.value=this.value.toLowerCase();">
                                         <label data-error="wrong" data-success="right" for="Email">
                                             <i class="fas fa-envelope prefix"></i> Your email </label>
                                     </div>
@@ -111,40 +112,40 @@
                                             class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
                                 <input type="hidden" name="controllerAction" value="Home.logon"/>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
+
                         <!--Footer-->
                         <div class="modal-footer">
                             <div class="options text-center text-md-right mt-1">
                                 <p>Forgot <a href="#" class="blue-text"> Password?</a></p>
                             </div>
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto"
+                                    data-dismiss="modal">Close
+                            </button>
                         </div>
-
                     </div>
                     <!--/.Panel 7-->
-                    <form name="registerForm" id="registerForm" method="post">
-                        <!--Panel 8-->
-                        <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+                    <!--Panel 8-->
+                    <div class="tab-pane fade" id="panel8" role="tabpanel">
+                        <form name="registerForm" id="registerForm" method="post">
 
                             <!--Body-->
                             <div class="modal-body">
 
                                 <div class="row">
-                                    <div class="md-form form-sm col-4 text-center">
-                                        <input type="text" class="form-control" name="name" id="Name" required oninput="this.value=this.value.toUpperCase();">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="text" class="form-control" name="name" id="Name"
+                                               required oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="Name">
                                             <i class="fas fa-user "></i> Name </label>
                                     </div>
-                                    <div class="md-form form-sm col-4 text-center">
-                                        <input type="text" class="form-control" name="surname" id="Surname" required oninput="this.value=this.value.toUpperCase();">
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="text" class="form-control" name="surname" id="Surname"
+                                               required oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="Surname">
                                             <i class="fas fa-user "></i> Surname </label>
-                                    </div>
-                                    <div class="md-form form-sm col-4 text-center">
-                                        <input type="email" id="modalLRInput12" name="email"
-                                               class="form-control form-control-sm validate " required>
-                                        <label data-error="wrong" data-success="right" for="modalLRInput12">
-                                            <i class="fas fa-envelope prefix"></i> Email </label>
                                     </div>
                                 </div>
 
@@ -164,7 +165,13 @@
                                 </div>
 
                                 <div class="row">
-
+                                    <div class="md-form form-sm col-6 text-center">
+                                        <input type="email" id="modalLRInput12" name="email"
+                                               class="form-control form-control-sm validate " required
+                                               oninput="this.value=this.value.toLowerCase();">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">
+                                            <i class="fas fa-envelope prefix"></i> Email </label>
+                                    </div>
                                     <div class="md-form form-sm col-6 text-center">
                                         <input type="tel" id="modalLRInput15" name="phone"
                                                class="form-control form-control-sm validate" required>
@@ -236,23 +243,23 @@
                                             <i class="fas fa-map-marker-alt"></i> House Number
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="text-center form-sm mt-2">
-                                <button type="submit" form="registerForm" class="btn btn-info">Sign up <i class="fas fa-sign-in-alt ml-1"></i></button>
+                            <!--Footer-->
+                            <div class="row justify-content-center">
+                                <div class="col-3 text-center">
+                                    <button type="button" class="btn btn-outline-info"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <button type="submit" form="registerForm" class="btn btn-info">Sign up
+                                        <i class="fas fa-sign-in-alt ml-1"></i>
+                                    </button>
+                                </div>
                             </div>
                             <input type="hidden" name="controllerAction" value="Home.register"/>
-                        </div>
-                    </form>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                        <div class="options text-right">
-                            <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
-                        </div>
-                        <button type="button" class="btn btn-outline-info waves-effect ml-auto"
-                                data-dismiss="modal">Close
-                        </button>
+                        </form>
                     </div>
                 </div>
                 <!--/.Panel 8-->

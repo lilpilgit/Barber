@@ -682,14 +682,16 @@ input[type=number] {
 /* ------------------------------------------------- LOGIN ---------------------------------------------------------- */
 
 
-.modal {
+/*.modal {
     position: absolute;
     top: 0;
     left: 0;
     height: auto;
+}*/
+
+.clearfix {
+    overflow: auto;
 }
-
-
 
 .modal-body {
     background-color: rgba(201, 197, 126, 0.5);
