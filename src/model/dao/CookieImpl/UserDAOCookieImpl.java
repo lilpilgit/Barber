@@ -31,6 +31,7 @@ public class UserDAOCookieImpl implements UserDAO {
         loggedUser.setId(id);
         loggedUser.setName(name);
         loggedUser.setSurname(surname);
+        loggedUser.setEmail(email);
         loggedUser.setIsAdmin(isAdmin);
         loggedUser.setIsEmployee(isEmployee);
         loggedUser.setIsCustomer(isCustomer);
@@ -119,7 +120,6 @@ public class UserDAOCookieImpl implements UserDAO {
 
     }
 
-
     private String encode(User loggedUser) {
 
         /**
@@ -130,6 +130,7 @@ public class UserDAOCookieImpl implements UserDAO {
                 = loggedUser.getId() + "#"
                 + loggedUser.getName() + "#"
                 + loggedUser.getSurname() + "#"
+                + loggedUser.getEmail() + "#"
                 + loggedUser.isAdmin() + "#"
                 + loggedUser.isEmployee() + "#"
                 + loggedUser.isCustomer() + "#";
@@ -143,15 +144,17 @@ public class UserDAOCookieImpl implements UserDAO {
          * Decode into an object, the parameter string of the type 'value1#value2#...'
          */
         User loggedUser = new User();
+        int i = 0;
 
         String[] values = encodedLoggedUser.split("#");
 
-        loggedUser.setId(Long.parseLong(values[0]));
-        loggedUser.setName(values[1]);
-        loggedUser.setSurname(values[2]);
-        loggedUser.setIsAdmin(Boolean.parseBoolean(values[3]));
-        loggedUser.setIsEmployee(Boolean.parseBoolean(values[4]));
-        loggedUser.setIsCustomer(Boolean.parseBoolean(values[5]));
+        loggedUser.setId(Long.parseLong(values[i++]));
+        loggedUser.setName(values[i++]);
+        loggedUser.setSurname(values[i++]);
+        loggedUser.setEmail(values[i++]);
+        loggedUser.setIsAdmin(Boolean.parseBoolean(values[i++]));
+        loggedUser.setIsEmployee(Boolean.parseBoolean(values[i++]));
+        loggedUser.setIsCustomer(Boolean.parseBoolean(values[i++]));
 
         return loggedUser;
 

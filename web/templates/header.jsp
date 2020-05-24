@@ -21,7 +21,7 @@
                         Shop
                     </button>
                     <button class="btn btnheader" type="button" id='showContact'
-                            onclick="window.location.href = '/jsp/common/contact.jsp'">
+                            onclick=setNavFormHome('Home.showContactForm')>
                         Contact
                     </button>
                     <% if (loggedOn) {%>
@@ -72,6 +72,17 @@
         </nav>
     </div>
 </header>
+<script>
+    function setNavFormHome(value) {
+        let navForm = document.getElementById('navForm');
+        navForm.elements['controllerAction'].value = value;
+        navForm.submit();
+    }
+</script>
+<!--form per decidere quale controller e method chiamare quando vengono cliccati i pulsanti della navbar-->
+<form name="navForm" id="navForm" method="post">
+    <input type="hidden" name="controllerAction" value="">
+</form>
 
 <!--PRESO DA https://mdbootstrap.com/docs/jquery/modals/forms/-->
 
