@@ -58,7 +58,7 @@
     <strong>Error! </strong><%="\n" + applicationMessage%>
 </div>
 <%}%>
-<div class="container h-75">
+<div class="container py-4">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-10 col-md-8 col-lg-6 back-form-contact">
             <!-- Form -->
