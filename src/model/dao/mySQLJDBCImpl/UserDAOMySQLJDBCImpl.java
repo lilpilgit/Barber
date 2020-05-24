@@ -220,7 +220,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
         User user = null;
 
-        query = "SELECT * FROM USER WHERE EMAIL = ?;";
+        query = "SELECT * FROM USER WHERE EMAIL = ? AND DELETED = 0;";
 
         try {
             ps = connection.prepareStatement(query);
