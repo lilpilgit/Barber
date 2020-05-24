@@ -48,10 +48,62 @@
 <body>
 <%@ include file="/templates/header.jsp" %>
 
+<!------------------------------------------ Product Window ----------------------------------------------------------->
+
+<div class="container-fluid ">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h1 class="display-4">Our Best Product!</h1>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="row padding">
+        <%
+            for (Product product : products) {%>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="text-center">
+                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
+                                                       alt="<%=product.getPictureName()%>"></div>
+                </div>
+                <div class="card-body toBottom text-center">
+                    <h4 class="card-title"><%=product.getName()%>
+                    </h4>
+                    <p class="card-text">&euro;<%=product.getPrice()%>
+                    </p>
+                    <div class="container">
+                        <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%}%>
+    </div>
+</div>
+
+<!----------------------------------------------- Link To shop -------------------------------------------------------->
+
+<div class="container text-center">
+    <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
+        See more...
+    </button>
+</div>
+<div class="container-fluid">
+    <div class="row welcome text-center">
+        <hr>
+    </div>
+</div>
+
+
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
+<div class="container text-center">
+    <h1 class="display-4">Come to our salon!</h1>
+</div>
 
-
-<div class="container pt-5 pb-5">
+<div class="container pt-2 pb-2">
     <div id="carousel" class="carousel slide container carousel-height px-4" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carousel" data-slide-to="0" class="active"></li>
@@ -99,56 +151,6 @@
             <h3>RELIABLE</h3>
             <p>For over 30 years, we do everything with love.</p>
         </div>
-    </div>
-</div>
-
-
-<!------------------------------------------ Product Window ----------------------------------------------------------->
-
-<div class="container-fluid ">
-    <div class="row welcome text-center">
-        <div class="col-12">
-            <h1 class="display-4">Our Best Product!</h1>
-        </div>
-        <hr>
-    </div>
-</div>
-
-<div class="container py-2">
-    <div class="row padding">
-        <%
-            for (Product product : products) {%>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="text-center">
-                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
-                                                       alt="<%=product.getPictureName()%>"></div>
-                </div>
-                <div class="card-body toBottom text-center">
-                    <h4 class="card-title"><%=product.getName()%>
-                    </h4>
-                    <p class="card-text">&euro;<%=product.getPrice()%>
-                    </p>
-                    <div class="container">
-                        <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
-</div>
-
-<!----------------------------------------------- Link To shop -------------------------------------------------------->
-
-<div class="container text-center">
-    <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
-        See more...
-    </button>
-</div>
-<div class="container-fluid">
-    <div class="row welcome text-center">
-        <hr>
     </div>
 </div>
 

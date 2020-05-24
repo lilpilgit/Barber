@@ -159,7 +159,7 @@ button:focus {outline:0;}
 .carousel-height {
     text-align: center;
     margin: auto;
-    height: auto;
+    height: 650px;
 }
 
 .carousel-inner img {
