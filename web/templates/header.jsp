@@ -24,7 +24,8 @@
                         Contact
                     </button>
                     <% if (loggedOn) {%>
-                    <button class="logged" type="button" id='showCart' title="Cart">
+                    <button class="logged" type="button" id='showCart' title="Cart"
+                            onclick=setNavFormHome('Home.showCart')>
                         <i class="fas fa-shopping-basket"></i>
                     </button>
                     <button class="logged" type="button" id='showWishlist' title="Wishlist">
