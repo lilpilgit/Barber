@@ -166,9 +166,9 @@
             <span class="font-weight-bold">90 &euro;</span>
         </div>
         <hr>
-       <div class="text-center pt-1">
-           <button class="btngeneric">Checkout</button>
-       </div>
+        <div class="text-center pt-1">
+            <button class="btngeneric">Checkout</button>
+        </div>
     </div> <!-- card.// -->
 </div>
 </div>
