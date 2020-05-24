@@ -52,43 +52,56 @@ function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta)
     });
 
 }
+function setProductForm(idProduct) {
+    /**
+     * Set id of product to show inside input hidden >idProduct< into form with id >showProductForm<
+     */
 
-/*
-* Add "selected" to the option dynamically, when the user select an option.
-*/
+    let productForm = document.getElementById('showProductForm');
 
-/*BISOGNA PASSARE LE ATTUALI CATEGORIE E BRAND SELEZIONATI PER EVITARE CHE VENGA RICARICATO LA CATEGORIA "All"*/
-function setUrlFiltered(id_select_of_category, id_select_of_brand, old_category_chosen, old_brand_chosen, id_filter_btn) {
-    /*get selected category on change*/
-    let url_parameters = "";
-    let value_filter_param = 0;
+    /*setto il value del campo idProduct del prodotto scelto da visualizzare */
+    productForm.elements['idProduct'].value = idProduct;
+
+    /*submit della form verso il dispatcher*/
+
+    productForm.submit();
+}
+
+function setFilterForm(id_select_of_category, id_select_of_brand, old_category_chosen, old_brand_chosen) {
+    /*
+    /* BISOGNA PASSARE LE ATTUALI CATEGORIE E BRAND SELEZIONATI PER EVITARE CHE VENGA RICARICATO LA CATEGORIA "All"
+    *  Aggiunge "selected" all'opzione dinamicamente quando l'utente la seleziona.
+    */
+
+    let filterForm = document.getElementById('filterForm');
+
+    /* Prendo il valore della categoria selezionata non appena cambia nel dropdown */
     let select_for_category = document.getElementById(id_select_of_category);
     let category_chosen = old_category_chosen; /*   = "All"; BUG!!!!!*/
+
+    console.log("category_chosen:" + category_chosen);
+    console.log("filter:" + filterForm.elements['filter'].value);
+
     select_for_category.addEventListener("change", () => {
         category_chosen = select_for_category.options[select_for_category.selectedIndex].text;
+        /* cambio il value del relativo campo nella form */
+        filterForm.elements['category'].value = category_chosen;
+        filterForm.elements['filter'].value = '1';
+
+        console.log("category_chosen:" + category_chosen);
+        console.log("filter:" + filterForm.elements['filter'].value);
     });
 
-    /*get selected brand on change*/
+    /* Prendo il valore del brand selezionato non appena cambia nel dropdown */
     let select_for_brand = document.getElementById(id_select_of_brand);
     let brand_chosen = old_brand_chosen;/*   = "All"; BUG!!!!!*/
     select_for_brand.addEventListener("change", () => {
         brand_chosen = select_for_brand.options[select_for_brand.selectedIndex].text;
-    });
-
-    let a = document.getElementById(id_filter_btn);
-
-
-    a.addEventListener("click", () => {
-        /*If all parameter are on value default not send "filter" parameter*/
-        if (category_chosen !== "All" || brand_chosen !== "All") {
-            value_filter_param = 1;
-            url_parameters = getPageName() + "?" + "filter=" + value_filter_param + "&" + "category=" + category_chosen + "&" + "brand=" + brand_chosen;
-        } else {
-            url_parameters = getPageName();
-        }
-        /*IL BUG ERA NELLA POSIZIONE DELLA STRINGA QUI SOTTO CHE INVECE DEVE STARE NELL'IF POCO SOPRA*/
-        /*url_parameters = "shop.jsp?" + "filter=" + value_filter_param + "&" + "category=" + category_chosen + "&" + "brand=" + brand_chosen;*/
-        a.setAttribute("href", url_parameters);
+        /* cambio il value del relativo campo nella form */
+        filterForm.elements['brand'].value = brand_chosen;
+        filterForm.elements['filter'].value = '1';
+        console.log("brand_chosen:" + brand_chosen);
+        console.log("filter:" + filterForm.elements['filter'].value);
     });
 
 }

@@ -142,8 +142,7 @@
 <!----------------------------------------------- Link To shop -------------------------------------------------------->
 
 <div class="container text-center">
-    <button class="btn btnheader active2" type="button" id='showHome'
-            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+    <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
         See more...
     </button>
 </div>

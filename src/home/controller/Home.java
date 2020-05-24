@@ -344,7 +344,7 @@ public class Home {
 
     }
 
-    public static void showBook(HttpServletRequest request, HttpServletResponse response){
+    public static void showBook(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call cart.jsp
          */
@@ -373,7 +373,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-
         } catch (Exception e) {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
@@ -397,7 +396,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/book");
     }
 
-    public static void showShop(HttpServletRequest request, HttpServletResponse response){
+    public static void showShop(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call shop.jsp
          */
@@ -408,12 +407,10 @@ public class Home {
         User loggedUser = null;
         ArrayList<Product> products = null; /* prodotti fetchati dal db da mostrare nella pagina shop */
         String applicationMessage = null;
-        ArrayList<String> all_category = null; /*categorie da mostrare nel dropdown del filtro */
-        ArrayList<String> all_producer = null; /*produttori da mostrare nel dropdown del filtro */
-        String category = "All"; /* voce predefinita nel filtro delle categorie */
-        String categoryParam = null; /* parametro da passare alla findFilteredProducts */
-        String brand = "All"; /* voce predefinita nel filtro dei brands */
-        String brandParam = null; /* parametro da passare alla findFilteredProducts */
+        ArrayList<String> categories = null; /*categorie da mostrare nel dropdown del filtro */
+        ArrayList<String> brands = null; /*produttori da mostrare nel dropdown del filtro */
+        String categoryToFilter = "All"; /* voce predefinita nel filtro delle categorie */
+        String brandToFilter = "All"; /* voce predefinita nel filtro dei brands */
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -435,38 +432,39 @@ public class Home {
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
-            /* Istanzio un DAO per poter fetchare i prodotti */
-            productDAO = daoFactory.getProductDAO();
 
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
+            /* Istanzio un DAO per poter fetchare i prodotti */
+            productDAO = daoFactory.getProductDAO();
+
             /* Prendo tutte le categorie dal database */
-            all_category = productDAO.findAllCategories();
+            categories = productDAO.findAllCategories();
 
             /* Prendo tutti i produttori dal database */
-            all_producer = productDAO.findAllProducers();
+            brands = productDAO.findAllProducers();
 
-            /* TODO: fetching dei parametri da aggiustare */
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            /* Fetching dei parametri  */
+            String toFilter = request.getParameter("filter");
+            System.err.println("toFilter ==>" + toFilter);
+            int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
+            if (toFilter != null) {
+                /* posso provare a parsarlo per evitare NullPointerException*/
+                filter = Integer.parseInt(toFilter);
+            }
+            System.err.println("filter:" + filter);
+            if (filter == 1) {
+                brandToFilter = request.getParameter("brand");
+                categoryToFilter = request.getParameter("category");
 
-            /* check delle credenziali sul database */
-            UserDAO userDAO = daoFactory.getUserDAO();
-            User user = userDAO.findByEmail(email); /* tale utente esiste???? */
+                products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
 
-            /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
-            if (user == null || !user.getPassword().equals(password)) {
-                sessionUserDAO.delete(null);
-                applicationMessage = "Username e/o password errati!";
-                loggedUser = null;
             } else {
-                loggedUser = sessionUserDAO.insert(user.getId(), user.getEmail(), user.getName(), user.getSurname(), null, null, null, user.isAdmin(), user.isEmployee(), user.isCustomer());
+                products = productDAO.findAllProducts();
             }
 
 
-            /* Chiamo la commonView */
-            commonView(daoFactory, request);
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -475,16 +473,28 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
+            boolean loggedOn = loggedUser != null;
             /* 1) Attributo che indica se è loggato oppure no */
-            request.setAttribute("loggedOn", loggedUser != null);
-            System.err.println("loggedOn==> " + loggedUser != null);
+            request.setAttribute("loggedOn", loggedOn);
+
+            System.err.println("loggedOn==>" + loggedOn);
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             System.err.println("loggedUser=> " + loggedUser);
             /* 3) Application messagge da mostrare all'utente */
             request.setAttribute("applicationMessage", applicationMessage);
             /* 4) Setto quale view devo mostrare */
-            request.setAttribute("viewUrl", "common/home");
+            request.setAttribute("viewUrl", "common/shop");
+            /* 5) Setto la lista dei prodotti da mostrare */
+            request.setAttribute("products", products);
+            /* 6) Setto la lista delle categorie completa */
+            request.setAttribute("categories", categories);
+            /* 7) Setto la lista dei brand completa */
+            request.setAttribute("brands", brands);
+            /* 8) Setto il brand che era stato selezionato per poterlo mostrare nella pagina filtrata all'interno del dropdown */
+            request.setAttribute("brandFiltered", brandToFilter);
+            /* 9) Setto la categoria che era stata selezionata per poterla mostrare nella pagina filtrata all'interno del dropdown */
+            request.setAttribute("categoryFiltered", categoryToFilter);
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -570,11 +580,11 @@ public class Home {
         /* 4) oggetto corrispondente all'utente loggato ( dopo la registrazione non posso essere loggato dunque null ) */
         request.setAttribute("loggedUser", null);
         /* 5) oggetto corrispondente al risultato dell'operazione */
-        request.setAttribute("contacted",contacted);
+        request.setAttribute("contacted", contacted);
 
     }
 
-    public static void showContactForm(HttpServletRequest request, HttpServletResponse response){
+    public static void showContactForm(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call contact.jsp
          */
@@ -603,7 +613,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-
         } catch (Exception e) {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
@@ -627,7 +636,7 @@ public class Home {
         request.setAttribute("viewUrl", "common/contact");
     }
 
-    public static void showCart(HttpServletRequest request, HttpServletResponse response){
+    public static void showCart(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call cart.jsp
          */
@@ -656,7 +665,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-
         } catch (Exception e) {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
@@ -680,7 +688,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/cart");
     }
 
-    public static void showWishlist(HttpServletRequest request, HttpServletResponse response){
+    public static void showWishlist(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call wishlist.jsp
          */
@@ -709,7 +717,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-
         } catch (Exception e) {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
@@ -733,7 +740,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/wishlist");
     }
 
-    public static void showBookings(HttpServletRequest request, HttpServletResponse response){
+    public static void showBookings(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call profile.jsp
          */
@@ -760,7 +767,6 @@ public class Home {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
-
 
 
         } catch (Exception e) {
@@ -786,7 +792,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/bookings");
     }
 
-    public static void showOrders(HttpServletRequest request, HttpServletResponse response){
+    public static void showOrders(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call profile.jsp
          */
@@ -813,7 +819,6 @@ public class Home {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
-
 
 
         } catch (Exception e) {
@@ -839,7 +844,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/orders");
     }
 
-    public static void showProfile(HttpServletRequest request, HttpServletResponse response){
+    public static void showProfile(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call profile.jsp
          */
@@ -868,7 +873,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-
         } catch (Exception e) {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
@@ -892,6 +896,88 @@ public class Home {
         request.setAttribute("viewUrl", "customer/profile");
     }
 
+    private static void showProduct(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Check if user is logged then call product.jsp with id of product to show.
+         */
+
+        DAOFactory daoFactory = null; //per il db
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        ProductDAO productDAO = null; /* per fetchare il prodotto */
+        User loggedUser = null;
+        Product product = null; /* prodotto fetchato dal db da mostrare nella pagina product.jsp */
+        String applicationMessage = null;
+
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* DAOFactory per manipolare i dati sul DB */
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            /* Inizio la transazione sul Database*/
+            daoFactory.beginTransaction();
+
+            /* Istanzio un DAO per poter fetchare i prodotti */
+            productDAO = daoFactory.getProductDAO();
+
+
+            /* Fetching dei parametri  */
+            String idProduct = request.getParameter("idProduct");
+            System.err.println("idProduct ==>" + idProduct);
+            Long id = 1L;
+            if (idProduct != null) {
+                /* posso provare a parsarlo per evitare NullPointerException*/
+                id = Long.parseLong(idProduct);
+            }
+            System.err.println("id:" + id);
+
+            product = productDAO.findProductById(id);
+
+            /* Commit della transazione sul db */
+            daoFactory.commitTransaction();
+
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
+
+
+            boolean loggedOn = loggedUser != null;
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedOn);
+            System.err.println("loggedOn==>" + loggedOn);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            System.err.println("loggedUser=> " + loggedUser);
+            /* 3) Application messagge da mostrare all'utente */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "common/product");
+            /* 5) Setto il prodotto da mostrare */
+            request.setAttribute("product", product);
+
+        } catch (
+                Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+
+            } catch (Throwable t) {
+            }
+        }
+    }
+
+
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
 
         ArrayList<Product> showcase = null;
@@ -906,7 +992,6 @@ public class Home {
 
 
     }
-
 
 
 }

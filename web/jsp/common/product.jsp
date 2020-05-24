@@ -1,37 +1,54 @@
-<%@page import="model.dao.DAOFactory" %>
-<%@page import="model.dao.ProductDAO" %>
 <%@page import="model.mo.Product" %>
 <%@ page import="java.math.BigDecimal" %>
-
+<%@ page import="model.mo.User" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
-    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL);
-    if (df != null) {
-        df.beginTransaction();
-    } else {
-        throw new RuntimeException("ERRORE NELL'IF DA AGGIUSTARE");
+    /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
+    Boolean loggedOn = false;
+    if (request.getAttribute("loggedOn") != null) {
+        loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
-    ProductDAO productDAO = df.getProductDAO();
 
-    Product product = productDAO.findProductById(Long.parseLong(request.getParameter("id")));
+    /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
+    User loggedUser = null;
+    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+        loggedUser = (User) request.getAttribute("loggedUser");
+    }
 
-    df.commitTransaction();
-    df.closeTransaction();
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di login/logout ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");/*null se loggato correttamente*/
+    }
+
+    /* Prendo il parametro "product" che mi consente di sapere qual'è il prodotto da visualizzare */
+    Product product = null;
+    if (request.getAttribute("product") != null) {
+        product = (Product) request.getAttribute("product");
+    }
+
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Shop";
+
+    /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
+    String idBtnAttivo = "showShop"; /* sto visualizzando un prodotto ma lascio attivo il bottone shop*/
+
 %>
 <!doctype html>
 <html lang="en">
 <head>
-<jsp:include page="/templates/head.jsp"/>
+<%@include file="/templates/head.jsp" %>
 <body>
-<jsp:include page="/templates/header.jsp"/>
+<%@include file="/templates/header.jsp" %>
 
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
 
 <div class="container pt-5 text-center">
     <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
-    <button class="btn btnheader active2" type="button" id='showHome'
-            onclick="window.location.href = '../../jsp/common/shop.jsp'">
+    <button class="btn btnheader active2" type="button" id='showShop'
+            onclick="history.back()">
         Go back to shop
     </button>
 </div>
@@ -89,11 +106,9 @@
 </div>
 
 
-<%@ include file="/templates/footer.html"%>
+<%@include file="/templates/footer.html"%>
 <script type="text/javascript">
     function onLoadHandler() {
-        setButtonActive("showShop");
-        setModalLogin();
         handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
     }
 

@@ -1,47 +1,14 @@
-<%@page import="model.dao.DAOFactory" %>
-<%@page import="model.dao.ProductDAO" %>
 <%@page import="model.mo.Product" %>
+<%@page import="model.mo.User" %>
 <%@page import="java.util.ArrayList" %>
-<%@ page import="model.mo.User" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
 
-    ProductDAO productDAO = df.getProductDAO();
-    ArrayList<Product> products_to_show = null;
-    ArrayList<String> all_category = productDAO.findAllCategories();
-    ArrayList<String> all_producer = productDAO.findAllProducers();
-    /*String category = null; BUUUUUUUUUUUUG ANCHE QUI*/
-    String category = "All";
-    String categoryParam = null; /*parameter to pass to findFilteredProducts*/
-    /*String brand = null;BUUUUUUUUUUUUG ANCHE QUI*/
-    String brand = "All";
-    String brandParam = null; /*parameter to pass to findFilteredProducts*/
+    /* Prendo il parametro "categoryFiltered" per settare il dropdown dopo il refresh della pagina */
+    String categoryFiltered = (request.getAttribute("categoryFiltered") != null) ? (String)request.getAttribute("categoryFiltered") : "All";
 
-    /* Se avremo altri criteri di ricerca e filtraggio VA ASSOLUTAMENTE AUTOMATIZZATO CON UN CICLO FOR TUTTI GLI IF SOTTOSTANTI*/
-    /*First I see if filters have been applied*/
-    if (request.getParameter("filter") != null && Integer.parseInt(request.getParameter("filter")) == 1) {
-        /*there are parameters aka modify query based on filters!!!*/
-        /*      -------- 1) category ---------       */
-        category = request.getParameter("category");
-        if (category.equals("All")) {
-            categoryParam = "%"; /* In SQL this character is a substitute for zero or more characters*/
-        } else {
-            categoryParam = category;
-        }
-        /*      -------- 2) brand ---------       */
-        brand = request.getParameter("brand");
-        if (brand.equals("All")) {
-            brandParam = "%"; /* In SQL this character is a substitute for zero or more characters*/
-        } else {
-            brandParam = brand;
-        }
-
-        products_to_show = productDAO.findFilteredProducts(categoryParam, brandParam);
-
-    } else if (request.getParameter("filter") == null || Integer.parseInt(request.getParameter("filter")) == 0) {
-        /*first visit on page/parameters not sent or different from All  */
-        products_to_show = productDAO.findAllProducts();
-    }
+    /* Prendo il parametro "brandFiltered" per settare il dropdown dopo il refresh della pagina */
+    String brandFiltered = (request.getAttribute("brandFiltered") != null) ? (String)request.getAttribute("brandFiltered") : "All";
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
@@ -63,11 +30,22 @@
     }
 
     /* Prendo l'ArrayList<Product> di tutti i prodotti dal parametro showcase */
-    ArrayList<Product> products = null;
-    if (request.getAttribute("showcase") != null) {
-        products = (ArrayList<Product>) request.getAttribute("showcase");
+    ArrayList<Product> products_to_show = null;
+    if (request.getAttribute("products") != null) {
+        products_to_show = (ArrayList<Product>) request.getAttribute("products");
     }
 
+    /* Prendo l'ArrayList<String> di tutte le categorie */
+    ArrayList<String> all_category = null;
+    if (request.getAttribute("categories") != null) {
+        all_category = (ArrayList<String>) request.getAttribute("categories");
+    }
+
+    /* Prendo l'ArrayList<String> di tutti i brands */
+    ArrayList<String> all_producer = null;
+    if (request.getAttribute("brands") != null) {
+        all_producer = (ArrayList<String>) request.getAttribute("brands");
+    }
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Shop";
 
@@ -77,10 +55,10 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@ include file="/templates/head.jsp"%>
+<%@ include file="/templates/head.jsp" %>
 <body>
 
-<%@ include file="/templates/header.jsp"%>
+<%@ include file="/templates/header.jsp" %>
 
 <!-------------------------------------------- Welcome Our Store --------------------------------------------------------->
 
@@ -116,10 +94,21 @@
         </option>
         <%}%>
     </select>
-    <!-- Button for filter based on category and brand -->
-    <a href="" class="btn button button1 ml-3 active2" id='filter_btn'>Filter</a>
+    <!-- Bottone che submitta la form filterForm con gli hidden input il cui value viene modificati con la setFormFilter() e i relativi listener -->
+    <button type="submit" form="filterForm" class="btn button button1 ml-3 active2" id='filter_btn'>Filter</button>
 </div>
+<form name="filterForm" id="filterForm" method="post">
+    <input type="hidden" name="controllerAction" value="Home.showShop">
+    <input type="hidden" name="filter" value="0">
+    <input type="hidden" name="category" value="All">
+    <input type="hidden" name="brand" value="All">
+</form>
 
+<!-- form per mostrare il prodotto scelto -->
+<form name="showProductForm" id="showProductForm" method="post">
+    <input type="hidden" name="controllerAction" value="Home.showProduct">
+    <input type="hidden" name="idProduct" value="">
+</form>
 
 <!--------------------------------------------- Product section ------------------------------------------------------->
 
@@ -132,7 +121,7 @@
         <div class="no-products-container">
             <h3 class="no-products-title">We are sorry...</h3>
             <div>
-                <img class="no-products-thumb" src="../../img/shop/empty_warehouse.png" alt="No products present">
+                <img class="no-products-thumb" src="img/shop/empty_warehouse.png" alt="No products present">
                 <p>What you requested did not produce any results</p>
             </div>
         </div>
@@ -144,8 +133,8 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="text-center ">
-                    <div class="tab-content-shop"><img src="../../img/products/<%=product.getPictureName()%>"
-                                                  alt="<%=product.getPictureName()%>"></div>
+                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
+                                                       alt="<%=product.getPictureName()%>"></div>
                 </div>
                 <div class="card-body toBottom text-center">
                     <h4 class="card-title"><%=product.getName()%>
@@ -153,7 +142,7 @@
                     <p class="card-text">&euro;<%=product.getPrice()%>
                     </p>
                     <div class="container">
-                        <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-dark">Show</a>
+                        <button class="btn btn-dark" onclick=setProductForm('<%=product.getId()%>')>Show</button>
                     </div>
                 </div>
             </div>
@@ -164,13 +153,13 @@
         %>
     </div>
 </div>
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-        setButtonActive('<%=menuActiveLink%>');
-        setUrlFiltered("category_select_menu", "brand_select_menu", "<%=category%>", "<%=brand%>", "filter_btn");
-        setSelectedFilter("category_select_menu", "<%=category%>");
-        setSelectedFilter("brand_select_menu", "<%=brand%>");
+        setButtonActive('<%=idBtnAttivo%>');
+        setFilterForm("category_select_menu", "brand_select_menu", "<%=categoryFiltered%>", "<%=brandFiltered%>");
+        setSelectedFilter("category_select_menu", "<%=categoryFiltered%>");
+        setSelectedFilter("brand_select_menu", "<%=brandFiltered%>");
     }
 </script>
 </body>
