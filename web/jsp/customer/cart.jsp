@@ -41,6 +41,11 @@
 
 <div class="container py-4">
     <div class="cart-box">
+        <div class="row justify-content-center pb-4">
+            <span class="logged" style="padding-bottom: 20px"><i class="fas fa-shopping-basket"></i></span>
+            <h3>Welcome to your shopping cart</h3>
+            <span class="logged"><i class="fas fa-shopping-basket"></i></span>
+        </div>
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
@@ -54,7 +59,7 @@
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate">Product name goes here </h6>
                             <dl class="param param-inline small">
@@ -109,7 +114,7 @@
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate">Product name goes here </h6>
                             <dl class="param param-inline small">

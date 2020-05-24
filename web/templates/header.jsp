@@ -12,7 +12,7 @@
                     </button>
                     <% if (loggedOn) {%>
                     <button class="btn btnheader" type="button" id='showBook'
-                            onclick="window.location.href = '/jsp/common/book.jsp'">
+                            onclick=setNavFormHome('Home.showBook')>
                         Book!
                     </button>
                     <%}%>
@@ -43,7 +43,17 @@
                         <ul class="dropdown-menu text-center">
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showPersonalArea'>Personal Area
+                                        id='showBookings'>Bookings
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button"
+                                        id='showOrders'>Orders
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button"
+                                        id='showProfile'>Edit profile
                                 </button>
                             </li>
                             <li>
