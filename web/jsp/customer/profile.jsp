@@ -1,6 +1,7 @@
 <%@page import="model.mo.Product" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Customer" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -16,10 +17,18 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* messaggio dall applicativo */
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
+    /* Prendo il parametro "customer" che indica i dati del cliente da mostrare nella form  */
+    Customer customer = null;
+    if (request.getAttribute("customer") != null) {
+        customer = (Customer) request.getAttribute("customer");
+    }
+
+    /*TODO usare customer per settare i campi */
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Profile";
@@ -41,7 +50,7 @@
 <div class="container py-4">
     <div class="cart-box">
         <div class="row justify-content-center pb-4">
-            <h3>Welcome <b>NOME</b> to your edit section</h3>
+            <h3>Welcome <b><%=loggedUser.getName()%></b> to your edit section</h3>
         </div>
         <form id='form_edit_profile' method="post" class="needs-validation">
             <hr>
@@ -51,13 +60,13 @@
                     <input type="text" class="form-control" name="name" id="Name"
                            autocapitalize="on"
                            placeholder="Mario" required
-                           value="" >
+                           value="<%=loggedUser.getName()%>" >
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname"
                            style="text-transform: capitalize;" placeholder="Rossi" required
-                           value="" oninput="this.value=this.value.toLowerCase();">
+                           value="<%=loggedUser.getSurname()%>" oninput="this.value=this.value.toLowerCase();">
                 </div>
             </div>
 
@@ -65,13 +74,13 @@
                 <div class="col-md-3">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="" style="text-transform: lowercase;"
+                           value="<%=loggedUser.getEmail()%>" style="text-transform: lowercase;"
                            required>
                 </div>
                 <div class="col-md-3">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value=""
+                           value="<%=customer.get%>"
                            class="form-control">
                 </div>
             </div>

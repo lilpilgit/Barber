@@ -52,6 +52,7 @@ function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta)
     });
 
 }
+
 function setProductForm(idProduct) {
     /**
      * Set id of product to show inside input hidden >idProduct< into form with id >showProductForm<
@@ -79,8 +80,7 @@ function setFilterForm(id_select_of_category, id_select_of_brand, old_category_c
     let select_for_category = document.getElementById(id_select_of_category);
     let category_chosen = old_category_chosen; /*   = "All"; BUG!!!!!*/
 
-    console.log("category_chosen:" + category_chosen);
-    console.log("filter:" + filterForm.elements['filter'].value);
+
 
     select_for_category.addEventListener("change", () => {
         category_chosen = select_for_category.options[select_for_category.selectedIndex].text;
@@ -89,7 +89,7 @@ function setFilterForm(id_select_of_category, id_select_of_brand, old_category_c
         filterForm.elements['filter'].value = '1';
 
         console.log("category_chosen:" + category_chosen);
-        console.log("filter:" + filterForm.elements['filter'].value);
+        console.log("brand_chosen:" + brand_chosen);
     });
 
     /* Prendo il valore del brand selezionato non appena cambia nel dropdown */
@@ -100,9 +100,12 @@ function setFilterForm(id_select_of_category, id_select_of_brand, old_category_c
         /* cambio il value del relativo campo nella form */
         filterForm.elements['brand'].value = brand_chosen;
         filterForm.elements['filter'].value = '1';
+        console.log("category_chosen:" + category_chosen);
         console.log("brand_chosen:" + brand_chosen);
-        console.log("filter:" + filterForm.elements['filter'].value);
     });
+
+    console.log("category_chosen:" + category_chosen);
+    console.log("brand_chosen:" + brand_chosen);
 
 }
 

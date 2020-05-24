@@ -6,6 +6,7 @@ import model.dao.DAOFactory;
 import model.dao.ProductDAO;
 import model.dao.UserDAO;
 import model.exception.NoCustomerCreatedException;
+import model.mo.Customer;
 import model.mo.Product;
 import model.mo.User;
 import services.config.Configuration;
@@ -445,6 +446,8 @@ public class Home {
             /* Prendo tutti i produttori dal database */
             brands = productDAO.findAllProducers();
 
+            System.err.println("categoryToFilter" + categoryToFilter);
+            System.err.println("brandToFilter" + brandToFilter);
             /* Fetching dei parametri  */
             String toFilter = request.getParameter("filter");
             System.err.println("toFilter ==>" + toFilter);
@@ -459,7 +462,8 @@ public class Home {
                 categoryToFilter = request.getParameter("category");
 
                 products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
-
+                System.err.println("categoryToFilter" + categoryToFilter);
+                System.err.println("brandToFilter" + brandToFilter);
             } else {
                 products = productDAO.findAllProducts();
             }
@@ -694,6 +698,7 @@ public class Home {
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
+
         User loggedUser = null;
 
         try {
@@ -850,7 +855,10 @@ public class Home {
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        CustomerDAO customerDAO = null;
+        Customer customer = null;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -868,13 +876,22 @@ public class Home {
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
 
+            daoFactory.beginTransaction();
+
+            customerDAO = daoFactory.getCustomerDAO();
+
+            customer = customerDAO.findById(loggedUser.getId());
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
 
         } catch (Exception e) {
             try {
+                if(daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
             } catch (Throwable t) {
             }
@@ -882,6 +899,7 @@ public class Home {
 
         } finally {
             try {
+                if(daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
             } catch (Throwable t) {
             }
@@ -894,6 +912,8 @@ public class Home {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "customer/profile");
+        /* 4) Setto il cliente da mostrare in base a quale utente è loggato */
+        request.setAttribute("customer", customer);
     }
 
     public static void showProduct(HttpServletRequest request, HttpServletResponse response) {
