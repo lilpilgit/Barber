@@ -387,22 +387,6 @@ hr.light-100 {
     text-align: center;
 }
 
-.up_count {
-    width: 45px;
-    margin-bottom: 5px;
-    margin-left: 1px;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-.down_count {
-    width: 45px;
-    margin-bottom: 5px;
-    margin-right: -4px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
-
 img {
     vertical-align: middle;
     max-width: 100%;
