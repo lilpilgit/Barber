@@ -22,10 +22,10 @@
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Profile";
+    String menuActiveLink = "Orders";
 
     /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
-    String idBtnAttivo = "showProfile";
+    String idBtnAttivo = "showOrders";
 
 %>
 <!doctype html>
@@ -38,7 +38,7 @@
 <%@include file="/templates/header.jsp"%>
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
-<p>Profile</p>
+<p>Orders</p>
 
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 

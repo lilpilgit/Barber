@@ -43,17 +43,20 @@
                         <ul class="dropdown-menu text-center">
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showBookings'>Bookings
+                                        id='showBookings' onclick=setNavFormHome('Home.showBookings')>
+                                    Bookings
                                 </button>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showOrders'>Orders
+                                        id='showOrders'onclick=setNavFormHome('Home.showOrders')>
+                                    Orders
                                 </button>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showProfile'>Edit profile
+                                        id='showProfile' onclick=setNavFormHome('Home.showProfile')>
+                                    Edit profile
                                 </button>
                             </li>
                             <li>
