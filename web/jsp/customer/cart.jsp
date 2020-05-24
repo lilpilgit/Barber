@@ -370,10 +370,10 @@
                     </div> <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                    <button class="btn btn-outline-gold"
+                    <button class="btn btn-outline-gold" title="Add to wishlist"
                             data-toggle="tooltip"
                             data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
+                        <i class="fas fa-star"></i></button>
                     <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
@@ -425,10 +425,10 @@
                     </div> <!-- price-wrap .// -->
                 </td>
                 <td class="text-right">
-                    <button class="btn btn-outline-gold"
+                    <button class="btn btn-outline-gold" title="Add to wishlist"
                             data-toggle="tooltip"
                             data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
+                        <i class="fas fa-star"></i></button>
                     <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
