@@ -2,14 +2,10 @@
 <%@page import="model.dao.ProductDAO" %>
 <%@page import="model.mo.Product" %>
 <%@page import="java.util.ArrayList" %>
+<%@ page import="model.mo.User" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
-    DAOFactory df = DAOFactory.getDAOFactory(DAOFactory.MYSQLJDBCIMPL, null);
-    if (df != null) {
-        df.beginTransaction();
-    } else {
-        throw new RuntimeException("ERRORE NELL'IF DA AGGIUSTARE");
-    }
+
     ProductDAO productDAO = df.getProductDAO();
     ArrayList<Product> products_to_show = null;
     ArrayList<String> all_category = productDAO.findAllCategories();
@@ -47,9 +43,37 @@
         products_to_show = productDAO.findAllProducts();
     }
 
+    /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
+    Boolean loggedOn = false;
+    if (request.getAttribute("loggedOn") != null) {
+        loggedOn = (Boolean) request.getAttribute("loggedOn");
+    }
 
-    df.commitTransaction();
-    df.closeTransaction();
+    /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
+    User loggedUser = null;
+    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+        loggedUser = (User) request.getAttribute("loggedUser");
+    }
+
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di login/logout ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");/*null se loggato correttamente*/
+    }
+
+    /* Prendo l'ArrayList<Product> di tutti i prodotti dal parametro showcase */
+    ArrayList<Product> products = null;
+    if (request.getAttribute("showcase") != null) {
+        products = (ArrayList<Product>) request.getAttribute("showcase");
+    }
+
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Shop";
+
+    /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
+    String idBtnAttivo = "showShop";
+
 %>
 <!doctype html>
 <html lang="en">
@@ -143,8 +167,7 @@
 <%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-        setButtonActive("showShop");
-        setModalLogin();
+        setButtonActive('<%=menuActiveLink%>');
         setUrlFiltered("category_select_menu", "brand_select_menu", "<%=category%>", "<%=brand%>", "filter_btn");
         setSelectedFilter("category_select_menu", "<%=category%>");
         setSelectedFilter("brand_select_menu", "<%=brand%>");

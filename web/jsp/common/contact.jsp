@@ -100,7 +100,7 @@
 <%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-        setButtonActive(<%=idBtnAttivo%>);
+        setButtonActive('<%=idBtnAttivo%>');
 
     }
 </script>

@@ -17,8 +17,7 @@
                     </button>
                     <%}%>
                     <button class="btn btnheader" type="button" id='showShop'
-                            onclick="window.location.href = '/jsp/common/shop.jsp'">
-                        Shop
+                            onclick=setNavFormHome('Home.showShop')>
                     </button>
                     <button class="btn btnheader" type="button" id='showContact'
                             onclick=setNavFormHome('Home.showContactForm')>
