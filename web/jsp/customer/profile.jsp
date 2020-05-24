@@ -46,14 +46,14 @@
         <form id='form_edit_profile' method="post" class="needs-validation">
             <hr>
             <div class="form-row justify-content-center">
-                <div class="col-md-3 mb-">
+                <div class="col-md-3 mb-2">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name"
                            autocapitalize="on"
                            placeholder="Mario" required
                            value="" >
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-2">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname"
                            style="text-transform: capitalize;" placeholder="Rossi" required
@@ -79,14 +79,14 @@
             <hr>
             <br>
             <div class="form-row justify-content-center">
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-2">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
                         <option selected disabled value="">Choose...</option>
                         <option>ITALY</option>
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-2">
                     <label for="Region">Region</label>
                     <select class="custom-select" name="region" id="Region" required>
                         <option selected disabled value="">Choose...</option>
@@ -111,7 +111,7 @@
                         <option>VENETO</option>
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-2">
                     <label for="City">City</label>
                     <input type="text" class="form-control" name="city" id="City" required
                            value=""
@@ -119,12 +119,12 @@
                 </div>
             </div>
             <div class="form-row justify-content-center">
-                <div class="col-md-3 mb-4">
+                <div class="col-md-3 mb-2">
                     <label for="Cap">CAP</label>
                     <input type="number" class="form-control" name="cap" id="Cap" required min="0"
                            value="">
                 </div>
-                <div class="col-md-3 mb-4">
+                <div class="col-md-3 mb-2">
                     <label for="Street">Street</label>
                     <input type="text" class="form-control" name="street" id="Street" required
                            value=""
@@ -138,6 +138,28 @@
             </div>
             <div class="text-center pt-1">
                 <button class="btngeneric">Update profile</button>
+            </div>
+            <hr>
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-2">
+                    <label for="Oldpwd">Insert old password</label>
+                    <input type="password" class="form-control" name="cap" id="Oldpwd" required min="0"
+                           value="">
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="Newpwd">Insert new password</label>
+                    <input type="password" class="form-control" name="street" id="Newpwd" required
+                           value=""
+                           oninput="toUpperCase(this)">
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label for="Cnfpwd">Confirm password</label>
+                    <input type="password" class="form-control" name="house_number" id="Cnfpwd" min="0"
+                           value="">
+                </div>
+            </div>
+            <div class="text-center pt-1">
+                <button class="btngeneric">Change password</button>
             </div>
         </form>
     </div>
