@@ -105,7 +105,6 @@
     </div>
 </div>
 
-
 <%@include file="/templates/footer.html"%>
 <script type="text/javascript">
     function onLoadHandler() {
