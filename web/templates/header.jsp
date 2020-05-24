@@ -32,7 +32,7 @@
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="dropdown">
-                        <button class= "logged dropdown-toggle" type="button" id='showOptions'
+                        <button class="logged dropdown-toggle" type="button" id='showOptions'
                                 data-target=""
                                 data-toggle="dropdown">
                             <i class="fas fa-user"></i>
@@ -40,10 +40,14 @@
                         </button>
                         <ul class="dropdown-menu text-center">
                             <li>
-                                <button class="btn btn-default gold font-weight-light" type="button" id='showPersonalArea'>Personal Area</button>
+                                <button class="btn btn-default gold font-weight-light" type="button"
+                                        id='showPersonalArea'>Personal Area
+                                </button>
                             </li>
                             <li>
-                                <button class="btn btn-default gold font-weight-light" type="button" id='logoutID'>Logout</button>
+                                <button class="btn btn-default gold font-weight-light" type="button" id='logoutID'
+                                        onclick=setNavFormHome('Home.logout')>Logout
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -245,13 +249,15 @@
 
                                 <div class="row">
                                     <div class="md-form form-sm col-6 text-center">
-                                        <input type="text" class="form-control" name="city" id="City" required oninput="this.value=this.value.toUpperCase();">
+                                        <input type="text" class="form-control" name="city" id="City" required
+                                               oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> City
                                         </label>
                                     </div>
                                     <div class="md-form form-sm col-6 text-center">
-                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0" oninput="this.value=this.value.toUpperCase();">
+                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                                               oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
                                             <i class="fas fa-map-marker-alt"></i> Postal Code
                                         </label>
@@ -259,7 +265,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="md-form form-sm col-6 text-center">
-                                        <input type="text" class="form-control" name="street" id="Street" required oninput="this.value=this.value.toUpperCase();">
+                                        <input type="text" class="form-control" name="street" id="Street" required
+                                               oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> Street
                                         </label>
