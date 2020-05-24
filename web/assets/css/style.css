@@ -29,10 +29,38 @@ html, body {
     color: black;
 }
 
+.btngeneric {
+    border-radius: 20px;
+    border: 2px solid transparent;
+    color: black;
+    background-color: rgb(201, 197, 126);
+    align-content: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 6px;
+    padding: .375rem .75rem;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    opacity: 85%;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    line-height: 1.5;
+}
+
+.btngeneric:hover {
+    background-color: rgb(187, 183, 116);
+    border: 2px solid #000000;
+    color: black;
+}
+
+
+
 .myrounded {
     border-radius: 40px;
 }
-
 
 
 .button2 {

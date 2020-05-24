@@ -432,15 +432,22 @@
                     <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
-
-
             </tbody>
         </table>
+        <div class="text-center">
+            <span>You Save: </span>
+            <span class="font-weight-bold">5 &euro;</span>
+            <br>
+            <span>Total Price: </span>
+            <span class="font-weight-bold">90 &euro;</span>
+        </div>
+        <hr>
+       <div class="text-center pt-1">
+           <button class="btngeneric">Checkout</button>
+       </div>
     </div> <!-- card.// -->
 </div>
 </div>
-
-
 
 
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>

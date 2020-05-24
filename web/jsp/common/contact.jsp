@@ -101,7 +101,6 @@
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive(<%=idBtnAttivo%>);
-
     }
 </script>
 </body>
