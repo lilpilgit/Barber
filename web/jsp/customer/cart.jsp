@@ -42,7 +42,7 @@
 <div class="container py-4">
     <div class="cart-box">
         <div class="row justify-content-center pb-4">
-            <span class="logged" style="padding-bottom: 20px"><i class="fas fa-shopping-basket"></i></span>
+            <span class="logged"><i class="fas fa-shopping-basket"></i></span>
             <h3>Welcome to your shopping cart</h3>
             <span class="logged"><i class="fas fa-shopping-basket"></i></span>
         </div>
