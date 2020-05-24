@@ -348,14 +348,20 @@
                             </dl>
                         </figcaption>
                     </figure>
-                </td>
+                </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
                 <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <!--COUNTER OF QUANTITY-->
+                    <div id="counter_qta<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" style="height: 73px;" class='main'>
+                        <input id="quantity<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
+                               readonly style="width: 90px;"
+                               value='1' required/>
+                        <div class="row justify-content-center">
+                            <button id="minus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Down'><i
+                                    class='fa fa-minus'></i></button>
+                            <button id="plus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Up'><i class='fa fa-plus'></i>
+                            </button>
+                        </div>
+                    </div>
                 </td>
                 <td>
                     <div class="price-wrap">
@@ -399,12 +405,18 @@
                     </figure>
                 </td>
                 <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <!--COUNTER OF QUANTITY-->
+                    <div id="counter_qta" style="height: 73px;" class='main'>
+                        <input id="quantity" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
+                               readonly style="width: 90px;"
+                               value='1' required/>
+                        <div class="row justify-content-center">
+                            <button id="minus_button" class='btn' title='Down'><i
+                                    class='fa fa-minus'></i></button>
+                            <button id="plus_button" class='btn' title='Up'><i class='fa fa-plus'></i>
+                            </button>
+                        </div>
+                    </div>
                 </td>
                 <td>
                     <div class="price-wrap">
@@ -420,290 +432,6 @@
                     <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="../../img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fa fa-heart"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-
-
-
-
-
-
-
-
-
-
-
 
 
             </tbody>
@@ -718,10 +446,17 @@
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
 
 <%@ include file="/templates/footer.html"%>
-<script>
-    window.onload = function afterPageLoad() {
-        /*  setButtonActive("showCart");*/
+<script type="text/javascript">
+    function onLoadHandler() {
+        setButtonActive("showCart");
+        /*
+        handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%--<%=product.getQuantity()%>--%>);
+
+        */
     }
+
+    window.addEventListener("load", onLoadHandler);
 </script>
+
 </body>
 </html>
