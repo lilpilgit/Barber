@@ -50,6 +50,10 @@ html, body {
     border-radius: 25px !important;
 }
 
+.gold:hover {
+    color: rgb(151, 148, 97);
+}
+
 .active2 {
     background-color: rgb(201, 197, 126);
     border: 2px solid black;
@@ -78,6 +82,10 @@ button:focus {outline:0;}
     font-size: 2.3em;
     transition-duration: 0.3s;
     outline: none;
+}
+
+.dropdown-toggle::after {
+    margin-left: 0 !important;
 }
 
 .logged:hover {

@@ -25,18 +25,35 @@
                         Contact
                     </button>
                     <% if (loggedOn) {%>
-                    <button class="logged" type="button" id='showCart'>
+                    <button class="logged" type="button" id='showCart' title="Cart">
                         <i class="fas fa-shopping-basket"></i>
                     </button>
-                    <button class="logged" type="button" id='showWishlist'>
+                    <button class="logged" type="button" id='showWishlist' title="Wishlist">
                         <i class="fas fa-star"></i>
                     </button>
-                    <%}%>
+                    <div class="dropdown">
+                        <button class= "logged dropdown-toggle" type="button" id='showOptions'
+                                data-target=""
+                                data-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu text-center">
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button" id='showPersonalArea'>Personal Area</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button" id='logoutID'>Logout</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <%} else {%>
                     <button class="logged" type="button" id='showEdit'
                             data-target="#loginModal"
                             data-toggle="modal">
                         <i class="fas fa-user"></i>
                     </button>
+                    <%}%>
 
 
                     <!-- MULTI LANGUAGE -->
