@@ -896,7 +896,7 @@ public class Home {
         request.setAttribute("viewUrl", "customer/profile");
     }
 
-    private static void showProduct(HttpServletRequest request, HttpServletResponse response) {
+    public static void showProduct(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Check if user is logged then call product.jsp with id of product to show.
          */
@@ -976,7 +976,6 @@ public class Home {
             }
         }
     }
-
 
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
 
