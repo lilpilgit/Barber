@@ -18,6 +18,7 @@
                     <%}%>
                     <button class="btn btnheader" type="button" id='showShop'
                             onclick=setNavFormHome('Home.showShop')>
+                        Shop
                     </button>
                     <button class="btn btnheader" type="button" id='showContact'
                             onclick=setNavFormHome('Home.showContactForm')>
@@ -28,7 +29,8 @@
                             onclick=setNavFormHome('Home.showCart')>
                         <i class="fas fa-shopping-basket"></i>
                     </button>
-                    <button class="logged" type="button" id='showWishlist' title="Wishlist">
+                    <button class="logged" type="button" id='showWishlist' title="Wishlist"
+                            onclick=setNavFormHome('Home.showWishlist')>
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="dropdown">

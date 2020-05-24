@@ -22,11 +22,11 @@ public class Product {
     private Structure structure;
 
     /* M : N with Orders */
-    private ArrayList<Orders> orders;
+    private ArrayList<Customer> orders;
     /* M : N with Cart */
-    private ArrayList<Cart> carts;
+    private ArrayList<Customer> carts;
     /* M : N with Wishlist */
-    private ArrayList<Wishlist> wishlists;
+    private ArrayList<Customer> wishlists;
 
     @Override
     public String toString() {
@@ -138,11 +138,11 @@ public class Product {
         this.showcase = showcase;
     }
 
-    public Boolean isDeleted(boolean deleted) {
+    public Boolean getDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
 
@@ -154,27 +154,27 @@ public class Product {
         this.structure = structure;
     }
 
-    public ArrayList<Orders> getOrders() {
+    public ArrayList<Customer> getOrders() {
         return orders;
     }
 
-    public void setOrders(ArrayList<Orders> orders) {
+    public void setOrders(ArrayList<Customer> orders) {
         this.orders = orders;
     }
 
-    public ArrayList<Cart> getCarts() {
+    public ArrayList<Customer> getCarts() {
         return carts;
     }
 
-    public void setCarts(ArrayList<Cart> carts) {
+    public void setCarts(ArrayList<Customer> carts) {
         this.carts = carts;
     }
 
-    public ArrayList<Wishlist> getWishlists() {
+    public ArrayList<Customer> getWishlists() {
         return wishlists;
     }
 
-    public void setWishlists(ArrayList<Wishlist> wishlists) {
+    public void setWishlists(ArrayList<Customer> wishlists) {
         this.wishlists = wishlists;
     }
 }

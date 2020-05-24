@@ -14,7 +14,7 @@
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
 
-    /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
+    /* Prendo il parametro "loggedUser" che mi consente di sapere qual è l'utente attualmente loggato */
     User loggedUser = null;
     if (request.getAttribute("loggedUser") != null && loggedOn != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
@@ -101,7 +101,6 @@
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
         setButtonActive('<%=idBtnAttivo%>');
-
     }
 </script>
 </body>

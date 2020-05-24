@@ -10,9 +10,10 @@ public class Customer {
     private Boolean isBlocked;
 
     /* M : N */
-    private ArrayList<Product> products;
-    private ArrayList<Wishlist> wishlists;
-    private ArrayList<Cart> carts;
+    private ArrayList<Product> orders;
+    private ArrayList<Product> wishlist;
+    private ArrayList<Product> cart;
+    /* 1 : N */
     private ArrayList<Booking> bookings;
 
     @Override
@@ -23,9 +24,9 @@ public class Customer {
                 ", numBookedReservations=" + numBookedReservations +
                 ", numOrderedProduct=" + numOrderedProduct +
                 ", isBlocked=" + isBlocked +
-                ", products=" + products +
-                ", wishlists=" + wishlists +
-                ", carts=" + carts +
+                ", orders=" + orders +
+                ", wishlist=" + wishlist +
+                ", cart=" + cart +
                 ", bookings=" + bookings +
                 '}';
     }
@@ -70,28 +71,28 @@ public class Customer {
         isBlocked = blocked;
     }
 
-    public ArrayList<Product> getProducts() {
-        return products;
+    public ArrayList<Product> getOrders() {
+        return orders;
     }
 
-    public void setProducts(ArrayList<Product> products) {
-        this.products = products;
+    public void setOrders(ArrayList<Product> orders) {
+        this.orders = orders;
     }
 
-    public ArrayList<Wishlist> getWishlists() {
-        return wishlists;
+    public ArrayList<Product> getWishlist() {
+        return wishlist;
     }
 
-    public void setWishlists(ArrayList<Wishlist> wishlists) {
-        this.wishlists = wishlists;
+    public void setWishlist(ArrayList<Product> wishlist) {
+        this.wishlist = wishlist;
     }
 
-    public ArrayList<Cart> getCarts() {
-        return carts;
+    public ArrayList<Product> getCart() {
+        return cart;
     }
 
-    public void setCarts(ArrayList<Cart> carts) {
-        this.carts = carts;
+    public void setCart(ArrayList<Product> cart) {
+        this.cart = cart;
     }
 
     public ArrayList<Booking> getBookings() {

@@ -430,7 +430,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             throw new RuntimeException(e);
         }
         try {
-            product.isDeleted(rs.getBoolean("DELETED"));
+            product.setDeleted(rs.getBoolean("DELETED"));
         }  catch (SQLException e) {
             System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);
