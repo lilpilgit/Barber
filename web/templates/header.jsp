@@ -10,7 +10,34 @@
                             onclick=setNavFormHome('Home.view')>
                         Home
                     </button>
-                    <% if (loggedOn) {%>
+                    <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
+
+                    <% if (loggedOn && loggedUser.isAdmin()) { %>
+                    <div class="dropdown">
+                        <button class="logged dropdown-toggle" type="button" id='showAdminOptions'
+                                data-toggle="dropdown">
+                            <i class="fas fa-user-tie"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu text-center">
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button"
+                                        id='adminArea' onclick=setNavFormHome('')>
+                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->
+                                    Admin Area
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-default gold font-weight-light" type="button" id="logoutAdmin"
+                                        onclick=setNavFormHome('Home.logout')>Logout
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <%
+                    } else {
+                        if (loggedOn) {
+                    %>
                     <button class="btn btnheader" type="button" id='showBook'
                             onclick=setNavFormHome('Home.showBook')>
                         Book!
@@ -49,7 +76,7 @@
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showOrders'onclick=setNavFormHome('Home.showOrders')>
+                                        id='showOrders' onclick=setNavFormHome('Home.showOrders')>
                                     Orders
                                 </button>
                             </li>
@@ -72,93 +99,10 @@
                             data-toggle="modal">
                         <i class="fas fa-user"></i>
                     </button>
-                    <%}%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
-
-                    <% if(loggedOn) { %>
-                    <button class="logged" type="button" id='showManage'
-                            data-target=""
-                            data-toggle=""
-                            onclick=alert("CIAO")>
-                        <i class="fas fa-user-tie"></i>
-                    </button>
-                    <%}%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <%
+                            }
+                        }
+                    %>
 
 
                     <!-- MULTI LANGUAGE -->
@@ -191,7 +135,7 @@
 
 <!--PRESO DA https://mdbootstrap.com/docs/jquery/modals/forms/-->
 
-<% if(!loggedOn) {%>
+<% if (!loggedOn) {%>
 <!--Modal: Login / Register Form-->
 <div class="modal fade " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-width modal-dialog-centered cascading-modal" role="document">
