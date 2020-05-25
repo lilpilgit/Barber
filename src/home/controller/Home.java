@@ -133,12 +133,14 @@ public class Home {
             customerDAO = daoFactory.getCustomerDAO();
             customer = customerDAO.findById(user.getId());
 
+            System.err.println(customer);
+
             /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
             if (user == null || !user.getPassword().equals(password)) {
                 sessionUserDAO.delete(null);
                 applicationMessage = "Username e/o password errati!";
                 loggedUser = null;
-            } else if (customer != null && customer.getBlocked()) {
+            } else if (customer.getId() != null && customer.getBlocked()) { /* mettendo solo customer != null va in errore */
                 /* email e password corretta, utente non cancellato, verifico se è BLOCCATO */
                 sessionUserDAO.delete(null);
                 applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";

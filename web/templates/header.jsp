@@ -21,11 +21,12 @@
                         </button>
                         <ul class="dropdown-menu text-center">
                             <li>
-                                <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='adminArea' onclick=setNavFormHome('')>
-                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->
-                                    Admin Area
-                                </button>
+<%--                                <button class="btn btn-default gold font-weight-light" type="button"--%>
+<%--                                        id="adminArea"> <!--onclick=setNavFormHome('')-->--%>
+<%--                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->--%>
+<%--                                    Admin Area--%>
+<%--                                </button>--%>
+                                    <a href="manage" class="btn btn-default gold font-weight-light" id="adminArea">Admin Area</a>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button" id="logoutAdmin"

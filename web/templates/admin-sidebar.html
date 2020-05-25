@@ -12,7 +12,7 @@
                     </button>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">John<strong>Smith</strong></span>
+                    <span class="user-name"><%=loggedUser.getName()%>&nbsp;&nbsp;<strong><%=loggedUser.getSurname()%></strong></span>
                     <span class="user-role">Administrator</span>
                 </div>
             </div>
@@ -71,10 +71,7 @@
         </div>
         <!-- sidebar-content  -->
         <div class="sidebar-footer button-side-footer">
-            <button onclick="setControllerAction('logout')"
-                    class="button-side-footer" type="button" id='logout'>
-                <i class="fa fa-power-off"></i>
-            </button>
+            <a href="app?controllerAction=Home.logout" class="button-side-footer" id="logout"><i class="fa fa-power-off"></i></a>
         </div>
 
     </nav>
