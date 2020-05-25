@@ -41,7 +41,7 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <%--        <%if (areEmployees) {%>--%>
-                <table class="table-bordered">
+                <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th scope="col">N°</th>

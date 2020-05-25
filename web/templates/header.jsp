@@ -67,12 +67,98 @@
                         </ul>
                     </div>
                     <%} else {%>
-                    <button class="logged" type="button" id='showEdit'
+                    <button class="logged" type="button" id='showModal'
                             data-target="#loginModal"
                             data-toggle="modal">
                         <i class="fas fa-user"></i>
                     </button>
                     <%}%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
+
+                    <% if(loggedOn) { %>
+                    <button class="logged" type="button" id='showManage'
+                            data-target=""
+                            data-toggle=""
+                            onclick=alert("CIAO")>
+                        <i class="fas fa-user-tie"></i>
+                    </button>
+                    <%}%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                     <!-- MULTI LANGUAGE -->
