@@ -59,6 +59,40 @@
     </div>
 </div>
 
+
+<%--<div class="container justify-content-center">--%>
+<%--    <div class="carousel slide" data-ride="carousel">--%>
+<%--        <div class="carousel-inner justify-content-center">--%>
+<%--            <% boolean first = true;--%>
+<%--                for (Product product : products) {%>--%>
+<%--            <div class="carousel-item mx-auto <%= first ? "active" : ""%>">--%>
+<%--                <div class="col-md-4">--%>
+<%--                    <div class="card">--%>
+<%--                        <div class="text-center">--%>
+<%--                            <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"--%>
+<%--                                                               alt="<%=product.getPictureName()%>"></div>--%>
+<%--                        </div>--%>
+<%--                        <div class="card-body toBottom text-center">--%>
+<%--                            <h4 class="card-title"><%=product.getName()%>--%>
+<%--                            </h4>--%>
+<%--                            <p class="card-text">&euro;<%=product.getPrice()%>--%>
+<%--                            </p>--%>
+<%--                            <div class="container">--%>
+<%--                                <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+
+<%--            <%first = false; }%>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</div>--%>
+
+
+
+
 <div class="container py-2">
     <div class="row padding">
         <%
