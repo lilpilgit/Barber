@@ -75,7 +75,7 @@
                     <p class="card-text">&euro;<%=product.getPrice()%>
                     </p>
                     <div class="container">
-                        <a href="product.jsp?id=<%=product.getId()%>" class="btn btn-outline-secondary">See Product</a>
+                        <button class="btn btn-outline-secondary" onclick=setProductForm('<%=product.getId()%>')>See Product</button>
                     </div>
                 </div>
             </div>
@@ -188,6 +188,11 @@
     </div>
 </div>
 </div>
+<!-- form per mostrare il prodotto scelto -->
+<form name="showProductForm" id="showProductForm" method="post">
+    <input type="hidden" name="controllerAction" value="Home.showProduct">
+    <input type="hidden" name="idProduct" value="">
+</form>
 <%@ include file="/templates/footer.html" %>
 </body>
 </html>
