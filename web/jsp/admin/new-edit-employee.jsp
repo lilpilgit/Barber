@@ -37,6 +37,7 @@
      * impiegato) o campi già riempiti ( modifica impiegato esistente ) */
     String action = (employeeToEdit != null) ? "modify" : "insert";
 
+    /* Faccio lo split dell'address per poterlo mostrare all'interno dei vari campi */
     String[] splittedAddress = null;
     int splittedAddressLength = 0;
     /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */

@@ -11,6 +11,13 @@ function showMessage(msg) {
     alert(msg);
 }
 
+function toUpperCase(element) {
+    /**
+     * set the value of input selected  by ID to upperCase
+     */
+    element.value = element.value.toUpperCase();
+}
+
 /*
 * Realize the counter of quantity for the product page
 * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase
@@ -118,6 +125,18 @@ function setSelectedFilter(id_select, filter) {
                 break;
             }
         }
+    }
+}
+
+function setSelectedAttribute(id_select, valueFromDb) {
+    let select = document.getElementById(id_select).options;
+
+    for (let option = 0; option < select.length; option++) {
+        if (select[option].text === valueFromDb) {
+            select[option].selected = true;
+            break;
+        }
+
     }
 }
 

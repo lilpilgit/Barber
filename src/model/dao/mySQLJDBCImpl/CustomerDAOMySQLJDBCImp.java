@@ -186,7 +186,7 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
 
         ArrayList<Customer> customers = new ArrayList<>();
         /* Seleziono solamente i clienti che non sono stati cancellati */
-        query = "SELECT * FROM CUSTOMER INNER JOIN USER U ON CUSTOMER.ID = U.ID WHERE DELETED = 0;";
+        query = "SELECT * FROM CUSTOMER C INNER JOIN USER U ON C.ID = U.ID WHERE DELETED = 0;";
 
         try {
             ps = connection.prepareStatement(query);
@@ -231,7 +231,7 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
     @Override
     public Customer findById(Long id) {
         Customer customer = new Customer();
-        query = "SELECT * FROM CUSTOMER C WHERE C.ID = ?";
+        query = "SELECT * FROM CUSTOMER C INNER JOIN USER U ON C.ID = U.ID WHERE DELETED = 0 AND C.ID = ?;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -251,7 +251,7 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
         try {
             if (rs.next()) {
                 /*Se true significa che esiste un cliente con quell'ID*/
-                customer = readCustomer(rs);
+                customer = readCustomerWithUserFields(rs);
             }
         } catch (SQLException e) {
             System.err.println("Errore nella if(rs.next())");
@@ -327,6 +327,124 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
             throw new RuntimeException(e);
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean update(Customer customer) throws DuplicatedObjectException{
+        /**
+         * The entity customer has an ID that appears to be FOREIGN KEYS of the PRIMARY KEYS <ID> of the USER entity,
+         * therefore this method checked if the customer that we want to modify, have same email of another existent
+         * customer and in this case raises a DuplicatedObjectException, therefore change attributes in USER & CUSTOMER
+         * tables.
+         *
+         * @return Return the object updated correctly in the DB otherwise raise an exception.
+         * */
+
+        boolean exist; /* flag per sapere se esiste già un cliente con gli stessi dati */
+        /*CON TALE QUERY CONTROLLO SE IL CLIENTE ESISTE */
+
+        query
+                = " SELECT C.ID"
+                + " FROM CUSTOMER C JOIN USER U ON C.ID = U.ID"
+                + " WHERE DELETED = 0 AND EMAIL = ? AND C.ID <> ?;";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, customer.getUser().getEmail());
+            ps.setLong(i++, customer.getId());
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            exist = rs.next(); /*se esiste almeno una riga non posso inserire un altro cliente con gli stessi dati!!!*/
+        } catch (SQLException e) {
+            System.err.println("Errore nella exist = rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        if (exist) {
+            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            throw new DuplicatedObjectException("CustomerDAOJDBCImpl.update: Tentativo di aggiornamento di un cliente con dati di un altro cliente già esistente.");
+        }
+
+        /*Se non è stata sollevata alcuna eccezione, allora possiamo aggiornare i dati di cliente + utente associato*/
+        query
+                = " UPDATE CUSTOMER C"
+                + " JOIN USER U ON C.ID = U.ID"
+                + " SET "
+                + "  NUM_BOOKED_RESERVATIONS = ?,"
+                + "  NUM_ORDERED_PRODUCT = ?,"
+                + "  BLOCKED = ?,"
+                + "  EMAIL = ?," /*field della tabella USER*/
+                + "  NAME = ?," /*field della tabella USER*/
+                + "  SURNAME = ?," /*field della tabella USER*/
+                + "  ADDRESS = ?," /*field della tabella USER*/
+                + "  PHONE = ?," /*field della tabella USER*/
+                + "  PASSWORD = ?," /*field della tabella USER*/
+                + "  IS_ADMIN = ?," /*field della tabella USER*/
+                + "  IS_EMPLOYEE = ?," /*field della tabella USER*/
+                + "  IS_CUSTOMER = ?" /*field della tabella USER*/
+                + " WHERE"
+                + "  C.ID = ?;";
+
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setInt(i++, customer.getNumBookedReservations()); /*field della tabella CUSTOMER*/
+            ps.setInt(i++, customer.getNumOrderedProduct()); /*field della tabella CUSTOMER*/
+            ps.setBoolean(i++, customer.getBlocked()); /*field della tabella CUSTOMER*/
+            ps.setString(i++, customer.getUser().getEmail()); /*field della tabella USER*/
+            ps.setString(i++, customer.getUser().getName()); /*field della tabella USER*/
+            ps.setString(i++, customer.getUser().getSurname()); /*field della tabella USER*/
+            ps.setString(i++, customer.getUser().getAddress()); /*field della tabella USER*/
+            ps.setString(i++, customer.getUser().getPhone()); /*field della tabella USER*/
+            ps.setString(i++, customer.getUser().getPassword()); /*field della tabella USER*/
+            ps.setBoolean(i++, customer.getUser().isAdmin()); /*field della tabella USER*/
+            ps.setBoolean(i++, customer.getUser().isEmployee()); /*field della tabella USER*/
+            ps.setBoolean(i++, customer.getUser().isCustomer()); /*field della tabella USER*/
+            ps.setLong(i++, customer.getId()); /*field della tabella CUSTOMER*/
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*Chiudo il preparedStatement*/
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /* se non è stata sollevata alcuna eccezione fin qui, ritorno true perché significa
+         * che l'aggiornamento di CUSTOMER & USER è andato a buon fine */
         return true;
     }
 
@@ -424,9 +542,9 @@ public class CustomerDAOMySQLJDBCImp implements CustomerDAO {
         /*              FINE DATI TABELLA USER                */
         /*              INIZIO DATI TABELLA CUSTOMER          */
         try {
-            customer.setId(rs.getLong("CUSTOMER.ID"));
+            customer.setId(rs.getLong("C.ID"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"ID\")");
+            System.err.println("Errore nella rs.getLong(\"C.ID\")");
             throw new RuntimeException(e);
         }
 

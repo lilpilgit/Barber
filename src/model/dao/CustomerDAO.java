@@ -1,5 +1,6 @@
 package model.dao;
 
+import model.exception.DuplicatedObjectException;
 import model.exception.NoCustomerCreatedException;
 import model.mo.Customer;
 
@@ -25,6 +26,8 @@ public interface CustomerDAO {
                     String address, /* [+] attributo della table USER */
                     String phone, /* [+] attributo della table USER */
                     String password /* [+] attributo della table USER */) throws NoCustomerCreatedException;
+
+    boolean update(Customer customer) throws DuplicatedObjectException;
 
     ArrayList<Customer> fetchAll();
 

@@ -1,8 +1,5 @@
-<%@page import="model.mo.Product" %>
-<%@ page import="java.util.ArrayList" %>
+<%@page import="model.mo.Customer" %>
 <%@ page import="model.mo.User" %>
-<%@ page import="model.mo.Customer" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -22,13 +19,28 @@
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
+
+    /* prendo il parametro result così da scegliere in modo più semplice i colori del frontend per mostrare il messaggio */
+    String result = null; /* "success" or "fail"*/
+    if(request.getAttribute("result") != null){
+        result = (String) request.getAttribute("result");
+    }
+
     /* Prendo il parametro "customer" che indica i dati del cliente da mostrare nella form  */
     Customer customer = null;
     if (request.getAttribute("customer") != null) {
         customer = (Customer) request.getAttribute("customer");
     }
 
-    /*TODO usare customer per settare i campi */
+    /* Faccio lo split dell'address per poterlo mostrare all'interno dei vari campi */
+    String[] splittedAddress = null;
+    int splittedAddressLength = 0;
+    /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
+    if (customer != null) {
+        String address = customer.getUser().getAddress();
+        splittedAddress = address.split("\\|");
+        splittedAddressLength = splittedAddress.length;
+    }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Profile";
@@ -40,47 +52,47 @@
 <!doctype html>
 <html lang="en">
 
-<%@include file="/templates/head.jsp"%>
+<%@include file="/templates/head.jsp" %>
 
 <body>
 
-<%@include file="/templates/header.jsp"%>
+<%@include file="/templates/header.jsp" %>
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container py-4">
     <div class="cart-box">
         <div class="row justify-content-center pb-4">
-            <h3>Welcome <b><%=loggedUser.getName()%></b> to your edit section</h3>
+            <h3>Welcome <b><%=loggedUser.getName()%>
+            </b> to your edit section</h3>
         </div>
+        <hr>
         <form id='form_edit_profile' method="post" class="needs-validation">
-            <hr>
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-2">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name"
                            autocapitalize="on"
                            placeholder="Mario" required
-                           value="<%=loggedUser.getName()%>" >
+                           value="<%=customer.getUser().getName()%>">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname"
                            style="text-transform: capitalize;" placeholder="Rossi" required
-                           value="<%=loggedUser.getSurname()%>" oninput="this.value=this.value.toLowerCase();">
+                           value="<%=customer.getUser().getSurname()%>">
                 </div>
             </div>
-
             <div class="form-row justify-content-center">
                 <div class="col-md-3">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=loggedUser.getEmail()%>" style="text-transform: lowercase;"
+                           value="<%=customer.getUser().getEmail()%>" style="text-transform: lowercase;"
                            required>
                 </div>
                 <div class="col-md-3">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value="<%=customer.get%>"
+                           value="<%=customer.getUser().getPhone()%>"
                            class="form-control">
                 </div>
             </div>
@@ -123,7 +135,7 @@
                 <div class="col-md-3 mb-2">
                     <label for="City">City</label>
                     <input type="text" class="form-control" name="city" id="City" required
-                           value=""
+                           value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
@@ -131,58 +143,59 @@
                 <div class="col-md-3 mb-2">
                     <label for="Cap">CAP</label>
                     <input type="number" class="form-control" name="cap" id="Cap" required min="0"
-                           value="">
+                           value="<%=splittedAddress[3]%>">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Street">Street</label>
                     <input type="text" class="form-control" name="street" id="Street" required
-                           value=""
+                           value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number" min="0"
-                           value="">
+                           value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
             <div class="text-center pt-1">
-                <button class="btngeneric">Update profile</button>
+                <button type="submit" form="form_edit_profile" class="btngeneric">Update profile</button>
             </div>
-            <hr>
-            <div class="form-row justify-content-center">
-                <div class="col-md-3 mb-2">
-                    <label for="Oldpwd">Insert old password</label>
-                    <input type="password" class="form-control" name="cap" id="Oldpwd" required min="0"
-                           value="">
-                </div>
-                <div class="col-md-3 mb-2">
-                    <label for="Newpwd">Insert new password</label>
-                    <input type="password" class="form-control" name="street" id="Newpwd" required
-                           value=""
-                           oninput="toUpperCase(this)">
-                </div>
-                <div class="col-md-3 mb-2">
-                    <label for="Cnfpwd">Confirm password</label>
-                    <input type="password" class="form-control" name="house_number" id="Cnfpwd" min="0"
-                           value="">
-                </div>
+            <input type="hidden" name="controllerAction" value="Home.updateProfile">
+        </form>
+        <hr>
+        <div class="form-row justify-content-center">
+            <div class="col-md-3 mb-2">
+                <label for="Oldpwd">Insert old password</label>
+                <input type="password" class="form-control" name="oldpwd" id="Oldpwd" required min="0"
+                       value="">
             </div>
-            <div class="text-center pt-1">
-                <button class="btngeneric">Change password</button>
+            <div class="col-md-3 mb-2">
+                <label for="Newpwd">Insert new password</label>
+                <input type="password" class="form-control" name="newpwd" id="Newpwd" required
+                       value=""
+                       oninput="">
             </div>
+            <div class="col-md-3 mb-2">
+                <label for="Cnfpwd">Confirm password</label>
+                <input type="password" class="form-control" id="Cnfpwd" min="0" required
+                       value="">
+            </div>
+        </div>
+        <div class="text-center pt-1">
+            <button class="btngeneric">Change password</button>
+        </div>
         </form>
     </div>
 </div>
 
 
-
-
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.onload = function afterPageLoad() {
-
+        setSelectedAttribute("State", "<%=splittedAddress[0]%>");
+        setSelectedAttribute("Region", "<%=splittedAddress[1]%>")
     }
 </script>
 </body>

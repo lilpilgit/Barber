@@ -5,6 +5,7 @@ import model.dao.CustomerDAO;
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
 import model.dao.UserDAO;
+import model.exception.DuplicatedObjectException;
 import model.exception.NoCustomerCreatedException;
 import model.mo.Customer;
 import model.mo.Product;
@@ -876,6 +877,9 @@ public class Home {
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
 
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
             daoFactory.beginTransaction();
 
             customerDAO = daoFactory.getCustomerDAO();
@@ -891,7 +895,7 @@ public class Home {
 
         } catch (Exception e) {
             try {
-                if(daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
             } catch (Throwable t) {
             }
@@ -899,7 +903,7 @@ public class Home {
 
         } finally {
             try {
-                if(daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
             } catch (Throwable t) {
             }
@@ -914,6 +918,140 @@ public class Home {
         request.setAttribute("viewUrl", "customer/profile");
         /* 4) Setto il cliente da mostrare in base a quale utente è loggato */
         request.setAttribute("customer", customer);
+    }
+
+    public static void updateProfile(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Instantiates a CustomerDAO to be able to edit the existing customer in Database.
+         */
+
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
+        User loggedUser = null;
+        CustomerDAO customerDAO = null;
+        Customer customerToUpdate = null;
+        Customer originalCustomer = null; //TODO!! SERVE???
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        boolean edited = false;
+
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            daoFactory.beginTransaction();
+
+            customerDAO = daoFactory.getCustomerDAO();
+
+
+            originalCustomer = customerDAO.findById(loggedUser.getId());
+
+            /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
+             * quale passare alla pagina profile.jsp */
+
+            customerToUpdate = customerDAO.findById(loggedUser.getId());
+
+
+            /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
+             * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
+
+            customerToUpdate.getUser().setName(request.getParameter("name")); /* attributo della tabella USER */
+            customerToUpdate.getUser().setSurname(request.getParameter("surname")); /* attributo della tabella USER */
+            customerToUpdate.getUser().setEmail(request.getParameter("email")); /* attributo della tabella USER */
+            customerToUpdate.getUser().setPhone(request.getParameter("phone")); /* attributo della tabella USER */
+            customerToUpdate.getUser().setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number"))); /* attributo della tabella USER */
+            customerToUpdate.getUser().setIsAdmin(false); /* attributo della tabella USER */
+            customerToUpdate.getUser().setIsEmployee(false); /* attributo della tabella USER */
+            customerToUpdate.getUser().setIsCustomer(true); /* attributo della tabella USER */
+            customerToUpdate.getUser().setIsDeleted(false); /* attributo della tabella USER */
+
+            /* Effettuo la modifica del cliente */
+            try {
+                edited = customerDAO.update(customerToUpdate);/* Se non viene sollevata l'eccezione, il cliente è stato modificato correttamente*/
+
+            } catch (DuplicatedObjectException e) {
+                applicationMessage = e.getMessage();
+                e.printStackTrace();
+            }
+
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
+
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
+            if (edited) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato modificato correttamente .*/
+                applicationMessage = "Your data has been modified SUCCESSFULLY.";
+            }
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                /* Se viene fatto il rollback della transazione il cliente non è stato modificato .*/
+                applicationMessage = "Error: Your data could not be updated.";
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+        }
+
+
+        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+
+        /* 1) Attributo che indica se è loggato oppure no */
+        request.setAttribute("loggedOn", loggedUser != null);
+        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+        request.setAttribute("loggedUser", loggedUser);
+        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+         *     form per consentire ulteriori modifiche sul medesimo impiegato */
+        request.setAttribute("viewUrl", "customer/profile");
+        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        if (edited) {
+            /* SUCCESS */
+            request.setAttribute("result", "success");
+        } else {
+            /* FAIL */
+            request.setAttribute("result", "fail");
+        }
+        /* 4) il cliente che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
+        if (edited) {
+            /* SUCCESS */
+            request.setAttribute("customer", customerToUpdate);
+        } else {
+            /* FAIL */
+            request.setAttribute("customer", originalCustomer);
+        }
+
     }
 
     public static void showProduct(HttpServletRequest request, HttpServletResponse response) {
