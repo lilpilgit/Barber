@@ -22,7 +22,7 @@
      * e dunque modificare a volontà all'interno della pagina */
     /*TODO A SESSIONE IMPLEMENTATA, VERRÀ PRESO L'ID DALLA SESSIONE PASSATA COME ATTRIBUTO DELLA REQUEST DAL CONTROLLER*/
     Admin adminToEdit = null;
-    if(request.getAttribute("adminToModify") != null){
+    if (request.getAttribute("adminToModify") != null) {
         adminToEdit = (Admin) request.getAttribute("adminToModify");
     }
 
@@ -185,20 +185,17 @@
 
 
 <script>
-    function onLoadFunctionalities() {
+    window.addEventListener("load", () => {
         /*addOnClickListenerBtnSidebar();*/
         /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
         /* Setto come selected tra le option di state e region quella uguale al valore dell'admin da modificare */
         setSelectedAttribute("State", "<%=splittedAddress[0]%>");
-        setSelectedAttribute("Region","<%=splittedAddress[1]%>")
+        setSelectedAttribute("Region", "<%=splittedAddress[1]%>")
 
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
-    }
-
-    window.addEventListener('load', onLoadFunctionalities);
-</script>
+    });</script>
 </body>
 </html>
 

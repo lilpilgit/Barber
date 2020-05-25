@@ -167,15 +167,15 @@
 
 
 <script>
-    function onLoadFunctionalities() {
+
+    window.addEventListener("load",() =>{
         /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
 
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
-    }
+    })
 
-    window.addEventListener('load', onLoadFunctionalities);
 </script>
 </body>
 </html>

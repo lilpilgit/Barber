@@ -107,11 +107,11 @@
 
 <%@include file="/templates/footer.html"%>
 <script type="text/javascript">
-    function onLoadHandler() {
-        handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
-    }
 
-    window.addEventListener("load", onLoadHandler);
+    window.addEventListener("load",() =>{
+        handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
+    });
+
 </script>
 </body>
 </html>

@@ -42,10 +42,9 @@
     </main>
 </div>
 <script>
-    function onLoadFunctionalities() {
-    }
+    window.addEventListener("load",() =>{
 
-    window.addEventListener('load', onLoadFunctionalities);
+    });
 </script>
 </body>
 </html>

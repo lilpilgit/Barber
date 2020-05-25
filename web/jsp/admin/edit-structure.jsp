@@ -180,7 +180,7 @@
 
 
 <script>
-    function onLoadFunctionalities() {
+    window.addEventListener("load",() =>{
         /*addOnClickListenerBtnSidebar();*/
         /* TODO impostare il pulsante Staff su hover in modo da fare l'highlight*/
         /* Setto come selected tra le option di state e region quella uguale al valore della struttura da modificare */
@@ -190,9 +190,7 @@
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
-    }
-
-    window.addEventListener('load', onLoadFunctionalities);
+    })
 </script>
 </body>
 </html>

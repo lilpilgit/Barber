@@ -193,10 +193,10 @@
 
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.onload = function afterPageLoad() {
+    window.addEventListener("load",() =>{
         setSelectedAttribute("State", "<%=splittedAddress[0]%>");
-        setSelectedAttribute("Region", "<%=splittedAddress[1]%>")
-    }
+        setSelectedAttribute("Region", "<%=splittedAddress[1]%>");
+    })
 </script>
 </body>
 </html>

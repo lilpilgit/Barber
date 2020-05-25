@@ -21,9 +21,8 @@
     <script type="text/javascript" src="assets/js/main.js"></script>
 </head>
 <script>
-    window.onload = function afterPageLoad() {
+    window.onload = function f() {
         setButtonActive("<%=idBtnAttivo%>");
-
         <%if(applicationMessage != null) {%>
         showMessage("<%=applicationMessage%>");
         <%}%>

@@ -85,12 +85,11 @@
 </div>
 
 <script>
-    function onLoadFunctionalities() {
+
+    window.addEventListener("load",() =>{
         /* TODO impostare il pulsante Bookings su hover in modo da fare l'highlight*/
+    })
 
-    }
-
-    window.addEventListener('load', onLoadFunctionalities);
 </script>
 </body>
 </html>

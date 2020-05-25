@@ -178,9 +178,8 @@
 
 <%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
-    window.onload = function afterPageLoad() {
-        setButtonActive('<%=idBtnAttivo%>');
-    }
+    window.addEventListener("load",() =>{
+    });
 </script>
 </body>
 </html>

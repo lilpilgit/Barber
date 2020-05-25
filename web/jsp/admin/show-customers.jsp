@@ -165,20 +165,18 @@
 <!--FINE MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
 
 <script>
-    function onLoadFunctionalities() {
+    function setTmpId(id) {
+        document.getElementById("tmpId").value = id;
+        console.log("ID SETTATO TMP: " + document.getElementById("tmpId").value);
+    }
+    window.addEventListener("load",() =>{
         /* TODO impostare il pulsante Customers su hover in modo da fare l'highlight*/
 
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
         <%}%>
-    }
+    })
 
-    function setTmpId(id) {
-        document.getElementById("tmpId").value = id;
-        console.log("ID SETTATO TMP: " + document.getElementById("tmpId").value);
-    }
-
-    window.addEventListener('load', onLoadFunctionalities);
 </script>
 </body>
 </html>

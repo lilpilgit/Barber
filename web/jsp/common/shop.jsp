@@ -5,10 +5,10 @@
 <%
 
     /* Prendo il parametro "categoryFiltered" per settare il dropdown dopo il refresh della pagina */
-    String categoryFiltered = (request.getAttribute("categoryFiltered") != null) ? (String)request.getAttribute("categoryFiltered") : "All";
+    String categoryFiltered = (request.getAttribute("categoryFiltered") != null) ? (String) request.getAttribute("categoryFiltered") : "All";
 
     /* Prendo il parametro "brandFiltered" per settare il dropdown dopo il refresh della pagina */
-    String brandFiltered = (request.getAttribute("brandFiltered") != null) ? (String)request.getAttribute("brandFiltered") : "All";
+    String brandFiltered = (request.getAttribute("brandFiltered") != null) ? (String) request.getAttribute("brandFiltered") : "All";
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
@@ -155,12 +155,12 @@
 </div>
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.onload = function afterPageLoad() {
+    window.addEventListener("load", () => {
         setButtonActive('<%=idBtnAttivo%>');
         setFilterForm("category_select_menu", "brand_select_menu", "<%=categoryFiltered%>", "<%=brandFiltered%>");
         setSelectedFilter("category_select_menu", "<%=categoryFiltered%>");
         setSelectedFilter("brand_select_menu", "<%=brandFiltered%>");
-    }
+    })
 </script>
 </body>
 </html>

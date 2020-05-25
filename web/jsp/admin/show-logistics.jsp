@@ -94,11 +94,10 @@
 
 
 <script>
-    function onLoadFunctionalities() {
-/* TODO impostare il pulsante Logistics su hover in modo da fare l'highlight*/
-    }
+    window.addEventListener("load",() =>{
+        /* TODO impostare il pulsante Logistics su hover in modo da fare l'highlight*/
 
-    window.addEventListener('load', onLoadFunctionalities);
+    })
 </script>
 </body>
 </html>
