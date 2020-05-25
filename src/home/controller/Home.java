@@ -93,8 +93,13 @@ public class Home {
          */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
-        User loggedUser;
         String applicationMessage = null;
+        UserDAO sessionUserDAO = null;
+        User loggedUser = null;
+        UserDAO userDAO = null;
+        User user = null;
+        CustomerDAO customerDAO = null;
+        Customer customer = null; /* serve per verificare se l'utente che sta facendo il login è un cliente e verificare se è BLOCKED */
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -107,7 +112,7 @@ public class Home {
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
             sessionDAOFactory.beginTransaction();
 
-            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
+            sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
             loggedUser = sessionUserDAO.findLoggedUser();
 
 
@@ -121,13 +126,22 @@ public class Home {
             String password = request.getParameter("password");
 
             /* check delle credenziali sul database */
-            UserDAO userDAO = daoFactory.getUserDAO();
-            User user = userDAO.findByEmail(email); /* tale utente esiste???? */
+            userDAO = daoFactory.getUserDAO();
+            user = userDAO.findByEmail(email); /* tale utente esiste???? */
+
+            /* controllo se si tratta di un utente in quanto devo verificare che non sia stato bloccato */
+            customerDAO = daoFactory.getCustomerDAO();
+            customer = customerDAO.findById(user.getId());
 
             /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
             if (user == null || !user.getPassword().equals(password)) {
                 sessionUserDAO.delete(null);
                 applicationMessage = "Username e/o password errati!";
+                loggedUser = null;
+            } else if (customer != null && customer.getBlocked()) {
+                /* email e password corretta, utente non cancellato, verifico se è BLOCCATO */
+                sessionUserDAO.delete(null);
+                applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
                 loggedUser = null;
             } else {
                 loggedUser = sessionUserDAO.insert(user.getId(), user.getEmail(), user.getName(), user.getSurname(), null, null, null, user.isAdmin(), user.isEmployee(), user.isCustomer());
