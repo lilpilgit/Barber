@@ -74,10 +74,11 @@
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Producer</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Price</th>
                         <th scope="col">Discount</th>
                         <th scope="col">Insert Date</th>
-                        <th scope="col">Showcase</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -96,15 +97,22 @@
                         </td>
                         <td><%=p.getQuantity()%>
                         </td>
+                        <td><%=p.getProducer()%>
+                        </td>
+                        <td><%=p.getCategory()%>
+                        </td>
                         <td><%=p.getPrice()%>
                         </td>
                         <td><%=p.getDiscount()%>
                         </td>
                         <td><%=p.getInsertDate()%>
                         </td>
-                        <td><i class="<%=(p.getShowcase()) ? "fas fa-check checked" : "fas fa-times unchecked"%>"></i>
-                        </td>
                         <td>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                                    title="<%=p.getShowcase() ? "Remove from showcase" : "Put in the showcase" %>"
+                                    onclick=showcaseById(<%=p.getId()%>,<%=p.getShowcase()%>)>
+                                <i class="<%=(p.getShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
+                            </button>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify">
                                 <i class="fas fa-pencil-alt"></i></button>
                             <button type="button" class="trashbutton" title="Delete">
@@ -117,6 +125,12 @@
                 <%} else {%>
                 <h1>There are no products :(</h1>
                 <%}%>
+                <form method="post" id="action">
+                    <input type="hidden" name="controllerAction" value="">
+                    <input type="hidden" name="ProductStatus" value="">
+                    <input type="hidden" name="ProductID" value="">
+                </form>
+
             </div>
         </div>
     </main>

@@ -16,6 +16,7 @@ public interface ProductDAO {
      *
      * @return all the products that must be shown in the showcase of the homepage
      */
+    boolean modifyShowcase(Product product, Boolean status);
     ArrayList<Product> findShowcaseProduct();
     Product findProductById(Long id);
     /* TODO DA RIPRENDERE IN MANO PERCHE' IMPLEMENTATA IN SHOP.JSP */

@@ -112,6 +112,21 @@ function unBlockById(id, user, controller) {
 }
 
 
+function showcaseById(id, status) {
+    /**
+     * for form with ID ==> action, set value of hidden input field with
+     * name="controllerAction" to "Procuct.modifyShowcase" and set value of hidden input field (of show-products.jsp)
+     */
+
+    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
+    let formProductID = document.getElementById('action');
+    let index = 'ProductID';
+    formProductID.elements['controllerAction'].value = 'Products.manageShowcase';
+    formProductID.elements['ProductStatus'].value = status;
+    formProductID.elements[index].value = id;
+    formProductID.submit();
+}
+
 function editEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with

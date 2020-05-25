@@ -28,6 +28,36 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     }
 
     @Override
+    public boolean modifyShowcase(Product product, Boolean status) {
+
+        query = "UPDATE PRODUCT SET SHOWCASE = ? WHERE ID = ?";
+
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setBoolean(i++, status);
+            ps.setLong(i++, product.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    @Override
     public ArrayList<Product> findShowcaseProduct() {
         ArrayList<Product> listProduct = new ArrayList<>();
         query = "SELECT * FROM PRODUCT WHERE SHOWCASE = 1;";
