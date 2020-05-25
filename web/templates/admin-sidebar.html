@@ -71,12 +71,19 @@
         </div>
         <!-- sidebar-content  -->
         <div class="sidebar-footer button-side-footer">
-            <a href="app?controllerAction=Home.logout" class="button-side-footer" id="logout"><i class="fa fa-power-off"></i></a>
+            <button type="submit" form="logoutForm"
+                    class="button-side-footer" id="logout">
+                <i class="fa fa-power-off"></i>
+            </button>
         </div>
 
     </nav>
     <form id="controller" method="post">
         <input type="hidden" name="controllerAction" value="">
+    </form>
+
+    <form id="logoutForm" method="post" action="app">
+        <input type="hidden" name="controllerAction" value="Home.logout">
     </form>
 </div>
 <script>
