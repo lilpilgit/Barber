@@ -105,6 +105,7 @@
 
 <!--PRESO DA https://mdbootstrap.com/docs/jquery/modals/forms/-->
 
+<% if(!loggedOn) {%>
 <!--Modal: Login / Register Form-->
 <div class="modal fade " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-width modal-dialog-centered cascading-modal" role="document">
@@ -317,12 +318,11 @@
                 </div>
                 <!--/.Panel 8-->
             </div>
-
         </div>
         <!--/.Content-->
     </div>
 </div>
-</div>
+<%}%>
 
 
 
