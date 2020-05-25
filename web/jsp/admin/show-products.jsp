@@ -113,7 +113,9 @@
                                     onclick=showcaseById(<%=p.getId()%>,<%=p.getShowcase()%>)>
                                 <i class="<%=(p.getShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
                             </button>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify">
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
+                                    title="edit product"
+                                    onclick=editProduct(<%=p.getId()%>)>
                                 <i class="fas fa-pencil-alt"></i></button>
                             <button type="button" class="trashbutton" title="Delete">
                                 <i class="far fa-trash-alt"></i></button>

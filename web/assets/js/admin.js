@@ -138,7 +138,19 @@ function editEmployee(id) {
     formEmployeeID.elements['controllerAction'].value = 'Staff.showFormEditEmployee';
     formEmployeeID.elements['employeeID'].value = id;
     formEmployeeID.submit();
+}
 
+function editProduct(id) {
+    /**
+     * for form with ID ==> action, set value of hidden input field with
+     * name="controllerAction" to "Staff.editEmployee" and set value of hidden input field (of edit-product.jsp)
+     * with name="ProductID" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
+    let formProductID = document.getElementById('action');
+    formProductID.elements['controllerAction'].value = 'Products.showFormEditProduct';
+    formProductID.elements['ProductID'].value = id;
+    formProductID.submit();
 }
 
 function setSelectedAttribute(id_select, valueFromDb) {

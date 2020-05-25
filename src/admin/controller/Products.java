@@ -2,11 +2,14 @@ package admin.controller;
 
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
+import model.dao.StructureDAO;
 import model.mo.Product;
+import model.mo.Structure;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -142,6 +145,52 @@ public class Products {
         products = productDAO.fetchAllProducts();
 
         request.setAttribute("products", products);
+    }
+
+    public static void showFormEditProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        /**
+         * Set viewUrl to the JSP <edit-product> to show the data entry form of the existent product.
+         * Send product to modify as attribute of the request, to fill in edit-product.jsp automatically
+         * field with data of existent product.
+         * */
+        Long idToEdit = null; /* Id da da modificare */
+        idToEdit = Long.valueOf(request.getParameter("ProductID"));
+        Product productToEdit = null; /* oggetto che deve essere passato alla pagina del form di inserimento/modifica */
+
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+        if (daoFactory != null) {
+            daoFactory.beginTransaction();
+        } else {
+            throw new RuntimeException("Errore nel Controller Products.showFormEditProduct ==> daoFactory.beginTransaction();");
+        }
+
+        /* Nel caso in cui ci fossero piu' strutture */
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = structureDAO.fetchStructure();
+
+        ProductDAO productDAO = daoFactory.getProductDAO();
+        productToEdit = productDAO.findProductById(idToEdit);
+
+        try {
+            /* committo la transazione */
+            daoFactory.commitTransaction();
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+        } catch (Exception e) {
+            System.err.println("ERRORE NEL COMMIT DELLA TRANSAZIONE");
+        } finally {
+            /*  chiudo la transazione */
+            daoFactory.closeTransaction();
+            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+        }
+
+        /* Setto gli attributi della request */
+        /* 1) il viewUrl che il dispatcher dovrà visualizzare nel browser */
+        request.setAttribute("viewUrl", "admin/edit-product"); /* bisogna visualizzare new-edit-employee.jsp */
+        /* 2) i dati della struttura sulla quale si sta operando da mostrare nella pagina edit-product.jsp */
+        request.setAttribute("structure", structure);
+        /* 3) l'oggetto impiegato che deve essere modificato */
+        request.setAttribute("productToModify", productToEdit);
     }
 
 }
