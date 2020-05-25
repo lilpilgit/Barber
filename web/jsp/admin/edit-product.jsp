@@ -84,9 +84,8 @@
                 </div>
                 <div class="col-md-5 mb-3">
                     <label for="Description">Description</label>
-                    <input type="text" name="description" id="Description" required
-                           value="<%=productToEdit.getDescription()%>"
-                           class="form-control">
+                    <textarea class="form-control" name="description" id="Description" required
+                              rows="8" form="Description" style="resize: none;"><%=productToEdit.getDescription()%></textarea>
                 </div>
             </div>
             <br>
@@ -113,6 +112,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="Price">Price</label>
                     <input type="number" name="price" id="Price" required
+                           min="0" step="0.01"
                            value="<%=productToEdit.getPrice()%>"
                            class="form-control">
                 </div>
