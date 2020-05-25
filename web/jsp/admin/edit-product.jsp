@@ -18,9 +18,9 @@
 
     /* Prendo il parametro "structureToModify" che è l'oggetto structure che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
-    Product productToedit = null;
-    if (request.getAttribute("structureToModify") != null) {
-        productToedit = (Product) request.getAttribute("productToModify");
+    Product productToEdit = null;
+    if (request.getAttribute("productToModify") != null) {
+        productToEdit = (Product) request.getAttribute("productToModify");
     }
 %>
 <!doctype html>
@@ -56,114 +56,88 @@
     <!--Main content of the page-->
     <main class="page-content">
 
-        <h1>Banane lamponi</h1>
-       <%-- <form id='form_edit_structure' method="post" class="needs-validation">
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
+        <form id='form_edit_product' method="post" class="needs-validation">
+            <br>
+            <div class="form-row justify-content-center">
+                <div class="col-md-5 mb-3">
                     <label for="Name">Name</label>
                     <input type="text" name="name" id="Name" required
-                           value="<%=structureToEdit.getName()%>"
+                           value="<%=productToEdit.getName()%>"
                            class="form-control">
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="Phone">Phone number</label>
-                    <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value="<%=structureToEdit.getPhone()%>"
-                           class="form-control">
-                </div>
-            </div>
-            <br>
-            <hr>
-            <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="Opening-Time">Opening Time</label>
-                    <input type="time" class="form-control" name="opening_time" id="Opening-Time" required
-                           value="<%=structureToEdit.getOpeningTime()%>">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="Closing-Time">Closing Time</label>
-                    <input type="time" class="form-control" name="closing_time" id="Closing-Time" required
-                           value="<%=structureToEdit.getClosingTime()%>"
-                           class="form-control">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="Slot">Slot</label> <!--TODO:step default 60 ==> 60 secondi-->
-                    <input type="time" class="form-control" name="slot" id="Slot" required
-                           value="<%=structureToEdit.getSlot()%>"
+                <div class="col-md-5 mb-3">
+                    <label for="Producer">Producer</label>
+                    <input type="text" name="phone" id="Producer" placeholder="Garnier" required
+                           value="<%=productToEdit.getProducer()%>"
                            class="form-control">
                 </div>
             </div>
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="State">State</label>
-                    <select class="custom-select" name="state" id="State" required>
-                        <option selected disabled value="">Choose...</option>
-                        <option>ITALY</option>
-                    </select>
+            <div class="form-row justify-content-center">
+                <div class="col-md-5 mb-3">
+                    <label for="Category">Category</label>
+                    <input type="text" name="category" id="Category" required
+                           value="<%=productToEdit.getCategory()%>"
+                           class="form-control">
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="Region">Region</label>
-                    <select class="custom-select" name="region" id="Region" required>
-                        <option selected disabled value="">Choose...</option>
-                        <option>ABRUZZO</option>
-                        <option>BASILICATA</option>
-                        <option>CALABRIA</option>
-                        <option>EMILIA-ROMAGNA</option>
-                        <option>FRIULI-VENEZIA-GIULIA</option>
-                        <option>LAZIO</option>
-                        <option>LIGURIA</option>
-                        <option>LOMBARDIA</option>
-                        <option>MARCHE</option>
-                        <option>MOLISE</option>
-                        <option>PIEMONTE</option>
-                        <option>PUGLIA</option>
-                        <option>SARDEGNA</option>
-                        <option>SICILIA</option>
-                        <option>TOSCANA</option>
-                        <option>TRENTINO-ALTO-ADIGE</option>
-                        <option>UMBRIA</option>
-                        <option>VALLE D'AOSTA</option>
-                        <option>VENETO</option>
-                    </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required
-                           value="<%=splittedAddress[2]%>"
-                           oninput="toUpperCase(this)">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
-                           value="<%=splittedAddress[3]%>">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="Street">Street</label>
-                    <input type="text" class="form-control"  name="street" id="Street" required
-                           value="<%=splittedAddress[4]%>"
-                           oninput="toUpperCase(this)">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
-                           value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
+                <div class="col-md-5 mb-3">
+                    <label for="Description">Description</label>
+                    <input type="text" name="description" id="Description" required
+                           value="<%=productToEdit.getDescription()%>"
+                           class="form-control">
                 </div>
             </div>
             <br>
             <hr>
             <br>
-            <button type="submit" id="submit-edit-structure" class="btn btn-primary" name="submit"
-                    value=edit_structure">Send
+            <div class="form-row justify-content-center">
+                <div class="col-md-5 mb-3">
+                    <label for="Pic_name">Picture</label>
+                    <input type="text" name="pic_name" id="Pic_name" required
+                           value="<%=productToEdit.getPictureName()%>"
+                           class="form-control">
+                </div>
+                <div class="col-md-5 mb-3">
+                    <label for="Insert_date">Insert Date </label>
+                    <input type="date" name="insert_date" id="Insert_date" required
+                           value="<%=productToEdit.getInsertDate()%>"
+                           class="form-control">
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <div class="form-row justify-content-center text-center">
+                <div class="col-md-3 mb-3">
+                    <label for="Price">Price</label>
+                    <input type="number" name="price" id="Price" required
+                           value="<%=productToEdit.getPrice()%>"
+                           class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Discount">Discount</label>
+                    <input type="number" name="discount" id="Discount"  required
+                           value="<%=productToEdit.getDiscount()%>"
+                           class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Quantity">Quantity</label>
+                    <input type="number" name="quantity" id="Quantity"  required
+                           value="<%=productToEdit.getQuantity()%>"
+                           class="form-control">
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <button type="submit" id="submit-edit-product" class="btn btn-primary" name="submit"
+                    value=edit_product">Send
             </button>
             <input type="hidden" name="controllerAction"
-                   value="Structure.editStructure">
-        </form>--%>
+                   value="Product.editProduct">
+        </form>
     </main>
 </div>
 
