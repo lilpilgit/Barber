@@ -34,6 +34,8 @@ public class Admin {
         sessionFactoryParameters.put("response", response);
         sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
+        sessionDAOFactory.beginTransaction();
+
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
         loggedUser = sessionUserDAO.findLoggedUser(); /* trovo l'id dell'admin attualmente loggato */
 

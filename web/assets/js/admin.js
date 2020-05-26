@@ -172,6 +172,16 @@ function toUpperCase(element) {
     element.value = element.value.toUpperCase();
 }
 
+function setButtonActiveSidebar(id) {
+    /**
+     * Add the class "button-side-active" to the button of sidebar based on actual active page
+     * */
+    let button2active = document.getElementById(id);
+    button2active.classList.add("button-side-active");
+}
+
+
+
 /*
 
 

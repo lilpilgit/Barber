@@ -13,40 +13,32 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
-    /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Home";
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del nuovo cliente è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
 
-    /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
-    String idBtnAttivo = "showHome";
+    /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
+     * di cancellazione/modifica ( se è andata a buon fine o meno) */
+    String applicationMessage = null;
+    if (request.getAttribute("applicationMessage") != null) {
+        applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Welcome";
+
+    /* Parametro per aggiungere la classe "button-side-active" al bottone della pagina in cui si trova */
+    String idBtnAttivo = "";
 
 %>
 <!doctype html>
 <html lang="en">
-<head>
-    <!--------------------------------------------- Meta tags --------------------------------------------------------->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-3.5.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-    <!--PER IL DATEPICKER-->
-
-
-    <!------------------------------------------------------------------->
-    <link href="${pageContext.request.contextPath}/assets/css/style-admin.css" rel="stylesheet">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
-</head>
+<%@include file="/templates/admin-head.jsp" %>
 <body>
-<%@include file="/templates/admin-sidebar.html"%>
+<%@include file="/templates/admin-sidebar.jsp"%>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">

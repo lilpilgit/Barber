@@ -1,5 +1,7 @@
-/*Add the class "active2" to the button of navbar based on actual active page*/
 function setButtonActive(id) {
+    /**
+     * Add the class "active2" to the button of navbar based on actual active page
+     * */
     let button2active = document.getElementById(id);
     button2active.classList.add("active2");
 }
