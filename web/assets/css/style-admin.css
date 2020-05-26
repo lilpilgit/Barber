@@ -547,6 +547,11 @@ div #result-new-employee > #result-message {
     text-decoration: none;
 }
 
+.button-side:active {
+    color: #18c7ff;
+    text-decoration: none;
+}
+
 
 table th, td {
     padding: 6px;
