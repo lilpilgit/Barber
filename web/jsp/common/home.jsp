@@ -44,11 +44,14 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@include file="/templates/head.jsp" %>
-<body>
-<%@include file="/templates/header.jsp" %>
+<%@ include file="/templates/head.jsp" %>
 
-<!------------------------------------------ Product Window ----------------------------------------------------------->
+<body>
+<%@ include file="/templates/header.jsp" %>
+
+<!------------------------------------------- SHOWCASE --- ---------------------------------------------------------->
+
+<% if (products.size() != 0) { %>
 
 <div class="container-fluid ">
     <div class="row welcome text-center">
@@ -58,6 +61,91 @@
         <hr>
     </div>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel" <%--data-interval="0"--%>>
+                <!-- Carousel indicators -->
+                <ol class="carousel-indicators">
+
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <% int counter = 1;
+                        while (counter != products.size()) {
+                            if ((counter % 4) == 0) { %>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <%
+                            }
+                            ++counter;
+                        }
+                    %>
+                </ol>
+                <!-- Wrapper for carousel items -->
+                <div class="carousel-inner">
+                    <% boolean firstItem = true;
+                        counter = 4;
+                        for (Product product : products) {
+                            if ((counter % 4) == 0) {%>
+                    <div class="item carousel-item <%=firstItem ? "active" : ""%>">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <%}%>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="img/products/<%=product.getPictureName()%>"
+                                                 alt="<%=product.getPictureName()%>">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4><%=product.getName()%> Valore:<%=counter%>
+                                            </h4>
+                                            <p class="item-price"><strike>&euro;<%=product.getPrice()%>
+                                            </strike>
+                                                <span>&euro;<%=product.getPrice()%></span></p>
+                                            <button class="btn btn-outline-secondary"
+                                                    onclick=setProductForm('<%=product.getId()%>')>See Product
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% counter++; %>
+                                <%if ((counter % 4) == 0 || (counter - 4) == products.size()) { %>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                            }
+                            firstItem = false;
+                        }
+                    %>
+                </div>
+                <!-- Carousel controls -->
+                <a class="carousel-control left carousel-control-prev" href="#myCarousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="carousel-control right carousel-control-next" href="#myCarousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------- Link To shop -------------------------------------------------------->
+
+<div class="container text-center">
+    <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
+        See more...
+    </button>
+</div>
+<div class="container-fluid">
+    <div class="row welcome text-center">
+        <hr>
+    </div>
+</div>
+<%}%>
+
+<!------------------------------------------- FINE SHOWCASE ---------------------------------------------------------->
+
 
 
 <%--<div class="container justify-content-center">--%>
@@ -116,21 +204,7 @@
         </div>
         <%}%>
     </div>
-</div>
-
-<!----------------------------------------------- Link To shop -------------------------------------------------------->
-
-<div class="container text-center">
-    <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
-        See more...
-    </button>
-</div>
-<div class="container-fluid">
-    <div class="row welcome text-center">
-        <hr>
-    </div>
-</div>
-
+</div>--%>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 <div class="container text-center">
