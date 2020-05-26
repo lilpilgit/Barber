@@ -547,7 +547,7 @@ div #result-new-employee > #result-message {
     text-decoration: none;
 }
 
-.button-side:active {
+.button-side-active {
     color: #18c7ff;
     text-decoration: none;
 }
