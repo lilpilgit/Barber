@@ -1,5 +1,6 @@
 <%@page import="model.mo.Product" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
@@ -96,11 +97,22 @@
                                                  alt="<%=product.getPictureName()%>">
                                         </div>
                                         <div class="thumb-content">
-                                            <h4><%=product.getName()%> Valore:<%=counter%>
+                                            <h4><%=product.getName()%>
                                             </h4>
-                                            <p class="item-price"><strike>&euro;<%=product.getPrice()%>
-                                            </strike>
-                                                <span>&euro;<%=product.getPrice()%></span></p>
+                                            <%
+                                                if (product.getDiscount() != null && product.getDiscount() != 0) {
+                                                    BigDecimal discountedPrice = product.getPrice().subtract(product.getPrice().multiply(BigDecimal.valueOf(product.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP));
+                                            %>
+                                            <p class="item-price"><span
+                                                    style="text-decoration: line-through;">&euro;<%=product.getPrice()%></span>
+
+                                                <span><%=discountedPrice%></span>
+                                            </p>
+                                            <%} else {%>
+                                            <p class="item-price">
+                                                <span>&euro;<%=product.getPrice()%></span>
+                                            </p>
+                                            <%}%>
                                             <button class="btn btn-outline-secondary"
                                                     onclick=setProductForm('<%=product.getId()%>')>See Product
                                             </button>
