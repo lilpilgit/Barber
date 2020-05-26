@@ -968,7 +968,8 @@ var {
     position: relative;
 }
 
-.carousel-indicators{position:absolute;
+.carousel-indicators {
+    position:absolute;
     bottom:10px;
     left:50%;
     z-index:15;
@@ -1018,6 +1019,7 @@ var {
 }
 .carousel .thumb-wrapper {
     text-align: center;
+    height: 370px;
 }
 .carousel .thumb-content {
     padding: 15px;
@@ -1043,7 +1045,7 @@ var {
     font-weight: bold;
 }
 
-.carousel-indicators li{
+.carousel-indicators li {
     display:inline-block;
     width:10px;
     height:10px;
@@ -1052,8 +1054,12 @@ var {
     cursor:pointer;
     background-color:#000\9;
     border:1px solid #fff;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.54);
     border-radius:10px
+}
+
+.carousel-indicators li.active {
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .carousel .item-price {
@@ -1065,8 +1071,9 @@ var {
     margin-right: 5px;
 }
 .carousel .item-price span {
-    color: #86bd57;
-    font-size: 110%;
+    color: #ffaa00;
+    font-size: 140%;
+    font-weight: 800;
 }
 .carousel .carousel-control.left i {
     margin-left: -3px;
@@ -1077,17 +1084,11 @@ var {
 .carousel .carousel-indicators {
     bottom: -50px;
 }
-.carousel-indicators li, .carousel-indicators li.active {
-    width: 10px;
-    height: 10px;
-    margin: 4px;
-    border-radius: 50%;
-    border-color: transparent;
-}
 
-.carousel-indicators li.active {
-    background: rgba(0, 0, 0, 0.6);
-}
+
+
+
+
 
 /* ------------------------------------------- ENDO OF PRODUCT CAROUSEL HOME PAGE -----------------------------------*/
 

@@ -65,7 +65,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel" <%--data-interval="0"--%>>
+            <div id="myCarousel" class="carousel slide" <%--data-ride="carousel"--%> <%--data-interval="0"--%>>
                 <!-- Carousel indicators -->
                 <ol class="carousel-indicators">
 
