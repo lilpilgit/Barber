@@ -37,8 +37,45 @@
 <%@include file="/templates/header.jsp"%>
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
-<h1> Here u can book your appointment</h1>
+<div class="container text-center my-4" style="background-color: #f1e7cb; border-radius: 25px;">
+    <img src="img/homepage/book.jpg" alt="BookImage">
+    <h4>We are open every day from 9:00 to 18:00!</h4>
+    <h3>You can book your appointment after selecting the date and time below.</h3>
 
+    <div class="d-flex justify-content-center" >
+        <div class="col-4 pt-4 my-5" style="background-color: #b29d6847; border-radius: 25px; box-shadow: 5px 5px 15px grey;">
+            <label for="appointment-date">Select a date:</label>
+            <input type="date" id="appointment-date" name="appointment date" min="2020-05-29" max="2020-05-31">
+            <hr>
+            <label for="time">Choose an hour:</label>
+            <select id="time" name="time">
+                <option value="09:00">09.00 AM</option>
+                <option value="09:30">09.30 AM</option>
+                <option value="10:00">10.00 AM</option>
+                <option value="10:30">10.30 AM</option>
+                <option value="11:00">11.00 AM</option>
+                <option value="11:30">11.30 AM</option>
+                <option value="12:00">12.00 PM</option>
+                <option value="12:30">12.30 PM</option>
+                <option value="13:00">01.00 PM</option>
+                <option value="13:30">01.30 PM</option>
+                <option value="14:00">02.00 PM</option>
+                <option value="14:30">02.30 PM</option>
+                <option value="15:00">03.00 PM</option>
+                <option value="15:30">03.30 PM</option>
+                <option value="16:00">04.00 PM</option>
+                <option value="16:30">04.30 PM</option>
+                <option value="17:00">05.00 PM</option>
+                <option value="17:30">05.30 PM</option>
+                <option value="18:00">06.00 PM</option>
+            </select>
+            <hr>
+            <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
+                Book Now!
+            </button>
+        </div>
+    </div>
+</div>
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
 <%@ include file="/templates/footer.html"%>
