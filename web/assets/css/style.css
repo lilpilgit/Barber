@@ -873,9 +873,10 @@ input[type=number] {
     border-color: white;
 }
 .cart-box {
-    background: #eee;
+    background: #f0e6cc;
     padding: 3em;
     line-height: 1.5em;
+    border-radius: 25px;
 }
 
 .param {
@@ -1086,26 +1087,7 @@ var {
 }
 
 
-
-
-
-
 /* ------------------------------------------- ENDO OF PRODUCT CAROUSEL HOME PAGE -----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
