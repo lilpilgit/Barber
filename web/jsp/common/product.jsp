@@ -45,14 +45,6 @@
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
 
-<div class="container pt-5 text-center">
-    <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
-    <button class="btn btnheader active2" type="button" id='showShop'
-            onclick="history.back()">
-        Go back to shop
-    </button>
-</div>
-
 <div class="container pt-5 pb-5">
     <div class="card2">
         <div class="container-fluid">
@@ -102,6 +94,13 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container pt-5 text-center">
+        <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
+        <button class="btn btnheader active2" type="button" id='showShop'
+                onclick="history.back()">
+            Go back to shop
+        </button>
     </div>
 </div>
 
