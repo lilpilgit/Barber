@@ -21,12 +21,12 @@
                         </button>
                         <ul class="dropdown-menu text-center">
                             <li>
-<%--                                <button class="btn btn-default gold font-weight-light" type="button"--%>
-<%--                                        id="adminArea"> <!--onclick=setNavFormHome('')-->--%>
-<%--                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->--%>
-<%--                                    Admin Area--%>
-<%--                                </button>--%>
-                                    <a href="manage" class="btn btn-default gold font-weight-light" id="adminArea">Admin Area</a>
+                                <%--                                <button class="btn btn-default gold font-weight-light" type="button"--%>
+                                <%--                                        id="adminArea"> <!--onclick=setNavFormHome('')-->--%>
+                                <%--                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->--%>
+                                <%--                                    Admin Area--%>
+                                <%--                                </button>--%>
+                                <a href="manage" class="btn btn-default gold font-weight-light" id="adminArea">Admin Area</a>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button" id="logoutAdmin"
@@ -69,9 +69,11 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu text-center">
+                            <!-- TODO Far vedere il pulsante Bookings solo se si e' prenotato un appuntamento -->
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showBookings' onclick=setNavFormHome('Home.showBookings')>
+                                        id='showBookings' <%--onclick=setNavFormHome('Home.showBookings')--%>
+                                        data-toggle="modal" data-target="#modalBookings">
                                     Bookings
                                 </button>
                             </li>
@@ -122,23 +124,58 @@
         </nav>
     </div>
 </header>
-<script>
-    function setNavFormHome(value) {
-        let navForm = document.getElementById('navForm');
-        navForm.elements['controllerAction'].value = value;
-        navForm.submit();
-    }
-</script>
-<!--form per decidere quale controller e method chiamare quando vengono cliccati i pulsanti della navbar-->
-<form name="navForm" id="navForm" method="post">
-    <input type="hidden" name="controllerAction" value="">
-</form>
+
+<!--------------------------------------------- MODAL BOOKINGS ----------------------------------------------->
+
+<div class="modal fade" id="modalBookings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="border-bottom: 2px solid black;">
+                <h5 class="modal-title" id="ModalLabel">You booked an appointment on:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <table class="table table-bordered" style="box-shadow: 5px 5px 15px grey;">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>30 Agosto 2020</td>
+                        <td>15:00</td>
+                        <td>
+                            <button type="button" class="trashbutton" title="Delete appointment"
+                                    data-target="#alert"
+                                    data-toggle="modal"
+                                    onclick="">
+                                <!-- TODO messaggio di conferma per cancellazione -->
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------- END OF MODAL BOOKINGS -------------------------------------------->
 
 <!--PRESO DA https://mdbootstrap.com/docs/jquery/modals/forms/-->
 
 <% if (!loggedOn) {%>
 <!--Modal: Login / Register Form-->
-<div class="modal fade " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-width modal-dialog-centered cascading-modal" role="document">
         <!--Content-->
         <div class="modal-content">
@@ -355,5 +392,14 @@
 </div>
 <%}%>
 
-
-
+<script>
+    function setNavFormHome(value) {
+        let navForm = document.getElementById('navForm');
+        navForm.elements['controllerAction'].value = value;
+        navForm.submit();
+    }
+</script>
+<!--form per decidere quale controller e method chiamare quando vengono cliccati i pulsanti della navbar-->
+<form name="navForm" id="navForm" method="post">
+    <input type="hidden" name="controllerAction" value="">
+</form>

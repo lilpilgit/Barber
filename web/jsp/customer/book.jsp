@@ -43,7 +43,7 @@
     <h3>You can book your appointment after selecting the date and time below.</h3>
 
     <div class="d-flex justify-content-center" >
-        <div class="col-4 pt-4 my-5" style="background-color: #b29d6847; border-radius: 25px; box-shadow: 5px 5px 15px grey;">
+        <div class="col-4 pt-4 my-5 book-box" >
             <label for="appointment-date">Select a date:</label>
             <input type="date" id="appointment-date" name="appointment date" min="2020-05-29" max="2020-05-31">
             <hr>

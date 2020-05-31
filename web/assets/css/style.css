@@ -57,7 +57,6 @@ html, body {
 }
 
 
-
 .myrounded {
     border-radius: 40px;
 }
@@ -92,13 +91,37 @@ html, body {
     border-radius: 5px;
 }
 
+.trashbutton {
+    position: relative;
+    padding: 2px 8px;
+    margin: 3px 0;
+    background-color: transparent;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.trashbutton:hover {
+    color: red;
+    top: 0;
+}
+
+.book-box {
+    background-color: #b29d6847;
+    border-radius: 25px;
+    box-shadow: 5px 5px 15px grey;
+}
+
 .navbar {
     height: auto;
     background-color: white;
     border-bottom: 2px solid black;
 }
 
-button:focus {outline:0;}
+button:focus {
+    outline: 0;
+}
 
 .logged {
     border: none;
@@ -400,7 +423,7 @@ hr.light-100 {
 
 .tab-content img {
     width: auto !important;
-/*    height: 700px !important;*/
+    /*    height: 700px !important;*/
 }
 
 
@@ -807,7 +830,7 @@ input[type=number] {
 }
 
 @media (min-width: 576px) {
-    .modal-width  {
+    .modal-width {
         max-width: 550px;
     }
 }
@@ -838,6 +861,7 @@ input[type=number] {
 
 
 }
+
 /* ---------------------------------------------- CUSTOMER SECTION -------------------------------------------------- */
 
 .btn-cust {
@@ -872,6 +896,7 @@ input[type=number] {
     background-color: rgb(201, 197, 126);
     border-color: white;
 }
+
 .cart-box {
     background: #f0e6cc;
     padding: 3em;
@@ -883,14 +908,17 @@ input[type=number] {
     margin-bottom: 7px;
     line-height: 1.4;
 }
+
 .param-inline dt {
     display: inline-block;
 }
+
 .param dt {
     margin: 0;
     margin-right: 7px;
     font-weight: 600;
 }
+
 .param-inline dd {
     vertical-align: baseline;
     display: inline-block;
@@ -908,6 +936,7 @@ input[type=number] {
     margin-right: 5px;
     display: block;
 }
+
 var {
     font-style: normal;
 }
@@ -915,6 +944,7 @@ var {
 .media img {
     margin-right: 1rem;
 }
+
 .img-sm {
     width: 90px;
     max-height: 75px;
@@ -923,7 +953,6 @@ var {
 
 
 /* ---------------------------------------------- END OF CART CSS --------------------------------------------------- */
-
 
 
 /* -------------------------------------------- PRODUCT CAROUSEL HOME PAGE -------------------------------------------*/
@@ -958,11 +987,13 @@ var {
     margin: 50px auto;
     padding: 0 70px;
 }
+
 .carousel .item {
     min-height: 330px;
     text-align: center;
     overflow: hidden;
 }
+
 .carousel .item .img-box {
     height: 184px;
     width: 100%;
@@ -970,15 +1001,15 @@ var {
 }
 
 .carousel-indicators {
-    position:absolute;
-    bottom:10px;
-    left:50%;
-    z-index:15;
-    width:60%;
-    padding-left:0;
-    margin-left:-30%;
-    text-align:center;
-    list-style:none;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    z-index: 15;
+    width: 60%;
+    padding-left: 0;
+    margin-left: -30%;
+    text-align: center;
+    list-style: none;
 }
 
 .carousel .item img {
@@ -991,10 +1022,12 @@ var {
     left: 0;
     right: 0;
 }
+
 .carousel .item h4 {
     font-size: 18px;
     margin: 10px 0;
 }
+
 .carousel .item .btn {
     color: #333;
     border-radius: 0;
@@ -1007,24 +1040,29 @@ var {
     margin-top: 5px;
     line-height: 16px;
 }
+
 .carousel .item .btn:hover, .carousel .item .btn:focus {
     color: #fff;
     background: #000;
     border-color: #000;
     box-shadow: none;
 }
+
 .carousel .item .btn i {
     font-size: 14px;
     font-weight: bold;
     margin-left: 5px;
 }
+
 .carousel .thumb-wrapper {
     text-align: center;
     height: 370px;
 }
+
 .carousel .thumb-content {
     padding: 15px;
 }
+
 .carousel .carousel-control {
     height: 100px;
     width: 40px;
@@ -1032,6 +1070,7 @@ var {
     margin: auto 0;
     background: rgba(0, 0, 0, 0.2);
 }
+
 .carousel .carousel-control i {
     font-size: 30px;
     position: absolute;
@@ -1047,16 +1086,16 @@ var {
 }
 
 .carousel-indicators li {
-    display:inline-block;
-    width:10px;
-    height:10px;
-    margin:1px;
-    text-indent:-999px;
-    cursor:pointer;
-    background-color:#000\9;
-    border:1px solid #fff;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    text-indent: -999px;
+    cursor: pointer;
+    background-color: #000 \9;
+    border: 1px solid #fff;
     background: rgba(0, 0, 0, 0.54);
-    border-radius:10px
+    border-radius: 10px
 }
 
 .carousel-indicators li.active {
@@ -1067,28 +1106,32 @@ var {
     font-size: 13px;
     padding: 2px 0;
 }
+
 .carousel .item-price strike {
     color: #999;
     margin-right: 5px;
 }
+
 .carousel .item-price span {
     color: #ffaa00;
     font-size: 140%;
     font-weight: 800;
 }
+
 .carousel .carousel-control.left i {
     margin-left: -3px;
 }
+
 .carousel .carousel-control.left i {
     margin-right: -3px;
 }
+
 .carousel .carousel-indicators {
     bottom: -50px;
 }
 
 
 /* ------------------------------------------- ENDO OF PRODUCT CAROUSEL HOME PAGE -----------------------------------*/
-
 
 
 /*--- Bootstrap Padding Fix --*/

@@ -552,7 +552,6 @@ div #result-new-employee > #result-message {
     text-decoration: none;
 }
 
-
 table th, td {
     padding: 6px;
     font-size: 16px;
@@ -561,7 +560,6 @@ table th, td {
 
 table i {
     font-size: 16px;
-
 }
 
 .tablebutton, .trashbutton{
