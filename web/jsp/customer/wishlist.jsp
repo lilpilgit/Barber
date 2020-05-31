@@ -50,7 +50,6 @@
             <thead class="text-muted">
             <tr>
                 <th scope="col">Product</th>
-                <th scope="col" width="120">Quantity</th>
                 <th scope="col" width="120">Price</th>
                 <th scope="col" width="200" class="text-right">Action</th>
             </tr>
@@ -73,20 +72,6 @@
                         </figcaption>
                     </figure>
                 </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
-                <td>
-                    <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" style="height: 73px;" class='main'>
-                        <input id="quantity<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
-                               readonly style="width: 90px;"
-                               value='1' required/>
-                        <div class="row justify-content-center">
-                            <button id="minus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Down'><i
-                                    class='fa fa-minus'></i></button>
-                            <button id="plus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Up'><i class='fa fa-plus'></i>
-                            </button>
-                        </div>
-                    </div>
-                </td>
                 <td>
                     <div class="price-wrap">
                         <var class="price">USD 145</var>
@@ -127,20 +112,6 @@
                             </dl>
                         </figcaption>
                     </figure>
-                </td>
-                <td>
-                    <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta" style="height: 73px;" class='main'>
-                        <input id="quantity" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
-                               readonly style="width: 90px;"
-                               value='1' required/>
-                        <div class="row justify-content-center">
-                            <button id="minus_button" class='btn' title='Down'><i
-                                    class='fa fa-minus'></i></button>
-                            <button id="plus_button" class='btn' title='Up'><i class='fa fa-plus'></i>
-                            </button>
-                        </div>
-                    </div>
                 </td>
                 <td>
                     <div class="price-wrap">
