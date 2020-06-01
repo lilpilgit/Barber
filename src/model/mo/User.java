@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class User {
     private Long id;
-    private Long idStructure;
     private String email;
     private String name;
     private String surname;
@@ -31,7 +30,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", idStructure=" + idStructure +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
@@ -56,14 +54,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getIdStructure() {
-        return idStructure;
-    }
-
-    public void setIdStructure(Long idStructure) {
-        this.idStructure = idStructure;
     }
 
     public String getEmail() {
