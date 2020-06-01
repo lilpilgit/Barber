@@ -1,4 +1,4 @@
-package admin.dispatcher;
+package dispatcher;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-@WebServlet(name = "DispatcherAdmin", urlPatterns = {"/manage"})
-public class DispatcherAdmin extends HttpServlet {
+@WebServlet(name = "Dispatcher", urlPatterns = {"/app"})
+public class Dispatcher extends HttpServlet {
     String controllerAction = null;
     PrintWriter out = null;
     Method controllerMethod = null;
@@ -65,12 +65,12 @@ public class DispatcherAdmin extends HttpServlet {
         }//fine ELSE
 
         if (controllerAction == null)
-            controllerAction = "Welcome.welcome";
+            controllerAction = "home.Home.view";
 
         String[] splittedAction = controllerAction.split("\\.");
         Class<?> controllerClass = null;
         try {
-            controllerClass = Class.forName("admin.controller." + splittedAction[0]);
+            controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
             System.err.println("DISPATCHER MANAGE ==> controllerClass :" + controllerClass.getName());
             //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
         } catch (ClassNotFoundException e) {
@@ -79,7 +79,7 @@ public class DispatcherAdmin extends HttpServlet {
         }
 
         try {
-            controllerMethod = controllerClass.getMethod(splittedAction[1], HttpServletRequest.class, HttpServletResponse.class);
+            controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
         } catch (NoSuchMethodException e) {
             System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
             e.printStackTrace();

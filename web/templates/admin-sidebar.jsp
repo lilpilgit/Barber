@@ -6,7 +6,7 @@
                 <div class="user-pic">
                     <img src="https://champsbarberschool.com/mainsite/wp-content/uploads/2013/12/barber-gallery-7.jpg"
                          alt="User picture"/>
-                    <button onclick="setControllerAction('Admin.showFormEditAdmin')" title="Edit your profile"
+                    <button onclick="setControllerAction('admin.Admin.showFormEditAdmin')" title="Edit your profile"
                             class="button-side" type="button" id='showAdmin'>
                         <i class="fas fa-user-edit"></i>
                     </button>
@@ -25,42 +25,42 @@
                         <span>General</span>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Staff.showEmployees')"
+                        <button onclick="setControllerAction('admin.Staff.showEmployees')"
                                 class="button-side" type="button" id='showEmployees'>
                             <i class="fa fa-gem pr-3"></i>
                             Staff
                         </button>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Customers.showCustomers')"
+                        <button onclick="setControllerAction('admin.Customers.showCustomers')"
                                 class="button-side" type="button" id='showCustomers'>
                             <i class="fa fa-users pr-3"></i>
                             Customers
                         </button>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Products.showProducts')"
+                        <button onclick="setControllerAction('admin.Products.showProducts')"
                                 class="button-side" type="button" id='showProducts'>
                             <i class="fa fa-shopping-cart pr-3"></i>
                             Products
                         </button>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Bookings.showBookings')"
+                        <button onclick="setControllerAction('admin.Bookings.showBookings')"
                                 class="button-side" type="button" id='showBookings'>
                             <i class="far fa-calendar pr-3"></i>
                             Bookings
                         </button>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Logistics.showLogistics')"
+                        <button onclick="setControllerAction('admin.Logistics.showLogistics')"
                                 class="button-side" type="button" id='showLogistics'>
                             <i class="fas fa-shipping-fast pr-3"></i>
                             Logistics
                         </button>
                     </li>
                     <li>
-                        <button onclick="setControllerAction('Structure.showStructure')"
+                        <button onclick="setControllerAction('admin.Structure.showStructure')"
                                 class="button-side" type="button" id='showStructure'>
                             <i class="fas fa-building pr-3"></i>
                             Structure
@@ -82,8 +82,8 @@
         <input type="hidden" name="controllerAction" value="">
     </form>
 
-    <form id="logoutForm" method="post" action="app">
-        <input type="hidden" name="controllerAction" value="Home.logout">
+    <form id="logoutForm" method="post">
+        <input type="hidden" name="controllerAction" value="home.Home.logout">
     </form>
 </div>
 <script>

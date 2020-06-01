@@ -14,7 +14,7 @@ public class Customer {
     private ArrayList<Product> wishlist;
     private ArrayList<Product> cart;
     /* 1 : N */
-    private ArrayList<Booking> bookings;
+    private ArrayList<Booking> bookings; /*TODO:cambiare in 1:1*/
 
     @Override
     public String toString() {

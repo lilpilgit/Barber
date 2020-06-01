@@ -7,7 +7,7 @@
 
                 <div class="navbar-nav ml-auto">
                     <button class="btn btnheader" type="button" id='showHome'
-                            onclick=setNavFormHome('Home.view')>
+                            onclick=setNavFormHome('home.Home.view')>
                         Home
                     </button>
                     <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
@@ -26,11 +26,15 @@
                                 <%--                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->--%>
                                 <%--                                    Admin Area--%>
                                 <%--                                </button>--%>
-                                <a href="manage" class="btn btn-default gold font-weight-light" id="adminArea">Admin Area</a>
+                                <button class="btn btn-default gold font-weight-light" type="button" id="adminArea"
+                                        onclick=setNavFormHome('admin.Welcome.welcome')>Admin
+                                    Area
+                                </button>
+                                <a href="manage" class="btn btn-default gold font-weight-light" ></a>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button" id="logoutAdmin"
-                                        onclick=setNavFormHome('Home.logout')>Logout
+                                        onclick=setNavFormHome('home.Home.logout')>Logout
                                 </button>
                             </li>
                         </ul>
@@ -40,25 +44,25 @@
                         if (loggedOn) {
                     %>
                     <button class="btn btnheader" type="button" id='showBook'
-                            onclick=setNavFormHome('Home.showBook')>
+                            onclick=setNavFormHome('home.Home.showBook')>
                         Book!
                     </button>
                     <%}%>
                     <button class="btn btnheader" type="button" id='showShop'
-                            onclick=setNavFormHome('Home.showShop')>
+                            onclick=setNavFormHome('home.Home.showShop')>
                         Shop
                     </button>
                     <button class="btn btnheader" type="button" id='showContact'
-                            onclick=setNavFormHome('Home.showContactForm')>
+                            onclick=setNavFormHome('home.Home.showContactForm')>
                         Contact
                     </button>
                     <% if (loggedOn) {%>
                     <button class="logged" type="button" id='showCart' title="Cart"
-                            onclick=setNavFormHome('Home.showCart')>
+                            onclick=setNavFormHome('home.Home.showCart')>
                         <i class="fas fa-shopping-basket"></i>
                     </button>
                     <button class="logged" type="button" id='showWishlist' title="Wishlist"
-                            onclick=setNavFormHome('Home.showWishlist')>
+                            onclick=setNavFormHome('home.Home.showWishlist')>
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="dropdown">
@@ -79,19 +83,19 @@
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showOrders' onclick=setNavFormHome('Home.showOrders')>
+                                        id='showOrders' onclick=setNavFormHome('home.Home.showOrders')>
                                     Orders
                                 </button>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showProfile' onclick=setNavFormHome('Home.showProfile')>
+                                        id='showProfile' onclick=setNavFormHome('home.Home.showProfile')>
                                     Edit profile
                                 </button>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button" id='logoutID'
-                                        onclick=setNavFormHome('Home.logout')>Logout
+                                        onclick=setNavFormHome('home.Home.logout')>Logout
                                 </button>
                             </li>
                         </ul>
@@ -127,7 +131,8 @@
 
 <!--------------------------------------------- MODAL BOOKINGS ----------------------------------------------->
 
-<div class="modal fade" id="modalBookings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalBookings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" style="border-bottom: 2px solid black;">
@@ -230,7 +235,7 @@
                                     <button type="submit" form="logonForm" class="btn btn-info">Log in<i
                                             class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
-                                <input type="hidden" name="controllerAction" value="Home.logon"/>
+                                <input type="hidden" name="controllerAction" value="home.Home.logon"/>
                             </form>
                         </div>
 
@@ -256,13 +261,13 @@
                                 <div class="row justify-content-center">
                                     <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="name" id="Name"
-                                               required oninput="this.value=this.value.toUpperCase();">
+                                               required>
                                         <label data-error="wrong" data-success="right" for="Name">
                                             <i class="fas fa-user "></i> Name </label>
                                     </div>
                                     <div class="md-form form-sm col-5 text-center">
                                         <input type="text" class="form-control" name="surname" id="Surname"
-                                               required oninput="this.value=this.value.toUpperCase();">
+                                               required>
                                         <label data-error="wrong" data-success="right" for="Surname">
                                             <i class="fas fa-user "></i> Surname </label>
                                     </div>
@@ -380,7 +385,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <input type="hidden" name="controllerAction" value="Home.register"/>
+                            <input type="hidden" name="controllerAction" value="home.Home.register"/>
                         </form>
                     </div>
                 </div>

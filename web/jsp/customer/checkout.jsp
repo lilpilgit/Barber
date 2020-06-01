@@ -1,5 +1,4 @@
 <%@ page import="model.mo.User" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
