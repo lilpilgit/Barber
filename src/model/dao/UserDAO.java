@@ -1,7 +1,12 @@
 package model.dao;
 
 import model.exception.DuplicatedObjectException;
+import model.mo.Employee;
+import model.mo.Structure;
 import model.mo.User;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public interface UserDAO {
 
@@ -18,17 +23,18 @@ public interface UserDAO {
      * @return all the products that must be shown in the showcase of the homepage
      */
 
-    User insert(Long id, String email, String name, String surname, String address,
-                String phone, String password, Boolean isAdmin, Boolean isEmployee,
-                Boolean isCustomer) throws DuplicatedObjectException;
+    User insert(Structure structure, String email, String name, String surname, String address,
+           String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException;
 
-    void update(User loggedUser);
+    boolean update(User user) throws DuplicatedObjectException;
 
     User findById(Long id);
 
     boolean delete(User user);
 
     User findByEmail(String email);
+
+    ArrayList<User> fetchAllOnType(char userType);
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
