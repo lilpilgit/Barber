@@ -1,32 +1,52 @@
 package model.mo;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class User {
     private Long id;
+    private Long idStructure;
     private String email;
     private String name;
     private String surname;
     private String address;
     private String phone;
     private String password;
-    private Boolean isAdmin;
-    private Boolean isEmployee;
-    private Boolean isCustomer;
-    private Boolean isDeleted;
+    private LocalDate birthDate;
+    private String fiscalCode;
+    private char type;                  /* A C E */
+    private Boolean blocked;
+    private Boolean deleted;
+
+    /* 1:1 Admin & N:1 Customers */
+    private Structure structure;
+    /* 1:1 Booking */
+    private Booking booking;
+    /* N:M Cart */
+    private ArrayList<ExtendedProduct> cart;
+    /* N:M Wishlist */
+    private ArrayList<Product> wishlist;
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", idStructure=" + idStructure +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
-                ", isAdmin=" + isAdmin +
-                ", isEmployee=" + isEmployee +
-                ", isCustomer=" + isCustomer +
-                ", isDeleted=" + isDeleted +
+                ", birthDate=" + birthDate +
+                ", fiscalCode='" + fiscalCode + '\'' +
+                ", type=" + type +
+                ", blocked=" + blocked +
+                ", deleted=" + deleted +
+                ", structure=" + structure +
+                ", booking=" + booking +
+                ", cart=" + cart +
+                ", wishlist=" + wishlist +
                 '}';
     }
 
@@ -36,6 +56,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdStructure() {
+        return idStructure;
+    }
+
+    public void setIdStructure(Long idStructure) {
+        this.idStructure = idStructure;
     }
 
     public String getEmail() {
@@ -86,35 +114,75 @@ public class User {
         this.password = password;
     }
 
-    public Boolean isAdmin() {
-        return isAdmin;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setIsAdmin(Boolean admin) {
-        isAdmin = admin;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Boolean isEmployee() {
-        return isEmployee;
+    public String getFiscalCode() {
+        return fiscalCode;
     }
 
-    public void setIsEmployee(Boolean employee) {
-        isEmployee = employee;
+    public void setFiscalCode(String fiscalCode) {
+        this.fiscalCode = fiscalCode;
     }
 
-    public Boolean isCustomer() {
-        return isCustomer;
+    public char getType() {
+        return type;
     }
 
-    public void setIsCustomer(Boolean customer) {
-        isCustomer = customer;
+    public void setType(char type) {
+        this.type = type;
+    }
+
+    public Boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
     }
 
     public Boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
-    public void setIsDeleted(Boolean deleted) {
-        isDeleted = deleted;
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public Structure getStructure() {
+        return structure;
+    }
+
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public ArrayList<ExtendedProduct> getCart() {
+        return cart;
+    }
+
+    public void setCart(ArrayList<ExtendedProduct> cart) {
+        this.cart = cart;
+    }
+
+    public ArrayList<Product> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(ArrayList<Product> wishlist) {
+        this.wishlist = wishlist;
     }
 }

@@ -1,36 +1,28 @@
 package model.mo;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
 public class Booking {
     private Long id;
-    private Boolean isDeleted;                /* Booking deleted or not? */
+    private Boolean deleted;                /* Booking deleted or not? */
     private String deletedReason;
     private LocalDate date;
     private Instant hourStart;
-    private BigDecimal price;
-    private Instant hourEnd;
 
-    /* N : 1 */
-    private Employee employee;
-    /* N : 1 */
-    private Customer customer;
-    /* N : 1 */
+    /* 1 : 1 User */
+    private User customer;
+    /* N : 1 Structure */
     private Structure structure;
 
     @Override
     public String toString() {
         return "Booking{" +
                 "id=" + id +
-                ", isDeleted=" + isDeleted +
+                ", deleted=" + deleted +
                 ", deletedReason='" + deletedReason + '\'' +
                 ", date=" + date +
                 ", hourStart=" + hourStart +
-                ", price=" + price +
-                ", hourEnd=" + hourEnd +
-                ", employee=" + employee +
                 ", customer=" + customer +
                 ", structure=" + structure +
                 '}';
@@ -45,11 +37,11 @@ public class Booking {
     }
 
     public Boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public String getDeletedReason() {
@@ -76,35 +68,11 @@ public class Booking {
         this.hourStart = hourStart;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Instant getHourEnd() {
-        return hourEnd;
-    }
-
-    public void setHourEnd(Instant hourEnd) {
-        this.hourEnd = hourEnd;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Customer getCustomer() {
+    public User getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(User customer) {
         this.customer = customer;
     }
 

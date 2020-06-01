@@ -10,12 +10,13 @@ public class Orders {
     private LocalDate orderDate;
     private String status;
     private BigDecimal totPrice;
-    private Boolean isDeleted;
+    private String shippingAddress;
+    private Boolean deleted;
 
-    /* M:N with product */
-    private ArrayList<Product> products;
-    /* M:N with customer */
-    private ArrayList<Customer> customers;
+    /* N:1 */
+    private User customer;
+
+    private ArrayList<ExtendedProduct> itemList;
 
     @Override
     public String toString() {
@@ -25,9 +26,10 @@ public class Orders {
                 ", orderDate=" + orderDate +
                 ", status='" + status + '\'' +
                 ", totPrice=" + totPrice +
-                ", isDeleted=" + isDeleted +
-                ", products=" + products +
-                ", customers=" + customers +
+                ", shippingAddress='" + shippingAddress + '\'' +
+                ", deleted=" + deleted +
+                ", customer=" + customer +
+                ", itemList=" + itemList +
                 '}';
     }
 
@@ -71,27 +73,35 @@ public class Orders {
         this.totPrice = totPrice;
     }
 
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
     public Boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
-    public void setIsDeleted(Boolean deleted) {
-        isDeleted = deleted;
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
-    public ArrayList<Product> getProducts() {
-        return products;
+    public User getCustomer() {
+        return customer;
     }
 
-    public void setProducts(ArrayList<Product> products) {
-        this.products = products;
+    public void setCustomer(User customer) {
+        this.customer = customer;
     }
 
-    public ArrayList<Customer> getCustomers() {
-        return customers;
+    public ArrayList<ExtendedProduct> getItemList() {
+        return itemList;
     }
 
-    public void setCustomers(ArrayList<Customer> customers) {
-        this.customers = customers;
+    public void setItemList(ArrayList<ExtendedProduct> itemList) {
+        this.itemList = itemList;
     }
 }

@@ -2,7 +2,6 @@ package model.mo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Product {
     private Long id;
@@ -16,17 +15,10 @@ public class Product {
     private Integer quantity;
     private String category;
     private Boolean showcase;                   /* The product is highlighted ? */
-    private Boolean isDeleted;
+    private Boolean deleted;
 
     /* N : 1 with Structure */
     private Structure structure;
-
-    /* M : N with Orders */
-    private ArrayList<Customer> orders;
-    /* M : N with Cart */
-    private ArrayList<Customer> carts;
-    /* M : N with Wishlist */
-    private ArrayList<Customer> wishlists;
 
     @Override
     public String toString() {
@@ -42,11 +34,8 @@ public class Product {
                 ", quantity=" + quantity +
                 ", category='" + category + '\'' +
                 ", showcase=" + showcase +
-                ", isDeleted=" + isDeleted +
+                ", deleted=" + deleted +
                 ", structure=" + structure +
-                ", orders=" + orders +
-                ", carts=" + carts +
-                ", wishlists=" + wishlists +
                 '}';
     }
 
@@ -130,7 +119,7 @@ public class Product {
         this.category = category;
     }
 
-    public Boolean getShowcase() {
+    public Boolean inShowcase() {
         return showcase;
     }
 
@@ -138,12 +127,12 @@ public class Product {
         this.showcase = showcase;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Boolean isDeleted() {
+        return deleted;
     }
 
     public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public Structure getStructure() {
@@ -152,29 +141,5 @@ public class Product {
 
     public void setStructure(Structure structure) {
         this.structure = structure;
-    }
-
-    public ArrayList<Customer> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(ArrayList<Customer> orders) {
-        this.orders = orders;
-    }
-
-    public ArrayList<Customer> getCarts() {
-        return carts;
-    }
-
-    public void setCarts(ArrayList<Customer> carts) {
-        this.carts = carts;
-    }
-
-    public ArrayList<Customer> getWishlists() {
-        return wishlists;
-    }
-
-    public void setWishlists(ArrayList<Customer> wishlists) {
-        this.wishlists = wishlists;
     }
 }

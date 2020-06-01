@@ -1,38 +1,37 @@
 package model.mo;
 
-import java.sql.Time;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class Structure {
 
     private Long id;
     private String address;
-    private String openingTime;
-    private String closingTime;
-    private String slot;        /* This is necessary for scanning the booking appointments */
+    private Instant openingTime;
+    private Instant closingTime;
+    private Instant slot;        /* This is necessary for scanning the booking appointments */
                         /*TODO:controllare per quale cazzo di motivo se uso Time sia qui che nel DB che nell'html va in eccezione*/
     private String name;
     private String phone;
 
     /* 1:1 with ADMIN */
-    private Admin admin;
+    private User admin;
 
     /* 1:N with EMPLOYEE */
-    private ArrayList<Employee> employees;
+    private ArrayList<User> employees;
     /* 1:N with BOOKING */
     private ArrayList<Booking> bookings;
     /* 1:N with PRODUCT */
     private ArrayList<Product> products;
-
 
     @Override
     public String toString() {
         return "Structure{" +
                 "id=" + id +
                 ", address='" + address + '\'' +
-                ", openingTime='" + openingTime + '\'' +
-                ", closingTime='" + closingTime + '\'' +
-                ", slot='" + slot + '\'' +
+                ", openingTime=" + openingTime +
+                ", closingTime=" + closingTime +
+                ", slot=" + slot +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", admin=" + admin +
@@ -58,27 +57,27 @@ public class Structure {
         this.address = address;
     }
 
-    public String getOpeningTime() {
+    public Instant getOpeningTime() {
         return openingTime;
     }
 
-    public void setOpeningTime(String openingTime) {
+    public void setOpeningTime(Instant openingTime) {
         this.openingTime = openingTime;
     }
 
-    public String getClosingTime() {
+    public Instant getClosingTime() {
         return closingTime;
     }
 
-    public void setClosingTime(String closingTime) {
+    public void setClosingTime(Instant closingTime) {
         this.closingTime = closingTime;
     }
 
-    public String getSlot() {
+    public Instant getSlot() {
         return slot;
     }
 
-    public void setSlot(String slot) {
+    public void setSlot(Instant slot) {
         this.slot = slot;
     }
 
@@ -98,19 +97,19 @@ public class Structure {
         this.phone = phone;
     }
 
-    public Admin getAdmin() {
+    public User getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Admin admin) {
+    public void setAdmin(User admin) {
         this.admin = admin;
     }
 
-    public ArrayList<Employee> getEmployees() {
+    public ArrayList<User> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(ArrayList<Employee> employees) {
+    public void setEmployees(ArrayList<User> employees) {
         this.employees = employees;
     }
 

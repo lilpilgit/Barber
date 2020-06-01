@@ -1,7 +1,42 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package model.mo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Employee {
     /*discende dalla classe User dunque deve avere lo stesso ID che è presente nella tabella USER*/
