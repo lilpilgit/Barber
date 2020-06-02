@@ -198,7 +198,7 @@
                     value="<%=(action.equals("modify")) ? "edit_employee" : "add_new_employee"%>">Send
             </button>
             <input type="hidden" name="controllerAction"
-                   value="<%=(action.equals("modify")) ? "Staff.editEmployee" : "Staff.addEmployee"%>">
+                   value="<%=(action.equals("modify")) ? "admin.Staff.editEmployee" : "admin.Staff.addEmployee"%>">
             <%if (action.equals("modify")) {%>
             <input type="hidden" name="employeeId" value="<%=employeeToEdit.getId()%>"/>
             <%}%>
