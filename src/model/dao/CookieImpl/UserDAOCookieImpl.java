@@ -2,6 +2,7 @@ package model.dao.CookieImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
+import model.mo.ExtendedProduct;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -108,6 +109,14 @@ public class UserDAOCookieImpl implements UserDAO {
 
     @Override
     public boolean unBlockCustomer(User user) throws UnsupportedOperationException {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */

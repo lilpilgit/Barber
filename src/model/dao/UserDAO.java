@@ -1,6 +1,7 @@
 package model.dao;
 
 import model.exception.DuplicatedObjectException;
+import model.mo.ExtendedProduct;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -38,6 +39,9 @@ public interface UserDAO {
     boolean blockCustomer(User user) throws UnsupportedOperationException;
 
     boolean unBlockCustomer(User user) throws UnsupportedOperationException;
+
+    ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException;
+
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();

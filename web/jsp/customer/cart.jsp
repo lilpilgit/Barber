@@ -1,6 +1,7 @@
-<%@page import="model.mo.Product" %>
-<%@ page import="java.util.ArrayList" %>
+<%@page import="model.mo.ExtendedProduct" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -21,6 +22,11 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    ArrayList<ExtendedProduct> cart = null;
+    if (request.getAttribute("cart") != null) {
+        cart = (ArrayList<ExtendedProduct>) request.getAttribute("cart");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Cart";
 
@@ -30,11 +36,11 @@
 <!doctype html>
 <html lang="en">
 
-<%@include file="/templates/head.jsp"%>
+<%@include file="/templates/head.jsp" %>
 
 <body>
 
-<%@include file="/templates/header.jsp"%>
+<%@include file="/templates/header.jsp" %>
 <!------------------------------------------------ Shopping Chart ----------------------------------------------------->
 
 <!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
@@ -56,42 +62,76 @@
             </tr>
             </thead>
             <tbody>
+            <%
+                float totSaved = 0;
+                float totPrice = 0;
+                for (ExtendedProduct ep : cart) {%>
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
+                                                   class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <h6 class="title text-truncate"><%=ep.getName()%></h6>
                             <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
+                                <dt>Producer:</dt>
+                                <dd><%=ep.getProducer()%>
+                                </dd>
                             </dl>
+                            <%if (ep.getDiscount() != null && ep.getDiscount() != 0) {%>
                             <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                                <dt>Discount:</dt>
+                                <dd><%=ep.getDiscount()%>%<i class="fas fa-piggy-bank"></i></dd>
                             </dl>
+                            <%}%>
                         </figcaption>
                     </figure>
                 </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
                 <td>
                     <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" style="height: 73px;" class='main'>
-                        <input id="quantity<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
-                               readonly style="width: 90px;"
-                               value='1' required/>
+                    <div id="counter_qta<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" style="height: 73px;"
+                         class='main'>
+                        <input id="quantity<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='counter'
+                               type="number" max="<%=ep.getQuantity()%>" min="1"
+                        readonly style="width: 90px;"
+                        value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
-                            <button id="minus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Down'><i
+                            <button id="minus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn'
+                                    title='Down'><i
                                     class='fa fa-minus'></i></button>
-                            <button id="plus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn' title='Up'><i class='fa fa-plus'></i>
+                            <button id="plus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn'
+                                    title='Up'><i class='fa fa-plus'></i>
                             </button>
                         </div>
                     </div>
                 </td>
                 <td>
+                    <%
+                        if (ep.getDiscount() != null && ep.getDiscount() != 0) {
+                            BigDecimal saved = ep.getPrice().multiply(BigDecimal.valueOf(ep.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
+                            BigDecimal discountedPrice = ep.getPrice().subtract(saved);
+                            totSaved += (saved.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo ai soldi totali risparmiati il parziale risparmiato */
+                            System.err.println("saved:" + saved + "--- totSaved:" + totSaved);
+                    %>
                     <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
+                        <var class="price"><%=discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))%>
+                        </var>
+                        <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
+                    <%
+                            totPrice += (discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo al totale il prezzo scontato ...*/
+                        System.err.println("discountedPrice:" + discountedPrice + "--- totPrice:" + totPrice);
+
+                    }else{%>
+                    <div class="price-wrap">
+                        <var class="price"><%=ep.getPrice().multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))%>
+                        </var>
+                        <small class="text-muted">(each)</small>
+                    </div> <!-- price-wrap .// -->
+                    <%
+                            totPrice += (ep.getPrice().multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* ... oppure quello non scontato */
+                            System.err.println("ep.getPrice():" + ep.getPrice() + "--- totPrice:" + totPrice);
+                        }%>
                 </td>
                 <td class="text-right">
                     <button class="btn btn-outline-gold" title="Add to wishlist"
@@ -101,73 +141,24 @@
                     <button class="btn btn-outline-danger"> × Remove</button>
                 </td>
             </tr>
-
-
-
-
-
-
-
-
-
-
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
-                        </figcaption>
-                    </figure>
-                </td>
-                <td>
-                    <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta" style="height: 73px;" class='main'>
-                        <input id="quantity" class='counter' type="number" <%--max="<%=product.getQuantity()%>"--%> min="1"
-                               readonly style="width: 90px;"
-                               value='1' required/>
-                        <div class="row justify-content-center">
-                            <button id="minus_button" class='btn' title='Down'><i
-                                    class='fa fa-minus'></i></button>
-                            <button id="plus_button" class='btn' title='Up'><i class='fa fa-plus'></i>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold" title="Add to wishlist"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fas fa-star"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
+            <%}%>
             </tbody>
         </table>
+        <%
+            BigDecimal totSavedBD = BigDecimal.valueOf(totSaved).setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal totPriceBD = BigDecimal.valueOf(totPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        %>
         <div class="text-center">
             <span>You Save: </span>
-            <span class="font-weight-bold">5 &euro;</span>
+            <span class="font-weight-bold"><%=totSavedBD%> &euro;</span>
             <br>
             <span>Total Price: </span>
-            <span class="font-weight-bold">90 &euro;</span>
+            <span class="font-weight-bold"><%=totPriceBD%> &euro;</span>
         </div>
         <hr>
         <div class="text-center pt-1">
-            <button class="btngeneric" onclick=setNavFormHome('Home.showCheckout')>Checkout</button>
+            <button class="btngeneric" onclick=setNavFormHome('home.Home.showCheckout')>Checkout</button>
         </div>
     </div> <!-- card.// -->
 </div>
@@ -176,9 +167,9 @@
 
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
 
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
     });
 </script>
 </body>

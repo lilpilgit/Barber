@@ -1,6 +1,6 @@
 <%@page import="model.mo.Product" %>
-<%@ page import="java.math.BigDecimal" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.math.BigDecimal" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -38,7 +38,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<%@include file="/templates/head.jsp" %>
+    <%@include file="/templates/head.jsp" %>
 <body>
 <%@include file="/templates/header.jsp" %>
 
@@ -75,6 +75,7 @@
                     <h4 class="price colors"><strong>Price: </strong><span>&euro;<%=product.getPrice()%></span></h4>
                     <%}%>
                     <br>
+                    <% if (loggedOn && loggedUser.getType() == 'C') {%>
                     <!--COUNTER OF QUANTITY-->
                     <div id="counter_qta" style="height: 73px;" class='main'>
                         <button id="minus_button" class='down_count btn btn-info' title='Down'><i
@@ -88,9 +89,19 @@
                     </div>
                     <!----------------------->
                     <div class="action">
-                        <button class="add-to-cart btn btn-default" type="button">add to cart</button>
-                        <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+
+                        <button class="add-to-cart btn btn-default" type="button"><span
+                                class="fas fa-shopping-cart"></span></button>
+                        <button class="like btn btn-default" type="button"><span class="fas fa-heart"></span></button>
                     </div>
+                    <%}else{%>
+                    <button class="logged" type="button" id='showModal'
+                            data-target="#loginModal"
+                            data-toggle="modal">
+                        Log in or register to buy!
+                        <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                    <%}%>
                 </div>
             </div>
         </div>
@@ -104,10 +115,10 @@
     </div>
 </div>
 
-<%@include file="/templates/footer.html"%>
+<%@include file="/templates/footer.html" %>
 <script type="text/javascript">
 
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
         handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
     });
 
