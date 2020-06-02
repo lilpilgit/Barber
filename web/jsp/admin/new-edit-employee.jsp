@@ -1,4 +1,3 @@
-<%@ page import="model.mo.Employee" %>
 <%@ page import="model.mo.Structure" %>
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -29,9 +28,9 @@
 
     /* Prendo il parametro "employeeToModify" che è l'oggetto employee che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
-    Employee employeeToEdit = null;
+    User employeeToEdit = null;
     if (request.getAttribute("employeeToModify") != null) {
-        employeeToEdit = (Employee) request.getAttribute("employeeToModify");
+        employeeToEdit = (User) request.getAttribute("employeeToModify");
     }
 
     /* Setto una stringa da usare all'interno dell html per decidere se devo mostrare campi vuoti ( inserimento nuovo
@@ -43,7 +42,7 @@
     int splittedAddressLength = 0;
     /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
     if (employeeToEdit != null) {
-        String address = employeeToEdit.getUser().getAddress();
+        String address = employeeToEdit.getAddress();
         splittedAddress = address.split("\\|");
         splittedAddressLength = splittedAddress.length;
     }
@@ -93,13 +92,13 @@
                 <div class="col-md-6 mb-3">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getName() : ""%>"
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getName() : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getSurname() : ""%>"
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getSurname() : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
@@ -108,7 +107,7 @@
                 <div class="col-md-4">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getEmail() : ""%>"
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getEmail() : ""%>"
                            required>
                     <%if (!action.equals("modify")) {%><small id="emailHelp" class="form-text text-muted">A random
                     password will be sent to that
@@ -117,13 +116,8 @@
                 <div class="col-md-4">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getUser().getPhone() : ""%>"
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getPhone() : ""%>"
                            class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <label for="Hire-Date">Hire Date</label>
-                    <input type="date" class="form-control" name="hire_date" id="Hire-Date" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getHireDate() : ""%>">
                 </div>
             </div>
             <br>
