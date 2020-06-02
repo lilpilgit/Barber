@@ -84,7 +84,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
 
         ArrayList<ExtendedProduct> listProducts = new ArrayList<>();
 
-        query = "SELECT * FROM ITEMS_LIST WHERE ID_ORDER = ?;";
+        query = "SELECT * FROM ITEMS_LIST IL INNER JOIN PRODUCT P ON ID_PRODUCT = ID WHERE ID_ORDER = ?;";
 
         try {
             ps = connection.prepareStatement(query);
@@ -184,9 +184,9 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             throw new RuntimeException(e);
         }
         try {
-            extendedProduct.setQuantity(rs.getInt("QUANTITY"));
+            extendedProduct.setQuantity(rs.getInt("P.QUANTITY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"QUANTITY\")");
+            System.err.println("Errore nella rs.getLong(\"P.QUANTITY\")");
             throw new RuntimeException(e);
         }
         try {
@@ -211,9 +211,9 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         /* Setto gli attributi esclusivi di ExtendedProduct */
 
         try {
-            extendedProduct.setRequiredQuantity(rs.getInt("QUANTITY"));
+            extendedProduct.setRequiredQuantity(rs.getInt("IL.QUANTITY"));
         }  catch (SQLException e) {
-            System.err.println("Errore nella rs.getBoolean(\"QUANTITY\")");
+            System.err.println("Errore nella rs.getBoolean(\"IL.QUANTITY\")");
             throw new RuntimeException(e);
         }
 
