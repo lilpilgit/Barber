@@ -70,16 +70,6 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
     }
 
     @Override
-    public EmployeeDAO getEmployeeDAO() {
-        return new EmployeeDAOMySQLJDBCImpl(connection);
-    }
-
-    @Override
-    public CustomerDAO getCustomerDAO() {
-        return new CustomerDAOMySQLJDBCImp(connection);
-    }
-
-    @Override
     public StructureDAO getStructureDAO() {
         return new StructureDAOMySQLJDBCImpl(connection);
     }
@@ -89,8 +79,4 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
         return new UserDAOMySQLJDBCImpl(connection);
     }
 
-    @Override
-    public AdminDAO getAdminDAO() {
-        return new AdminDAOMySQLJDBCImpl(connection);
-    }
 }

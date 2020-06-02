@@ -13,7 +13,7 @@ public class Orders {
     private String shippingAddress;
     private Boolean deleted;
 
-    /* N:1 COSTUMER*/
+    /* N:1 */
     private User customer;
 
     private ArrayList<ExtendedProduct> itemList;

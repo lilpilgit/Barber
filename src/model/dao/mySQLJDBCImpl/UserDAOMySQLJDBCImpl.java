@@ -22,10 +22,11 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     }
 
     @Override
-    public User insert(Structure structure, String email, String name, String surname, String address,
+    public User insert(Long id, Structure structure, String email, String name, String surname, String address,
                        String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException {
         /**
          * This method allows you to indifferently insert a user of type Admin, Customer or Employee.
+         * @params id parameter is DUMMY for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
          * @return Returns the user inserted correctly in the DB otherwise raises an exception
          * */
 
@@ -218,17 +219,22 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          * */
 
         boolean exist; /* flag per sapere se esiste già un'utente con gli stessi dati */
-        /* CON TALE QUERY CONTROLLO SE L'UTENTE ESISTE GIÀ */
+        /* CON TALE QUERY CONTROLLO SE L'UTENTE ESISTE GIÀ CON LO STESSA EMAIL O CON LO STESSO CODICE FISCALE O ENTRAMBI */
 
-        query
-                = " SELECT ID"
-                + " FROM USER"
-                + " WHERE DELETED = 0 AND ( EMAIL = ? OR FISCAL_CODE = ?)AND ID <> ?;";
+        query =
+                "SELECT ID "
+                        + "FROM USER "
+                        + "WHERE DELETED = 0 AND EMAIL = ? AND ID <> ? "
+                        + "UNION "
+                        + "SELECT ID "
+                        + "FROM USER "
+                        + "WHERE DELETED = 0 AND FISCAL_CODE = ? AND ID <> ?;";
 
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, user.getEmail());
+            ps.setLong(i++, user.getId());
             ps.setString(i++, user.getFiscalCode());
             ps.setLong(i++, user.getId());
 
@@ -262,12 +268,17 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
             throw new DuplicatedObjectException("UserDAOJDBCImpl.update: Tentativo di aggiornamento di un utente già esistente con email{" + user.getEmail() + "}.}.");
         }
-
         /*Se non è stata sollevata alcuna eccezione, allora possiamo aggiornare i dati di utente */
+
+        boolean yesAdditionalQuery = false;
+        yesAdditionalQuery = (user.getType() != 'C');
+
+        String additionalQuery = (yesAdditionalQuery) ? "ID_STRUCTURE = ?," : "";
+
         query
                 = " UPDATE USER"
                 + " SET "
-                + "  ID_STRUCTURE = ?,"
+                + additionalQuery
                 + "  EMAIL = ?,"
                 + "  NAME = ?,"
                 + "  SURNAME = ?,"
@@ -286,14 +297,15 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
-            ps.setLong(i++, user.getStructure().getId());
+            if (yesAdditionalQuery)
+                ps.setLong(i++, user.getStructure().getId()); /* un cliente non ha una struttura di riferimento */
             ps.setString(i++, user.getEmail());
             ps.setString(i++, user.getName());
             ps.setString(i++, user.getSurname());
             ps.setString(i++, user.getAddress());
             ps.setString(i++, user.getPhone());
             ps.setString(i++, user.getPassword());
-            ps.setDate(i++, Date.valueOf(user.getBirthDate()));
+            ps.setDate(i++, (user.getBirthDate() != null) ? Date.valueOf(user.getBirthDate()) : null);
             ps.setString(i++, user.getFiscalCode());
             ps.setString(i++, String.valueOf(user.getType()));
             ps.setBoolean(i++, user.isBlocked());
@@ -330,8 +342,8 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
         query =
                 "SELECT *"
-              + " FROM USER"
-              + " WHERE ID = ? AND DELETED = 0;";
+                        + " FROM USER"
+                        + " WHERE ID = ? AND DELETED = 0;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -476,12 +488,12 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         /* Selezioni solamente gli utenti che non sono stati cancellati */
         query =
                 "SELECT *"
-              + " FROM USER"
-              + " WHERE DELETED = 0 AND TYPE = ?;";
+                        + " FROM USER"
+                        + " WHERE DELETED = 0 AND TYPE = ?;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
-            ps.setString(i++,String.valueOf(userType));
+            ps.setString(i++, String.valueOf(userType));
         } catch (SQLException e) {
             System.err.println("Errore nella ps = connection.prepareStatement(query)");
             throw new RuntimeException(e);
@@ -528,13 +540,13 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          */
 
         /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
-        if(user.getType() != 'C')
+        if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile bloccare un utente che non è un cliente. Errore con l'utente con id{" + user.getId() + "}.");
 
         query =
                 "UPDATE USER"
-              + " SET BLOCKED = '1'"
-              + " WHERE ID = ?";
+                        + " SET BLOCKED = '1'"
+                        + " WHERE ID = ?";
 
         try {
             ps = connection.prepareStatement(query);
@@ -569,14 +581,14 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          */
 
         /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
-        if(user.getType() != 'C')
+        if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile sbloccare un utente che non è un cliente. Errore con l'utente con id{" + user.getId() + "}.");
 
 
         query =
                 "UPDATE USER"
-              + " SET BLOCKED = '0'"
-              + " WHERE ID = ?";
+                        + " SET BLOCKED = '0'"
+                        + " WHERE ID = ?";
 
         try {
             ps = connection.prepareStatement(query);
@@ -609,20 +621,30 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          * @return User object read from result set.
          */
         User user = new User();
+        Structure structure = new Structure();
+        user.setStructure(structure);
 
-
+        try {/* deve stare per primo per poter sapere che tipo di utente stiamo trattando */
+            user.setType(rs.getString("TYPE").charAt(0));
+        } catch (
+                SQLException e) {
+            System.err.println("Errore nella user.setType(rs.getString(\"TYPE\").charAt(0));");
+            throw new RuntimeException(e);
+        }
         try {
             user.setId(rs.getLong("ID"));
         } catch (SQLException e) {
             System.err.println("Errore nella user.setId(rs.getLong(\"ID\"));");
             throw new RuntimeException(e);
         }
+
         try {
-            user.setId(rs.getLong("ID_STRUCTURE"));
+            user.getStructure().setId(rs.getLong("ID_STRUCTURE"));
         } catch (SQLException e) {
             System.err.println("Errore nella user.setId(rs.getLong(\"ID_STRUCTURE\"));");
             throw new RuntimeException(e);
         }
+
         try {
             user.setEmail(rs.getString("EMAIL"));
         } catch (SQLException e) {
@@ -670,13 +692,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         } catch (
                 SQLException e) {
             System.err.println("Errore nella user.setFiscalCode(rs.getString(\"FISCAL_CODE\"));");
-            throw new RuntimeException(e);
-        }
-        try {
-            user.setType(rs.getString("TYPE").charAt(0));
-        } catch (
-                SQLException e) {
-            System.err.println("Errore nella user.setType(rs.getString(\"TYPE\").charAt(0));");
             throw new RuntimeException(e);
         }
         try {

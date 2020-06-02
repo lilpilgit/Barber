@@ -22,8 +22,8 @@ public interface UserDAO {
      * @return all the products that must be shown in the showcase of the homepage
      */
 
-    User insert(Structure structure, String email, String name, String surname, String address,
-           String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException;
+    User insert(Long id, Structure structure, String email, String name, String surname, String address,
+                String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException;
 
     boolean update(User user) throws DuplicatedObjectException;
 

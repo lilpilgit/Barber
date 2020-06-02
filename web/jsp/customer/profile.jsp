@@ -1,4 +1,3 @@
-<%@page import="model.mo.Customer" %>
 <%@ page import="model.mo.User" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -27,9 +26,9 @@
     }
 
     /* Prendo il parametro "customer" che indica i dati del cliente da mostrare nella form  */
-    Customer customer = null;
+    User customer = null;
     if (request.getAttribute("customer") != null) {
-        customer = (Customer) request.getAttribute("customer");
+        customer = (User) request.getAttribute("customer");
     }
 
     /* Faccio lo split dell'address per poterlo mostrare all'interno dei vari campi */
@@ -37,7 +36,7 @@
     int splittedAddressLength = 0;
     /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
     if (customer != null) {
-        String address = customer.getUser().getAddress();
+        String address = customer.getAddress();
         splittedAddress = address.split("\\|");
         splittedAddressLength = splittedAddress.length;
     }
@@ -73,26 +72,26 @@
                     <input type="text" class="form-control" name="name" id="Name"
                            autocapitalize="on"
                            placeholder="Mario" required
-                           value="<%=customer.getUser().getName()%>">
+                           value="<%=customer.getName()%>">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname"
                            style="text-transform: capitalize;" placeholder="Rossi" required
-                           value="<%=customer.getUser().getSurname()%>">
+                           value="<%=customer.getSurname()%>">
                 </div>
             </div>
             <div class="form-row justify-content-center">
                 <div class="col-md-3">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=customer.getUser().getEmail()%>" style="text-transform: lowercase;"
+                           value="<%=customer.getEmail()%>" style="text-transform: lowercase;"
                            required>
                 </div>
                 <div class="col-md-3">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value="<%=customer.getUser().getPhone()%>"
+                           value="<%=customer.getPhone()%>"
                            class="form-control">
                 </div>
             </div>
@@ -160,7 +159,7 @@
             <div class="text-center pt-1">
                 <button type="submit" form="form_edit_profile" class="btngeneric">Update profile</button>
             </div>
-            <input type="hidden" name="controllerAction" value="Home.updateProfile">
+            <input type="hidden" name="controllerAction" value="home.Home.updateProfile">
         </form>
         <hr>
         <div class="form-row justify-content-center">

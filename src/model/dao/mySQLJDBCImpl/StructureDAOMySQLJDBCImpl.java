@@ -1,6 +1,7 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
+import model.dao.UserDAO;
 import model.mo.Structure;
 
 import java.sql.Connection;
@@ -96,8 +97,7 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, structure.getAddress());
-            ps.setString(i++, String.valueOf(structure.getClosingTime()));
-/*            ps.setTime(i++, Time.valueOf(LocalTime.from(structure.getOpeningTime())));*/ /* TODO: risolvere problema tipo di dato nel db */
+            ps.setString(i++, String.valueOf(structure.getOpeningTime()));
             ps.setString(i++, String.valueOf(structure.getClosingTime()));
             ps.setString(i++, String.valueOf(structure.getSlot()));
             ps.setString(i++, structure.getName());

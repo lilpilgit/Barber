@@ -17,155 +17,184 @@ public class Admin {
     private Admin() {
     }
 
-    public static void showFormEditAdmin(HttpServletRequest request, HttpServletResponse response) {
+    public static void showProfile(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Fetch info about logged admin and call edit-admin.jsp
          * */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
-        model.mo.Admin adminToEdit = null; /* oggetto di classe Admin che deve essere passato alla pagina del form di inserimento/modifica */
+        UserDAO userDAO = null;
+        User adminToEdit = null; /* oggetto di classe User che deve essere passato alla pagina del form di modifica */
         User loggedUser;
 
-        /* Inizializzo il cookie di sessione */
-        HashMap sessionFactoryParameters = new HashMap<String, Object>();
-        sessionFactoryParameters.put("request", request);
-        sessionFactoryParameters.put("response", response);
-        sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
-
-        sessionDAOFactory.beginTransaction();
-
-        UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
-        loggedUser = sessionUserDAO.findLoggedUser(); /* trovo l'id dell'admin attualmente loggato */
-
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
-        if (daoFactory != null) {
-            daoFactory.beginTransaction();
-        } else {
-            throw new RuntimeException("Errore nel Controller Admin.showFormEditAdmin ==> daoFactory.beginTransaction();");
-        }
-
-        AdminDAO adminDAO = daoFactory.getAdminDAO();
-        adminToEdit = adminDAO.findById(loggedUser.getId()); /* l'id lo prendo dal cookie di sessione */
-
         try {
-            /* committo la transazione sul db */
-            daoFactory.commitTransaction();
-            /* commit della transazione cookie fittizia */
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+
+            loggedUser = sessionUserDAO.findLoggedUser(); /* trovo l'oggetto user dell'admin attualmente loggato */
+
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            daoFactory.beginTransaction();
+
+            userDAO = daoFactory.getUserDAO();
+
+            adminToEdit = userDAO.findByEmail(loggedUser.getEmail());
+
+            /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
+            /* Commit sul db */
+            daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
             System.err.println("ERRORE NEL COMMIT DELLA TRANSAZIONE");
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL ROLLBACK DELLA TRANSAZIONE");
+            }
+            throw new RuntimeException(e);
+
         } finally {
-            /*  chiudo la transazione sul db */
-            daoFactory.closeTransaction();
-            /* chiusura della transazione cookie fittizia */
-            sessionDAOFactory.closeTransaction();
-            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
         }
 
         /* Setto gli attributi della request */
         /* 1) Booleano per sapere se è loggato o meno */
-        request.setAttribute("loggedOn",loggedUser!=null);
+        request.setAttribute("loggedOn", loggedUser != null);
         /* 2) Oggetto che specifica quale utente è loggato*/
         request.setAttribute("loggedUser", loggedUser);
         /* 3) il viewUrl che il dispatcher dovrà visualizzare nel browser */
         request.setAttribute("viewUrl", "admin/edit-admin"); /* bisogna visualizzare edit-admin.jsp */
         /* 4) l'oggetto impiegato che deve essere modificato */
         request.setAttribute("adminToModify", adminToEdit);
+
+
     }
 
     public static void editAdmin(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Instantiates an AdminDAO to be able to edit the existing admin in Database.
+         * Instantiates a UserDAO to be able to edit the existing admin in Database.
          */
 
 //        String submit; /*mi aspetto che il value sia "edit_admin"*/
 
-        DAOFactory daoFactory = null;
-        AdminDAO adminDAO = null;
-        model.mo.Admin adminToEdit = null;
-        model.mo.Admin originalAdmin = null; /* l'oggetto intatto ancora con i campi non modificati */
-
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
+        User loggedUser = null;
+        UserDAO userDAO = null;
+        User adminToEdit = null;
+        User originalAdmin = null; /* l'oggetto intatto ancora con i campi non modificati */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
 
 
-//        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_admin"*/
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
-        if (daoFactory != null) {
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
             daoFactory.beginTransaction();
-        } else {
-            throw new RuntimeException("Errore nel Controller Admin.editAdmin ==> daoFactory.beginTransaction();");
-        }
 
-        adminDAO = daoFactory.getAdminDAO();
+            userDAO = daoFactory.getUserDAO();
+
+            originalAdmin = userDAO.findByEmail(loggedUser.getEmail());
+
+            /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
+             * quale passare alla pagina profile.jsp */
+
+            adminToEdit = userDAO.findByEmail(loggedUser.getEmail());
 
 
-        /* In caso di modifica, il form contiene un campo hidden con name="adminId" che mi viene
-         * passato dalla JSP e consente di poter scaricare dal DB l'admin con quel determinato ID */
-        originalAdmin = adminDAO.findById(Long.valueOf(request.getParameter("adminId")));
+            /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
+             * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
 
-        /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
-         * quale passare alla pagina edit-admin.jsp */
-        adminToEdit = adminDAO.findById(Long.valueOf(request.getParameter("adminId")));
+            adminToEdit.setEmail(request.getParameter("email"));
+            adminToEdit.setName(request.getParameter("name"));
+            adminToEdit.setSurname(request.getParameter("surname"));
+            adminToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
+            adminToEdit.setPhone(request.getParameter("phone"));
+            /* TODO:cambio password per l'admin */
+            adminToEdit.setBirthDate(LocalDate.parse(request.getParameter("birth_date")));
+            adminToEdit.setFiscalCode(request.getParameter("fiscal_code"));
+            adminToEdit.setType('A');
+            adminToEdit.setBlocked(false);
+            /* TODO:cancellazione account dell'admin */
 
-        /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
-         * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
+            /* Effettuo la modifica dell'admin */
+            try {
+                edited = userDAO.update(adminToEdit);/* Se non viene sollevata l'eccezione, l'admin è stato modificato correttamente*/
 
-        /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
-         * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
-         * */
-        adminToEdit.getUser().setName(request.getParameter("name")); /* attributo della tabella USER */
-        adminToEdit.getUser().setSurname(request.getParameter("surname")); /* attributo della tabella USER */
-        adminToEdit.getUser().setEmail(request.getParameter("email")); /* attributo della tabella USER */
-        adminToEdit.getUser().setPhone(request.getParameter("phone")); /* attributo della tabella USER */
-        adminToEdit.getUser().setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number"))); /* attributo della tabella USER */
-        adminToEdit.getUser().setIsAdmin(true); /* attributo della tabella USER */
-        adminToEdit.getUser().setIsEmployee(false); /* attributo della tabella USER */
-        adminToEdit.getUser().setIsCustomer(false); /* attributo della tabella USER */
-        adminToEdit.getUser().setIsDeleted(false); /* attributo della tabella USER */
-        adminToEdit.setBirthDate(LocalDate.parse(request.getParameter("birth_date"))); /* attributo della tabella ADMIN */
-        adminToEdit.setFiscalCode(request.getParameter("fiscal_code")); /* attributo della tabella ADMIN */
+            } catch (DuplicatedObjectException e) {
+                applicationMessage = e.getMessage();
+                e.printStackTrace();
+            }
 
-        /* Effettuo la modifica dell'admin */
-        try {
-            edited = adminDAO.update(adminToEdit);/* Se non viene sollevata l'eccezione, l'admin è stato modificato correttamente*/
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
 
-        } catch (DuplicatedObjectException e) {
-            applicationMessage = e.getMessage();
-            e.printStackTrace();
-        }
+            /* Commit sul db */
+            daoFactory.commitTransaction();
 
-        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
-        try {
             if (edited) {
-                /* Se l'admin è stato modificato correttamente committo la transazione */
-                daoFactory.commitTransaction();
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+                /* Solo se viene committata la transazione senza errori siamo sicuri che l'admin sia stato modificato correttamente .*/
+                applicationMessage = "Your data has been modified SUCCESSFULLY.";
+            }
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-                /* Solo se viene committata la transazione senza errori siamo sicuri che l' admin sia stato modificato correttamente .*/
-                applicationMessage = "Admin modified SUCCESSFULLY.";
-
-            } else {
-                /* Altrimenti faccio il rollback della transazione */
-                daoFactory.rollbackTransaction();
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                /* Se viene fatto il rollback della transazione il cliente non è stato modificato .*/
+                applicationMessage = "Error: Your data could not be updated.";
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
-                /* Se viene fatto il rollback della transazione l'admin non è stato modificato .*/
-                applicationMessage = "Admin modification ERROR.";
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
 
             }
-        } catch (Exception e) {
-            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+            throw new RuntimeException(e);
+
         } finally {
-            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
-            daoFactory.closeTransaction();
-            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            try {
+                /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
         }
 
         /* Setto gli attributi della request che verranno processati dalla edit-admin.jsp */
@@ -193,6 +222,4 @@ public class Admin {
         }
 
     }
-
-
 }

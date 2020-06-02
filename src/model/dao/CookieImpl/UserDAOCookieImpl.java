@@ -2,11 +2,14 @@ package model.dao.CookieImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
+import model.mo.Structure;
 import model.mo.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 public class UserDAOCookieImpl implements UserDAO {
@@ -20,21 +23,19 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
-    public User insert(Long id, String email, String name, String surname, String address, String phone, String password, Boolean isAdmin, Boolean isEmployee, Boolean isCustomer) throws DuplicatedObjectException {
+    public User insert(Long id, Structure structure, String email, String name, String surname, String address, String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException {
         /**
-         * Insert into cookie info about logged user and add cookie to response.
+         * Create cookie with info about logged user and add cookie to response.
          *
          * @return The user actually logged.
          * */
 
         User loggedUser = new User();
         loggedUser.setId(id);
+        loggedUser.setEmail(email);
         loggedUser.setName(name);
         loggedUser.setSurname(surname);
-        loggedUser.setEmail(email);
-        loggedUser.setIsAdmin(isAdmin);
-        loggedUser.setIsEmployee(isEmployee);
-        loggedUser.setIsCustomer(isCustomer);
+        loggedUser.setType(type);
 
         Cookie cookie = null;
         cookie = new Cookie("loggedUser", encode(loggedUser)); /* faccio l'encoding del cookie */
@@ -44,9 +45,8 @@ public class UserDAOCookieImpl implements UserDAO {
         return loggedUser;
     }
 
-
     @Override
-    public void update(User loggedUser) {
+    public boolean update(User loggedUser) {
 
         /**
          * Create new cookie that will be added to existent response and overwrite existent cookie.
@@ -56,6 +56,7 @@ public class UserDAOCookieImpl implements UserDAO {
         cookie.setPath("/");
         response.addCookie(cookie);
 
+        return true;
     }
 
     @Override
@@ -83,6 +84,30 @@ public class UserDAOCookieImpl implements UserDAO {
 
     @Override
     public User findByEmail(String email) {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public ArrayList<User> fetchAllOnType(char userType) {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public boolean blockCustomer(User user) throws UnsupportedOperationException {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public boolean unBlockCustomer(User user) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
@@ -128,12 +153,10 @@ public class UserDAOCookieImpl implements UserDAO {
         String encodedLoggedUser;
         encodedLoggedUser
                 = loggedUser.getId() + "#"
+                + loggedUser.getEmail() + "#"
                 + loggedUser.getName() + "#"
                 + loggedUser.getSurname() + "#"
-                + loggedUser.getEmail() + "#"
-                + loggedUser.isAdmin() + "#"
-                + loggedUser.isEmployee() + "#"
-                + loggedUser.isCustomer() + "#";
+                + loggedUser.getType() + "#";
 
         return encodedLoggedUser;
 
@@ -149,12 +172,10 @@ public class UserDAOCookieImpl implements UserDAO {
         String[] values = encodedLoggedUser.split("#");
 
         loggedUser.setId(Long.parseLong(values[i++]));
+        loggedUser.setEmail(values[i++]);
         loggedUser.setName(values[i++]);
         loggedUser.setSurname(values[i++]);
-        loggedUser.setEmail(values[i++]);
-        loggedUser.setIsAdmin(Boolean.parseBoolean(values[i++]));
-        loggedUser.setIsEmployee(Boolean.parseBoolean(values[i++]));
-        loggedUser.setIsCustomer(Boolean.parseBoolean(values[i++]));
+        loggedUser.setType(values[i++].charAt(0));
 
         return loggedUser;
 

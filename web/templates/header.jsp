@@ -12,7 +12,7 @@
                     </button>
                     <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
 
-                    <% if (loggedOn && loggedUser.isAdmin()) { %>
+                    <% if (loggedOn && loggedUser.getType() == 'A') { %>
                     <div class="dropdown">
                         <button class="logged dropdown-toggle" type="button" id='showAdminOptions'
                                 data-toggle="dropdown">

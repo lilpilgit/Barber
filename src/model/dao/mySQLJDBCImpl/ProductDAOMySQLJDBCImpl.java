@@ -142,6 +142,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return product;
     }
 
+
+    /* TODO SISTEMARE SHOP.JSP ED AGGIORNARE CON METODO MVC */
+
     @Override
     /*
       Returns all product to sale ordered by Most Recent Date of Entry
@@ -186,6 +189,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         return listProduct;
     }
+
 
     /* FUNZIONE AGGIORNATA CON METODO MVC */
 

@@ -1,4 +1,3 @@
-<%@ page import="model.mo.Admin" %>
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -38,16 +37,16 @@
 
     /* Prendo il parametro "adminToModify" che è l'oggetto admin che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
-    Admin adminToEdit = null;
+    User adminToEdit = null;
     if (request.getAttribute("adminToModify") != null) {
-        adminToEdit = (Admin) request.getAttribute("adminToModify");
+        adminToEdit = (User) request.getAttribute("adminToModify");
     }
 
     String[] splittedAddress = null;
     int splittedAddressLength = 0;
     /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
     if (adminToEdit != null) {
-        String address = adminToEdit.getUser().getAddress();
+        String address = adminToEdit.getAddress();
         splittedAddress = address.split("\\|");
         splittedAddressLength = splittedAddress.length;
     }
@@ -67,13 +66,13 @@
                 <div class="col-md-6 mb-3">
                     <label for="Name">First name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
-                           value="<%=adminToEdit.getUser().getName()%>"
+                           value="<%=adminToEdit.getName()%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="Surname">Last name</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
-                           value="<%=adminToEdit.getUser().getSurname()%>"
+                           value="<%=adminToEdit.getSurname()%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
@@ -81,13 +80,13 @@
                 <div class="col-md-4">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=adminToEdit.getUser().getEmail()%>"
+                           value="<%=adminToEdit.getEmail()%>"
                            required>
                 </div>
                 <div class="col-md-4">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
-                           value="<%=adminToEdit.getUser().getPhone()%>"
+                           value="<%=adminToEdit.getPhone()%>"
                            class="form-control">
                 </div>
             </div>
@@ -169,7 +168,7 @@
                     value=edit_admin">Send
             </button>
             <input type="hidden" name="controllerAction"
-                   value="Admin.editAdmin">
+                   value="admin.Admin.editAdmin">
             <input type="hidden" name="adminId" value="<%=adminToEdit.getId()%>"/>
 
         </form>

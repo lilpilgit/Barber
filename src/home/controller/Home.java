@@ -95,8 +95,6 @@ public class Home {
         User loggedUser = null;
         UserDAO userDAO = null;
         User user = null;
-        CustomerDAO customerDAO = null;
-        Customer customer = null; /* serve per verificare se l'utente che sta facendo il login è un cliente e verificare se è BLOCKED */
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -131,48 +129,37 @@ public class Home {
                 sessionUserDAO.delete(null);
                 applicationMessage = "Username e/o password errati!";
                 loggedUser = null;
-            } else if (customer.getId() != null && customer.getBlocked()) { /* mettendo solo customer != null va in errore */
-                /* email e password corretta, utente non cancellato, verifico se è BLOCCATO */
-                sessionUserDAO.delete(null);
-                applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
-                loggedUser = null;
-            }
-            /* determino il tipo di utente */
-            switch (user.getType()) {
-                case 'A':
-                    /* ADMIN */
-                    break;
-                case 'E':
-                    /* EMPLOYEE */
-                    break;
-                case 'C':
-                    /* CUSTOMER */
-                    break;
-                default:
-                    /* ERROR!!!! */
-            }
-
-
-            /* controllo se si tratta di un utente in quanto devo verificare che non sia stato bloccato */
-            customerDAO = daoFactory.getCustomerDAO();
-            customer = customerDAO.findById(user.getId());
-
-            System.err.println(customer);
-
-            /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
-            if (user == null || !user.getPassword().equals(password)) {
-                sessionUserDAO.delete(null);
-                applicationMessage = "Username e/o password errati!";
-                loggedUser = null;
-            } else if (customer.getId() != null && customer.getBlocked()) { /* mettendo solo customer != null va in errore */
-                /* email e password corretta, utente non cancellato, verifico se è BLOCCATO */
-                sessionUserDAO.delete(null);
-                applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
-                loggedUser = null;
             } else {
-                loggedUser = sessionUserDAO.insert(user.getId(), user.getEmail(), user.getName(), user.getSurname(), null, null, null, user.isAdmin(), user.isEmployee(), user.isCustomer());
-            }
+                /* determino il tipo di utente */
+                System.err.println("UTENTE CHE SI È LOGGATO =======> " + user);
+                switch (user.getType()) {
+                    case 'A':
+                        /* ADMIN */
+                        /* ulteriori operazioni */
+                        loggedUser = sessionUserDAO.insert(user.getId(),null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        break;
+                    case 'E':
+                        /* EMPLOYEE */
+                        loggedUser = sessionUserDAO.insert(user.getId(),null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        break;
+                    case 'C':
+                        /* CUSTOMER */
+                        if (user.getId() != null && user.isBlocked()) { /* mettendo solo user != null va in errore */
+                            /* email e password corretta, utente non cancellato, è un cliente e verifico se è BLOCCATO */
+                            sessionUserDAO.delete(null);
+                            applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
+                            loggedUser = null;
+                        } else {
+                            loggedUser = sessionUserDAO.insert(user.getId(),null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        }
+                        break;
+                    default:
+                        /* ERROR!!!! */
+                        System.err.println("ERRORE NELLO SWITCH CASE!!!!!");
+                }
 
+
+            }
 
             /* Chiamo la commonView */
             commonView(daoFactory, request);
@@ -294,74 +281,68 @@ public class Home {
         String house_number;
 
         DAOFactory daoFactory = null;
-        CustomerDAO customerDAO = null;
-        UserDAO userDAO = null; /* DAO Necessario per poter effettuare l'inserimento del cliente */
+        UserDAO userDAO = null; /* DAO Necessario per poter effettuare l'inserimento dell'utente  */
 
         String applicationMessage = "It was not possible to register!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean registered = false;
 
 
-        /* Fetching dei parametri provenienti dal form di registrazione*/
-        name = request.getParameter("name");/*required*/
-        surname = request.getParameter("surname");/*required*/
-        email = request.getParameter("email");/*required*/
-        password = request.getParameter("password"); /*required*/
-        phone = request.getParameter("phone");/*required*/
-        state = request.getParameter("state"); /*required*/
-        region = request.getParameter("region");/*required*/
-        city = request.getParameter("city");/*required*/
-        cap = request.getParameter("cap");/*required*/
-        street = request.getParameter("street");/*required*/
-        house_number = request.getParameter("house_number");/*not required*/
+        try {
 
+            /* Fetching dei parametri provenienti dal form di registrazione*/
+            email = request.getParameter("email");/*required*/
+            name = request.getParameter("name");/*required*/
+            surname = request.getParameter("surname");/*required*/
+            password = request.getParameter("password"); /*required*/
+            state = request.getParameter("state"); /*required*/
+            region = request.getParameter("region");/*required*/
+            city = request.getParameter("city");/*required*/
+            cap = request.getParameter("cap");/*required*/
+            street = request.getParameter("street");/*required*/
+            house_number = request.getParameter("house_number");/*not required*/
+            phone = request.getParameter("phone");/*required*/
 
-        daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
-        if (daoFactory != null) {
+            /* DAOFactory per manipolare i dati sul DB */
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
-        } else {
-            throw new RuntimeException("Errore nel Controller Home.register ==> daoFactory.beginTransaction();");
-        }
 
-        customerDAO = daoFactory.getCustomerDAO();
+            userDAO = daoFactory.getUserDAO();
 
-        userDAO = daoFactory.getUserDAO();
+            userDAO.insert(null,null, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, null, null, 'C');
 
-        /* Effettuo l'inserimento del nuovo cliente */
-        try {
-            customerDAO.insert(userDAO, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password);
-            registered = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
-        } catch (NoCustomerCreatedException e) {
-            /* cliente già registrato con la stessa email */
-            applicationMessage = "Already registered user.";
-            e.printStackTrace();
-        }
+            registered = true; /* se non viene sollevata l'eccezione riesco a settarlo a true */
 
-        /* Chiamo la commonView */
-        commonView(daoFactory, request);
+            /* Chiamo la commonView */
+            commonView(daoFactory, request);
 
-        /* Effettuo le ultime operazioni di commit o rollback e poi successiva chiusura della transazione */
-        try {
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
             if (registered) {
-                /* Se il cliente è stato inserito correttamente committo la transazione */
-                daoFactory.commitTransaction();
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato inserito correttamente .*/
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato registrato correttamente .*/
                 applicationMessage = "Registration successful. Now you can Login!";
-
-            } else {
-                /* Altrimenti faccio il rollback della transazione */
-                daoFactory.rollbackTransaction();
-                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
-                /* Se viene fatto il rollback della transazione il cliente non è stato inserito .*/
             }
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
         } catch (Exception e) {
-            System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                /* Se viene fatto il rollback della transazione il cliente non è stato registrato .*/
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+            }
+            throw new RuntimeException(e);
+
         } finally {
-            /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
-            daoFactory.closeTransaction();
-            System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            try {
+                /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
         }
 
         /* Setto gli attributi della request che verranno processati dalla home.jsp */
@@ -382,7 +363,6 @@ public class Home {
         request.setAttribute("loggedOn", false);
         /* 4) oggetto corrispondente all'utente loggato ( dopo la registrazione non posso essere loggato dunque null ) */
         request.setAttribute("loggedUser", null);
-
 
     }
 
@@ -951,8 +931,8 @@ public class Home {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
-        CustomerDAO customerDAO = null;
-        Customer customer = null;
+        UserDAO userDAO = null;
+        User user = null;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -975,9 +955,9 @@ public class Home {
 
             daoFactory.beginTransaction();
 
-            customerDAO = daoFactory.getCustomerDAO();
+            userDAO = daoFactory.getUserDAO();
 
-            customer = customerDAO.findById(loggedUser.getId());
+            user = userDAO.findByEmail(loggedUser.getEmail());
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -1010,20 +990,20 @@ public class Home {
         /* 3) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "customer/profile");
         /* 4) Setto il cliente da mostrare in base a quale utente è loggato */
-        request.setAttribute("customer", customer);
+        request.setAttribute("customer", user);
     }
 
     public static void updateProfile(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Instantiates a CustomerDAO to be able to edit the existing customer in Database.
+         * Instantiates a UserDAO to be able to edit the existing user in Database.
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
-        CustomerDAO customerDAO = null;
-        Customer customerToUpdate = null;
-        Customer originalCustomer = null; //TODO!! SERVE???
+        UserDAO userDAO = null;
+        User userToUpdate = null;
+        User originalUser = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
 
@@ -1048,33 +1028,32 @@ public class Home {
 
             daoFactory.beginTransaction();
 
-            customerDAO = daoFactory.getCustomerDAO();
+            userDAO = daoFactory.getUserDAO();
 
-
-            originalCustomer = customerDAO.findById(loggedUser.getId());
+            originalUser = userDAO.findById(loggedUser.getId());
 
             /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
              * quale passare alla pagina profile.jsp */
 
-            customerToUpdate = customerDAO.findById(loggedUser.getId());
+            userToUpdate = userDAO.findById(loggedUser.getId());
 
 
             /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
              * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
 
-            customerToUpdate.getUser().setName(request.getParameter("name")); /* attributo della tabella USER */
-            customerToUpdate.getUser().setSurname(request.getParameter("surname")); /* attributo della tabella USER */
-            customerToUpdate.getUser().setEmail(request.getParameter("email")); /* attributo della tabella USER */
-            customerToUpdate.getUser().setPhone(request.getParameter("phone")); /* attributo della tabella USER */
-            customerToUpdate.getUser().setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number"))); /* attributo della tabella USER */
-            customerToUpdate.getUser().setIsAdmin(false); /* attributo della tabella USER */
-            customerToUpdate.getUser().setIsEmployee(false); /* attributo della tabella USER */
-            customerToUpdate.getUser().setIsCustomer(true); /* attributo della tabella USER */
-            customerToUpdate.getUser().setIsDeleted(false); /* attributo della tabella USER */
+            userToUpdate.setEmail(request.getParameter("email"));
+            userToUpdate.setName(request.getParameter("name"));
+            userToUpdate.setSurname(request.getParameter("surname"));
+            userToUpdate.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
+            userToUpdate.setPhone(request.getParameter("phone"));
+            /* TODO:cambio password per l'utente */
+            userToUpdate.setType('C');
+            userToUpdate.setBlocked(false);
+            /* TODO:cancellazione account dell'utente */
 
             /* Effettuo la modifica del cliente */
             try {
-                edited = customerDAO.update(customerToUpdate);/* Se non viene sollevata l'eccezione, il cliente è stato modificato correttamente*/
+                edited = userDAO.update(userToUpdate);/* Se non viene sollevata l'eccezione, l'utente è stato modificato correttamente*/
 
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
@@ -1088,7 +1067,7 @@ public class Home {
             daoFactory.commitTransaction();
 
             if (edited) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato modificato correttamente .*/
+                /* Solo se viene committata la transazione senza errori siamo sicuri che l'utente sia stato modificato correttamente .*/
                 applicationMessage = "Your data has been modified SUCCESSFULLY.";
             }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
@@ -1139,10 +1118,10 @@ public class Home {
         /* 4) il cliente che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
         if (edited) {
             /* SUCCESS */
-            request.setAttribute("customer", customerToUpdate);
+            request.setAttribute("customer", userToUpdate);
         } else {
             /* FAIL */
-            request.setAttribute("customer", originalCustomer);
+            request.setAttribute("customer", originalUser);
         }
 
     }

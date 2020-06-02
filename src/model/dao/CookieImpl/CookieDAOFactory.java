@@ -55,16 +55,6 @@ public class CookieDAOFactory extends DAOFactory {
     }
 
     @Override
-    public EmployeeDAO getEmployeeDAO() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public CustomerDAO getCustomerDAO() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public StructureDAO getStructureDAO() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -74,10 +64,6 @@ public class CookieDAOFactory extends DAOFactory {
         return new UserDAOCookieImpl(request, response);
     }
 
-    @Override
-    public AdminDAO getAdminDAO() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 
 }

@@ -17,12 +17,15 @@ public interface ProductDAO {
      * @return all the products that must be shown in the showcase of the homepage
      */
     boolean modifyShowcase(Product product, Boolean status);
-
-    Product findProductById(Long id);
-
     ArrayList<Product> findShowcaseProduct();
+    Product findProductById(Long id);
+    /* TODO DA RIPRENDERE IN MANO PERCHE' IMPLEMENTATA IN SHOP.JSP */
     ArrayList<Product> findAllProducts();
+
+    /* FUNZIONE AGGIORNATA CON METODO MVC */
     ArrayList<Product> fetchAllProducts();
+
+
     ArrayList<String> findAllCategories();
     ArrayList<String> findAllProducers();
     ArrayList<Product> findFilteredProducts(String category,String producer);

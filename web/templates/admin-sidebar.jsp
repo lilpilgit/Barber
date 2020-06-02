@@ -6,7 +6,7 @@
                 <div class="user-pic">
                     <img src="https://champsbarberschool.com/mainsite/wp-content/uploads/2013/12/barber-gallery-7.jpg"
                          alt="User picture"/>
-                    <button onclick="setControllerAction('admin.Admin.showFormEditAdmin')" title="Edit your profile"
+                    <button onclick="setControllerAction('admin.Admin.showProfile')" title="Edit your profile"
                             class="button-side" type="button" id='showAdmin'>
                         <i class="fas fa-user-edit"></i>
                     </button>

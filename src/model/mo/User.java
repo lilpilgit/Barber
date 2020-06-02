@@ -25,6 +25,16 @@ public class User {
     private ArrayList<ExtendedProduct> cart;
     /* N:M Wishlist */
     private ArrayList<Product> wishlist;
+    /* 1:N Orders */
+    private ArrayList<Orders> orders;
+
+//    public User(){
+//        this.structure = new Structure();
+//        this.booking = new Booking();
+//        this.cart = new ArrayList<>();
+//        this.wishlist = new ArrayList<>();
+//        this.orders = new ArrayList<>();
+//    }
 
     @Override
     public String toString() {
@@ -45,6 +55,7 @@ public class User {
                 ", booking=" + booking +
                 ", cart=" + cart +
                 ", wishlist=" + wishlist +
+                ", orders=" + orders +
                 '}';
     }
 
@@ -174,5 +185,13 @@ public class User {
 
     public void setWishlist(ArrayList<Product> wishlist) {
         this.wishlist = wishlist;
+    }
+
+    public ArrayList<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(ArrayList<Orders> orders) {
+        this.orders = orders;
     }
 }
