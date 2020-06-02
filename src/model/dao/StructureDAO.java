@@ -1,7 +1,6 @@
 package model.dao;
 
 import model.mo.Structure;
-import java.util.ArrayList;
 
 public interface StructureDAO {
     /**

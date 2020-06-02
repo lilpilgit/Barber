@@ -1,12 +1,14 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
-import model.exception.DuplicatedObjectException;
-import model.mo.Admin;
 import model.mo.Structure;
 import model.mo.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
 
 
 public class StructureDAOMySQLJDBCImpl implements StructureDAO {
@@ -25,7 +27,7 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     @Override
     public Structure fetchStructure() {
         Structure structure = new Structure();
-        query = "SELECT * FROM STRUCTURE WHERE ID = 1;";
+        query = "SELECT * FROM STRUCTURE WHERE ID = 1;"; /* TODO rimuovere WHERE ID = 1 ? */
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -92,9 +94,9 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, structure.getAddress());
-            ps.setString(i++, structure.getOpeningTime());
-            ps.setString(i++, structure.getClosingTime());
-            ps.setString(i++, structure.getSlot());
+            ps.setString(i++, String.valueOf(structure.getOpeningTime()));
+            ps.setString(i++, String.valueOf(structure.getClosingTime()));
+            ps.setString(i++, String.valueOf(structure.getSlot()));
             ps.setString(i++, structure.getName());
             ps.setString(i++, structure.getPhone());
             ps.setLong(i++,structure.getId());
@@ -126,9 +128,8 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     private Structure readStructure(ResultSet rs) {
 
         Structure structure = new Structure();
-        Admin admin = new Admin();
-        User user = new User();
-        admin.setUser(user);
+        User admin = new User();
+        admin.setType('A');
         structure.setAdmin(admin);
 
         try {
@@ -144,19 +145,19 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             throw new RuntimeException(e);
         }
         try {
-            structure.setOpeningTime(rs.getString("OPENING_TIME"));
+            structure.setOpeningTime(Instant.parse(rs.getString("OPENING_TIME")));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setOpeningTime(rs.getString(\"OPENING_TIME\"));");
             throw new RuntimeException(e);
         }
         try {
-            structure.setClosingTime(rs.getString("CLOSING_TIME"));
+            structure.setClosingTime(Instant.parse(rs.getString("CLOSING_TIME")));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setClosingTime(rs.getString(\"CLOSING_TIME\"));");
             throw new RuntimeException(e);
         }
         try {
-                structure.setSlot(rs.getString("SLOT"));
+                structure.setSlot(Instant.parse(rs.getString("SLOT")));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setSlot(rs.getString(\"SLOT\"));");
             throw new RuntimeException(e);
@@ -171,12 +172,6 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             structure.setPhone(rs.getString("PHONE"));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setPhone(rs.getString(\"PHONE\"));");
-            throw new RuntimeException(e);
-        }
-        try {
-            structure.getAdmin().getUser().setId(rs.getLong("ID_ADMIN")); /*TODO : da controllare*/
-        } catch (SQLException e) {
-            System.err.println("Errore nella structure.getAdmin().getUser().setId(rs.getLong(\"ID_ADMIN\"));");
             throw new RuntimeException(e);
         }
 
