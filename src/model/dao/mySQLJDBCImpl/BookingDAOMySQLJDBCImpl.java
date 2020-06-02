@@ -19,9 +19,11 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         this.connection = connection;
     }
 
-
     @Override
     public ArrayList<Booking> findBookingsByDate(LocalDate date) {
+        /**
+         * Il metodo permette di cercare tutti gli appuntamenti presi in una determinata data <date>
+         */
         ArrayList<Booking> bookings = new ArrayList<>();
         query = "SELECT * FROM BOOKING WHERE DATE = ? ORDER BY HOUR_START ASC;";
         try {
@@ -37,12 +39,9 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             System.err.println("Errore nella ps.executeQuery()");
             throw new RuntimeException(e);
         }
-
         try {
             while (rs.next()) {
-/*
                 bookings.add(readBooking(rs));
-*/
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
@@ -65,12 +64,29 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         return bookings;
     }
 
-/*    private Booking readBooking(ResultSet rs) {
+    private Booking readBooking(ResultSet rs) {
+
+        /**
+         * In questo metodo vado a settare tutti i campi di ogni colonna di BOOKING.
+         */
+
         Booking booking = new Booking();
         try {
             booking.setId(rs.getLong("ID"));
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getLong(\"ID\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.setDeleted(rs.getBoolean("DELETED"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.setDeletedReason(rs.getString("DELETED_REASON"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);
         }
         try {
@@ -86,30 +102,19 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
         try {
-            booking.setPrice(rs.getBigDecimal("PRICE"));
-        } catch (SQLException e) {
-            System.err.println("Errore nella rs.getBigDecimal(\"PRICE\")");
-            throw new RuntimeException(e);
-        }
-        try {
-            booking.setHourEnd(rs.getTime("HOUR_END").toInstant());
-        } catch (SQLException e) {
-            System.err.println("Errore nella rs.getObject(\"HOUR_END\", Instant.class)");
-            throw new RuntimeException(e);
-        }
-        try {
-            booking.setIdEmployee(rs.getLong("ID_EMPLOYEE"));
-        } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"ID_SUPPLIER\")");
-            throw new RuntimeException(e);
-        }
-        try {
-            booking.setIdCustomer(rs.getLong("ID_CUSTOMER"));
+            booking.getCustomer().setId(rs.getLong("ID_CUSTOMER"));
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getLong(\"ID_CUSTOMER\")");
             throw new RuntimeException(e);
         }
+        try {
+            booking.getStructure().setId(rs.getLong("ID_STRUCTURE"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getLong(\"ID_STRUCTURE\")");
+            throw new RuntimeException(e);
+        }
+
         return booking;
-    }*/
+    }
 
 }

@@ -1,14 +1,12 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
-import model.dao.UserDAO;
 import model.mo.Structure;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 
 
 public class StructureDAOMySQLJDBCImpl implements StructureDAO {
@@ -145,21 +143,21 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             throw new RuntimeException(e);
         }
         try {
-            structure.setOpeningTime(Instant.parse(rs.getString("OPENING_TIME")));
+            structure.setOpeningTime(rs.getTime("OPENING_TIME").toInstant());
         } catch (SQLException e) {
-            System.err.println("Errore nella structure.setOpeningTime(rs.getString(\"OPENING_TIME\"));");
+            System.err.println("Errore nella structure.setOpeningTime(rs.getTime(\"OPENING_TIME\").toInstant());");
             throw new RuntimeException(e);
         }
         try {
-            structure.setClosingTime(Instant.parse(rs.getString("CLOSING_TIME")));
+            structure.setClosingTime(rs.getTime("CLOSING_TIME").toInstant());
         } catch (SQLException e) {
-            System.err.println("Errore nella structure.setClosingTime(rs.getString(\"CLOSING_TIME\"));");
+            System.err.println("Errore nella structure.setClosingTime(rs.getTime(\"CLOSING_TIME\").toInstant());");
             throw new RuntimeException(e);
         }
         try {
-                structure.setSlot(Instant.parse(rs.getString("SLOT")));
+                structure.setSlot(rs.getTime("SLOT").toInstant());
         } catch (SQLException e) {
-            System.err.println("Errore nella structure.setSlot(rs.getString(\"SLOT\"));");
+            System.err.println("Errore nella structure.setSlot(rs.getTime(\"SLOT\").toInstant());");
             throw new RuntimeException(e);
         }
         try {
