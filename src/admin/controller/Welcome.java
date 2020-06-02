@@ -1,9 +1,7 @@
 package admin.controller;
 
-import model.dao.CustomerDAO;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
-import model.mo.Customer;
 import model.mo.User;
 import services.config.Configuration;
 

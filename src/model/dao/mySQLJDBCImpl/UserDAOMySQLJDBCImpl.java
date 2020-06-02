@@ -2,7 +2,6 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.mo.Employee;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 
 public class UserDAOMySQLJDBCImpl implements UserDAO {
 
-    private Connection connection;
     private final String COUNTER_ID = "userId";
+    private Connection connection;
     private PreparedStatement ps;
     private String query;
     private ResultSet rs;
@@ -332,8 +331,8 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
         query =
                 "SELECT *"
-                        + " FROM USER"
-                        + " WHERE ID = ? AND DELETED = 0;";
+              + " FROM USER"
+              + " WHERE ID = ? AND DELETED = 0;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -521,6 +520,88 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         return users;
     }
 
+    @Override
+    public boolean blockCustomer(User user) throws UnsupportedOperationException {
+        /**
+         * Call this method if and only if on user object with type = 'C'.
+         *
+         * @return true if user (customer) is blocked correctly otherwise raise an exception.
+         */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if(user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile bloccare un utente che non è un cliente. Errore con l'utente con id{" + user.getId() + "}.");
+
+        query =
+                "UPDATE CUSTOMER"
+              + " SET BLOCKED = '1'"
+              + " WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, user.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean unBlockCustomer(User user) throws UnsupportedOperationException {
+        /**
+         * Call this method if and only if on user object with type = 'C'.
+         *
+         * @return true if user (customer) is unblocked correctly otherwise raise an exception.
+         */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if(user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile sbloccare un utente che non è un cliente. Errore con l'utente con id{" + user.getId() + "}.");
+
+
+        query =
+                "UPDATE CUSTOMER"
+              + " SET BLOCKED = '0'"
+              + " WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, user.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
 
     private User readUser(ResultSet rs) {
         /**

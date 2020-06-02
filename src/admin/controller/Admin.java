@@ -1,7 +1,6 @@
 package admin.controller;
 
 import functions.StaticFunc;
-import model.dao.AdminDAO;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;

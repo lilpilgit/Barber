@@ -1,13 +1,10 @@
 package home.controller;
 
 import functions.StaticFunc;
-import model.dao.CustomerDAO;
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.exception.NoCustomerCreatedException;
-import model.mo.Customer;
 import model.mo.Product;
 import model.mo.User;
 import services.config.Configuration;
@@ -128,6 +125,33 @@ public class Home {
             /* check delle credenziali sul database */
             userDAO = daoFactory.getUserDAO();
             user = userDAO.findByEmail(email); /* tale utente esiste???? */
+
+            /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
+            if (user == null || !user.getPassword().equals(password)) {
+                sessionUserDAO.delete(null);
+                applicationMessage = "Username e/o password errati!";
+                loggedUser = null;
+            } else if (customer.getId() != null && customer.getBlocked()) { /* mettendo solo customer != null va in errore */
+                /* email e password corretta, utente non cancellato, verifico se è BLOCCATO */
+                sessionUserDAO.delete(null);
+                applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
+                loggedUser = null;
+            }
+            /* determino il tipo di utente */
+            switch (user.getType()) {
+                case 'A':
+                    /* ADMIN */
+                    break;
+                case 'E':
+                    /* EMPLOYEE */
+                    break;
+                case 'C':
+                    /* CUSTOMER */
+                    break;
+                default:
+                    /* ERROR!!!! */
+            }
+
 
             /* controllo se si tratta di un utente in quanto devo verificare che non sia stato bloccato */
             customerDAO = daoFactory.getCustomerDAO();

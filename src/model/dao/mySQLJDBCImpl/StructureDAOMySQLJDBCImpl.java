@@ -27,7 +27,10 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     @Override
     public Structure fetchStructure() {
         Structure structure = new Structure();
-        query = "SELECT * FROM STRUCTURE WHERE ID = 1;"; /* TODO rimuovere WHERE ID = 1 ? */
+        query =
+                "SELECT *"
+              + " FROM STRUCTURE"
+              + " WHERE ID = 1;"; /* PERCHÉ IN TALE APPLICATIVO STIAMO TRATTANDO UN UNICA STRUTTURA */
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {

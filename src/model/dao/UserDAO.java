@@ -1,7 +1,6 @@
 package model.dao;
 
 import model.exception.DuplicatedObjectException;
-import model.mo.Employee;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -35,6 +34,10 @@ public interface UserDAO {
     User findByEmail(String email);
 
     ArrayList<User> fetchAllOnType(char userType);
+
+    boolean blockCustomer(User user) throws UnsupportedOperationException;
+
+    boolean unBlockCustomer(User user) throws UnsupportedOperationException;
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
