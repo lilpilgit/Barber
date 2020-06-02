@@ -1,16 +1,15 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.mo.Customer" %>
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String user = "Customer";
-    String controller = "Customers";
+    String controller = "admin.Customers";
 /*    Customer c = null;
     Boolean blockedStatus = c.getBlocked();*/
 
     /* Prendo l'ArrayList<Customer> di tutti gli impiegati */
     boolean areCustomers = false;
-    ArrayList<Customer> customers = (ArrayList<Customer>) request.getAttribute("customers");
+    ArrayList<User> customers = (ArrayList<User>) request.getAttribute("customers");
     if (customers != null && customers.size() != 0)
         areCustomers = true;
 
@@ -67,8 +66,6 @@
                         <th scope="col">Email</th>
                         <th scope="col">Address</th>
                         <th scope="col">Phone</th>
-                        <th scope="col">Num Booked</th>
-                        <th scope="col">Num Order</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -76,23 +73,19 @@
                     <%
                         int i = 1; /* contatore per il numero di impiegati */
 
-                        for (Customer c : customers) {
-                            boolean blockedStatus = c.getBlocked();
+                        for (User c : customers) {
+                            boolean blockedStatus = c.isBlocked();
                     %>
                     <tr class="<%=blockedStatus ? "table-danger" : ""%>">
                         <th scope="row"><%=i++%>
                         </th>
                         <td><%=c.getId()%>
                         </td>
-                        <td><%=c.getUser().getEmail()%>
+                        <td><%=c.getEmail()%>
                         </td>
-                        <td><%=c.getUser().getAddress()%>
+                        <td><%=c.getAddress()%>
                         </td>
-                        <td><%=c.getUser().getPhone()%>
-                        </td>
-                        <td><%=c.getNumBookedReservations()%>
-                        </td>
-                        <td><%=c.getNumOrderedProduct()%>
+                        <td><%=c.getPhone()%>
                         </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: <%=blockedStatus ? "green" : "red"%>;"
@@ -104,7 +97,7 @@
                             <% } else { %>
                                             "blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
                             <%}%>
-                                <i class="fas <%=c.getBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
+                                <i class="fas <%=c.isBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
                                     data-target="#alert<%=user%>"

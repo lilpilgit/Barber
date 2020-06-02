@@ -51,10 +51,10 @@
     <!--Main content of the page-->
     <main class="page-content">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
-            <button onclick="setControllerAction('Staff.addEmployee')"
+            <button onclick="setControllerAction('admin.Products.addProduct')"
                     class="button-side" type="button" id='showProducts'>
                 <i class="fas fa-plus-square pr-3"></i>
-                Add New Products
+                Add New Product
             </button>
             <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto"></ul>
@@ -108,9 +108,9 @@
                         </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
-                                    title="<%=p.getShowcase() ? "Remove from showcase" : "Put in the showcase" %>"
-                                    onclick=showcaseById(<%=p.getId()%>,<%=p.getShowcase()%>)>
-                                <i class="<%=(p.getShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
+                                    title="<%=(p.inShowcase()) ? "Remove from showcase" : "Put in the showcase" %>"
+                                    onclick=showcaseById(<%=p.getId()%>,<%=p.inShowcase()%>)>
+                                <i class="<%=(p.inShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
                             </button>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
                                     title="edit product"

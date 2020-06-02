@@ -1,4 +1,3 @@
-<%@ page import="model.mo.Employee" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -8,7 +7,7 @@
 
     /* Prendo l'ArrayList<Employee> di tutti gli impiegati */
     boolean areEmployees = false;
-    ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
+    ArrayList<User> employees = (ArrayList<User>) request.getAttribute("employees");
     if (employees != null && employees.size() != 0)
         areEmployees = true;
 
@@ -55,7 +54,7 @@
     <!--Main content of the page-->
     <main class="page-content">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
-            <button onclick="setControllerAction('Staff.showFormNewEmployee')"
+            <button onclick="setControllerAction('admin.Staff.showFormNewEmployee')"
                     class="button-side" type="button" id='showFormNewEmployee'>
                 <i class="fas fa-user-plus pr-3"></i>
                 Add New Employee
@@ -87,22 +86,22 @@
                     <%
                         int i = 1; /* contatore per il numero di impiegati */
 
-                        for (Employee e : employees) {
+                        for (User e : employees) {
                     %>
                     <tr>
                         <th scope="row"><%=i++%>
                         </th>
                         <td><%=e.getId()%>
                         </td>
-                        <td><%=e.getUser().getSurname()%>
+                        <td><%=e.getSurname()%>
                         </td>
-                        <td><%=e.getUser().getName()%>
+                        <td><%=e.getName()%>
                         </td>
-                        <td><%=e.getUser().getPhone()%>
+                        <td><%=e.getPhone()%>
                         </td>
-                        <td><%=e.getUser().getEmail()%>
+                        <td><%=e.getEmail()%>
                         </td>
-                        <td><%=e.getUser().getAddress()%>
+                        <td><%=e.getAddress()%>
                         </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"

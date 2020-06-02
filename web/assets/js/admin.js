@@ -58,7 +58,7 @@ function deleteEmployee(id) {
      */
     /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
     let formEmployeeID = document.getElementById('action');
-    formEmployeeID.elements['controllerAction'].value = 'Staff.deleteEmployee';
+    formEmployeeID.elements['controllerAction'].value = 'admin.Staff.deleteEmployee';
     formEmployeeID.elements['employeeID'].value = id;
     formEmployeeID.submit();
 
@@ -121,7 +121,7 @@ function showcaseById(id, status) {
     /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
     let formProductID = document.getElementById('action');
     let index = 'ProductID';
-    formProductID.elements['controllerAction'].value = 'Products.manageShowcase';
+    formProductID.elements['controllerAction'].value = 'admin.Products.manageShowcase';
     formProductID.elements['ProductStatus'].value = status;
     formProductID.elements[index].value = id;
     formProductID.submit();
@@ -135,7 +135,7 @@ function editEmployee(id) {
      */
     /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
     let formEmployeeID = document.getElementById('action');
-    formEmployeeID.elements['controllerAction'].value = 'Staff.showFormEditEmployee';
+    formEmployeeID.elements['controllerAction'].value = 'admin.Staff.showFormEditEmployee';
     formEmployeeID.elements['employeeID'].value = id;
     formEmployeeID.submit();
 }
@@ -148,7 +148,7 @@ function editProduct(id) {
      */
     /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
     let formProductID = document.getElementById('action');
-    formProductID.elements['controllerAction'].value = 'Products.showFormEditProduct';
+    formProductID.elements['controllerAction'].value = 'admin.Products.showFormEditProduct';
     formProductID.elements['ProductID'].value = id;
     formProductID.submit();
 }

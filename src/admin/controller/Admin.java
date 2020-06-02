@@ -198,13 +198,16 @@ public class Admin {
         }
 
         /* Setto gli attributi della request che verranno processati dalla edit-admin.jsp */
-
-        /* 1) il messaggio da visualizzare nella pagina di modifica solo se non è null */
+        /* 1) Booleano per sapere se è loggato o meno */
+        request.setAttribute("loggedOn", loggedUser != null);
+        /* 2) Oggetto che specifica quale utente è loggato*/
+        request.setAttribute("loggedUser", loggedUser);
+        /* 3) il messaggio da visualizzare nella pagina di modifica solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
-        /* 2) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
          *     form per consentire ulteriori modifiche sul medesimo admin */
         request.setAttribute("viewUrl", "admin/edit-admin");
-        /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (edited) {
             /* SUCCESS */
             request.setAttribute("result", "success");
@@ -212,7 +215,7 @@ public class Admin {
             /* FAIL */
             request.setAttribute("result", "fail");
         }
-        /* 4) l'admin che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
+        /* 6) l'admin che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
         if (edited) {
             /* SUCCESS */
             request.setAttribute("adminToModify", adminToEdit);

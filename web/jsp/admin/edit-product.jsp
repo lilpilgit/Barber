@@ -131,7 +131,7 @@
                     value=edit_product">Send
             </button>
             <input type="hidden" name="controllerAction"
-                   value="Product.editProduct">
+                   value="admin.Products.editProduct">
         </form>
     </main>
 </div>

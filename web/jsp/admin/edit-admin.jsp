@@ -56,7 +56,7 @@
 <html lang="en">
 <%@include file="/templates/admin-head.jsp" %>
 <body>
-<%@include file="../../templates/admin-sidebar.jsp"%>
+<%@include file="/templates/admin-sidebar.jsp"%>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
