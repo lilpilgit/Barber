@@ -187,7 +187,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return listProduct;
     }
 
-
     /* FUNZIONE AGGIORNATA CON METODO MVC */
 
     @Override

@@ -324,7 +324,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         return true;
     }
 
-
     @Override
     public User findById(Long id) {
         User user = new User();
