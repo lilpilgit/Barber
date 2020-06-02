@@ -29,15 +29,9 @@ public abstract class DAOFactory {
 
     public abstract BookingDAO getBookingDAO();
 
-    public abstract EmployeeDAO getEmployeeDAO();
-
-    public abstract CustomerDAO getCustomerDAO();
-
     public abstract StructureDAO getStructureDAO();
 
     public abstract UserDAO getUserDAO();
-
-    public abstract AdminDAO getAdminDAO();
 
     public static DAOFactory getDAOFactory(String whichFactory, HashMap factoryParameters) {
         if (whichFactory.equals(MYSQLJDBCIMPL)) {
