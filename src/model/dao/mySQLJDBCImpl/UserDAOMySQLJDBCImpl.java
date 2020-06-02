@@ -533,7 +533,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile bloccare un utente che non è un cliente. Errore con l'utente con id{" + user.getId() + "}.");
 
         query =
-                "UPDATE CUSTOMER"
+                "UPDATE USER"
               + " SET BLOCKED = '1'"
               + " WHERE ID = ?";
 
@@ -575,7 +575,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
 
         query =
-                "UPDATE CUSTOMER"
+                "UPDATE USER"
               + " SET BLOCKED = '0'"
               + " WHERE ID = ?";
 

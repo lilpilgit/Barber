@@ -1,6 +1,7 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
+import model.dao.UserDAO;
 import model.mo.Structure;
 
 import java.sql.Connection;
