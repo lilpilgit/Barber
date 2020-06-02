@@ -143,19 +143,19 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             throw new RuntimeException(e);
         }
         try {
-            structure.setOpeningTime(rs.getTime("OPENING_TIME").toInstant());
+            structure.setOpeningTime(rs.getTime("OPENING_TIME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella structure.setOpeningTime(rs.getTime(\"OPENING_TIME\").toInstant());");
+            System.err.println("structure.setOpeningTime(rs.getTime(\"OPENING_TIME\"));");
             throw new RuntimeException(e);
         }
         try {
-            structure.setClosingTime(rs.getTime("CLOSING_TIME").toInstant());
+            structure.setClosingTime(rs.getTime("CLOSING_TIME"));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setClosingTime(rs.getTime(\"CLOSING_TIME\").toInstant());");
             throw new RuntimeException(e);
         }
         try {
-                structure.setSlot(rs.getTime("SLOT").toInstant());
+                structure.setSlot(rs.getTime("SLOT"));
         } catch (SQLException e) {
             System.err.println("Errore nella structure.setSlot(rs.getTime(\"SLOT\").toInstant());");
             throw new RuntimeException(e);

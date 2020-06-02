@@ -9,7 +9,7 @@ import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.Instant;
+import java.sql.Time;
 import java.util.HashMap;
 
 
@@ -129,9 +129,9 @@ public class Structure {
              * */
             structureToEdit.setName(request.getParameter("name"));
             structureToEdit.setPhone(request.getParameter("phone"));
-            structureToEdit.setOpeningTime(Instant.parse(request.getParameter("opening_time")));
-            structureToEdit.setClosingTime(Instant.parse(request.getParameter("closing_time")));
-            structureToEdit.setSlot(Instant.parse(request.getParameter("slot")));
+            structureToEdit.setOpeningTime(Time.valueOf(request.getParameter("opening_time")));
+            structureToEdit.setClosingTime(Time.valueOf(request.getParameter("closing_time")));
+            structureToEdit.setSlot(Time.valueOf(request.getParameter("slot")));
             structureToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
 
             /* DAOFactory per manipolare i dati sul DB */

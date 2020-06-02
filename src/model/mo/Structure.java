@@ -1,15 +1,15 @@
 package model.mo;
 
-import java.time.Instant;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class Structure {
 
     private Long id;
     private String address;
-    private Instant openingTime;
-    private Instant closingTime;
-    private Instant slot;        /* This is necessary for scanning the booking appointments */
+    private Time openingTime;
+    private Time closingTime;
+    private Time slot;        /* This is necessary for scanning the booking appointments */
                         /*TODO:controllare per quale cazzo di motivo se uso Time sia qui che nel DB che nell'html va in eccezione*/
     private String name;
     private String phone;
@@ -53,27 +53,27 @@ public class Structure {
         this.address = address;
     }
 
-    public Instant getOpeningTime() {
+    public Time getOpeningTime() {
         return openingTime;
     }
 
-    public void setOpeningTime(Instant openingTime) {
+    public void setOpeningTime(Time openingTime) {
         this.openingTime = openingTime;
     }
 
-    public Instant getClosingTime() {
+    public Time getClosingTime() {
         return closingTime;
     }
 
-    public void setClosingTime(Instant closingTime) {
+    public void setClosingTime(Time closingTime) {
         this.closingTime = closingTime;
     }
 
-    public Instant getSlot() {
+    public Time getSlot() {
         return slot;
     }
 
-    public void setSlot(Instant slot) {
+    public void setSlot(Time slot) {
         this.slot = slot;
     }
 
