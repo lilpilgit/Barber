@@ -14,9 +14,6 @@ public class Structure {
     private String name;
     private String phone;
 
-    /* 1:1 with ADMIN */
-    private User admin;
-
     /* 1:N with EMPLOYEE */
     private ArrayList<User> employees;
     /* 1:N with BOOKING */
@@ -34,7 +31,6 @@ public class Structure {
                 ", slot=" + slot +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", admin=" + admin +
                 ", employees=" + employees +
                 ", bookings=" + bookings +
                 ", products=" + products +
@@ -95,14 +91,6 @@ public class Structure {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public User getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(User admin) {
-        this.admin = admin;
     }
 
     public ArrayList<User> getEmployees() {

@@ -2,7 +2,6 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.StructureDAO;
 import model.mo.Structure;
-import model.mo.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -131,9 +130,6 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     private Structure readStructure(ResultSet rs) {
 
         Structure structure = new Structure();
-        User admin = new User();
-        admin.setType('A');
-        structure.setAdmin(admin);
 
         try {
             structure.setId(rs.getLong("ID"));
