@@ -102,6 +102,7 @@
                     <label for="Price">Price</label>
                     <input type="number" name="price" id="Price" required
                            min="0" step="0.01"
+                           onchange="this.value = this.value.replace(/,/g, '.')"
                            value="<%=(action.equals("modify")) ? productToEdit.getPrice() : ""%>"
                            class="form-control">
                 </div>

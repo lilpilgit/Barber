@@ -2,7 +2,10 @@ package model.dao;
 
 import model.exception.DuplicatedObjectException;
 import model.mo.Product;
+import model.mo.Structure;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface ProductDAO {
@@ -22,6 +25,8 @@ public interface ProductDAO {
     boolean update(Product product) throws DuplicatedObjectException;
 
     boolean modifyShowcase(Product product, Boolean status);
+    Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
+                   String picName, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException;
     ArrayList<Product> findShowcaseProduct();
     Product findProductById(Long id);
     /* TODO DA RIPRENDERE IN MANO PERCHE' IMPLEMENTATA IN SHOP.JSP */

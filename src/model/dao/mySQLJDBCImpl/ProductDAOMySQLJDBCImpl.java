@@ -3,7 +3,9 @@ package model.dao.mySQLJDBCImpl;
 import model.dao.ProductDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.Product;
+import model.mo.Structure;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     si sarebbero dovuti creare altri package dal nome per esempio PostgreeSQLJDBCImpl e avremmo dovuto
     scrivere le implementazioni per ogni possibile db
  */
+    private final String COUNTER_ID = "productId";
     private Connection connection;
     private PreparedStatement ps;
     private String query;
@@ -166,6 +169,195 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
 
         return true;
+    }
+
+    @Override
+    public Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
+                          String picName, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException {
+        /**
+         * This method allows you to indifferently insert a product.
+         * @params id parameter is DUMMY for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
+         * @return Returns the product inserted correctly in the DB otherwise raises an exception
+         * */
+
+        /* Setto l'oggetto cui andro' a verificarne l'esistenza prima di inserirlo nel DB */
+        Product product = new Product();
+        product.setId(id);
+        product.setProducer(producer);
+        product.setPrice(price);
+        product.setDiscount(discount);
+        product.setName(name);
+        product.setInsertDate(insertDate);
+        product.setPictureName(picName);
+        product.setDescription(description);
+        product.setQuantity(quantity);
+        product.setCategory(category);
+        product.setStructure(structure);
+        product.setShowcase(true);
+        product.setDeleted(false);
+
+        Long newId = null;
+
+        /* Con tale query controllo se esistono gia' 2 prodotti con lo stesso nome */
+        /* 2 prodotti con lo stesso nome non possono esiste nel db */
+
+        query =
+                "SELECT ID"
+                        + " FROM PRODUCT"
+                        + " WHERE NAME = ?;";
+
+        System.err.println("NAME =>>" + product.getName());
+        System.err.println("PRODUCER =>>" + product.getProducer());
+        System.err.println("PRICE =>>" + product.getPrice());
+        System.err.println("DISCOUNT =>>" + product.getDiscount());
+        System.err.println("QUANTITY =>>" + product.getQuantity());
+
+
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, product.getName());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        boolean exist; /* flag per sapere se esiste o meno */
+        try {
+            exist = rs.next(); /*se esiste almeno una riga non posso inserire altro!!!*/
+        } catch (SQLException e) {
+            System.err.println("Errore nella exist = rs.next();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        if (exist) {
+            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            throw new DuplicatedObjectException("ProductDAOJDBCImpl.insert: Tentativo di inserimento di un prodotto già esistente con nome: {" + product.getName() + "}.");
+        }
+
+        /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
+         * UN NUOVO IMPIEGATO DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
+         * NUMERO PER IMPIEGATI DIVERSI SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
+        query =
+                "UPDATE COUNTER"
+                        + " SET VALUE = VALUE + 1"
+                        + " WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
+        query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+
+        /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
+        try {
+            rs.next();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
+        try {
+            newId = rs.getLong("VALUE");
+        } catch (SQLException e) {
+            System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
+            throw new RuntimeException(e);
+        } finally {
+            /* IL resultSet una volta letto l'id non serve più in quanto rimane da fare solo l'INSERT di PRODUCT*/
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println("Errore nella rs.close();");
+                throw new RuntimeException(e);
+            }
+        }
+
+        /* L'unico campo che rimane da settare è l'ID. */
+        product.setId(newId);
+
+
+        query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, product.getId());
+            ps.setString(i++, product.getProducer());
+            ps.setBigDecimal(i++, product.getPrice());
+            ps.setInt(i++, product.getDiscount());
+            ps.setString(i++, product.getName());
+            ps.setDate(i++, Date.valueOf(product.getInsertDate()));
+            ps.setString(i++, product.getPictureName());
+            ps.setString(i++, product.getDescription());
+            ps.setInt(i++, product.getQuantity());
+            ps.setString(i++, product.getCategory());
+            ps.setBoolean(i++, product.inShowcase());
+            ps.setBoolean(i++, product.isDeleted());
+            ps.setLong(i++, product.getStructure().getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /*
+         * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe User
+         * appena inserito
+         * */
+
+
+        return product;
     }
 
     @Override
