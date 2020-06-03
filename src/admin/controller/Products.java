@@ -465,7 +465,8 @@ public class Products {
             productToEdit.setDescription(request.getParameter("description"));
             productToEdit.setPictureName(request.getParameter("pic_name"));
             productToEdit.setInsertDate(LocalDate.parse(request.getParameter("insert_date")));
-            productToEdit.setPrice(BigDecimal.valueOf(Long.parseLong(request.getParameter("price"))));
+            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price")));
+            productToEdit.setPrice(price);
             productToEdit.setDiscount(Integer.parseInt(request.getParameter("discount")));
             productToEdit.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             productToEdit.setDeleted(false);
