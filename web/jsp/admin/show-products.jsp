@@ -3,6 +3,8 @@
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    String subject = "Product";
+    String controller = "admin.Products";
     /* Prendo l'ArrayList<Product> di tutti i prodotti */
     boolean areProducts = false;
     ArrayList<Product> products = (ArrayList<Product>) request.getAttribute("products");
@@ -116,7 +118,10 @@
                                     title="edit product"
                                     onclick=editProduct(<%=p.getId()%>)>
                                 <i class="fas fa-pencil-alt"></i></button>
-                            <button type="button" class="trashbutton" title="Delete">
+                            <button type="button" class="trashbutton" title="Delete"
+                                    data-target="#alert<%=subject%>"
+                                    data-toggle="modal"
+                                    onclick=setTmpId(<%=p.getId()%>)>
                                 <i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
@@ -129,16 +134,47 @@
                 <form method="post" id="action">
                     <input type="hidden" name="controllerAction" value="">
                     <input type="hidden" name="ProductStatus" value="">
-                    <input type="hidden" name="ProductID" value="">
+                    <input type="hidden" name="<%=subject%>ID" value="">
                 </form>
 
             </div>
         </div>
     </main>
 </div>
+<input type="hidden" id="tmpId" value="">
+<!--MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
+<div class="modal fade" id="alert<%=subject%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DeleteModal" style="color: rgba(211,4,0,0.75)">You are removing
+                    a <%=subject%>...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to permanently delete a <%=subject%>.<br><br>Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">Delete <%=subject%>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
 
 
 <script>
+    function setTmpId(id) {
+        document.getElementById("tmpId").value = id;
+        console.log("ID SETTATO TMP: " + document.getElementById("tmpId").value);
+    }
     window.addEventListener("load",() =>{
 
     })

@@ -23,7 +23,7 @@ public interface ProductDAO {
      */
 
     boolean update(Product product) throws DuplicatedObjectException;
-
+    boolean delete(Product product);
     boolean modifyShowcase(Product product, Boolean status);
     Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
                    String picName, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException;
@@ -34,7 +34,6 @@ public interface ProductDAO {
 
     /* FUNZIONE AGGIORNATA CON METODO MVC */
     ArrayList<Product> fetchAllProducts();
-
 
     ArrayList<String> findAllCategories();
     ArrayList<String> findAllProducers();

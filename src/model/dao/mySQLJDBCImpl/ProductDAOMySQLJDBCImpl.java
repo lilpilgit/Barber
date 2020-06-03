@@ -142,6 +142,41 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     }
 
     @Override
+    public boolean delete(Product product) {
+        /**
+         * Flag by DELETED column a PRODUCT as deleted
+         *
+         * @return true if delete go correctly otherwise raise exception
+         */
+        query
+                = "UPDATE PRODUCT"
+                + " SET DELETED = '1'"
+                + " WHERE ID = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, product.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean modifyShowcase(Product product, Boolean status) {
 
         query = "UPDATE PRODUCT SET SHOWCASE = ? WHERE ID = ?";
@@ -499,7 +534,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
         ArrayList<Product> products = new ArrayList<>();
         /* Seleziono tutti i prodotti in ordine alfabetico per nome */
-        query = "SELECT * FROM PRODUCT ORDER BY NAME;";
+        query = "SELECT * FROM PRODUCT WHERE DELETED = '0' ORDER BY NAME;";
 
         try {
             ps = connection.prepareStatement(query);
