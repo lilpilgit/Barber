@@ -65,7 +65,7 @@
     <!--Main content of the page-->
     <main class="page-content">
 
-        <form id='form_edit_product' method="post" class="needs-validation">
+        <form id="form_edit_product" method="post" class="needs-validation">
             <br>
             <div class="form-row justify-content-center">
                 <div class="col-md-4 mb-1">
@@ -92,8 +92,9 @@
                 <div class="col-md-5 mb-3">
                     <label for="Description">Description</label>
                     <textarea class="form-control" name="description" id="Description" required
-                              rows="8" form="Description"
-                              style="resize: none;"><%=(action.equals("modify")) ? productToEdit.getDescription() : ""%></textarea>
+                              rows="8" form="form_edit_product"
+                              style="resize: none;"><%=(action.equals("modify")) ? productToEdit.getDescription() : ""%>
+                    </textarea>
                 </div>
             </div>
             <hr>
