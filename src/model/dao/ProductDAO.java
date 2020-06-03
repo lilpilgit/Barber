@@ -1,6 +1,8 @@
 package model.dao;
 
+import model.exception.DuplicatedObjectException;
 import model.mo.Product;
+
 import java.util.ArrayList;
 
 public interface ProductDAO {
@@ -16,6 +18,9 @@ public interface ProductDAO {
      *
      * @return all the products that must be shown in the showcase of the homepage
      */
+
+    boolean update(Product product) throws DuplicatedObjectException;
+
     boolean modifyShowcase(Product product, Boolean status);
     ArrayList<Product> findShowcaseProduct();
     Product findProductById(Long id);

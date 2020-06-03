@@ -51,7 +51,7 @@
     <!--Main content of the page-->
     <main class="page-content">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
-            <button onclick="setControllerAction('admin.Products.addProduct')"
+            <button onclick="setControllerAction('admin.Products.showFormNewProduct')"
                     class="button-side" type="button" id='showProducts'>
                 <i class="fas fa-plus-square pr-3"></i>
                 Add New Product

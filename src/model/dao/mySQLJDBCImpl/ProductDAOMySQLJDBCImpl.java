@@ -1,12 +1,10 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.ProductDAO;
+import model.exception.DuplicatedObjectException;
 import model.mo.Product;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -25,6 +23,119 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     public ProductDAOMySQLJDBCImpl(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public boolean update(Product product) throws DuplicatedObjectException {
+        /**
+         * Update data about a product.
+         *
+         * @return Return the object updated correctly in the DB otherwise raise an exception.
+         * */
+
+        boolean exist; /* flag per sapere se esiste già un'utente con gli stessi dati */
+        /* CON TALE QUERY CONTROLLO SE IL PRODOTTO ESISTE GIÀ CON LO STESSO NOME */
+
+        query =
+                "SELECT ID "
+                        + "FROM PRODUCT "
+                        + "WHERE DELETED = 0 AND NAME = ? AND ID <> ?;";
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, product.getName());
+            ps.setLong(i++, product.getId());
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            exist = rs.next(); /*se esiste almeno una riga non posso inserire un altro prodotto con gli stessi dati!!!*/
+        } catch (SQLException e) {
+            System.err.println("Errore nella exist = rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        if (exist) {
+            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            throw new DuplicatedObjectException("ProductDAOJDBCImpl.update: Tentativo di aggiornamento di un prodotto già esistente con nome{" + product.getName() + "}.}.");
+        }
+        /*Se non è stata sollevata alcuna eccezione, allora possiamo aggiornare i dati */
+
+        query
+                = " UPDATE PRODUCT"
+                + " SET "
+                + "  ID_STRUCTURE = ?,"
+                + "  PRICE = ?,"
+                + "  PRODUCER = ?,"
+                + "  DISCOUNT = ?,"
+                + "  NAME = ?,"
+                + "  INSERT_DATE = ?,"
+                + "  PIC_NAME = ?,"
+                + "  DESCRIPTION = ?,"
+                + "  QUANTITY = ?,"
+                + "  CATEGORY = ?,"
+                + "  SHOWCASE = ?,"
+                + "  DELETED = ?"
+                + " WHERE"
+                + "  ID = ?;";
+
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setLong(i++, product.getStructure().getId()); /* il prodotto ha una struttura di riferimento */
+            ps.setBigDecimal(i++, product.getPrice());
+            ps.setString(i++, product.getProducer());
+            ps.setInt(i++, product.getDiscount());
+            ps.setString(i++, product.getName());
+            ps.setDate(i++, Date.valueOf(product.getInsertDate()));
+            ps.setString(i++, product.getPictureName());
+            ps.setString(i++, product.getDescription());
+            ps.setInt(i++, product.getQuantity());
+            ps.setString(i++, product.getCategory());
+            ps.setBoolean(i++, product.inShowcase());
+            ps.setBoolean(i++, product.isDeleted());
+            ps.setLong(i++, product.getId());
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*Chiudo il preparedStatement*/
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /* se non è stata sollevata alcuna eccezione fin qui, ritorno true perché significa
+         * che l'aggiornamento è andato a buon fine */
+        return true;
     }
 
     @Override
@@ -142,7 +253,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return product;
     }
 
-
     /* TODO SISTEMARE SHOP.JSP ED AGGIORNARE CON METODO MVC */
 
     @Override
@@ -189,7 +299,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         return listProduct;
     }
-
 
     /* FUNZIONE AGGIORNATA CON METODO MVC */
 
