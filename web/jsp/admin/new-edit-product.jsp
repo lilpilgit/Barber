@@ -109,8 +109,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Discount">Discount</label>
-                    <input type="number" name="discount" id="Discount"  required
-                           value="<%=(action.equals("modify")) ? productToEdit.getDiscount() : ""%>"
+                    <input type="number" name="discount" id="Discount" min="0" max="100"  required
+                           value="<%=(action.equals("modify")) ? productToEdit.getDiscount() : "0"%>"
                            class="form-control">
                 </div>
                 <div class="col-md-3 mb-3">
@@ -129,7 +129,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Insert_date">Insert Date </label>
-                    <input type="date" name="insert_date" id="Insert_date" required
+                    <input type="date" name="insert_date" id="Insert_date" required readonly
                            value="<%=(action.equals("modify")) ? productToEdit.getInsertDate() : ""%>"
                            class="form-control">
                 </div>
@@ -150,7 +150,9 @@
 
 <script>
     window.addEventListener("load",() =>{
-
+        <%if(!action.equals("modify")){%>
+            setCurrentDate("Insert_date");
+            <%}%>
     })
 </script>
 </body>

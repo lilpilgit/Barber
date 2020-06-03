@@ -88,10 +88,10 @@ public class Products {
             productDAO = daoFactory.getProductDAO();
             structureDAO = daoFactory.getStructureDAO();
 
-            /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
+            /* Scarico dal DB l'UNICA struttura  */
             structure = structureDAO.fetchStructure();
             System.err.println(structure);
-            /* Effettuo l'inserimento del nuovo dipendente */
+            /* Effettuo l'inserimento del nuovo prodotto */
             try {
                 productDAO.insert(null, producer, price, discount, name, insertDate, pictureName, description, quantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
@@ -119,7 +119,7 @@ public class Products {
 
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Se viene fatto il rollback della transazione il dipendente non è stato inserito .*/
-                applicationMessage = "Employee insertion ERROR.";
+                applicationMessage = "Product insertion ERROR.";
 
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");

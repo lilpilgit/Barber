@@ -234,7 +234,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         Long newId = null;
 
         /* Con tale query controllo se esistono gia' 2 prodotti con lo stesso nome */
-        /* 2 prodotti con lo stesso nome non possono esiste nel db */
+        /* 2 prodotti con lo stesso nome non possono esistere nel db */
 
         query =
                 "SELECT ID"

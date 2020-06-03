@@ -108,7 +108,7 @@ function unBlockById(id, user, controller) {
     formUserID.elements['controllerAction'].value = controller + '.unBlocked' + user;
     formUserID.elements[index].value = id;
     formUserID.submit();
-    console.log(index + "==> " + controller + ".unBlocked" + user + " for " + id +" Successful called");
+    console.log(index + "==> " + controller + ".unBlocked" + user + " for " + id + " Successful called");
 }
 
 
@@ -180,6 +180,28 @@ function setButtonActiveSidebar(id) {
     button2active.classList.add("button-side-active");
 }
 
+function setCurrentDate(id) {
+    /**
+     * Return current date in format gg-mm-aaaa
+     * */
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    console.log(today);
+    document.getElementById(id).value = today;
+}
 
 
 /*
