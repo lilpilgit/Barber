@@ -118,19 +118,19 @@
                            value="<%=(action.equals("modify")) ? productToEdit.getQuantity() : ""%>"
                            class="form-control">
                 </div>
-                <div class="form-row justify-content-center">
-                    <div class="col-md-5 mb-3">
-                        <label for="Pic_name">Picture</label>
-                        <input type="text" name="pic_name" id="Pic_name" required
-                               value="<%=(action.equals("modify")) ? productToEdit.getPictureName() : ""%>"
-                               class="form-control">
-                    </div>
-                    <div class="col-md-5 mb-3">
-                        <label for="Insert_date">Insert Date </label>
-                        <input type="date" name="insert_date" id="Insert_date" required
-                               value="<%=(action.equals("modify")) ? productToEdit.getInsertDate() : ""%>"
-                               class="form-control">
-                    </div>
+            </div>
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-3">
+                    <label for="Pic_name">Picture</label>
+                    <input type="text" name="pic_name" id="Pic_name" required
+                           value="<%=(action.equals("modify")) ? productToEdit.getPictureName() : ""%>"
+                           class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="Insert_date">Insert Date </label>
+                    <input type="date" name="insert_date" id="Insert_date" required
+                           value="<%=(action.equals("modify")) ? productToEdit.getInsertDate() : ""%>"
+                           class="form-control">
                 </div>
             </div>
             <hr>

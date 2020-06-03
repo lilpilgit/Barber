@@ -555,7 +555,7 @@ public class Products {
                 applicationMessage = "An error occurred.";
             }
         }
-        /* Setto gli attributi della request che verranno processati dalla new-edit-employee.jsp */
+        /* Setto gli attributi della request che verranno processati dalla new-edit-product.jsp */
         /* 1) Attributo che indica se è loggato oppure no */
         request.setAttribute("loggedOn", loggedUser != null);
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
@@ -706,7 +706,7 @@ public class Products {
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
          *     form per consentire ulteriori modifiche sul medesimo impiegato */
-        request.setAttribute("viewUrl", "admin/new-edit-employee");
+        request.setAttribute("viewUrl", "admin/new-edit-product");
         /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (edited) {
             /* SUCCESS */
