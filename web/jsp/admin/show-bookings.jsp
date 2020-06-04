@@ -77,6 +77,7 @@
 <script>
 
     window.addEventListener("load", () => {
+        setCurrentDate("Booking-Date");
     })
 
 </script>
