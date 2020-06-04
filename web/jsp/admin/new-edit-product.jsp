@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Quantity">Quantity</label>
-                    <input type="number" name="quantity" id="Quantity"  required
+                    <input type="number" name="quantity" id="Quantity" min="0" required
                            value="<%=(action.equals("modify")) ? productToEdit.getQuantity() : ""%>"
                            class="form-control">
                 </div>
