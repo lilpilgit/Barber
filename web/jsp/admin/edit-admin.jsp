@@ -59,31 +59,31 @@
 <%@include file="/templates/admin-sidebar.jsp"%>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
-    <main class="page-content">
-
+    <main class="page-content text-center">
+        <br>
         <form id='form_edit_admin' method="post" class="needs-validation">
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-sm-2 mb-3">
                     <label for="Name">First name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
                            value="<%=adminToEdit.getName()%>"
                            oninput="toUpperCase(this)">
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="Surname">Last name</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
                            value="<%=adminToEdit.getSurname()%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4">
+            <div class="form-row justify-content-center">
+                <div class="col-sm-2">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
                            value="<%=adminToEdit.getEmail()%>"
                            required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-2">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
                            value="<%=adminToEdit.getPhone()%>"
@@ -93,28 +93,28 @@
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-sm-2 mb-3">
                     <label for="Birth-Date">Birth Date</label>
                     <input type="date" class="form-control" name="birth_date" id="Birth-Date" required
                            value="<%=adminToEdit.getBirthDate()%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
                     <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
                            required value="<%=adminToEdit.getFiscalCode()%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-sm-2 mb-3">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
                         <option selected disabled value="">Choose...</option>
                         <option>ITALY</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="Region">Region</label>
                     <select class="custom-select" name="region" id="Region" required>
                         <option selected disabled value="">Choose...</option>
@@ -139,31 +139,32 @@
                         <option>VENETO</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="City">City</label>
                     <input type="text" class="form-control" name="city" id="City" required
                            value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-sm-2 mb-3">
                     <label for="Cap">CAP</label>
                     <input type="number" class="form-control" name="cap" id="Cap" required min="0"
                            value="<%=splittedAddress[3]%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="Street">Street</label>
                     <input type="text" class="form-control" name="street" id="Street" required
                            value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-sm-2 mb-3">
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number" min="0"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
+            <br>
             <button type="submit" id="submit-edit-admin" class="btn btn-primary" name="submit"
                     value=edit_admin">Send
             </button>

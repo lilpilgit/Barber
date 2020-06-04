@@ -63,32 +63,32 @@
 <%@include file="/templates/admin-sidebar.jsp"%>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
-    <main class="page-content">
+    <main class="page-content text-center">
 
         <form id="form_edit_product" method="post" class="needs-validation">
             <br>
             <div class="form-row justify-content-center">
-                <div class="col-md-4 mb-1">
+                <div class="col-md-2 mb-1">
                     <label for="Name">Name</label>
                     <input type="text" name="name" id="Name" required
                            value="<%=(action.equals("modify")) ? productToEdit.getName() : ""%>"
                            class="form-control">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Producer">Producer</label>
                     <input type="text" name="producer" id="Producer" placeholder="Garnier" required
                            value="<%=(action.equals("modify")) ? productToEdit.getProducer() : ""%>"
                            class="form-control">
                 </div>
-            </div>
-            <hr>
-            <div class="form-row justify-content-center">
-                <div class="col-md-5 mb-1">
+                <div class="col-md-2 mb-3">
                     <label for="Category">Category</label>
                     <input type="text" name="category" id="Category" required
                            value="<%=(action.equals("modify")) ? productToEdit.getCategory() : ""%>"
                            class="form-control">
                 </div>
+            </div>
+            <hr>
+            <div class="form-row justify-content-center">
                 <div class="col-md-5 mb-3">
                     <label for="Description">Description</label>
                     <textarea class="form-control" name="description" id="Description" required
@@ -98,7 +98,7 @@
                 </div>
             </div>
             <hr>
-            <div class="form-row justify-content-center text-center">
+            <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <label for="Price">Price</label>
                     <input type="number" name="price" id="Price" required
@@ -135,6 +135,7 @@
                 </div>
             </div>
             <hr>
+            <br>
             <button type="submit" id="submit-edit-product" class="btn btn-primary" name="submit"
                     value="<%=(action.equals("modify")) ? "edit_product" : "add_new_product"%>">Send
             </button>

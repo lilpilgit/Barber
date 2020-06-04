@@ -95,9 +95,9 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, structure.getAddress());
-            ps.setString(i++, String.valueOf(structure.getOpeningTime()));
-            ps.setString(i++, String.valueOf(structure.getClosingTime()));
-            ps.setString(i++, String.valueOf(structure.getSlot()));
+            ps.setTime(i++, structure.getOpeningTime());
+            ps.setTime(i++, structure.getClosingTime());
+            ps.setTime(i++, structure.getSlot());
             ps.setString(i++, structure.getName());
             ps.setString(i++, structure.getPhone());
             ps.setLong(i++,structure.getId());

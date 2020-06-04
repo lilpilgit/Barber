@@ -74,7 +74,7 @@
     <main class="page-content">
 
         <form id='form_add_employee' method="post" class="needs-validation">
-            <div class="form-row">
+            <div class="form-row justify-content-center">
                 <%if (structurePresent) {%>
                 <div class="text-center">
                     <label for="Structure">You are <%=(action.equals("modify")) ? "modifying an " : "entering an"%>
@@ -88,14 +88,14 @@
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-3">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
                            value="<%=(action.equals("modify")) ? employeeToEdit.getName() : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
                            value="<%=(action.equals("modify")) ? employeeToEdit.getSurname() : ""%>"
@@ -103,8 +103,8 @@
                 </div>
             </div>
             <!-- TODO Dare la possibilita' al dipendente di modificare la password -->
-            <div class="form-row">
-                <div class="col-md-4">
+            <div class="form-row justify-content-center">
+                <div class="col-md-3">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
                            value="<%=(action.equals("modify")) ? employeeToEdit.getEmail() : ""%>"
@@ -113,7 +113,7 @@
                     password will be sent to that
                     email</small><%}%>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
                            value="<%=(action.equals("modify")) ? employeeToEdit.getPhone() : ""%>"
@@ -123,28 +123,28 @@
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-3">
                     <label for="Birth-Date">Birth Date</label>
                     <input type="date" class="form-control" name="birth_date" id="Birth-Date" required
                            value="<%=(action.equals("modify")) ? employeeToEdit.getBirthDate() : ""%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
                     <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
                            required value="<%=(action.equals("modify")) ? employeeToEdit.getFiscalCode() : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-3">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
                         <option selected disabled value="">Choose...</option>
                         <option>ITALY</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="Region">Region</label>
                     <select class="custom-select" name="region" id="Region" required>
                         <option selected disabled value="">Choose...</option>
@@ -169,34 +169,37 @@
                         <option>VENETO</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="City">City</label>
                     <input type="text" class="form-control" name="city" id="City" required
                            value="<%=(action.equals("modify")) ? splittedAddress[2] : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-3 mb-3">
                     <label for="Cap">CAP</label>
                     <input type="number" class="form-control" name="cap" id="Cap" required min="0"
                            value="<%=(action.equals("modify")) ? splittedAddress[3] : ""%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="Street">Street</label>
                     <input type="text" class="form-control" name="street" id="Street" required
                            value="<%=(action.equals("modify")) ? splittedAddress[4] : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number" min="0"
                            value="<%=(action.equals("modify") && splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
+            <br>
+            <div class="text-center">
             <button type="submit" id="submit-new-edit-employee" class="btn btn-primary" name="submit"
                     value="<%=(action.equals("modify")) ? "edit_employee" : "add_new_employee"%>">Send
             </button>
+            </div>
             <input type="hidden" name="controllerAction"
                    value="<%=(action.equals("modify")) ? "admin.Staff.editEmployee" : "admin.Staff.addEmployee"%>">
             <%if (action.equals("modify")) {%>

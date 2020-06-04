@@ -17,7 +17,6 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-
     /* Prendo il parametro "structureToModify" che è l'oggetto structure che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
     Structure structureToEdit = null;
@@ -60,17 +59,17 @@
 <%@include file="../../templates/admin-sidebar.jsp"%>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
-    <main class="page-content">
-
+    <main class="page-content text-center">
+        <br>
         <form id='form_edit_structure' method="post" class="needs-validation">
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-2 mb-3">
                     <label for="Name">Name</label>
                     <input type="text" name="name" id="Name" required
                            value="<%=structureToEdit.getName()%>"
                            class="form-control">
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Phone">Phone number</label>
                     <input type="tel" name="phone" id="Phone" placeholder="3334445556" pattern="[0-9]{5,20}" required
                            value="<%=structureToEdit.getPhone()%>"
@@ -80,19 +79,19 @@
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-2 mb-3">
                     <label for="Opening-Time">Opening Time</label>
                     <input type="time" class="form-control" name="opening_time" id="Opening-Time" required readonly
                            value="<%=structureToEdit.getOpeningTime()%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Closing-Time">Closing Time</label>
                     <input type="time" class="form-control" name="closing_time" id="Closing-Time" required readonly
                            value="<%=structureToEdit.getClosingTime()%>"
                            class="form-control">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Slot">Slot</label> <!--TODO:step default 60 ==> 60 secondi-->
                     <input type="time" class="form-control" name="slot" id="Slot" required readonly
                            value="<%=structureToEdit.getSlot()%>"
@@ -102,15 +101,15 @@
             <br>
             <hr>
             <br>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-2 mb-3">
                     <label for="State">State</label>
                     <select class="custom-select" name="state" id="State" required>
                         <option selected disabled value="">Choose...</option>
                         <option>ITALY</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Region">Region</label>
                     <select class="custom-select" name="region" id="Region" required>
                         <option selected disabled value="">Choose...</option>
@@ -135,26 +134,26 @@
                         <option>VENETO</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="City">City</label>
                     <input type="text" class="form-control" name="city" id="City" required
                            value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
+            <div class="form-row justify-content-center">
+                <div class="col-md-2 mb-3">
                     <label for="Cap">CAP</label>
                     <input type="number" class="form-control" name="cap" id="Cap" required min="0"
                            value="<%=splittedAddress[3]%>">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="Street">Street</label>
                     <input type="text" class="form-control"  name="street" id="Street" required
                            value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="House-number">House number</label>
                     <input type="number" class="form-control" name="house_number" id="House-number" min="0"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
@@ -167,7 +166,7 @@
                     value=edit_structure">Send
             </button>
             <input type="hidden" name="controllerAction"
-                   value="Structure.editStructure">
+                   value="admin.Structure.editStructure">
         </form>
     </main>
 </div>
