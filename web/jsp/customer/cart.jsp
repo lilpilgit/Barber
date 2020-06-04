@@ -89,21 +89,24 @@
                 </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
                 <td>
                     <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" style="height: 73px;"
+                    <div id="counter_qta_<%=ep.getId()%>" style="height: 73px;"
                          class='main'>
-                        <input id="quantity<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='counter'
+                        <input id="quantity_<%=ep.getId()%>" class='counter'
                                type="number" max="<%=ep.getQuantity()%>" min="1"
                         readonly style="width: 90px;"
                         value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
-                            <button id="minus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn'
+                            <button id="minus_button_<%=ep.getId()%>" class='btn'
                                     title='Down'><i
                                     class='fa fa-minus'></i></button>
-                            <button id="plus_button<!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->" class='btn'
+                            <button id="plus_button_<%=ep.getId()%>" class='btn'
                                     title='Up'><i class='fa fa-plus'></i>
                             </button>
                         </div>
                     </div>
+                    <script>
+                        handlerCounterQtaProduct("counter_qta_<%=ep.getId()%>", "minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getQuantity()%>);
+                    </script>
                 </td>
                 <td>
                     <%
@@ -170,6 +173,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
+
     });
 </script>
 </body>
