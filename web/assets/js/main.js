@@ -192,15 +192,54 @@ function showResult(result, message) {
 
 }
 
+function addProductToCart(id) {
+    /**
+     * for form with ID ==> action_product, set value of hidden input field with
+     * name="controllerAction" to "home.Cart.addToCart" and set value of hidden input field (of product.jsp)
+     * with name="idProduct" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della product.jsp */
+    let form = document.getElementById('action_product');
+    form.elements['controllerAction'].value = 'home.Cart.addToCart';
+    form.elements['idProduct'].value = id;
+    form.submit();
+}
+
 function removeProductFromCart(id) {
     /**
      * for form with ID ==> action_product, set value of hidden input field with
      * name="controllerAction" to "home.Cart.removeFromCart" and set value of hidden input field (of cart.jsp)
      * with name="idProduct" to parameter id
      */
-    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
-    let formEmployeeID = document.getElementById('action_product');
-    formEmployeeID.elements['controllerAction'].value = 'home.Cart.removeFromCart';
-    formEmployeeID.elements['idProduct'].value = id;
-    formEmployeeID.submit();
+    /* Setto la controllerAction usando il form con id="action" che è proprio della cart.jsp */
+    let form = document.getElementById('action_product');
+    form.elements['controllerAction'].value = 'home.Cart.removeFromCart';
+    form.elements['idProduct'].value = id;
+    form.submit();
+}
+
+function addProductToWishlist(id) {
+    /**
+     * for form with ID ==> action_product, set value of hidden input field with
+     * name="controllerAction" to "home.Wishlist.addToWishlist" and set value of hidden input field (of product.jsp)
+     * with name="idProduct" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della product.jsp */
+    let form = document.getElementById('action_product');
+    form.elements['controllerAction'].value = 'home.Wishlist.addToWishlist';
+    form.elements['idProduct'].value = id;
+    form.submit();
+}
+
+function removeProductFromWishlist(id) {
+    /**
+     * for form with ID ==> action_product, set value of hidden input field with
+     * name="controllerAction" to "home.Wishlist.removeFromWishlist" and set value of hidden input field (of wishslist.jsp)
+     * with name="idProduct" to parameter id
+     */
+    /* Setto la controllerAction usando il form con id="action" che è proprio della wishlist.jsp */
+    let form = document.getElementById('action_product');
+    form.elements['controllerAction'].value = 'home.Wishlist.removeFromWishlist';
+    form.elements['idProduct'].value = id;
+    form.submit();
 }

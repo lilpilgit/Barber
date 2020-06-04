@@ -90,7 +90,7 @@
                                 class='fa fa-minus'></i></button>
                         <label for="quantity"></label>
                         <input id="quantity" class='counter' name="desiredQty" type="number" max="<%=product.getQuantity()%>" min="1"
-                               readonly form="add_to_cart"
+                               readonly form="action_product"
                                value='1' required/>
                         <button id="plus_button" class='up_count btn btn-info' title='Up'><i class='fa fa-plus'></i>
                         </button>
@@ -98,9 +98,9 @@
                     <!----------------------->
                     <div class="action">
 
-                        <button class="add-to-cart btn btn-default" type="submit" form="add_to_cart"><span
+                        <button class="add-to-cart btn btn-default" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
                                 class="fas fa-shopping-cart"></span></button>
-                        <button class="like btn btn-default" type="button"><span class="fas fa-heart"></span></button>
+                        <button class="like btn btn-default" type="button" onclick="addProductToWishlist(<%=product.getId()%>)"><span class="fas fa-heart"></span></button>
                     </div>
                     <%}else{%>
                     <button class="logged" type="button" id='showModal'
@@ -122,9 +122,9 @@
         </button>
     </div>
 </div>
-<form method="post" id="add_to_cart">
-    <input type="hidden" name="controllerAction" value="home.Cart.addToCart">
-    <input type="hidden" name="idProduct" value="<%=product.getId()%>">
+<form method="post" id="action_product">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idProduct" value="">
 </form>
 <%@include file="/templates/footer.html" %>
 <script type="text/javascript">

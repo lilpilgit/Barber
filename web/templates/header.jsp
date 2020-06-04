@@ -62,7 +62,7 @@
                         <i class="fas fa-shopping-basket"></i>
                     </button>
                     <button class="logged" type="button" id='showWishlist' title="Wishlist"
-                            onclick=setNavFormHome('home.Home.showWishlist')>
+                            onclick=setNavFormHome('home.Wishlist.showWishlist')>
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="dropdown">

@@ -1,6 +1,7 @@
 <%@page import="model.mo.Product" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.math.BigDecimal" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -19,6 +20,11 @@
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+
+    ArrayList<Product> wishlist = null;
+    if (request.getAttribute("wishlist") != null) {
+        wishlist = (ArrayList<Product>) request.getAttribute("wishlist");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
@@ -55,89 +61,74 @@
             </tr>
             </thead>
             <tbody>
+            <%
+                for (Product p : wishlist) {%>
             <tr>
                 <td>
                     <figure class="media">
-                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
+                        <div class="img-wrap"><img src="img/products/<%=p.getPictureName()%>"
+                                                   class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
+                            <h6 class="title text-truncate"><%=p.getName()%>
+                            </h6>
                             <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
+                                <dt>Producer:</dt>
+                                <dd><%=p.getProducer()%>
+                                </dd>
                             </dl>
+                            <%if (p.getDiscount() != null && p.getDiscount() != 0) {%>
                             <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
+                                <dt>Discount:</dt>
+                                <dd><%=p.getDiscount()%>%<i class="fas fa-piggy-bank"></i></dd>
                             </dl>
-                        </figcaption>
-                    </figure>
-                </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
-                <td>
-                    <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
-                    </div> <!-- price-wrap .// -->
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-outline-gold" title="Add to cart"
-                            data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
-                        <i class="fas fa-shopping-basket"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
-                </td>
-            </tr>
-
-
-
-
-
-
-
-
-
-
-            <tr>
-                <td>
-                    <figure class="media">
-                        <div class="img-wrap"><img src="img/products/product3.jpg" class="img-thumbnail img-sm"></div>
-                        <figcaption class="media-body">
-                            <h6 class="title text-truncate">Product name goes here </h6>
-                            <dl class="param param-inline small">
-                                <dt>Producer: </dt>
-                                <dd>Avaha</dd>
-                            </dl>
-                            <dl class="param param-inline small">
-                                <dt>Discount? </dt>
-                                <dd><i class="fas fa-piggy-bank"></i></dd>
-                            </dl>
+                            <%}%>
                         </figcaption>
                     </figure>
                 </td>
                 <td>
+                    <%
+                        if (p.getDiscount() != null && p.getDiscount() != 0) {
+                            BigDecimal saved = p.getPrice().multiply(BigDecimal.valueOf(p.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
+                            BigDecimal discountedPrice = p.getPrice().subtract(saved);
+                    %>
                     <div class="price-wrap">
-                        <var class="price">USD 145</var>
-                        <small class="text-muted">(USD5 each)</small>
+                        <var class="price"><%=discountedPrice%>
+                        </var>
+                        <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
+                    <%
+                    } else {%>
+                    <div class="price-wrap">
+                        <var class="price"><%=p.getPrice()%>
+                        </var>
+                        <small class="text-muted">(each)</small>
+                    </div> <!-- price-wrap .// -->
+                    <%}%>
                 </td>
                 <td class="text-right">
                     <button class="btn btn-outline-gold" title="Add to cart"
                             data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
+                            data-original-title="Save to Cart">
                         <i class="fas fa-shopping-basket"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
+                    <button class="btn btn-outline-danger" onclick="removeProductFromWishlist(<%=p.getId()%>)"> × Remove
+                    </button>
                 </td>
             </tr>
+            <%}%>
             </tbody>
         </table>
         <hr>
         <div class="text-center pt-1">
             <button class="btngeneric"
-                    onclick=setNavFormHome('Home.showCart')>Go to shopping Cart!</button>
+                    onclick=setNavFormHome('home.Cart.showCart')>Go to shopping Cart!</button>
         </div>
     </div> <!-- card.// -->
 </div>
 </div>
-
+<form method="post" id="action_product">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idProduct" value="">
+</form>
 
 <!---------------------------------------------- End of WishList ------------------------------------------------>
 

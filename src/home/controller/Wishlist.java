@@ -13,18 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Cart {
+public class Wishlist {
 
-    private Cart() {}
+    private Wishlist(){}
 
-    public static void showCart(HttpServletRequest request, HttpServletResponse response) {
+    public static void showWishlist(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Fetch user then call cart.jsp
+         * Check if user is logged then call wishlist.jsp
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        ArrayList<Product> wishlist = null; //la wishlist da passare alla jsp
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
 
@@ -85,12 +86,12 @@ public class Cart {
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
         /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/cart");
+        request.setAttribute("viewUrl", "customer/wishlist");
     }
 
-    public static void addToCart(HttpServletRequest request, HttpServletResponse response){
+    public static void addToWishlist(HttpServletRequest request, HttpServletResponse response){
         /**
-         * Fetch user logged then add product to cart with desired quantity.
+         * Fetch user logged then add product to wishlist.
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
@@ -100,8 +101,7 @@ public class Cart {
         User user = null;
         ProductDAO productDAO = null;
         Product product = null; /* prodotto da passare come attributo alla product.jsp */
-        Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
-        Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello */
+        Long idProductToAdd = null; /* il del prodotto da aggiungere alla wishlist */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         boolean added = false;
@@ -131,17 +131,14 @@ public class Cart {
 
             user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
+            /* setto l'id del prodotto da aggiungere alla wishlist sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
             productDAO = daoFactory.getProductDAO();
 
             product = productDAO.findProductById(idProductToAdd);
 
-            /* prendo la quantità scelta da aggiungere al carrello */
-            desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
-
-            added = userDAO.addProductToCart(user,idProductToAdd,desiredQty);
+            added = userDAO.addProductToWishlist(user,idProductToAdd);
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -150,8 +147,8 @@ public class Cart {
             daoFactory.commitTransaction();
 
             if (added) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto al carrello dell'utente */
-                applicationMessage = "Product added to cart SUCCESSFULLY.";
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto alla wishlist dell'utente */
+                applicationMessage = "Product added to wishlist SUCCESSFULLY.";
             }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
@@ -160,7 +157,7 @@ public class Cart {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
                 /* Se viene fatto il rollback della transazione il prodotto non è stato aggiunto .*/
-                applicationMessage = "Error: this product could not be added to your cart.";
+                applicationMessage = "Error: this product could not be added to your wishlist.";
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
@@ -203,9 +200,9 @@ public class Cart {
 
     }
 
-    public static void removeFromCart(HttpServletRequest request, HttpServletResponse response){
+    public static void removeFromWishlist(HttpServletRequest request, HttpServletResponse response){
         /**
-         * Fetch user logged then remove product from cart.
+         * Fetch user logged then remove product from wishlist.
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
@@ -213,8 +210,8 @@ public class Cart {
         User loggedUser = null;
         UserDAO userDAO = null;
         User user = null;
-        Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
-        ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
+        Long idProductToRemove = null; /* il del prodotto da rimuovere dalla wishlist */
+        ArrayList<Product> wishlist = null; //la wishlist da passare alla jsp
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         boolean removed = false;
@@ -244,12 +241,12 @@ public class Cart {
 
             user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
-            idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+            /* setto l'id del prodotto da rimuovere dal carrello sulla base dell'id ricevuto */
+            idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
 
-            removed = userDAO.removeProductFromCart(user,idProductToAdd);
+            removed = userDAO.removeProductFromWishlist(user,idProductToRemove);
 
-            commonView(daoFactory,loggedUser,request); /* setto l'attributo "cart" all'interno della request */
+            commonView(daoFactory,loggedUser,request); /* setto l'attributo "wishlist" all'interno della request */
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -258,8 +255,8 @@ public class Cart {
             daoFactory.commitTransaction();
 
             if (removed) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
-                applicationMessage = "Product removed from cart SUCCESSFULLY.";
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dalla wishlist dell'utente */
+                applicationMessage = "Product removed from wishlist SUCCESSFULLY.";
             }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
@@ -268,7 +265,7 @@ public class Cart {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
                 /* Se viene fatto il rollback della transazione il prodotto non è stato rimosso .*/
-                applicationMessage = "Error: this product could not be removed from your cart.";
+                applicationMessage = "Error: this product could not be removed from your wishlist.";
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
@@ -295,8 +292,8 @@ public class Cart {
         /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
-         *     form per consentire ulteriori modifiche sul medesimo impiegato */
-        request.setAttribute("viewUrl", "customer/cart");
+         *     form per consentire ulteriori modifiche sulla medesima wishlist */
+        request.setAttribute("viewUrl", "customer/wishlist");
         /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (removed) {
             /* SUCCESS */
@@ -310,7 +307,7 @@ public class Cart {
 
     private static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 
-        ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
+        ArrayList<Product> wishlist = null; //il carrello da passare alla jsp
         UserDAO userDAO = daoFactory.getUserDAO();
         User user = null;
 
@@ -318,13 +315,11 @@ public class Cart {
 
         user = userDAO.findById(loggedUser.getId());
 
-        /* setto l'oggetto carrello all'interno dell'oggetto utente */
-        cart = userDAO.fetchCart(user);
+        /* setto l'oggetto wishlist all'interno dell'oggetto utente */
+        wishlist = userDAO.fetchWishlist(user);
 
-
-        /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
-        request.setAttribute("cart",cart);
-
-
+        /* Setto la wishlist da mostrare nella pagina della wishlist dell'utente loggato */
+        request.setAttribute("wishlist",wishlist);
     }
+
 }

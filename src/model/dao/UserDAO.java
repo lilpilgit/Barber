@@ -2,6 +2,7 @@ package model.dao;
 
 import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
+import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -46,8 +47,14 @@ public interface UserDAO {
 
     boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
 
+    ArrayList<Product> fetchWishlist(User user);
+
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
+
+    boolean removeProductFromWishlist(User user, Long idProduct) throws UnsupportedOperationException;
+
+    boolean addProductToWishlist(User user, Long idProduct) throws UnsupportedOperationException;
 
     /* ********************************************** */
 }

@@ -3,6 +3,7 @@ package model.dao.CookieImpl;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
+import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -139,6 +140,31 @@ public class UserDAOCookieImpl implements UserDAO {
         throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
+
+    @Override
+    public boolean removeProductFromWishlist(User user, Long idProduct) throws UnsupportedOperationException {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public boolean addProductToWishlist(User user, Long idProduct) throws UnsupportedOperationException {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
+    public ArrayList<Product> fetchWishlist(User user) {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
     @Override
     public User findById(Long id) {
         /**
@@ -169,6 +195,7 @@ public class UserDAOCookieImpl implements UserDAO {
         return loggedUser;
 
     }
+
 
     private String encode(User loggedUser) {
 
