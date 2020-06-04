@@ -61,7 +61,7 @@
     <!--Main content of the page-->
     <main class="page-content text-center">
         <br>
-        <form id='form_edit_structure' method="post" class="needs-validation">
+        <form id="form_edit_structure" method="post" class="needs-validation">
             <div class="form-row justify-content-center">
                 <div class="col-md-2 mb-3">
                     <label for="Name">Name</label>
@@ -163,7 +163,7 @@
             <hr>
             <br>
             <button type="submit" id="submit-edit-structure" class="btn btn-primary" name="submit"
-                    value=edit_structure">Send
+                    value="edit_structure">Send
             </button>
             <input type="hidden" name="controllerAction"
                    value="admin.Structure.editStructure">
