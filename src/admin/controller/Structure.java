@@ -121,19 +121,6 @@ public class Structure {
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
 
-            /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
-             * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
-
-            /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
-             * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
-             * */
-            structureToEdit.setName(request.getParameter("name"));
-            structureToEdit.setPhone(request.getParameter("phone"));
-            structureToEdit.setOpeningTime(Time.valueOf(request.getParameter("opening_time")));
-            structureToEdit.setClosingTime(Time.valueOf(request.getParameter("closing_time")));
-            structureToEdit.setSlot(Time.valueOf(request.getParameter("slot")));
-            structureToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -147,6 +134,20 @@ public class Structure {
             /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
              * quale passare alla pagina edit-structure.jsp */
             structureToEdit = structureDAO.fetchStructure();
+
+            /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
+             * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
+
+            /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
+             * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
+             * */
+            structureToEdit.setName(request.getParameter("name"));
+            structureToEdit.setPhone(request.getParameter("phone"));
+            structureToEdit.setOpeningTime(Time.valueOf(request.getParameter("opening_time")));
+            structureToEdit.setClosingTime(Time.valueOf(request.getParameter("closing_time")));
+            structureToEdit.setSlot(Time.valueOf(request.getParameter("slot")));
+            structureToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
+
 
 
             /* Effettuo la modifica della struttura */
