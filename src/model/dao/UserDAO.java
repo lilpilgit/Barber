@@ -42,6 +42,7 @@ public interface UserDAO {
 
     ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException;
 
+    boolean addProductToCart(User user, Long idProduct, Integer desiredQty) throws UnsupportedOperationException;
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();

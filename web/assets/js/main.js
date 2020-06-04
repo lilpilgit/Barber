@@ -20,12 +20,13 @@ function toUpperCase(element) {
     element.value = element.value.toUpperCase();
 }
 
-/*
-* Realize the counter of quantity for the product page
-* Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase
-* Set the quantity text on click of buttons
-*/
+
 function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta) {
+    /**
+     * Realize the counter of quantity for the product page
+     * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase
+     * Set the quantity text on click of buttons
+     */
     let error_present = false;
     max_qta = parseInt(max_qta);
     let div_father = document.getElementById(id_father);
@@ -88,7 +89,6 @@ function setFilterForm(id_select_of_category, id_select_of_brand, old_category_c
     /* Prendo il valore della categoria selezionata non appena cambia nel dropdown */
     let select_for_category = document.getElementById(id_select_of_category);
     let category_chosen = old_category_chosen; /*   = "All"; BUG!!!!!*/
-
 
 
     select_for_category.addEventListener("change", () => {

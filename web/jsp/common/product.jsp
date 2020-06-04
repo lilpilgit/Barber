@@ -22,6 +22,14 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");/*null se loggato correttamente*/
     }
 
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del prodotto nel carrello/wishlist è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     /* Prendo il parametro "product" che mi consente di sapere qual'è il prodotto da visualizzare */
     Product product = null;
     if (request.getAttribute("product") != null) {
@@ -81,8 +89,8 @@
                         <button id="minus_button" class='down_count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
                         <label for="quantity"></label>
-                        <input id="quantity" class='counter' type="number" max="<%=product.getQuantity()%>" min="1"
-                               readonly
+                        <input id="quantity" class='counter' name="desiredQty" type="number" max="<%=product.getQuantity()%>" min="1"
+                               readonly form="add_to_cart"
                                value='1' required/>
                         <button id="plus_button" class='up_count btn btn-info' title='Up'><i class='fa fa-plus'></i>
                         </button>
@@ -90,7 +98,7 @@
                     <!----------------------->
                     <div class="action">
 
-                        <button class="add-to-cart btn btn-default" type="button"><span
+                        <button class="add-to-cart btn btn-default" type="submit" form="add_to_cart"><span
                                 class="fas fa-shopping-cart"></span></button>
                         <button class="like btn btn-default" type="button"><span class="fas fa-heart"></span></button>
                     </div>
@@ -107,14 +115,17 @@
         </div>
     </div>
     <div class="container pt-5 text-center">
-        <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima? -->
+        <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima?TODO -->
         <button class="btn btnheader active2" type="button" id='showShop'
                 onclick="history.back()">
             Go back to shop
         </button>
     </div>
 </div>
-
+<form method="post" id="add_to_cart">
+    <input type="hidden" name="controllerAction" value="home.Cart.addToCart">
+    <input type="hidden" name="idProduct" value="<%=product.getId()%>">
+</form>
 <%@include file="/templates/footer.html" %>
 <script type="text/javascript">
 

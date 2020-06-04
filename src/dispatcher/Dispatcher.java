@@ -71,7 +71,7 @@ public class Dispatcher extends HttpServlet {
         Class<?> controllerClass = null;
         try {
             controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
-            System.err.println("DISPATCHER MANAGE ==> controllerClass :" + controllerClass.getName());
+            System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
             //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
@@ -80,6 +80,7 @@ public class Dispatcher extends HttpServlet {
 
         try {
             controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
+            System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
         } catch (NoSuchMethodException e) {
             System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
             e.printStackTrace();
