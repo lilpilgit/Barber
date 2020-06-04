@@ -782,6 +782,48 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         return true;
     }
 
+    public boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException {
+        /**
+         * Remove product from cart of logged user .
+         *
+         * @params User user : a user with type {C}
+         *         Long idProduct : id of the product to remove from cart of user.
+         *
+         * @return true if product is successfully removed from cart otherwise raise an exception.
+         * */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if (user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile aggiungere il prodotto con id{" + idProduct + "} al carrello dell'utente con id{" + user.getId() + "} in quanto non è cliente.");
+
+
+        query = "DELETE FROM CART WHERE ID_CUSTOMER = ? AND ID_PRODUCT = ?;";
+
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, user.getId());
+            ps.setLong(i++, idProduct);
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps = connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
 
     /* ******************************************************************************** */
 

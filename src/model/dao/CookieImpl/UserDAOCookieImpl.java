@@ -132,6 +132,14 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
+    public boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException {
+        /**
+         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
+         * */
+        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+    }
+
+    @Override
     public User findById(Long id) {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.

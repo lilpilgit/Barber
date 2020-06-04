@@ -44,6 +44,8 @@ public interface UserDAO {
 
     boolean addProductToCart(User user, Long idProduct, Integer desiredQty) throws UnsupportedOperationException;
 
+    boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
+
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
 

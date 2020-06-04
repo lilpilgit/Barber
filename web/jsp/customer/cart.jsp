@@ -72,7 +72,8 @@
                         <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
                                                    class="img-thumbnail img-sm"></div>
                         <figcaption class="media-body">
-                            <h6 class="title text-truncate"><%=ep.getName()%></h6>
+                            <h6 class="title text-truncate"><%=ep.getName()%>
+                            </h6>
                             <dl class="param param-inline small">
                                 <dt>Producer:</dt>
                                 <dd><%=ep.getProducer()%>
@@ -93,8 +94,8 @@
                          class='main'>
                         <input id="quantity_<%=ep.getId()%>" class='counter'
                                type="number" max="<%=ep.getQuantity()%>" min="1"
-                        readonly style="width: 90px;"
-                        value="<%=ep.getRequiredQuantity()%>" required/>
+                               readonly style="width: 90px;"
+                               value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
                             <button id="minus_button_<%=ep.getId()%>" class='btn'
                                     title='Down'><i
@@ -122,10 +123,10 @@
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
                     <%
-                            totPrice += (discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo al totale il prezzo scontato ...*/
+                        totPrice += (discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo al totale il prezzo scontato ...*/
                         System.err.println("discountedPrice:" + discountedPrice + "--- totPrice:" + totPrice);
 
-                    }else{%>
+                    } else {%>
                     <div class="price-wrap">
                         <var class="price"><%=ep.getPrice().multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))%>
                         </var>
@@ -141,7 +142,8 @@
                             data-toggle="tooltip"
                             data-original-title="Save to Wishlist">
                         <i class="fas fa-star"></i></button>
-                    <button class="btn btn-outline-danger"> × Remove</button>
+                    <button class="btn btn-outline-danger" onclick="removeProductFromCart(<%=ep.getId()%>)"> × Remove
+                    </button>
                 </td>
             </tr>
             <%}%>
@@ -166,6 +168,10 @@
     </div> <!-- card.// -->
 </div>
 </div>
+<form method="post" id="action_product">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idProduct" value="">
+</form>
 
 
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
