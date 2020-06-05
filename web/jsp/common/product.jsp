@@ -36,6 +36,12 @@
         product = (Product) request.getAttribute("product");
     }
 
+    /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
+    Boolean inWishlist = false;
+    if (request.getAttribute("inWishlist") != null) {
+        inWishlist = (Boolean) request.getAttribute("inWishlist");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Shop";
 
@@ -100,7 +106,9 @@
 
                         <button class="add-to-cart btn btn-default" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
                                 class="fas fa-shopping-cart"></span></button>
-                        <button class="like btn btn-default" type="button" onclick="addProductToWishlist(<%=product.getId()%>)"><span class="fas fa-heart"></span></button>
+                        <button class="like btn btn-default" type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
+                                onclick="<%=(inWishlist) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=product.getId() + ");"%>">
+                            <span class="fas fa-heart"></span></button>
                     </div>
                     <%}else{%>
                     <button class="logged" type="button" id='showModal'
@@ -125,6 +133,7 @@
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
+    <input type="hidden" name="from" value="product">
 </form>
 <%@include file="/templates/footer.html" %>
 <script type="text/javascript">

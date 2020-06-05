@@ -138,10 +138,12 @@
                         }%>
                 </td>
                 <td class="text-right">
-                    <button class="btn btn-outline-gold" title="Add to wishlist"
+<%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
+                    <button class="btn btn-outline-gold" title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
                             data-toggle="tooltip"
-                            data-original-title="Save to Wishlist">
+                            data-original-title="<%=(ep.isInWishlist()) ? "Delete from Wishlist" : "Save to Wishlist"%>" onclick="<%=(ep.isInWishlist()) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=ep.getId() + ");"%>">
                         <i class="fas fa-star"></i></button>
+
                     <button class="btn btn-outline-danger" onclick="removeProductFromCart(<%=ep.getId()%>)"> × Remove
                     </button>
                 </td>
@@ -171,6 +173,7 @@
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
+    <input type="hidden" name="from" value="cart">
 </form>
 
 

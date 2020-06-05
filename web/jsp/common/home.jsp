@@ -276,7 +276,7 @@
 </div>
 <!-- form per mostrare il prodotto scelto -->
 <form name="showProductForm" id="showProductForm" method="post">
-    <input type="hidden" name="controllerAction" value="home.Home.showProduct">
+    <input type="hidden" name="controllerAction" value="home.Product.showProduct">
     <input type="hidden" name="idProduct" value="">
 </form>
 <%@ include file="/templates/footer.html" %>

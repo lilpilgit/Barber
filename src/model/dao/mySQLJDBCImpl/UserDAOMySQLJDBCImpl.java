@@ -621,7 +621,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
     public ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException {
         /**
-         * Fetch ArrayList<ExtendendProduct> that is Cart of user passed as parameter.
+         * Fetch ArrayList<ExtendedProduct> that is Cart of user passed as parameter.
          *
          * @params User user : a user with type {C}
          * @return Return the ArrayList<ExtendedProduct> for the user passed as parameter
@@ -635,9 +635,11 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         ArrayList<ExtendedProduct> cart = new ArrayList<>();
         /* Seleziono i prodotti presenti nel carrello dell'utente passato come parametro */
         query =
-                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY, QUANTITY, DESIRED_QTY "
-                        + "FROM CART C INNER JOIN PRODUCT P ON C.ID_PRODUCT = P.ID "
-                        + "WHERE C.ID_CUSTOMER = ? AND P.DELETED = 0;";
+
+                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY,DESIRED_QTY, IF(EXISTS (SELECT W.ID_PRODUCT FROM WISHLIST W WHERE W.ID_PRODUCT = C.ID_PRODUCT),TRUE,FALSE) IN_WISHLIST "
+                        + "FROM (CART C INNER JOIN PRODUCT P ON C.ID_PRODUCT = P.ID) "
+                        + "WHERE C.ID_CUSTOMER = ? AND P.DELETED = 0";
+
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -977,6 +979,67 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         return true;
     }
 
+    public boolean inWishlist(User user,Long idProduct) throws UnsupportedOperationException{
+        /**
+         * Verify if product is in Wishlist of user passed as parameter.
+         *
+         * @params User user : a user with type {C}
+         *         Long idProduct : id of product to search
+         * @return Return true if there is in logged user's wishlist otherwise return false or raise an exception.
+         * */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if (user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile verificare se un prodotto è nella wishlist di un utente che non è cliente. Errore con l'utente con id{" + user.getId() + "}.");
+
+        boolean inWishlist = false;
+        /* Seleziono i prodotti presenti nella wishlist dell'utente passato come parametro */
+        query =
+                "SELECT W.ID_PRODUCT "
+                        + "FROM WISHLIST W "
+                        + "WHERE W.ID_CUSTOMER = ? AND W.ID_PRODUCT = ?;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, user.getId());
+            ps.setLong(i++, idProduct);
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps = connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            if (rs.next()) { /* Esiste tale prodotto nella wishlist dell'utente */
+                inWishlist = true;
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella if (rs.next()){inWishlist = true;};");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return inWishlist;
+
+    }
     /* ******************************************************************************** */
 
     private User readUser(ResultSet rs) {
@@ -1145,6 +1208,12 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             extendedProduct.setRequiredQuantity(rs.getInt("DESIRED_QTY"));
         } catch (SQLException e) {
             System.err.println("Errore nella extendedProduct.setRequiredQuantity(rs.getInt(\"DESIRED_QTY\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            extendedProduct.setInWishlist(rs.getBoolean("IN_WISHLIST"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella extendedProduct.setInWishlist(rs.getBoolean(\"IN_WISHLIST\"));");
             throw new RuntimeException(e);
         }
 

@@ -6,6 +6,7 @@ import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -48,6 +49,8 @@ public interface UserDAO {
     boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
 
     ArrayList<Product> fetchWishlist(User user);
+
+    boolean inWishlist(User user,Long idProduct) throws UnsupportedOperationException;
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();

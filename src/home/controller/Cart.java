@@ -1,10 +1,8 @@
 package home.controller;
 
 import model.dao.DAOFactory;
-import model.dao.ProductDAO;
 import model.dao.UserDAO;
 import model.mo.ExtendedProduct;
-import model.mo.Product;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -15,7 +13,8 @@ import java.util.HashMap;
 
 public class Cart {
 
-    private Cart() {}
+    private Cart() {
+    }
 
     public static void showCart(HttpServletRequest request, HttpServletResponse response) {
         /**
@@ -49,7 +48,7 @@ public class Cart {
 
             daoFactory.beginTransaction();
 
-            commonView(daoFactory,loggedUser,request);
+            commonView(daoFactory, loggedUser, request);
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -88,7 +87,7 @@ public class Cart {
         request.setAttribute("viewUrl", "customer/cart");
     }
 
-    public static void addToCart(HttpServletRequest request, HttpServletResponse response){
+    public static void addToCart(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Fetch user logged then add product to cart with desired quantity.
          */
@@ -98,10 +97,9 @@ public class Cart {
         User loggedUser = null;
         UserDAO userDAO = null;
         User user = null;
-        ProductDAO productDAO = null;
-        Product product = null; /* prodotto da passare come attributo alla product.jsp */
         Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
-        Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello */
+        Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello : di default a 1 se viene aggiunto al carrello dalla pagina wishlist.jsp */
+        String from = null; /* da quale jsp viene chiamato il metodo */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         boolean added = false;
@@ -134,14 +132,30 @@ public class Cart {
             /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            productDAO = daoFactory.getProductDAO();
+            /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
+             *  base del parametro "from" */
+            from = request.getParameter("from");
+            if (from != null) {
+                if (from.equals("product")) {
+                    /* prendo la quantità scelta da aggiungere al carrello */
+                    desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
+                    added = userDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                    /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
+                    Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
+                    System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
 
-            product = productDAO.findProductById(idProductToAdd);
+                } else if (from.equals("wishlist")) {
+                    /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
+                    added = userDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                    /* aggiunge la wishlist come ArrayList alla request*/
+                    Wishlist.commonView(daoFactory, loggedUser, request);
+                    System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
+                }
 
-            /* prendo la quantità scelta da aggiungere al carrello */
-            desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
+            } else {
+                throw new RuntimeException("Cart.java ==> non è stato passato alcun parametro 'from'");
+            }
 
-            added = userDAO.addProductToCart(user,idProductToAdd,desiredQty);
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -186,10 +200,7 @@ public class Cart {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
-         *     form per consentire ulteriori modifiche sul medesimo prodotto */
-        request.setAttribute("viewUrl", "common/product");
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (added) {
             /* SUCCESS */
             request.setAttribute("result", "success");
@@ -198,12 +209,22 @@ public class Cart {
             request.setAttribute("result", "fail");
         }
 
-        /* 6) setto l'attributo product da mostrare nuovamente nella pagina product.jsp*/
-        request.setAttribute("product",product);
+
+        /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento  */
+        if (from != null) {
+            if (from.equals("product")) {
+                request.setAttribute("viewUrl", "common/product");
+
+            } else if (from.equals("wishlist")) {
+                request.setAttribute("viewUrl", "customer/wishlist");
+            }
+        } else {
+            request.setAttribute("viewUrl", "common/home");
+        }
 
     }
 
-    public static void removeFromCart(HttpServletRequest request, HttpServletResponse response){
+    public static void removeFromCart(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Fetch user logged then remove product from cart.
          */
@@ -247,9 +268,9 @@ public class Cart {
             /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            removed = userDAO.removeProductFromCart(user,idProductToAdd);
+            removed = userDAO.removeProductFromCart(user, idProductToAdd);
 
-            commonView(daoFactory,loggedUser,request); /* setto l'attributo "cart" all'interno della request */
+            commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -308,8 +329,11 @@ public class Cart {
 
     }
 
-    private static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
+    public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 
+        /**
+         * Set attribute "cart" inside request
+         */
         ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
         UserDAO userDAO = daoFactory.getUserDAO();
         User user = null;
@@ -323,7 +347,7 @@ public class Cart {
 
 
         /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
-        request.setAttribute("cart",cart);
+        request.setAttribute("cart", cart);
 
 
     }

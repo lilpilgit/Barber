@@ -166,6 +166,11 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
+    public boolean inWishlist(User user, Long idProduct) throws UnsupportedOperationException {
+        return false;
+    }
+
+    @Override
     public User findById(Long id) {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.

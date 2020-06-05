@@ -234,7 +234,7 @@ function addProductToWishlist(id) {
 function removeProductFromWishlist(id) {
     /**
      * for form with ID ==> action_product, set value of hidden input field with
-     * name="controllerAction" to "home.Wishlist.removeFromWishlist" and set value of hidden input field (of wishslist.jsp)
+     * name="controllerAction" to "home.Wishlist.removeFromWishlist" and set value of hidden input field
      * with name="idProduct" to parameter id
      */
     /* Setto la controllerAction usando il form con id="action" che è proprio della wishlist.jsp */

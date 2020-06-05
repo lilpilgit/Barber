@@ -108,7 +108,7 @@
                 <td class="text-right">
                     <button class="btn btn-outline-gold" title="Add to cart"
                             data-toggle="tooltip"
-                            data-original-title="Save to Cart">
+                            data-original-title="Save to Cart" onclick="addProductToCart(<%=p.getId()%>)">
                         <i class="fas fa-shopping-basket"></i></button>
                     <button class="btn btn-outline-danger" onclick="removeProductFromWishlist(<%=p.getId()%>)"> × Remove
                     </button>
@@ -128,6 +128,7 @@
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
+    <input type="hidden" name="from" value="wishlist">
 </form>
 
 <!---------------------------------------------- End of WishList ------------------------------------------------>
