@@ -41,7 +41,7 @@
 <body>
 
 <%@include file="/templates/header.jsp" %>
-<!------------------------------------------------ Shopping Chart ----------------------------------------------------->
+<!------------------------------------------------ Shopping Cart ----------------------------------------------------->
 
 <!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
 
@@ -69,8 +69,9 @@
             <tr>
                 <td>
                     <figure class="media">
+                        <div class="cart-img text-center">
                         <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
-                                                   class="img-thumbnail img-sm"></div>
+                                                   class="img-thumbnail img-sm"></div></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=ep.getName()%>
                             </h6>
@@ -139,7 +140,7 @@
                 </td>
                 <td class="text-right">
 <%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
-                    <button class="btn btn-outline-gold" title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
+                    <button class="btn <%=(ep.isInWishlist()) ? "btn-gold-active" : "btn-outline-gold"%>" title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
                             data-toggle="tooltip"
                             data-original-title="<%=(ep.isInWishlist()) ? "Delete from Wishlist" : "Save to Wishlist"%>" onclick="<%=(ep.isInWishlist()) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=ep.getId() + ");"%>">
                         <i class="fas fa-star"></i></button>
