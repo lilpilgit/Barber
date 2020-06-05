@@ -91,7 +91,7 @@
                     <br>
                     <% if (loggedOn && loggedUser.getType() == 'C') {%>
                     <!--COUNTER OF QUANTITY-->
-                    <div id="counter_qta" style="height: 73px;" class='main'>
+                    <div class="text-center" id="counter_qta" style="height: 73px;" class='main'>
                         <button id="minus_button" class='down_count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
                         <label for="quantity"></label>
@@ -102,13 +102,13 @@
                         </button>
                     </div>
                     <!----------------------->
-                    <div class="action">
-
-                        <button class="add-to-cart btn btn-default" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
+                    <div class="action text-center">
+                        <button class="add-to-cart btn btn-outline-gold" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
                                 class="fas fa-shopping-cart"></span></button>
-                        <button class="like btn btn-default" type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
+                        <button class="btn like <%=(inWishlist) ? "btn-gold-active" : "btn-outline-gold"%>"
+                                type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
                                 onclick="<%=(inWishlist) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=product.getId() + ");"%>">
-                            <span class="fas fa-heart"></span></button>
+                            <span class="fas fa-star"></span></button>
                     </div>
                     <%}else{%>
                     <button class="logged" type="button" id='showModal'
