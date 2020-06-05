@@ -89,7 +89,7 @@
     <form id="logoutForm" method="post">
         <input type="hidden" name="controllerAction" value="home.Home.logout">
     </form>
-    <form id="goBackToHome" method="post"> <!-- TODO MODIFICARE FORM PER TORNARE ALLA HOME -->
+    <form id="goBackToHome" method="post">
         <input type="hidden" name="controllerAction" value="home.Home.view">
     </form>
 </div>
