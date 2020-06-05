@@ -33,6 +33,10 @@ public abstract class DAOFactory {
 
     public abstract UserDAO getUserDAO();
 
+    public abstract CartDAO getCartDAO();
+
+    public abstract WishlistDAO getWishlistDAO();
+
     public static DAOFactory getDAOFactory(String whichFactory, HashMap factoryParameters) {
         if (whichFactory.equals(MYSQLJDBCIMPL)) {
             return new MySQLJDBCDAOFactory(factoryParameters);

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MySQLJDBCDAOFactory extends DAOFactory {
 
@@ -15,7 +14,7 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
     private HashMap factoryParameters = null;
 
     public MySQLJDBCDAOFactory(HashMap factoryParameters) {
-        this.factoryParameters=factoryParameters;
+        this.factoryParameters = factoryParameters;
     }
 
     @Override
@@ -77,6 +76,16 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
     @Override
     public UserDAO getUserDAO() {
         return new UserDAOMySQLJDBCImpl(connection);
+    }
+
+    @Override
+    public CartDAO getCartDAO() {
+        return new CartDAOMySQLJDBCImpl(connection);
+    }
+
+    @Override
+    public WishlistDAO getWishlistDAO() {
+        return new WishlistDAOMySQLJDBCImpl(connection);
     }
 
 }

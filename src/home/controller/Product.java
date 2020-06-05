@@ -3,6 +3,7 @@ package home.controller;
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
 import model.dao.UserDAO;
+import model.dao.WishlistDAO;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -89,18 +90,14 @@ public class Product {
 
     public static void commonView(DAOFactory daoFactory,User loggedUser,Long id, HttpServletRequest request){
 
-        ProductDAO productDAO = null; /* per fetchare il prodotto */
-        UserDAO userDAO = null;
+        ProductDAO productDAO = daoFactory.getProductDAO(); /* per fetchare il prodotto */
+        WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
         model.mo.Product product = null; /* prodotto fetchato dal db da mostrare nella pagina product.jsp */
         boolean inWishlist = false; /* flag per sapere se il prodotto è nella wishlist dell'utente loggato */
 
-        productDAO = daoFactory.getProductDAO();
-
         product = productDAO.findProductById(id);
 
-        userDAO = daoFactory.getUserDAO();
-
-        inWishlist = userDAO.inWishlist(loggedUser,id);
+        inWishlist = wishlistDAO.inWishlist(loggedUser,id);
 
         System.err.println("product:" + product);
         System.err.println("inWishlist:" + inWishlist);

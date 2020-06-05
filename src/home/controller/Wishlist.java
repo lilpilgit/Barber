@@ -2,6 +2,7 @@ package home.controller;
 
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
+import model.dao.WishlistDAO;
 import model.mo.Product;
 import model.mo.User;
 import services.config.Configuration;
@@ -97,6 +98,7 @@ public class Wishlist {
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         UserDAO userDAO = null;
+        WishlistDAO wishlistDAO = null;
         User user = null;
         Long idProductToAdd = null; /* il del prodotto da aggiungere alla wishlist */
         String from = null; /* da quale jsp viene chiamato il metodo */
@@ -132,7 +134,9 @@ public class Wishlist {
             /* setto l'id del prodotto da aggiungere alla wishlist sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            added = userDAO.addProductToWishlist(user, idProductToAdd);
+            wishlistDAO = daoFactory.getWishlistDAO();
+
+            added = wishlistDAO.addProductToWishlist(user, idProductToAdd);
 
             /* IMPORTANTE !!! chiamo la commonView solo dopo che è stato aggiunto il prodotto altrimenti viene falsato il parametro inWishlist */
 
@@ -239,6 +243,7 @@ public class Wishlist {
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         UserDAO userDAO = null;
+        WishlistDAO wishlistDAO = null;
         User user = null;
         Long idProductToRemove = null; /* il del prodotto da rimuovere dalla wishlist */
         String from = null; /* da quale jsp viene chiamato il metodo */
@@ -274,7 +279,9 @@ public class Wishlist {
             /* setto l'id del prodotto da rimuovere dal carrello sulla base dell'id ricevuto */
             idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
 
-            removed = userDAO.removeProductFromWishlist(user, idProductToRemove);
+            wishlistDAO = daoFactory.getWishlistDAO();
+
+            removed = wishlistDAO.removeProductFromWishlist(user, idProductToRemove);
 
             /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
              *  base del parametro "from" */
@@ -367,14 +374,13 @@ public class Wishlist {
 
         ArrayList<Product> wishlist = null; //il carrello da passare alla jsp
         UserDAO userDAO = daoFactory.getUserDAO();
+        WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
         User user = null;
-
-        userDAO = daoFactory.getUserDAO();
 
         user = userDAO.findById(loggedUser.getId());
 
         /* setto l'oggetto wishlist all'interno dell'oggetto utente */
-        wishlist = userDAO.fetchWishlist(user);
+        wishlist = wishlistDAO.fetchWishlist(user);
 
         /* Setto la wishlist da mostrare nella pagina della wishlist dell'utente loggato */
         request.setAttribute("wishlist", wishlist);

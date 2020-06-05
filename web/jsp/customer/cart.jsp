@@ -166,7 +166,7 @@
         </div>
         <hr>
         <div class="text-center pt-1">
-            <button class="btngeneric" onclick=setNavFormHome('home.Home.showCheckout')>Checkout</button>
+            <button class="btngeneric" onclick=setNavFormHome('home.Checkout.showCheckout')>Checkout</button>
         </div>
     </div> <!-- card.// -->
 </div>

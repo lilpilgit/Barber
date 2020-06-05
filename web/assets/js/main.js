@@ -20,7 +20,6 @@ function toUpperCase(element) {
     element.value = element.value.toUpperCase();
 }
 
-
 function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta) {
     /**
      * Realize the counter of quantity for the product page

@@ -116,59 +116,6 @@ public class UserDAOCookieImpl implements UserDAO {
         throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
-    @Override
-    public ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-    @Override
-    public boolean addProductToCart(User user, Long idProduct, Integer desiredQty) throws UnsupportedOperationException {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-    @Override
-    public boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-
-    @Override
-    public boolean removeProductFromWishlist(User user, Long idProduct) throws UnsupportedOperationException {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-    @Override
-    public boolean addProductToWishlist(User user, Long idProduct) throws UnsupportedOperationException {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-    @Override
-    public ArrayList<Product> fetchWishlist(User user) {
-        /**
-         * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
-         * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
-    }
-
-    @Override
-    public boolean inWishlist(User user, Long idProduct) throws UnsupportedOperationException {
-        return false;
-    }
 
     @Override
     public User findById(Long id) {

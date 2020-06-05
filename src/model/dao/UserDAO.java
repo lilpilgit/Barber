@@ -12,19 +12,6 @@ import java.util.ArrayList;
 
 public interface UserDAO {
 
-    /*
-     * questi metodi rappresentano la business logic per l'oggetto USER
-     * e verranno implementati da classi diverse in modo diverso a seconda del sorgente dati o di quale DB
-     * è implementato nella applicazione. Pertanto fornisce solo una lista di quelli che sono i metodi che
-     * devono essere implementati per poter accedere ai dati della classe USER
-     */
-
-    /*
-     * Based on the SHOWCASE flag, it lists all the products that must be shown in the showcase
-     *
-     * @return all the products that must be shown in the showcase of the homepage
-     */
-
     User insert(Long id, Structure structure, String email, String name, String surname, String address,
                 String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException;
 
@@ -42,22 +29,9 @@ public interface UserDAO {
 
     boolean unBlockCustomer(User user) throws UnsupportedOperationException;
 
-    ArrayList<ExtendedProduct> fetchCart(User user) throws UnsupportedOperationException;
-
-    boolean addProductToCart(User user, Long idProduct, Integer desiredQty) throws UnsupportedOperationException;
-
-    boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
-
-    ArrayList<Product> fetchWishlist(User user);
-
-    boolean inWishlist(User user,Long idProduct) throws UnsupportedOperationException;
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
-
-    boolean removeProductFromWishlist(User user, Long idProduct) throws UnsupportedOperationException;
-
-    boolean addProductToWishlist(User user, Long idProduct) throws UnsupportedOperationException;
 
     /* ********************************************** */
 }

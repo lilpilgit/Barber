@@ -98,7 +98,7 @@
     <button type="submit" form="filterForm" class="btn button button1 ml-3 active2" id='filter_btn'>Filter</button>
 </div>
 <form name="filterForm" id="filterForm" method="post">
-    <input type="hidden" name="controllerAction" value="home.Home.showShop">
+    <input type="hidden" name="controllerAction" value="home.Shop.showShop">
     <input type="hidden" name="filter" value="0">
     <input type="hidden" name="category" value="All">
     <input type="hidden" name="brand" value="All">

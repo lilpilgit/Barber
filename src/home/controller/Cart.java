@@ -1,5 +1,6 @@
 package home.controller;
 
+import model.dao.CartDAO;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
 import model.mo.ExtendedProduct;
@@ -96,6 +97,7 @@ public class Cart {
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         UserDAO userDAO = null;
+        CartDAO cartDAO = null;
         User user = null;
         Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
         Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello : di default a 1 se viene aggiunto al carrello dalla pagina wishlist.jsp */
@@ -132,6 +134,8 @@ public class Cart {
             /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
+            cartDAO = daoFactory.getCartDAO();
+
             /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
              *  base del parametro "from" */
             from = request.getParameter("from");
@@ -139,14 +143,14 @@ public class Cart {
                 if (from.equals("product")) {
                     /* prendo la quantità scelta da aggiungere al carrello */
                     desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
-                    added = userDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                    added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
                     /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
                     Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
                     System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
 
                 } else if (from.equals("wishlist")) {
                     /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
-                    added = userDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                    added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
                     /* aggiunge la wishlist come ArrayList alla request*/
                     Wishlist.commonView(daoFactory, loggedUser, request);
                     System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
@@ -233,6 +237,7 @@ public class Cart {
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         UserDAO userDAO = null;
+        CartDAO cartDAO = null;
         User user = null;
         Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
         ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
@@ -268,7 +273,9 @@ public class Cart {
             /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
             idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            removed = userDAO.removeProductFromCart(user, idProductToAdd);
+            cartDAO = daoFactory.getCartDAO();
+
+            removed = cartDAO.removeProductFromCart(user, idProductToAdd);
 
             commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
 
@@ -335,15 +342,14 @@ public class Cart {
          * Set attribute "cart" inside request
          */
         ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
+        CartDAO cartDAO = daoFactory.getCartDAO();
         UserDAO userDAO = daoFactory.getUserDAO();
         User user = null;
-
-        userDAO = daoFactory.getUserDAO();
 
         user = userDAO.findById(loggedUser.getId());
 
         /* setto l'oggetto carrello all'interno dell'oggetto utente */
-        cart = userDAO.fetchCart(user);
+        cart = cartDAO.fetchCart(user);
 
 
         /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */

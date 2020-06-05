@@ -88,7 +88,7 @@
                 <div class="pt-2">
                     <button type="submit" form="contactForm" class="button btn-contact-form">Submit</button>
                 </div>
-                <input type="hidden" name="controllerAction" value="home.Home.contact">
+                <input type="hidden" name="controllerAction" value="home.Contact.contact">
 
             </form>
 

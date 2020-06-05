@@ -159,7 +159,7 @@
             <div class="text-center pt-1">
                 <button type="submit" form="form_edit_profile" class="btngeneric">Update profile</button>
             </div>
-            <input type="hidden" name="controllerAction" value="home.Home.updateProfile">
+            <input type="hidden" name="controllerAction" value="home.Profile.updateProfile">
         </form>
         <hr>
         <div class="form-row justify-content-center">

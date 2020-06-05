@@ -44,16 +44,16 @@
                         if (loggedOn) {
                     %>
                     <button class="btn btnheader" type="button" id='showBook'
-                            onclick=setNavFormHome('home.Home.showBook')>
+                            onclick=setNavFormHome('home.Book.showBook')>
                         Book!
                     </button>
                     <%}%>
                     <button class="btn btnheader" type="button" id='showShop'
-                            onclick=setNavFormHome('home.Home.showShop')>
+                            onclick=setNavFormHome('home.Shop.showShop')>
                         Shop
                     </button>
                     <button class="btn btnheader" type="button" id='showContact'
-                            onclick=setNavFormHome('home.Home.showContactForm')>
+                            onclick=setNavFormHome('home.Contact.showContactForm')>
                         Contact
                     </button>
                     <% if (loggedOn) {%>
@@ -83,13 +83,13 @@
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showOrders' onclick=setNavFormHome('home.Home.showOrders')>
+                                        id='showOrders' onclick=setNavFormHome('home.Orders.showOrders')>
                                     Orders
                                 </button>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showProfile' onclick=setNavFormHome('home.Home.showProfile')>
+                                        id='showProfile' onclick=setNavFormHome('home.Profile.showProfile')>
                                     Edit profile
                                 </button>
                             </li>

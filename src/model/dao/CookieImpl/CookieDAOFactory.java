@@ -31,7 +31,7 @@ public class CookieDAOFactory extends DAOFactory {
     }
 
     /* Dato che estende DAOFactory è costretto a dover implementare tali metodi anche se in caso di cookie
-    * commit,rollback,close non hanno alcun significato.*/
+     * commit,rollback,close non hanno alcun significato.*/
     @Override
     public void commitTransaction() {
     }
@@ -64,6 +64,15 @@ public class CookieDAOFactory extends DAOFactory {
         return new UserDAOCookieImpl(request, response);
     }
 
+    @Override
+    public CartDAO getCartDAO() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public WishlistDAO getWishlistDAO() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 
 }
