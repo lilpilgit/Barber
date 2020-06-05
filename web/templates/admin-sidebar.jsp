@@ -70,9 +70,13 @@
             <!-- sidebar-menu  -->
         </div>
         <!-- sidebar-content  -->
-        <div class="sidebar-footer button-side-footer">
-            <button type="submit" form="logoutForm"
-                    class="button-side-footer" id="logout">
+        <div class="sidebar-footer justify-content-center">
+            <button class="button-backtohome" type="submit" form="goBackToHome"
+                    class="button-side-footer" id="toHome" title="Go back to home">
+                <i class="fa fa-home"></i>
+            </button>
+            <button class="button-logout-admin" type="submit" form="logoutForm"
+                    class="button-side-footer" id="logout" title="Logout">
                 <i class="fa fa-power-off"></i>
             </button>
         </div>
@@ -84,6 +88,9 @@
 
     <form id="logoutForm" method="post">
         <input type="hidden" name="controllerAction" value="home.Home.logout">
+    </form>
+    <form id="goBackToHome" method="post"> <!-- TODO MODIFICARE FORM PER TORNARE ALLA HOME -->
+        <input type="hidden" name="controllerAction" value="home.Home.view">
     </form>
 </div>
 <script>

@@ -483,11 +483,11 @@ body {
     color: #ff0000;
 }
 
-.button-side-footer {
-    color: #56ce3a;
+.button-backtohome {
+    color: #818895;
     padding: 6px 12px;
     display: inline-block;
-    font-size: 1.2em;
+    font-size: 1.5em;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -502,7 +502,31 @@ body {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.button-side-footer:hover {
+.button-backtohome:hover {
+    color: #18c7ff;
+    text-decoration: none;
+}
+
+.button-logout-admin {
+    color: #18c7ff;
+    padding: 6px 12px;
+    display: inline-block;
+    font-size: 1.4em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.button-logout-admin:hover {
     color: #dc1219;
     text-decoration: none;
 }
