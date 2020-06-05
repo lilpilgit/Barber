@@ -776,6 +776,7 @@ input[type=number] {
 .back-form-contact {
     background-color: rgba(201, 197, 126, 0.7);
     padding: 2.8rem !important;
+    border-radius: 25px;
 }
 
 .btn-contact-form {
