@@ -47,15 +47,22 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         user.setBlocked(false); /* sto inserendo un nuovo utente */
         user.setDeleted(false); /* sto inserendo un nuovo utente */
         Long newId = null;
+        boolean yesAdditionalQuery = false;
 
 
 
         /*CON TALE QUERY CONTROLLO SE LO USER ESISTE GIÀ ALL'INTERNO DEL DB
          * 2 UTENTI CON LA STESSA EMAIL NON POSSONO ESISTERE PERTANTO CONTROLLO IL CAMPO MAIL*/
+
+        /* In base al fatto se sto inserendo un cliente o meno devo modificare la query sul DB */
+        yesAdditionalQuery = (user.getType() != 'C');
+
+        String additionalQuery = (yesAdditionalQuery) ? "AND FISCAL_CODE = ?" : ""; /* se sto aggiungendo qualcuno che è diverso da cliente devo controllare anche il codice fiscale */
+
         query =
                 "SELECT ID"
                         + " FROM USER"
-                        + " WHERE EMAIL = ? OR FISCAL_CODE = ?;";
+                        + " WHERE EMAIL = ? " + additionalQuery + ";";
 
         System.err.println("EMAIL =>>" + user.getEmail());
         System.err.println("FISCAL_CODE =>>" + user.getFiscalCode());
@@ -70,6 +77,8 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, user.getEmail());
+            if(yesAdditionalQuery)
+                ps.setString(i++,user.getFiscalCode());
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
@@ -168,20 +177,26 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         /* L'unico campo dell'utente che rimane da settare è l'ID. */
         user.setId(newId);
 
+        /* In base al fatto se sto inserendo un cliente o meno devo modificare la query sul DB */
+        yesAdditionalQuery = (user.getType() != 'C');
 
-        query = "INSERT INTO USER(ID, ID_STRUCTURE, EMAIL, NAME, SURNAME, ADDRESS, PHONE, PASSWORD, BIRTH_DATE, FISCAL_CODE, TYPE, BLOCKED, DELETED) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        String additionalQuery1 = (yesAdditionalQuery) ? "ID_STRUCTURE," : "";
+        String additionalQuery2 = (yesAdditionalQuery) ? "?," : "";
+
+        query = "INSERT INTO USER(ID," +  additionalQuery1 + " EMAIL, NAME, SURNAME, ADDRESS, PHONE, PASSWORD, BIRTH_DATE, FISCAL_CODE, TYPE, BLOCKED, DELETED) VALUES(?," +  additionalQuery2 + "?,?,?,?,?,?,?,?,?,?,?);";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
             ps.setLong(i++, user.getId());
-            ps.setLong(i++, user.getStructure().getId());
+            if (yesAdditionalQuery)
+                ps.setLong(i++, user.getStructure().getId()); /* un cliente non ha una struttura di riferimento */
             ps.setString(i++, user.getEmail());
             ps.setString(i++, user.getName());
             ps.setString(i++, user.getSurname());
             ps.setString(i++, user.getAddress());
             ps.setString(i++, user.getPhone());
             ps.setString(i++, user.getPassword());
-            ps.setDate(i++, Date.valueOf(user.getBirthDate()));
+            ps.setDate(i++, (user.getBirthDate() != null) ? Date.valueOf(user.getBirthDate()) : null); /* ad un cliente non chiediamo la data di nascita */
             ps.setString(i++, user.getFiscalCode());
             ps.setString(i++, String.valueOf(user.getType()));
             ps.setBoolean(i++, user.isBlocked());
@@ -307,7 +322,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps.setString(i++, user.getAddress());
             ps.setString(i++, user.getPhone());
             ps.setString(i++, user.getPassword());
-            ps.setDate(i++, (user.getBirthDate() != null) ? Date.valueOf(user.getBirthDate()) : null);
+            ps.setDate(i++, (user.getBirthDate() != null) ? Date.valueOf(user.getBirthDate()) : null); /* ad un cliente non chiediamo la data di nascita */
             ps.setString(i++, user.getFiscalCode());
             ps.setString(i++, String.valueOf(user.getType()));
             ps.setBoolean(i++, user.isBlocked());

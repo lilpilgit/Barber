@@ -249,8 +249,6 @@ public class Home {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
             } catch (Throwable t) {
             }
-            throw new RuntimeException(e);
-
         } finally {
             try {
                 /* Close fittizia */
@@ -310,10 +308,14 @@ public class Home {
 
             userDAO = daoFactory.getUserDAO();
 
-            userDAO.insert(null,null, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, null, null, 'C');
+            try {
+                userDAO.insert(null, null, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, null, null, 'C');
 
-            registered = true; /* se non viene sollevata l'eccezione riesco a settarlo a true */
-
+                registered = true; /* se non viene sollevata l'eccezione riesco a settarlo a true */
+            }catch (DuplicatedObjectException e){
+                System.out.println("HOME.JAVA ==> Errore durante la registrazione.");
+                applicationMessage = "Email already registered";
+            }
             /* Chiamo la commonView */
             commonView(daoFactory, request);
 
@@ -334,8 +336,6 @@ public class Home {
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
             }
-            throw new RuntimeException(e);
-
         } finally {
             try {
                 /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
@@ -423,7 +423,6 @@ public class Home {
 
         ArrayList<Product> showcase = null;
         ProductDAO productDAO = daoFactory.getProductDAO();
-
 
         /* Scarico dal DB la lista dei prodotti da mostrare in vetrina */
         showcase = productDAO.findShowcaseProduct();
