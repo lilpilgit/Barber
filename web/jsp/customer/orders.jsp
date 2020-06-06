@@ -55,6 +55,11 @@
                         <div class="col pt-2">ORDER DATE: 2020-12-12</div>
                         <div class="col-5 pt-2"><span class="float-left pr-3">STATUS:</span><span class="progress">
                             <!-- PER MODIFICARE STATO AVANZAMENTO CAMBIARE width: 0/25/50/75/100 e aria-valuenow= 0/25/50/75/100 -->
+                                <%--0 = ancora niente--%>
+                                <%--25 = in elaborazione--%>
+                                <%--50 = Spedito--%>
+                                <%--75 = in consegna--%>
+                                <%--100 = consegnato--%>
                             <span class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
                          </span>
                         </div>
