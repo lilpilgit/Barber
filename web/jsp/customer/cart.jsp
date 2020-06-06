@@ -69,7 +69,7 @@
                 long index_checkbox = 0;
                 for (ExtendedProduct ep : cart) {%>
             <tr>
-                <td>
+                <td class="align-middle">
                     <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>" value="<%=ep.getId()%>">
                 </td>
                 <td>
