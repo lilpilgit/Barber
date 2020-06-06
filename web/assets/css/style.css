@@ -542,11 +542,12 @@ img {
     margin: auto;
 }
 
-.card {
+.card-shop {
     background: #eee;
     padding: 3em;
     line-height: 1.5em;
     height: 500px;
+    border-radius: 15px;
 }
 
 .card2 {

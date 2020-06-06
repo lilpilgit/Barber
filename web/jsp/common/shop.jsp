@@ -131,7 +131,7 @@
             for (Product product : products_to_show) {
         %>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card-shop">
                 <div class="text-center ">
                     <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
                                                        alt="<%=product.getPictureName()%>"></div>
