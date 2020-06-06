@@ -242,3 +242,13 @@ function removeProductFromWishlist(id) {
     form.elements['idProduct'].value = id;
     form.submit();
 }
+
+function checkUncheckAll(nameGroup) {
+    console.log("chiamata")
+    let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
+    console.log(checkboxes)
+    checkboxes.forEach((checkbox)=>{
+        checkbox.checked = !checkbox.checked;
+    })
+}
+

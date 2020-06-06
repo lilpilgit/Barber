@@ -55,6 +55,7 @@
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
+                <th scope="col"><input type="checkbox" id="modify_all_checkboxes"></th>
                 <th scope="col">Product</th>
                 <th scope="col" width="120">Quantity</th>
                 <th scope="col" width="120">Price</th>
@@ -65,8 +66,12 @@
             <%
                 float totSaved = 0;
                 float totPrice = 0;
+                long index_checkbox = 0;
                 for (ExtendedProduct ep : cart) {%>
             <tr>
+                <td>
+                    <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>" value="<%=ep.getId()%>">
+                </td>
                 <td>
                     <div class="media">
                         <div class="cart-img text-center">
@@ -183,7 +188,9 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
-
+        document.getElementById('modify_all_checkboxes').addEventListener("click",() => {
+            checkUncheckAll('productsToBuy')
+        });
     });
 </script>
 </body>
