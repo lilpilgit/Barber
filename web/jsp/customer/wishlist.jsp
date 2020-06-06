@@ -65,9 +65,10 @@
                 for (Product p : wishlist) {%>
             <tr>
                 <td>
-                    <figure class="media">
+                    <div class="media">
+                        <div class="cart-img text-center">
                         <div class="img-wrap"><img src="img/products/<%=p.getPictureName()%>"
-                                                   class="img-thumbnail img-sm"></div>
+                                                   class="img-thumbnail img-sm"></div></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=p.getName()%>
                             </h6>
@@ -83,7 +84,7 @@
                             </dl>
                             <%}%>
                         </figcaption>
-                    </figure>
+                    </div>
                 </td>
                 <td>
                     <%

@@ -68,10 +68,10 @@
                 for (ExtendedProduct ep : cart) {%>
             <tr>
                 <td>
-                    <figure class="media">
+                    <div class="media">
                         <div class="cart-img text-center">
-                        <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
-                                                   class="img-thumbnail img-sm"></div></div>
+                            <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
+                                                       class="img-thumbnail img-sm"></div></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=ep.getName()%>
                             </h6>
@@ -87,7 +87,7 @@
                             </dl>
                             <%}%>
                         </figcaption>
-                    </figure>
+                    </div>
                 </td><!-- RICORDARSI DI INCREMENTARE L'ID PER OGNI CICLO -->
                 <td>
                     <!--COUNTER OF QUANTITY-->
@@ -139,7 +139,7 @@
                         }%>
                 </td>
                 <td class="text-right">
-<%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
+                    <%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
                     <button class="btn <%=(ep.isInWishlist()) ? "btn-gold-active" : "btn-outline-gold"%>" title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
                             data-toggle="tooltip"
                             data-original-title="<%=(ep.isInWishlist()) ? "Delete from Wishlist" : "Save to Wishlist"%>" onclick="<%=(ep.isInWishlist()) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=ep.getId() + ");"%>">
