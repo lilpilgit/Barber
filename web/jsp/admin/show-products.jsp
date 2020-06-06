@@ -74,7 +74,7 @@
                         <th scope="col">N°</th>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col">Maximum Order Quantity</th>
                         <th scope="col">Producer</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
@@ -96,7 +96,7 @@
                         </td>
                         <td><%=p.getName()%>
                         </td>
-                        <td><%=p.getQuantity()%>
+                        <td><%=p.getMaxOrderQuantity()%>
                         </td>
                         <td><%=p.getProducer()%>
                         </td>

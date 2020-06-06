@@ -35,7 +35,7 @@ public class Products {
         LocalDate insertDate;
         String pictureName;
         String description;
-        Integer quantity;
+        Integer maxOrderQuantity;
         String category;
 
         String submit; /*mi aspetto che il value sia "add_new_product"*/
@@ -73,7 +73,7 @@ public class Products {
             description = request.getParameter("description");/*required*/
             price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price"))); /*required*/
             discount = Integer.parseInt(request.getParameter("discount"));/*required*/
-            quantity = Integer.parseInt(request.getParameter("quantity"));/*required*/
+            maxOrderQuantity = Integer.parseInt(request.getParameter("maxOrderQuantity"));/*required*/
             pictureName = request.getParameter("pic_name");/*required*/
             insertDate = LocalDate.parse(request.getParameter("insert_date"));/*not required*/
             submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_product"*/
@@ -93,7 +93,7 @@ public class Products {
             System.err.println(structure);
             /* Effettuo l'inserimento del nuovo prodotto */
             try {
-                productDAO.insert(null, producer, price, discount, name, insertDate, pictureName, description, quantity, category, structure);
+                productDAO.insert(null, producer, price, discount, name, insertDate, pictureName, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
@@ -648,7 +648,7 @@ public class Products {
             BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price")));
             productToEdit.setPrice(price);
             productToEdit.setDiscount(Integer.parseInt(request.getParameter("discount")));
-            productToEdit.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+            productToEdit.setMaxOrderQuantity(Integer.parseInt(request.getParameter("maxOrderQuantity")));
             productToEdit.setDeleted(false);
             productToEdit.setShowcase(true);
             productToEdit.setStructure(structure);

@@ -184,7 +184,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             throw new RuntimeException(e);
         }
         try {
-            extendedProduct.setQuantity(rs.getInt("P.QUANTITY"));
+            extendedProduct.setMaxOrderQuantity(rs.getInt("P.QUANTITY"));
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getLong(\"P.QUANTITY\")");
             throw new RuntimeException(e);

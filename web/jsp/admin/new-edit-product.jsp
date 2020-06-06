@@ -114,9 +114,9 @@
                            class="form-control">
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="Quantity">Quantity</label>
-                    <input type="number" name="quantity" id="Quantity" min="0" required
-                           value="<%=(action.equals("modify")) ? productToEdit.getQuantity() : ""%>"
+                    <label for="maxOrderQuantity">Maximum Order Quantity</label>
+                    <input type="number" name="maxOrderQuantity" id="maxOrderQuantity" min="0" required
+                           value="<%=(action.equals("modify")) ? productToEdit.getMaxOrderQuantity() : ""%>"
                            class="form-control">
                 </div>
             </div>

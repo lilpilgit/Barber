@@ -94,8 +94,8 @@
                     <div class="text-center" id="counter_qta" style="height: 73px;" class='main'>
                         <button id="minus_button" class='down_count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
-                        <label for="quantity"></label>
-                        <input id="quantity" class='counter' name="desiredQty" type="number" max="<%=product.getQuantity()%>" min="1"
+                        <label for="maxOrderQuantity"></label>
+                        <input id="maxOrderQuantity" class='counter' name="desiredQty" type="number" max="<%=product.getMaxOrderQuantity()%>" min="1"
                                readonly form="action_product"
                                value='1' required/>
                         <button id="plus_button" class='up_count btn btn-info' title='Up'><i class='fa fa-plus'></i>
@@ -139,7 +139,7 @@
 <script type="text/javascript">
 
     window.addEventListener("load", () => {
-        handlerCounterQtaProduct("counter_qta", "minus_button", "quantity", "plus_button", <%=product.getQuantity()%>);
+        handlerCounterQtaProduct("minus_button", "maxOrderQuantity", "plus_button", <%=product.getMaxOrderQuantity()%>);
     });
 
 </script>

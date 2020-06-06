@@ -12,7 +12,7 @@ public class Product {
     private LocalDate insertDate;
     private String pictureName;
     private String description;
-    private Integer quantity;
+    private Integer maxOrderQuantity;
     private String category;
     private Boolean showcase;                   /* The product is highlighted ? */
     private Boolean deleted;
@@ -31,7 +31,7 @@ public class Product {
                 ", insertDate=" + insertDate +
                 ", pictureName='" + pictureName + '\'' +
                 ", description='" + description + '\'' +
-                ", quantity=" + quantity +
+                ", maxOrderQuantity=" + maxOrderQuantity +
                 ", category='" + category + '\'' +
                 ", showcase=" + showcase +
                 ", deleted=" + deleted +
@@ -103,12 +103,12 @@ public class Product {
         this.description = description;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getMaxOrderQuantity() {
+        return maxOrderQuantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setMaxOrderQuantity(Integer maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
     }
 
     public String getCategory() {

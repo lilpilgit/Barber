@@ -13,7 +13,8 @@ import java.util.HashMap;
 
 public class Product {
 
-    private Product(){}
+    private Product() {
+    }
 
     public static void showProduct(HttpServletRequest request, HttpServletResponse response) {
         /**
@@ -56,7 +57,7 @@ public class Product {
             }
             System.err.println("id:" + id);
 
-            commonView(daoFactory,loggedUser,id,request);
+            commonView(daoFactory, loggedUser, id, request);
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -88,7 +89,7 @@ public class Product {
         }
     }
 
-    public static void commonView(DAOFactory daoFactory,User loggedUser,Long id, HttpServletRequest request){
+    public static void commonView(DAOFactory daoFactory, User loggedUser, Long id, HttpServletRequest request) {
 
         ProductDAO productDAO = daoFactory.getProductDAO(); /* per fetchare il prodotto */
         WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
@@ -97,13 +98,17 @@ public class Product {
 
         product = productDAO.findProductById(id);
 
-        inWishlist = wishlistDAO.inWishlist(loggedUser,id);
+        if (loggedUser != null) {
+            /* controllo necessario altrimenti va in errore se non si è utenti loggati e si prova a visualizzare la pagina product */
+            inWishlist = wishlistDAO.inWishlist(loggedUser, id);
+        }
+
 
         System.err.println("product:" + product);
         System.err.println("inWishlist:" + inWishlist);
         /* 5) Setto il prodotto da mostrare */
         request.setAttribute("product", product);
         /* 6) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */
-        request.setAttribute("inWishlist",inWishlist);
+        request.setAttribute("inWishlist", inWishlist);
     }
 }

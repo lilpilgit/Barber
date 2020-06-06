@@ -1,3 +1,9 @@
+/* GLOBAL VARIABLE */
+
+var RESULT_CHANGE_DESIRED_QTY = false; /* variabile globale per gestire il risultato tornato dalla request AJAX */
+
+/* *************** */
+
 function setButtonActive(id) {
     /**
      * Add the class "active2" to the button of navbar based on actual active page
@@ -20,26 +26,27 @@ function toUpperCase(element) {
     element.value = element.value.toUpperCase();
 }
 
-function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta) {
+function handlerCounterQtaProduct(id_minus, id_qta, id_plus, max_qta) {
     /**
-     * Realize the counter of quantity for the product page
-     * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase
-     * Set the quantity text on click of buttons
+     * Realize the counter of quantity
+     * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase, max quantity available to select
+     * Set the quantity text on click of buttons.
+     * Return true if operation of '+' or '-' is allowed otherwise return false.
      */
     let error_present = false;
     max_qta = parseInt(max_qta);
-    let div_father = document.getElementById(id_father);
+    // let div_father = document.getElementById(id_father);
     let minus_btn = document.getElementById(id_minus);
     let qta_field = document.getElementById(id_qta);
     let plus_btn = document.getElementById(id_plus);
-    let div_max_qta = document.createElement("div");
-    div_max_qta.classList.add("max-qta-reached");
-    div_max_qta.innerHTML = "<p><strong>Warning!</strong>Maximum quantity reached.</p>";
+    // let div_max_qta = document.createElement("div");
+    // div_max_qta.classList.add("max-qta-reached");
+    // div_max_qta.innerHTML = "<p><strong>Warning!</strong>Maximum quantity reached.</p>";
 
 
     minus_btn.addEventListener("click", () => {
         if (error_present) {
-            div_father.removeChild(div_max_qta);
+            // div_father.removeChild(div_max_qta);
             error_present = false;
         }
         if (parseInt(qta_field.value) !== 1) {
@@ -56,9 +63,10 @@ function handlerCounterQtaProduct(id_father, id_minus, id_qta, id_plus, max_qta)
         } else {
             /*show popup next to the counter to alert customer */
             error_present = true;
-            div_father.appendChild(div_max_qta);
+            // div_father.appendChild(div_max_qta);
         }
     });
+
 
 }
 
@@ -244,11 +252,93 @@ function removeProductFromWishlist(id) {
 }
 
 function checkUncheckAll(nameGroup) {
-    console.log("chiamata")
+    /**
+     * Allows you to select or deselect a list of checkboxes with the same name
+     */
     let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
-    console.log(checkboxes)
-    checkboxes.forEach((checkbox)=>{
+    checkboxes.forEach((checkbox) => {
         checkbox.checked = !checkbox.checked;
     })
+}
+
+function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
+    /**
+     * Realize the counter of quantity in page of cart
+     * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase, max quantity available to select
+     * Set the quantity text on click of buttons.
+     * Return true if operation of '+' or '-' is allowed otherwise return false.
+     */
+    let error_present = false;
+    max_qta = parseInt(max_qta);
+    // let div_father = document.getElementById(id_father);
+    let minus_btn = document.getElementById(id_minus);
+    let qta_field = document.getElementById(id_qta);
+    let plus_btn = document.getElementById(id_plus);
+    // let div_max_qta = document.createElement("div");
+    // div_max_qta.classList.add("max-qta-reached");
+    // div_max_qta.innerHTML = "<p><strong>Warning!</strong>Maximum quantity reached.</p>";
+
+
+    minus_btn.addEventListener("click", () => {
+        if (error_present) {
+            // div_father.removeChild(div_max_qta);
+            error_present = false;
+        }
+        if (parseInt(qta_field.value) !== 1) {
+            /* la decremento sul db */
+            changeQuantityProductInCart(idProduct, 'decrease');
+            if (RESULT_CHANGE_DESIRED_QTY === true) {
+                /*i can decrease the quantity*/
+                qta_field.value -= 1;
+                RESULT_CHANGE_DESIRED_QTY = false; /* IMPORTANTE! resettarlo a false subito dopo */
+            }
+        }
+    });
+
+
+    plus_btn.addEventListener("click", () => {
+        if (parseInt(qta_field.value) !== max_qta) {
+            /* la incremento sul db */
+            changeQuantityProductInCart(idProduct, 'increase');
+            if (RESULT_CHANGE_DESIRED_QTY === true) {
+                /*i can increase the quantity*/
+                qta_field.value = parseInt(qta_field.value) + 1;
+                RESULT_CHANGE_DESIRED_QTY = false; /* IMPORTANTE! resettarlo a false subito dopo */
+            }
+        } else {
+            /*show popup next to the counter to alert customer */
+            error_present = true;
+            // div_father.appendChild(div_max_qta);
+        }
+    });
+
+}
+
+function changeQuantityProductInCart(idProduct, operation) {
+
+    /**
+     * Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
+     * loggedUser and product with ID = idProduct
+     *
+     * Parameters required by the controller: idProduct
+     *                                        operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
+     * @type {XMLHttpRequest}
+     */
+    let xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            alert("Modificato!");
+            RESULT_CHANGE_DESIRED_QTY = true;
+        } else if (this.readyState === 4 && this.status === 418) {
+            alert("ERRORE!!!!");
+            RESULT_CHANGE_DESIRED_QTY = false;
+        }
+    };
+
+    xhttp.open("GET", "", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation);
+
 }
 

@@ -38,7 +38,7 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
         ArrayList<Product> wishlist = new ArrayList<>();
         /* Seleziono i prodotti presenti nella wishlist dell'utente passato come parametro */
         query =
-                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY "
+                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY "
                         + "FROM WISHLIST W INNER JOIN PRODUCT P ON W.ID_PRODUCT = P.ID "
                         + "WHERE W.ID_CUSTOMER = ? AND P.DELETED = 0;";
         try {
@@ -230,6 +230,7 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
             throw new RuntimeException(e);
         }
 
+        System.err.println("inWishlist NEL DAO " + inWishlist);
         return inWishlist;
 
     }
@@ -294,9 +295,9 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
             throw new RuntimeException(e);
         }
         try {
-            product.setQuantity(rs.getInt("QUANTITY"));
+            product.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setQuantity(rs.getInt(\"QUANTITY\"));");
+            System.err.println("Errore nella product.setMaxOrderQuantity(rs.getInt(\"MAX_ORDER_QTY\"));");
             throw new RuntimeException(e);
         }
 

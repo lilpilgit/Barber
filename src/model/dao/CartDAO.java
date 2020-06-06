@@ -17,4 +17,5 @@ public interface CartDAO {
 
     boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
 
+    boolean changeDesiredQuantity(User user, Long idProduct, boolean increase, Integer desiredQuantity) throws UnsupportedOperationException;
 }

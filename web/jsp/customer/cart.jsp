@@ -55,7 +55,7 @@
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
-                <th scope="col"><input type="checkbox" id="modify_all_checkboxes"></th>
+                <th scope="col"><input type="checkbox" id="modify_all_checkboxes" title="Check/Uncheck all"></th>
                 <th scope="col">Product</th>
                 <th scope="col" width="120">Quantity</th>
                 <th scope="col" width="120">Price</th>
@@ -99,20 +99,20 @@
                     <div id="counter_qta_<%=ep.getId()%>" style="height: 73px;"
                          class='main'>
                         <input id="quantity_<%=ep.getId()%>" class='counter'
-                               type="number" max="<%=ep.getQuantity()%>" min="1"
+                               type="number" max="<%=ep.getMaxOrderQuantity()%>" min="1"
                                readonly style="width: 90px;"
                                value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
-                            <button id="minus_button_<%=ep.getId()%>" class='btn'
-                                    title='Down'><i
-                                    class='fa fa-minus'></i></button>
-                            <button id="plus_button_<%=ep.getId()%>" class='btn'
-                                    title='Up'><i class='fa fa-plus'></i>
+                            <button id="minus_button_<%=ep.getId()%>" class="btn"
+                                    title="Down"><i
+                                    class="fa fa-minus"></i></button>
+                            <button id="plus_button_<%=ep.getId()%>" class="btn"
+                                    title="Up"><i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
                     <script>
-                        handlerCounterQtaProduct("counter_qta_<%=ep.getId()%>", "minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getQuantity()%>);
+                        handleCounterCart("minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getMaxOrderQuantity()%>, <%=ep.getId()%>);
                     </script>
                 </td>
                 <td>

@@ -92,7 +92,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
                 + "  INSERT_DATE = ?,"
                 + "  PIC_NAME = ?,"
                 + "  DESCRIPTION = ?,"
-                + "  QUANTITY = ?,"
+                + "  MAX_ORDER_QTY = ?,"
                 + "  CATEGORY = ?,"
                 + "  SHOWCASE = ?,"
                 + "  DELETED = ?"
@@ -111,7 +111,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             ps.setDate(i++, Date.valueOf(product.getInsertDate()));
             ps.setString(i++, product.getPictureName());
             ps.setString(i++, product.getDescription());
-            ps.setInt(i++, product.getQuantity());
+            ps.setInt(i++, product.getMaxOrderQuantity());
             ps.setString(i++, product.getCategory());
             ps.setBoolean(i++, product.inShowcase());
             ps.setBoolean(i++, product.isDeleted());
@@ -208,7 +208,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     @Override
     public Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
-                          String picName, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException {
+                          String picName, String description, Integer maxOrderQuantity, String category, Structure structure) throws DuplicatedObjectException {
         /**
          * This method allows you to indifferently insert a product.
          * @params id parameter is DUMMY for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
@@ -225,7 +225,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         product.setInsertDate(insertDate);
         product.setPictureName(picName);
         product.setDescription(description);
-        product.setQuantity(quantity);
+        product.setMaxOrderQuantity(maxOrderQuantity);
         product.setCategory(category);
         product.setStructure(structure);
         product.setShowcase(true);
@@ -245,7 +245,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         System.err.println("PRODUCER =>>" + product.getProducer());
         System.err.println("PRICE =>>" + product.getPrice());
         System.err.println("DISCOUNT =>>" + product.getDiscount());
-        System.err.println("QUANTITY =>>" + product.getQuantity());
+        System.err.println("MAX_ORDER_QTY =>>" + product.getMaxOrderQuantity());
 
 
 
@@ -351,7 +351,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         product.setId(newId);
 
 
-        query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -363,7 +363,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             ps.setDate(i++, Date.valueOf(product.getInsertDate()));
             ps.setString(i++, product.getPictureName());
             ps.setString(i++, product.getDescription());
-            ps.setInt(i++, product.getQuantity());
+            ps.setInt(i++, product.getMaxOrderQuantity());
             ps.setString(i++, product.getCategory());
             ps.setBoolean(i++, product.inShowcase());
             ps.setBoolean(i++, product.isDeleted());
@@ -778,9 +778,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             throw new RuntimeException(e);
         }
         try {
-            product.setQuantity(rs.getInt("QUANTITY"));
+            product.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"QUANTITY\")");
+            System.err.println("Errore nella rs.getLong(\"MAX_ORDER_QTY\")");
             throw new RuntimeException(e);
         }
         try {

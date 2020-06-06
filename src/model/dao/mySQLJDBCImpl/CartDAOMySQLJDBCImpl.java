@@ -1,15 +1,13 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.CartDAO;
-import model.dao.UserDAO;
-import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
-import model.mo.Product;
-import model.mo.Structure;
 import model.mo.User;
 
-import java.sql.*;
-import java.time.LocalDate;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CartDAOMySQLJDBCImpl implements CartDAO {
@@ -40,7 +38,7 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         /* Seleziono i prodotti presenti nel carrello dell'utente passato come parametro */
         query =
 
-                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, QUANTITY, CATEGORY,DESIRED_QTY, IF(EXISTS (SELECT W.ID_PRODUCT FROM WISHLIST W WHERE W.ID_PRODUCT = C.ID_PRODUCT),TRUE,FALSE) IN_WISHLIST "
+                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY,DESIRED_QTY, IF(EXISTS (SELECT W.ID_PRODUCT FROM WISHLIST W WHERE W.ID_PRODUCT = C.ID_PRODUCT),TRUE,FALSE) IN_WISHLIST "
                         + "FROM (CART C INNER JOIN PRODUCT P ON C.ID_PRODUCT = P.ID) "
                         + "WHERE C.ID_CUSTOMER = ? AND P.DELETED = 0";
 
@@ -232,6 +230,59 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         return true;
     }
 
+    public boolean changeDesiredQuantity(User user, Long idProduct, boolean operation, Integer desiredQuantity) throws UnsupportedOperationException {
+        /**
+         * Increase desired quantity of product into the cart of logged user .
+         *
+         * @params User user : a user with type {C}
+         *         Long idProduct : id of the product.
+         *         Integer desiredQuantity.
+         *         boolean operation: if true increase else if false decrease desired quantity.
+         *
+         * @return true if product is successfully updated into the cart otherwise raise an exception.
+         * */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if (user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile modificare la quantità desiderata del prodotto con id{" + idProduct + "} nel carrello dell'utente con id{" + user.getId() + "} in quanto non è cliente.");
+
+        if(operation) {
+            query =
+                    "UPDATE CART "
+                            + "SET DESIRED_QTY = DESIRED_QTY + ? "
+                            + "WHERE ID_CUSTOMER = ? AND ID_PRODUCT = ?;";
+        }else{
+            query =
+                    "UPDATE CART "
+                            + "SET DESIRED_QTY = DESIRED_QTY - ? "
+                            + "WHERE ID_CUSTOMER = ? AND ID_PRODUCT = ?;";
+        }
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setInt(i++, desiredQuantity);
+            ps.setLong(i++, user.getId());
+            ps.setLong(i++, idProduct);
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps = connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
     private ExtendedProduct readCart(ResultSet rs) {
         /**
          * Read an ExtendedProduct attributes
@@ -292,9 +343,9 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
             throw new RuntimeException(e);
         }
         try {
-            extendedProduct.setQuantity(rs.getInt("QUANTITY"));
+            extendedProduct.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella extendedProduct.setQuantity(rs.getInt(\"QUANTITY\"));");
+            System.err.println("Errore nella extendedProduct.setMaxOrderQuantity(rs.getInt(\"MAX_ORDER_QTY\"));");
             throw new RuntimeException(e);
         }
         try {
@@ -312,7 +363,6 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
 
         return extendedProduct;
     }
-
 
 
 }
