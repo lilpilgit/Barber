@@ -18,7 +18,10 @@ public class Checkout {
          */
 
         DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -36,21 +39,39 @@ public class Checkout {
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
 
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            daoFactory.beginTransaction();
+
+            String checkoutInfo = request.getParameter("checkoutInfo");
+
+            System.err.println("checkoutInfo ===> " + checkoutInfo);
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
             try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
             }
             throw new RuntimeException(e);
 
         } finally {
             try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
             } catch (Throwable t) {
             }
         }
@@ -62,5 +83,6 @@ public class Checkout {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "customer/checkout");
+
     }
 }

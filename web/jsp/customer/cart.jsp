@@ -167,11 +167,12 @@
             <span class="font-weight-bold"><%=totSavedBD%> &euro;</span>
             <br>
             <span>Total Price: </span>
-            <span class="font-weight-bold"><%=totPriceBD%> &euro;</span>
+            <span class="font-weight-bold"><%=totPriceBD%>&euro;</span>
+            <input type="hidden" readonly id="totalPrice" value="<%=totPriceBD%>">
         </div>
         <hr>
         <div class="text-center pt-1">
-            <button class="btngeneric" onclick=setNavFormHome('home.Checkout.showCheckout')>Checkout</button>
+            <button class="btngeneric" onclick=goToCheckout('productsToBuy')>Checkout</button>
         </div>
     </div> <!-- card.// -->
 </div>
@@ -180,6 +181,11 @@
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
     <input type="hidden" name="from" value="cart">
+</form>
+
+<form method="post" id="action_checkout">
+    <input type="hidden" name="controllerAction" value="home.Checkout.showCheckout">
+    <input type="hidden" value="" name="checkoutInfo" id="checkoutInfo">
 </form>
 
 

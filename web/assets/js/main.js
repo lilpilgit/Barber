@@ -342,3 +342,35 @@ function changeQuantityProductInCart(idProduct, operation) {
 
 }
 
+function goToCheckout(nameGroup) {
+
+    let form =  document.getElementById('action_checkout');
+    let totalPrice = document.getElementById('totalPrice').value;
+    let checkOutJson = {
+        "totalPrice": totalPrice,
+    };
+    /* Fetch all checkboxes checked and the corresponding values */
+    let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
+    let atLeastOne = false;
+    checkboxes.forEach((checkbox) => {
+        if (checkbox.checked === true) {
+            atLeastOne = true;
+            /* aggiungo al json la coppia id:quantità_desiderata */
+            let desiredQuantity = document.getElementById('quantity_' + checkbox.value).value; /* per poter indirizzare l'id del tipo : quantity_idProdotto*/
+            checkOutJson[checkbox.value] = desiredQuantity;
+        }
+    })
+    if (atLeastOne === false) {
+        //TODO: mostrare popover al posto di alert
+        alert("Select at least one product for checkout.");
+    }else {
+        /* posso procedere al checkout */
+        console.log(JSON.stringify(checkOutJson));
+        let checkoutInfo = document.getElementById('checkoutInfo');
+        checkoutInfo.value = JSON.stringify(checkOutJson);
+
+        /* Faccio il submit della form */
+        form.submit();
+    }
+}
+

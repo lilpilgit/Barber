@@ -19,10 +19,10 @@
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Book";
+    String menuActiveLink = "Shop";
 
     /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
-    String idBtnAttivo = "showCheckout";
+    String idBtnAttivo = "showShop";
 %>
 <!doctype html>
 <html lang="en">
