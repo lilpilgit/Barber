@@ -55,7 +55,7 @@
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
-                <th scope="col"><input type="checkbox" id="modify_all_checkboxes" title="Check/Uncheck all"></th>
+                <th scope="col"><input type="checkbox" id="modify_all_checkboxes" title="Check/Uncheck all" onchange="checkUncheckAll(this,'productsToBuy')"></th>
                 <th scope="col">Product</th>
                 <th scope="col" width="120">Quantity</th>
                 <th scope="col" width="120">Price</th>
@@ -194,9 +194,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
-        document.getElementById('modify_all_checkboxes').addEventListener("click",() => {
-            checkUncheckAll('productsToBuy')
-        });
+
     });
 </script>
 </body>

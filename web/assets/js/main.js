@@ -251,14 +251,22 @@ function removeProductFromWishlist(id) {
     form.submit();
 }
 
-function checkUncheckAll(nameGroup) {
+function checkUncheckAll(ele, nameGroup) {
     /**
      * Allows you to select or deselect a list of checkboxes with the same name
      */
     let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = !checkbox.checked;
-    })
+
+    if (ele.checked) {
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+        }
+    } else {
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
+    }
+
 }
 
 function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
@@ -344,7 +352,7 @@ function changeQuantityProductInCart(idProduct, operation) {
 
 function goToCheckout(nameGroup) {
 
-    let form =  document.getElementById('action_checkout');
+    let form = document.getElementById('action_checkout');
     let totalPrice = document.getElementById('totalPrice').value;
     let checkOutJson = {
         "totalPrice": totalPrice,
@@ -363,7 +371,7 @@ function goToCheckout(nameGroup) {
     if (atLeastOne === false) {
         //TODO: mostrare popover al posto di alert
         alert("Select at least one product for checkout.");
-    }else {
+    } else {
         /* posso procedere al checkout */
         console.log(JSON.stringify(checkOutJson));
         let checkoutInfo = document.getElementById('checkoutInfo');
