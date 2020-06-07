@@ -23,5 +23,6 @@
     <orderEntry type="library" name="commons-fileupload-1" level="project" />
     <orderEntry type="library" name="commons-io-2" level="project" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="library" name="json-20200518" level="project" />
   </component>
 </module>

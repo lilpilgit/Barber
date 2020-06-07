@@ -64,54 +64,74 @@ public class Dispatcher extends HttpServlet {
             }
         }//fine ELSE
 
-        if (controllerAction == null)
-            controllerAction = "home.Home.view";
+        /* chiamate AJAX */
+        if (controllerAction != null && controllerAction.equals("home.Cart.changeDesiredQuantity")) {
+            RequestDispatcher jspChangeDesiredQty = request.getRequestDispatcher("jsp/customer/ajax-change-desired-qty.jsp");
+            try {
+                jspChangeDesiredQty.forward(request, response);
+            } catch (ServletException e) {
+                System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
+                e.printStackTrace();
+            } finally {
+                out.close();
+            }
+        } else {
+            if (controllerAction == null)
 
-        String[] splittedAction = controllerAction.split("\\.");
-        Class<?> controllerClass = null;
-        try {
-            controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
-            System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
-            //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
-            e.printStackTrace();
-        }
+                controllerAction = "home.Home.view";
 
-        try {
-            controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
-            System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
-        } catch (NoSuchMethodException e) {
-            System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
-            e.printStackTrace();
-        }
+            String[] splittedAction = controllerAction.split("\\.");
+            Class<?> controllerClass = null;
+            try {
+                controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
+                System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
+                //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
+            } catch (ClassNotFoundException e) {
+                System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                e.printStackTrace();
+            }
 
-        try {
-            controllerMethod.invoke(null, request, response);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
-            e.printStackTrace();
-        }
-        /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
-         * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
+            try {
+                controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
+                System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
+            } catch (NoSuchMethodException e) {
+                System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                e.printStackTrace();
+            }
 
-        String viewUrl = (String) request.getAttribute("viewUrl");
-        RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
-        /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa
-         *  1) Il forward è un’operazione interna al server o, nel caso di più server coinvolti, è un’operazione server-to-server.
-         *  2) Il browser è completamente inconsapevole che l’operazione ha avuto luogo, quindi il suo URL originale rimane intatto.
-         *  3) Qualsiasi ricaricamento del browser nella pagina risultante ripeterà semplicemente la richiesta originale, con l’URL originale.
-         * */
+            try {
+                controllerMethod.invoke(null, request, response);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                e.printStackTrace();
+            }
+            /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
+             * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
 
-        try {
-            jspToShow.forward(request, response); /*LINK INTERESSANTE => https://www.javaboss.it/redirect-vs-forward/*/
-        } catch (ServletException e) {
-            System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
-            e.printStackTrace();
-        } finally {
-            out.close();
+            String viewUrl = (String) request.getAttribute("viewUrl");
+            System.out.println("viewUrl ==> " + viewUrl);
+            if (viewUrl != null) {
+                RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
+                System.out.println("jspToShow ==> " + jspToShow);
+                /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa
+                 *  1) Il forward è un’operazione interna al server o, nel caso di più server coinvolti, è un’operazione server-to-server.
+                 *  2) Il browser è completamente inconsapevole che l’operazione ha avuto luogo, quindi il suo URL originale rimane intatto.
+                 *  3) Qualsiasi ricaricamento del browser nella pagina risultante ripeterà semplicemente la richiesta originale, con l’URL originale.
+                 * */
+
+                try {
+                    jspToShow.forward(request, response); /*LINK INTERESSANTE => https://www.javaboss.it/redirect-vs-forward/*/
+                } catch (ServletException e) {
+                    System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
+                    e.printStackTrace();
+                } finally {
+                    out.close();
+                }
+            } else {
+                System.err.println("viewUrl È null!!!");
+            }
         }
     }
 }

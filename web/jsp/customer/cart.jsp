@@ -55,7 +55,8 @@
         <table class="table table-hover shopping-cart-wrap">
             <thead class="text-muted">
             <tr>
-                <th scope="col"><input type="checkbox" id="modify_all_checkboxes" title="Check/Uncheck all" onchange="checkUncheckAll(this,'productsToBuy')"></th>
+                <th scope="col"><input type="checkbox" id="modify_all_checkboxes" title="Check/Uncheck all"
+                                       onchange="checkUncheckAll(this,'productsToBuy')"></th>
                 <th scope="col">Product</th>
                 <th scope="col" width="120">Quantity</th>
                 <th scope="col" width="120">Price</th>
@@ -70,15 +71,19 @@
                 for (ExtendedProduct ep : cart) {%>
             <tr>
                 <td class="align-middle">
-                    <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>" value="<%=ep.getId()%>">
+                    <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>"
+                           value="<%=ep.getId()%>">
                 </td>
                 <td>
                     <div class="media">
                         <div class="cart-img text-center">
                             <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
-                                                       class="img-thumbnail img-sm"></div></div>
+                                                       class="img-thumbnail img-sm"></div>
+                        </div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=ep.getName()%>
+                                <input type="hidden" readonly id="productName_<%=ep.getId()%>"
+                                       value="<%=ep.getName()%>">
                             </h6>
                             <dl class="param param-inline small">
                                 <dt>Producer:</dt>
@@ -104,16 +109,17 @@
                                value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
                             <button id="minus_button_<%=ep.getId()%>" class="btn"
-                                    title="Down"><i
+                                    title="Down" onclick="changeQuantityProductInCart('decrease', 'quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>)"><i
                                     class="fa fa-minus"></i></button>
                             <button id="plus_button_<%=ep.getId()%>" class="btn"
-                                    title="Up"><i class="fa fa-plus"></i>
+                                    title="Up" onclick="changeQuantityProductInCart('increase','quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>)"><i
+                                    class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <script>
-                        handleCounterCart("minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getMaxOrderQuantity()%>, <%=ep.getId()%>);
-                    </script>
+<%--                    <script>--%>
+<%--                        changeQuantityProductInCart("minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getMaxOrderQuantity()%>, <%=ep.getId()%>);--%>
+<%--                    </script>--%>
                 </td>
                 <td>
                     <%
@@ -124,8 +130,9 @@
                             System.err.println("saved:" + saved + "--- totSaved:" + totSaved);
                     %>
                     <div class="price-wrap">
-                        <var class="price"><%=discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))%>
+                        <var class="price"><%=discountedPrice%>
                         </var>
+                        <input type="hidden" readonly id="eachPrice_<%=ep.getId()%>" value="<%=discountedPrice%>">
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
                     <%
@@ -134,8 +141,9 @@
 
                     } else {%>
                     <div class="price-wrap">
-                        <var class="price"><%=ep.getPrice().multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))%>
+                        <var class="price"><%=ep.getPrice()%>
                         </var>
+                        <input type="hidden" readonly id="eachPrice_<%=ep.getId()%>" value="<%=ep.getPrice()%>">
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
                     <%
@@ -145,9 +153,11 @@
                 </td>
                 <td class="text-right">
                     <%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
-                    <button class="btn <%=(ep.isInWishlist()) ? "btn-gold-active" : "btn-outline-gold"%>" title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
+                    <button class="btn <%=(ep.isInWishlist()) ? "btn-gold-active" : "btn-outline-gold"%>"
+                            title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
                             data-toggle="tooltip"
-                            data-original-title="<%=(ep.isInWishlist()) ? "Delete from Wishlist" : "Save to Wishlist"%>" onclick="<%=(ep.isInWishlist()) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=ep.getId() + ");"%>">
+                            data-original-title="<%=(ep.isInWishlist()) ? "Delete from Wishlist" : "Save to Wishlist"%>"
+                            onclick="<%=(ep.isInWishlist()) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=ep.getId() + ");"%>">
                         <i class="fas fa-star"></i></button>
 
                     <button class="btn btn-outline-danger" onclick="removeProductFromCart(<%=ep.getId()%>)"> × Remove
@@ -165,6 +175,7 @@
         <div class="text-center">
             <span>You Save: </span>
             <span class="font-weight-bold"><%=totSavedBD%> &euro;</span>
+            <input type="hidden" readonly id="totalSaved" value="<%=totSavedBD%>">
             <br>
             <span>Total Price: </span>
             <span class="font-weight-bold"><%=totPriceBD%>&euro;</span>

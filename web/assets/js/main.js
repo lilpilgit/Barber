@@ -276,7 +276,6 @@ function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
      * Set the quantity text on click of buttons.
      * Return true if operation of '+' or '-' is allowed otherwise return false.
      */
-    let error_present = false;
     max_qta = parseInt(max_qta);
     // let div_father = document.getElementById(id_father);
     let minus_btn = document.getElementById(id_minus);
@@ -288,10 +287,7 @@ function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
 
 
     minus_btn.addEventListener("click", () => {
-        if (error_present) {
-            // div_father.removeChild(div_max_qta);
-            error_present = false;
-        }
+
         if (parseInt(qta_field.value) !== 1) {
             /* la decremento sul db */
             changeQuantityProductInCart(idProduct, 'decrease');
@@ -313,16 +309,12 @@ function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
                 qta_field.value = parseInt(qta_field.value) + 1;
                 RESULT_CHANGE_DESIRED_QTY = false; /* IMPORTANTE! resettarlo a false subito dopo */
             }
-        } else {
-            /*show popup next to the counter to alert customer */
-            error_present = true;
-            // div_father.appendChild(div_max_qta);
         }
     });
 
 }
 
-function changeQuantityProductInCart(idProduct, operation) {
+function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct) {
 
     /**
      * Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
@@ -332,21 +324,51 @@ function changeQuantityProductInCart(idProduct, operation) {
      *                                        operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
      * @type {XMLHttpRequest}
      */
+    max_qta = parseInt(max_qta);
+    let qta_field = document.getElementById(id_qta);
+    let result = "fail";
+    let allowAJAX = false; /* mi consente di sapere se posso usare AJAX */
     let xhttp = new XMLHttpRequest();
 
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            alert("Modificato!");
-            RESULT_CHANGE_DESIRED_QTY = true;
-        } else if (this.readyState === 4 && this.status === 418) {
-            alert("ERRORE!!!!");
-            RESULT_CHANGE_DESIRED_QTY = false;
-        }
-    };
+    if (operation === 'increase' && parseInt(qta_field.value) !== max_qta) {
+        allowAJAX = true;
+    } else if (operation === 'decrease' && parseInt(qta_field.value) !== 1) {
+        allowAJAX = true;
+    } else {
+        alert("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
+        allowAJAX = false;
+    }
+    if (allowAJAX) {
+        /* la incremento sul db */
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                result = JSON.parse(this.responseText).result;
+                if (result === "success") {
+                    alert("Modificato!");
+                    if (operation === 'increase') {
+                        /*i can increase the quantity*/
+                        qta_field.value = parseInt(qta_field.value) + 1;
+                    } else if (operation === 'decrease') {
+                        /*i can decrease the quantity*/
+                        qta_field.value -= 1;
+                    }
+                } else if (result === "fail") {
+                    alert("Non è stato modificato!");
+                } else {
+                    alert("ERRORE NEL BACKEND!");
+                }
+            }
 
-    xhttp.open("GET", "", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation);
+        };
+
+        xhttp.open("POST", "app", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation);
+
+    }else{
+        console.log("NON SI PUÒ MODIFICARE SEI FUORI RANGE!");
+    }
+
 
 }
 
@@ -354,8 +376,11 @@ function goToCheckout(nameGroup) {
 
     let form = document.getElementById('action_checkout');
     let totalPrice = document.getElementById('totalPrice').value;
+    let totalSaved = document.getElementById('totalSaved').value;
     let checkOutJson = {
         "totalPrice": totalPrice,
+        "totalSaved": totalSaved,
+        "productsToBuy": []
     };
     /* Fetch all checkboxes checked and the corresponding values */
     let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
@@ -365,7 +390,16 @@ function goToCheckout(nameGroup) {
             atLeastOne = true;
             /* aggiungo al json la coppia id:quantità_desiderata */
             let desiredQuantity = document.getElementById('quantity_' + checkbox.value).value; /* per poter indirizzare l'id del tipo : quantity_idProdotto*/
-            checkOutJson[checkbox.value] = desiredQuantity;
+            let productName = document.getElementById('productName_' + checkbox.value).value;
+            let eachPrice = document.getElementById('eachPrice_' + checkbox.value).value;
+            let objNewProduct = {};
+
+            objNewProduct["ID"] = checkbox.value;
+            objNewProduct["desiredQty"] = desiredQuantity;
+            objNewProduct["name"] = productName;
+            objNewProduct["eachPrice"] = eachPrice;
+
+            checkOutJson["productsToBuy"].push(objNewProduct);
         }
     })
     if (atLeastOne === false) {

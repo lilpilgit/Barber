@@ -1,4 +1,7 @@
+<%@ page import="model.mo.ExtendedProduct" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.util.ArrayList" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -18,61 +21,76 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Shop";
+    ArrayList<ExtendedProduct> checkoutProducts = null;
+    if (request.getAttribute("checkoutProducts") != null) {
+        checkoutProducts = (ArrayList<ExtendedProduct>) request.getAttribute("checkoutProducts");
+    }
 
-    /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
-    String idBtnAttivo = "showShop";
+    /* Numero di prodotti da mostrare vicino la scritta Order Summary */
+    Integer numProducts = 0;
+    for (int i = 0; i < checkoutProducts.size(); i++) {
+        numProducts += checkoutProducts.get(i).getRequiredQuantity();
+    }
+
+    BigDecimal totalPrice = null;
+    if (request.getAttribute("totalPrice") != null) {
+        totalPrice = (BigDecimal) request.getAttribute("totalPrice");
+    }
+
+    BigDecimal totalSaved = null;
+    if (request.getAttribute("totalSaved") != null) {
+        totalSaved = (BigDecimal) request.getAttribute("totalSaved");
+    }
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Checkout";
+
+    /* In questo caso non esiste un bottone di cui cambiare la classe ma la variabile va comunque definita
+    *  per evitare errori, basta solamente lasciarla a null */
+    String idBtnAttivo = null;
+
 %>
 <!doctype html>
 <html lang="en">
 
-<%@include file="/templates/head.jsp"%>
+<%@include file="/templates/head.jsp" %>
 
 <body>
 
-<%@include file="/templates/header.jsp"%>
+<%@include file="/templates/header.jsp" %>
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container pt-4">
     <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Your cart</span>
-                <span class="badge badge-secondary badge-pill">3</span>
+                <span class="text-muted">Order Summary</span>
+                <span class="badge badge-secondary badge-pill"><%=numProducts%></span>
             </h4>
             <ul class="list-group mb-3">
+                <%
+                    for (ExtendedProduct ep : checkoutProducts) {
+                %>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
-                        <h6 class="my-0">Product name</h6>
-                        <small class="text-muted">Brief description</small>
+                        <h6 class="my-0"><%=ep.getName()%>
+                        </h6>
+                        <small class="text-muted font-italic">x<%=ep.getRequiredQuantity()%>
+                        </small>
                     </div>
-                    <span class="text-muted">$12</span>
+                    <span class="text-muted"><%=ep.getPrice()%>(each)</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0">Second product</h6>
-                        <small class="text-muted">Brief description</small>
-                    </div>
-                    <span class="text-muted">$8</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0">Third item</h6>
-                        <small class="text-muted">Brief description</small>
-                    </div>
-                    <span class="text-muted">$5</span>
-                </li>
+                <%}%>
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
-                        <h6 class="my-0">Promo code</h6>
-                        <small>EXAMPLECODE</small>
+                        <h6 class="my-0">Total saved</h6>
+                        <%--                        <small>EXAMPLECODE</small>--%>
                     </div>
-                    <span class="text-success">-$5</span>
+                    <span class="text-success">-<%=totalSaved%></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span>Total (USD)</span>
-                    <strong>$20</strong>
+                    <span>Total (&euro;)</span>
+                    <strong><%=totalPrice%>
+                    </strong>
                 </li>
             </ul>
 
@@ -171,7 +189,8 @@
                 <hr class="mb-4">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="same-address">
-                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing
+                        address</label>
                 </div>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="save-info">
@@ -183,7 +202,8 @@
 
                 <div class="d-block my-3">
                     <div class="custom-control custom-radio">
-                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked
+                               required>
                         <label class="custom-control-label" for="credit">Credit card</label>
                     </div>
                     <div class="custom-control custom-radio">
@@ -238,18 +258,18 @@
 
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
+    (function () {
         'use strict';
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
 
             // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();

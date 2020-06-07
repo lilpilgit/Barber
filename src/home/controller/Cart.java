@@ -401,6 +401,20 @@ public class Cart {
                 }
             }
 
+
+            if (changed) {
+                /* SUCCESS */
+                response.setStatus(200);
+            } else {
+                /* FAIL */
+                /* 418 I'm a teapot
+                 * Questo è un tipico pesce d'aprile dell'IETF.[4] Solitamente non viene mai implementato in nessun server HTTP.
+                 * L'RFC specifica che questo codice di stato dovrebbe essere restituito dalle teiere a cui viene erroneamente richiesto
+                 * di preparare del caffè. Questo stato viene utilizzato come easter egg in alcuni siti, come Google.
+                 */
+                response.setStatus(418);
+            }
+
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
@@ -428,19 +442,6 @@ public class Cart {
             } catch (Throwable t) {
             }
         }
-//
-//        if (changed) {
-//            /* SUCCESS */
-//            response.setStatus(200);
-//        } else {
-//            /* FAIL */
-//            /* 418 I'm a teapot
-//             * Questo è un tipico pesce d'aprile dell'IETF.[4] Solitamente non viene mai implementato in nessun server HTTP.
-//             * L'RFC specifica che questo codice di stato dovrebbe essere restituito dalle teiere a cui viene erroneamente richiesto
-//             * di preparare del caffè. Questo stato viene utilizzato come easter egg in alcuni siti, come Google.
-//             */
-//            response.setStatus(418);
-//        }
 
     }
 
