@@ -35,6 +35,8 @@ public abstract class DAOFactory {
 
     public abstract CartDAO getCartDAO();
 
+    public abstract OrdersDAO getOrdersDAO();
+
     public abstract WishlistDAO getWishlistDAO();
 
     public static DAOFactory getDAOFactory(String whichFactory, HashMap factoryParameters) {

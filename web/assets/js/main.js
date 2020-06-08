@@ -267,61 +267,69 @@ function checkUncheckAll(ele, nameGroup) {
         }
     }
 
-}
-
-function handleCounterCart(id_minus, id_qta, id_plus, max_qta, idProduct) {
-    /**
-     * Realize the counter of quantity in page of cart
-     * Parameter in order: id of div in which to insert note of danger, id of button to decrease, id of quantity text, id of button to increase, max quantity available to select
-     * Set the quantity text on click of buttons.
-     * Return true if operation of '+' or '-' is allowed otherwise return false.
-     */
-    max_qta = parseInt(max_qta);
-    // let div_father = document.getElementById(id_father);
-    let minus_btn = document.getElementById(id_minus);
-    let qta_field = document.getElementById(id_qta);
-    let plus_btn = document.getElementById(id_plus);
-    // let div_max_qta = document.createElement("div");
-    // div_max_qta.classList.add("max-qta-reached");
-    // div_max_qta.innerHTML = "<p><strong>Warning!</strong>Maximum quantity reached.</p>";
-
-
-    minus_btn.addEventListener("click", () => {
-
-        if (parseInt(qta_field.value) !== 1) {
-            /* la decremento sul db */
-            changeQuantityProductInCart(idProduct, 'decrease');
-            if (RESULT_CHANGE_DESIRED_QTY === true) {
-                /*i can decrease the quantity*/
-                qta_field.value -= 1;
-                RESULT_CHANGE_DESIRED_QTY = false; /* IMPORTANTE! resettarlo a false subito dopo */
-            }
-        }
-    });
-
-
-    plus_btn.addEventListener("click", () => {
-        if (parseInt(qta_field.value) !== max_qta) {
-            /* la incremento sul db */
-            changeQuantityProductInCart(idProduct, 'increase');
-            if (RESULT_CHANGE_DESIRED_QTY === true) {
-                /*i can increase the quantity*/
-                qta_field.value = parseInt(qta_field.value) + 1;
-                RESULT_CHANGE_DESIRED_QTY = false; /* IMPORTANTE! resettarlo a false subito dopo */
-            }
-        }
-    });
+    /* sono state modificate le checkbox devo rifare il calcolo del totale */
+    modifyTotalPriceAndSaving(nameGroup);
 
 }
 
-function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct) {
+function modifyTotalPriceAndSaving(nameGroup) {
+    let totalSavedSpan = document.getElementById("totalSavedSpan");
+    let totalSavedInputHidden = document.getElementById("totalSaved");
+    let totalPriceSpan = document.getElementById("totalPriceSpan");
+    let totalPriceInputHidden = document.getElementById("totalPrice");
+    let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
+    let checkboxes_checked = [];
+    let eachOriginalPrice;
+    let eachFinalPrice;
+    let desiredQuantity;
+    let eachDiscount;
+    let totalPrice = 0;
+    let totalSaved = 0;
+
+    /* vedo quali checkbox sono stati checkati */
+
+    checkboxes.forEach(function (item) {
+        if(item.checked === true){
+            checkboxes_checked.push(item);
+        }
+    })
+
+    /* per ogni checkbox checkata sommo il prezzo singolo moltiplicandolo per l'attuale quantità */
+    checkboxes_checked.forEach(function (item) {
+        eachFinalPrice = document.getElementById('eachFinalPrice_' + item.value).value;
+        eachOriginalPrice = document.getElementById('eachOriginalPrice_' + item.value).value;
+        desiredQuantity = document.getElementById('quantity_' + item.value).value;
+        eachDiscount = document.getElementById('eachDiscount_' + item.value).value;
+
+        /* calcolo il prezzo totale */
+        totalPrice += parseFloat(eachFinalPrice) * parseInt(desiredQuantity);
+
+        /* calcolo il risparmio parziale e lo aggiungo al totale solo se lo sconto è diverso da 0 */
+        if(eachDiscount !== 0){
+            totalSaved = parseFloat(totalSaved) + ( parseInt(desiredQuantity) * ( parseFloat(eachOriginalPrice) * ( parseInt(eachDiscount) / 100.00 ).toPrecision(2) ) );
+            /*                                    |                                             risparmio parziale                                                   |        */
+        }
+    })
+
+    totalPriceSpan.textContent = totalPrice.toFixed(2) + '\u20AC';
+    totalPriceInputHidden.value = totalPrice.toFixed(2);
+    totalSavedSpan.textContent = totalSaved.toFixed(2) + '\u20AC';
+    totalSavedInputHidden.value = totalSaved.toFixed(2);
+
+}
+
+function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct , nameGroup) {
 
     /**
      * Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
      * loggedUser and product with ID = idProduct
      *
-     * Parameters required by the controller: idProduct
-     *                                        operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
+     * Parameters required by the controller: operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
+     *                                        id_qta : id of quantity field
+     *                                        max_qta : max quantity reachable for this product
+     *                                        idProduct : id of product that is being edited
+     *                                        nameGroup : name of checkbox group in order to change the total price and savings
+     *
      * @type {XMLHttpRequest}
      */
     max_qta = parseInt(max_qta);
@@ -348,10 +356,13 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct) {
                     if (operation === 'increase') {
                         /*i can increase the quantity*/
                         qta_field.value = parseInt(qta_field.value) + 1;
+
                     } else if (operation === 'decrease') {
                         /*i can decrease the quantity*/
                         qta_field.value -= 1;
                     }
+                    /* devo ricalcolare prezzo totale e risparmio solo dopo aver modificato i text field relativi alla quantità  */
+                    modifyTotalPriceAndSaving(nameGroup);
                 } else if (result === "fail") {
                     alert("Non è stato modificato!");
                 } else {
@@ -365,7 +376,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct) {
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation);
 
-    }else{
+    } else {
         console.log("NON SI PUÒ MODIFICARE SEI FUORI RANGE!");
     }
 
@@ -391,13 +402,13 @@ function goToCheckout(nameGroup) {
             /* aggiungo al json la coppia id:quantità_desiderata */
             let desiredQuantity = document.getElementById('quantity_' + checkbox.value).value; /* per poter indirizzare l'id del tipo : quantity_idProdotto*/
             let productName = document.getElementById('productName_' + checkbox.value).value;
-            let eachPrice = document.getElementById('eachPrice_' + checkbox.value).value;
+            let eachFinalPrice = document.getElementById('eachFinalPrice_' + checkbox.value).value;
             let objNewProduct = {};
 
             objNewProduct["ID"] = checkbox.value;
             objNewProduct["desiredQty"] = desiredQuantity;
             objNewProduct["name"] = productName;
-            objNewProduct["eachPrice"] = eachPrice;
+            objNewProduct["eachFinalPrice"] = eachFinalPrice;
 
             checkOutJson["productsToBuy"].push(objNewProduct);
         }

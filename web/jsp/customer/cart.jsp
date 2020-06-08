@@ -65,14 +65,12 @@
             </thead>
             <tbody>
             <%
-                float totSaved = 0;
-                float totPrice = 0;
                 long index_checkbox = 0;
                 for (ExtendedProduct ep : cart) {%>
             <tr>
                 <td class="align-middle">
                     <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>"
-                           value="<%=ep.getId()%>">
+                           value="<%=ep.getId()%>" onchange="modifyTotalPriceAndSaving('productsToBuy')">
                 </td>
                 <td>
                     <div class="media">
@@ -93,8 +91,11 @@
                             <%if (ep.getDiscount() != null && ep.getDiscount() != 0) {%>
                             <dl class="param param-inline small">
                                 <dt>Discount:</dt>
-                                <dd><%=ep.getDiscount()%>%<i class="fas fa-piggy-bank"></i></dd>
+                                <dd><%=ep.getDiscount()%> %<i class="fas fa-piggy-bank"></i></dd>
+                                <input type="hidden" readonly id="eachDiscount_<%=ep.getId()%>" value="<%=ep.getDiscount()%>">
                             </dl>
+                            <%}else{%>
+                            <input type="hidden" readonly id="eachDiscount_<%=ep.getId()%>" value="0">
                             <%}%>
                         </figcaption>
                     </div>
@@ -109,10 +110,10 @@
                                value="<%=ep.getRequiredQuantity()%>" required/>
                         <div class="row justify-content-center">
                             <button id="minus_button_<%=ep.getId()%>" class="btn"
-                                    title="Down" onclick="changeQuantityProductInCart('decrease', 'quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>)"><i
+                                    title="Down" onclick="changeQuantityProductInCart('decrease', 'quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>,'productsToBuy')"><i
                                     class="fa fa-minus"></i></button>
                             <button id="plus_button_<%=ep.getId()%>" class="btn"
-                                    title="Up" onclick="changeQuantityProductInCart('increase','quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>)"><i
+                                    title="Up" onclick="changeQuantityProductInCart('increase','quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>,'productsToBuy')"><i
                                     class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -122,37 +123,30 @@
 <%--                    </script>--%>
                 </td>
                 <td>
+                    <!-- mi interessa per il calcolo con javascript il prezzo già scontato pertanto lo salvo in tale campo hidden -->
+                    <input type="hidden" id="eachOriginalPrice_<%=ep.getId()%>" value="<%=ep.getPrice()%>">
                     <%
                         if (ep.getDiscount() != null && ep.getDiscount() != 0) {
                             BigDecimal saved = ep.getPrice().multiply(BigDecimal.valueOf(ep.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
                             BigDecimal discountedPrice = ep.getPrice().subtract(saved);
-                            totSaved += (saved.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo ai soldi totali risparmiati il parziale risparmiato */
-                            System.err.println("saved:" + saved + "--- totSaved:" + totSaved);
                     %>
                     <div class="price-wrap">
                         <var class="price"><%=discountedPrice%>
                         </var>
-                        <input type="hidden" readonly id="eachPrice_<%=ep.getId()%>" value="<%=discountedPrice%>">
+                        <input type="hidden" readonly id="eachFinalPrice_<%=ep.getId()%>" value="<%=discountedPrice%>">
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
                     <%
-                        totPrice += (discountedPrice.multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* aggiungo al totale il prezzo scontato ...*/
-                        System.err.println("discountedPrice:" + discountedPrice + "--- totPrice:" + totPrice);
-
                     } else {%>
                     <div class="price-wrap">
                         <var class="price"><%=ep.getPrice()%>
                         </var>
-                        <input type="hidden" readonly id="eachPrice_<%=ep.getId()%>" value="<%=ep.getPrice()%>">
+                        <input type="hidden" readonly id="eachFinalPrice_<%=ep.getId()%>" value="<%=ep.getPrice()%>">
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
-                    <%
-                            totPrice += (ep.getPrice().multiply(BigDecimal.valueOf(ep.getRequiredQuantity()))).floatValue(); /* ... oppure quello non scontato */
-                            System.err.println("ep.getPrice():" + ep.getPrice() + "--- totPrice:" + totPrice);
-                        }%>
+                    <%}%>
                 </td>
                 <td class="text-right">
-                    <%--                    <%=(ep.isInWishlist()) ? ":hover" : ""%> TODO: crea la classe e fai na roba simile--%>
                     <button class="btn <%=(ep.isInWishlist()) ? "btn-gold-active" : "btn-outline-gold"%>"
                             title="<%=(ep.isInWishlist()) ? "Remove from wishlist" : "Add to wishlist"%>"
                             data-toggle="tooltip"
@@ -167,19 +161,14 @@
             <%}%>
             </tbody>
         </table>
-        <%
-            BigDecimal totSavedBD = BigDecimal.valueOf(totSaved).setScale(2, BigDecimal.ROUND_HALF_UP);
-            BigDecimal totPriceBD = BigDecimal.valueOf(totPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
-
-        %>
         <div class="text-center">
             <span>You Save: </span>
-            <span class="font-weight-bold"><%=totSavedBD%> &euro;</span>
-            <input type="hidden" readonly id="totalSaved" value="<%=totSavedBD%>">
+            <span id="totalSavedSpan" class="font-weight-bold">0.00 &euro;</span>
+            <input type="hidden" readonly id="totalSaved" value="0">
             <br>
             <span>Total Price: </span>
-            <span class="font-weight-bold"><%=totPriceBD%>&euro;</span>
-            <input type="hidden" readonly id="totalPrice" value="<%=totPriceBD%>">
+            <span id="totalPriceSpan" class="font-weight-bold">0.00 &euro;</span>
+            <input type="hidden" readonly id="totalPrice" value="0">
         </div>
         <hr>
         <div class="text-center pt-1">

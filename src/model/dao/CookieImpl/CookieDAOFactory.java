@@ -70,6 +70,11 @@ public class CookieDAOFactory extends DAOFactory {
     }
 
     @Override
+    public OrdersDAO getOrdersDAO()  {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public WishlistDAO getWishlistDAO() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

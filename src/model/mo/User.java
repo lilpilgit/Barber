@@ -25,8 +25,8 @@ public class User {
     private ArrayList<ExtendedProduct> cart;
     /* N:M Wishlist */
     private ArrayList<Product> wishlist;
-    /* 1:N Orders */
-    private ArrayList<Orders> orders;
+    /* 1:N Order */
+    private ArrayList<Order> orders;
 
 //    public User(){
 //        this.structure = new Structure();
@@ -187,11 +187,11 @@ public class User {
         this.wishlist = wishlist;
     }
 
-    public ArrayList<Orders> getOrders() {
+    public ArrayList<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(ArrayList<Orders> orders) {
+    public void setOrders(ArrayList<Order> orders) {
         this.orders = orders;
     }
 }

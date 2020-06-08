@@ -1,8 +1,10 @@
 package model.dao;
 
 import model.mo.ExtendedProduct;
-import model.mo.Orders;
+import model.mo.Order;
+import model.mo.User;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public interface OrdersDAO {
@@ -14,7 +16,8 @@ public interface OrdersDAO {
      * devono essere implementati per poter accedere ai dati della classe ORDERS
      */
 
-    ArrayList<Orders> fetchOrdersByCustomerId(Long id);
+    Order insert(User customer, BigDecimal totalPrice, ArrayList<ExtendedProduct> items);
+    ArrayList<Order> fetchOrdersByCustomerId(Long id);
     ArrayList<ExtendedProduct> listOrderedProducts(Long id);
 
 }

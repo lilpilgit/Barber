@@ -41,11 +41,28 @@
     if (request.getAttribute("totalSaved") != null) {
         totalSaved = (BigDecimal) request.getAttribute("totalSaved");
     }
+
+
+    User customer = null;
+    if (request.getAttribute("customer") != null) {
+        customer = (User) request.getAttribute("customer");
+    }
+
+    /* Faccio lo split dell'address per poterlo mostrare all'interno dei vari campi */
+    String[] splittedAddress = null;
+    int splittedAddressLength = 0;
+    /* Splitto sulla | il campo address dell'utente per poterlo visualizzare in ogni campo della form */
+    if (customer != null) {
+        String address = customer.getAddress();
+        splittedAddress = address.split("\\|");
+        splittedAddressLength = splittedAddress.length;
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Checkout";
 
     /* In questo caso non esiste un bottone di cui cambiare la classe ma la variabile va comunque definita
-    *  per evitare errori, basta solamente lasciarla a null */
+     *  per evitare errori, basta solamente lasciarla a null */
     String idBtnAttivo = null;
 
 %>
@@ -91,6 +108,7 @@
                     <span>Total (&euro;)</span>
                     <strong><%=totalPrice%>
                     </strong>
+                    <input type="hidden" name="totalPrice" id="totalPrice" value="<%=totalPrice%>" form="buyForm" readonly>
                 </li>
             </ul>
 
@@ -104,98 +122,135 @@
             </form>
         </div>
         <div class="col-md-8 order-md-1">
-            <h4 class="mb-3">Billing address</h4>
+            <h4 class="mb-3">Shipping address</h4>
             <form class="needs-validation" novalidate>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="firstName">First name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="firstName" value="<%=customer.getName()%>" readonly required>
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Last name</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="lastName" value="<%=customer.getSurname()%>" readonly
+                               required>
                         <div class="invalid-feedback">
                             Valid last name is required.
                         </div>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="username">Username</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">@</span>
-                        </div>
-                        <input type="text" class="form-control" id="username" placeholder="Username" required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your username is required.
-                        </div>
-                    </div>
-                </div>
+                <%--                <div class="mb-3">--%>
+                <%--                    <label for="username">Username</label>--%>
+                <%--                    <div class="input-group">--%>
+                <%--                        <div class="input-group-prepend">--%>
+                <%--                            <span class="input-group-text">@</span>--%>
+                <%--                        </div>--%>
+                <%--                        <input type="text" class="form-control" id="username" placeholder="Username" required>--%>
+                <%--                        <div class="invalid-feedback" style="width: 100%;">--%>
+                <%--                            Your username is required.--%>
+                <%--                        </div>--%>
+                <%--                    </div>--%>
+                <%--                </div>--%>
 
                 <div class="mb-3">
-                    <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" value="<%=customer.getEmail()%>" readonly required>
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
                     </div>
                 </div>
-
-                <div class="mb-3">
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-                    <div class="invalid-feedback">
-                        Please enter your shipping address.
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-                    <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                </div>
-
                 <div class="row">
                     <div class="col-md-5 mb-3">
-                        <label for="country">Country</label>
-                        <select class="custom-select d-block w-100" id="country" required>
-                            <option value="">Choose...</option>
-                            <option>United States</option>
+                        <label for="State">State</label>
+                        <select class="custom-select d-block w-100" name="state" id="State" readonly required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>ITALY</option>
                         </select>
                         <div class="invalid-feedback">
-                            Please select a valid country.
+                            Please select a valid state.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="state">State</label>
-                        <select class="custom-select d-block w-100" id="state" required>
-                            <option value="">Choose...</option>
-                            <option>California</option>
+                        <label for="Region">Region</label>
+                        <select class="custom-select d-block w-100" name="region" id="Region" readonly required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>ABRUZZO</option>
+                            <option>BASILICATA</option>
+                            <option>CALABRIA</option>
+                            <option>EMILIA-ROMAGNA</option>
+                            <option>FRIULI-VENEZIA-GIULIA</option>
+                            <option>LAZIO</option>
+                            <option>LIGURIA</option>
+                            <option>LOMBARDIA</option>
+                            <option>MARCHE</option>
+                            <option>MOLISE</option>
+                            <option>PIEMONTE</option>
+                            <option>PUGLIA</option>
+                            <option>SARDEGNA</option>
+                            <option>SICILIA</option>
+                            <option>TOSCANA</option>
+                            <option>TRENTINO-ALTO-ADIGE</option>
+                            <option>UMBRIA</option>
+                            <option>VALLE D'AOSTA</option>
+                            <option>VENETO</option>
                         </select>
                         <div class="invalid-feedback">
-                            Please provide a valid state.
+                            Please provide a valid region for shipping.
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-5 text-center">
+                        <label for="City">City</label>
+                        <input type="text" class="form-control" name="city" id="City" readonly required
+                               value="<%=splittedAddress[2]%>"
+                               oninput="this.value=this.value.toUpperCase();">
+                        <div class="invalid-feedback">
+                            Please provide a valid city for shipping.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="Cap">Postal Code</label>
+                        <input type="number" class="form-control" name="cap" id="Cap" readonly required min="0"
+                               value="<%=splittedAddress[3]%>"
+                               oninput="this.value=this.value.toUpperCase();">
+                        <div class="invalid-feedback">
+                            Please provide a valid Postal Code for shipping.
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-5">
+                        <label for="Street">Street</label>
+                        <input type="text" class="form-control" name="street" id="Street" readonly required
+                               value="<%=splittedAddress[4]%>"
+                               oninput="this.value=this.value.toUpperCase();">
+                        <div class="invalid-feedback">
+                            Please provide a valid Street for shipping.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="zip">Zip</label>
-                        <input type="text" class="form-control" id="zip" placeholder="" required>
+                        <label for="House-number">House Number</label>
+                        <input type="number" class="form-control" name="house_number" id="House-number" readonly
+                               value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>" min="0">
                         <div class="invalid-feedback">
-                            Zip code required.
+                            Please provide a valid House Number for shipping.
                         </div>
                     </div>
+
+
                 </div>
-                <hr class="mb-4">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="same-address">
-                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing
-                        address</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="save-info">
-                    <label class="custom-control-label" for="save-info">Save this information for next time</label>
-                </div>
+<%--                <hr class="mb-4">--%>
+<%--                <div class="custom-control custom-checkbox">--%>
+<%--                    <input type="checkbox" class="custom-control-input" id="same-address">--%>
+<%--                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing--%>
+<%--                        address</label>--%>
+<%--                </div>--%>
+<%--                <div class="custom-control custom-checkbox">--%>
+<%--                    <input type="checkbox" class="custom-control-input" id="save-info">--%>
+<%--                    <label class="custom-control-label" for="save-info">Save this information for next time</label>--%>
+<%--                </div>--%>
                 <hr class="mb-4">
 
                 <h4 class="mb-3">Payment</h4>
@@ -249,12 +304,18 @@
                     </div>
                 </div>
                 <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                <%for (ExtendedProduct ep : checkoutProducts) {%>
+                <input type="hidden" name="ids" value="<%=ep.getId()%>" form="buyForm">
+                <input type="hidden" name="quantities" value="<%=ep.getRequiredQuantity()%>" form="buyForm">
+                <%}%>
+                <button class="btn btn-primary btn-lg btn-block" type="submit" form="buyForm">Continue to checkout</button>
             </form>
         </div>
     </div>
 </div>
-
+<form id="buyForm" method="post">
+    <input type="hidden" name="controllerAction" value="home.Checkout.processCheckout">
+</form>
 
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
@@ -265,10 +326,10 @@
         'use strict';
         window.addEventListener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
+            let forms = document.getElementsByClassName('needs-validation');
 
             // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function (form) {
+            let validation = Array.prototype.filter.call(forms, function (form) {
                 form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
@@ -279,6 +340,10 @@
             });
         }, false);
     })();
+    setSelectedAttribute("State", "<%=splittedAddress[0]%>");
+    setSelectedAttribute("Region", "<%=splittedAddress[1]%>");
+
+
 </script>
 
 </body>

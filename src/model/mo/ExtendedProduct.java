@@ -4,6 +4,24 @@ public class ExtendedProduct extends Product {
     private Integer requiredQuantity;
     private boolean inWishlist;
 
+    public ExtendedProduct(Product product){
+        this.setName(product.getName());
+        this.setPrice(product.getPrice());
+        this.setId(product.getId());
+        this.setProducer(product.getProducer());
+        this.setCategory(product.getCategory());
+        this.setPictureName(product.getPictureName());
+        this.setDiscount(product.getDiscount());
+        this.setDescription(product.getDescription());
+        this.setMaxOrderQuantity(product.getMaxOrderQuantity());
+        this.setStructure(product.getStructure());
+        this.setInsertDate(product.getInsertDate());
+        this.setShowcase(product.inShowcase());
+        this.setDeleted(product.isDeleted());
+    }
+
+    public ExtendedProduct(){}
+
     @Override
     public String toString() {
         return "ExtendedProduct{" +

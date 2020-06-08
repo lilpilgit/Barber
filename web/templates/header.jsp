@@ -83,7 +83,7 @@
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showOrders' onclick=setNavFormHome('home.Orders.showOrders')>
+                                        id='showOrders' onclick=setNavFormHome('home.Order.showOrders')>
                                     Orders
                                 </button>
                             </li>

@@ -1,13 +1,16 @@
 package model.dao.mySQLJDBCImpl;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+import functions.StaticFunc;
 import model.dao.OrdersDAO;
+import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
-import model.mo.Orders;
+import model.mo.Order;
+import model.mo.Product;
+import model.mo.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -20,6 +23,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     scrivere le implementazioni per ogni possibile db
      */
 
+    private final String COUNTER_ID = "orderId";
     private Connection connection;
     private PreparedStatement ps;
     private String query;
@@ -28,13 +32,169 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     public OrdersDAOMySQLJDBCImpl (Connection connection) { this.connection = connection; }
 
     @Override
-    public ArrayList<Orders> fetchOrdersByCustomerId(Long id) {
+    public Order insert(User customer,BigDecimal totalPrice, ArrayList<ExtendedProduct> items) {
+        /**
+         * This method allows you to insert an order.
+         * @params
+         *              User customer: object of customer that do order
+         *              BigDecimal totalPrice: total price of order calculater client-side
+         *              ArrayList<ExtendendProduct> items: products to add to ITEMS_LIST into Database
+         * @return Returns the order inserted correctly in the DB otherwise raises an exception
+         * */
+        Long newId = null;
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setItemList(items);
+        order.setOrderDate(LocalDate.now()); /* uso la data calcolata dal server */
+//                                <%--0 = nothing-new--%>
+//                                <%--25 = processing--%>
+//                                <%--50 = sent--%>
+//                                <%--75 = delivering--%>
+//                                <%--100 = delivered--%>
+//                                <%-- annulled --%>
+//                                <%-- canceled --%> --%>
+        order.setStatus(StaticFunc.NOTHING_NEW);
+        order.setTotPrice(totalPrice);
+        order.setShippingAddress(customer.getAddress());
+        order.setDeleted(false); /* lo dobbiamo inserire !*/
+
+        /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
+         * UN NUOVO ORDINE DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
+         * NUMERO PER ORDINI DIVERSI SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
+        query =
+                "UPDATE COUNTER"
+                        + " SET VALUE = VALUE + 1"
+                        + " WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
+        query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+
+        /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
+        try {
+            rs.next();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
+        try {
+            newId = rs.getLong("VALUE");
+        } catch (SQLException e) {
+            System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
+            throw new RuntimeException(e);
+        } finally {
+            /* IL resultSet una volta letto l'id non serve più in quanto rimane da fare solo l'INSERT di ORDERS*/
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println("Errore nella rs.close();");
+                throw new RuntimeException(e);
+            }
+        }
+
+        /* L'unico campo che rimane da settare è l'ID. */
+        order.setId(newId);
+
+
+        query = "INSERT INTO ORDERS(ID, SELL_DATE, ORDER_DATE, STATUS, TOT_PRICE, SHIPPING_ADDR, DELETED, ID_CUSTOMER) VALUES(?,?,?,?,?,?,?,?);";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, order.getId());
+            ps.setDate(i++, null);/* la data di vendita verrà settata solo una volta che l'ordine che sarà consegnato */
+            ps.setDate(i++, Date.valueOf(order.getOrderDate()));
+            ps.setString(i++, order.getStatus());
+            ps.setBigDecimal(i++, order.getTotPrice());
+            ps.setString(i++, order.getShippingAddress());
+            ps.setBoolean(i++, order.isDeleted());
+            ps.setLong(i++, order.getCustomer().getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate()");
+            throw new RuntimeException(e);
+        }
+
+        /* ora bisogna inserire una riga per ogni prodotto acquistato all'interno della tabella ITEMS_LIST */
+        query = "INSERT INTO ITEMS_LIST(ID_PRODUCT, ID_ORDER, QUANTITY) VALUES(?,?,?);";
+        for (ExtendedProduct item : order.getItemList()){
+            try {
+                int i = 1;
+                ps = connection.prepareStatement(query);
+                ps.setLong(i++, item.getId());
+                ps.setLong(i++, order.getId());
+                ps.setInt(i++, item.getRequiredQuantity());
+            } catch (SQLException e) {
+                System.err.println("Errore nella connection.prepareStatement per l'item:" + item);
+                throw new RuntimeException(e);
+            }
+            try {
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Errore nella ps.executeUpdate() per l'item:" + item);
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /*
+         * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe Order
+         * appena inserito
+         * */
+
+
+        return order;
+    }
+
+    @Override
+    public ArrayList<Order> fetchOrdersByCustomerId(Long id) {
 
         /**
          * Con questo metodo e' possibile elencare tutti gli ordini eseguiti da un cliente in base al suo id
          */
 
-        ArrayList<Orders> listOrders = new ArrayList<>();
+        ArrayList<Order> listOrders = new ArrayList<>();
 
         query = "SELECT * FROM ORDERS WHERE ID_CUSTOMER = ? AND DELETED = 0;";
 
@@ -220,13 +380,13 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         return extendedProduct;
     }
 
-    private Orders readOrders(ResultSet rs) {
+    private Order readOrders(ResultSet rs) {
 
         /**
-         * Con questo metodo si costruisce l'oggetto Orders contenente tutti i dati raccolti nel db
+         * Con questo metodo si costruisce l'oggetto Order contenente tutti i dati raccolti nel db
          */
 
-        Orders order = new Orders();
+        Order order = new Order();
 
         try {
             order.setId(rs.getLong("ID"));

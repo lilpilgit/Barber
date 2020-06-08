@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Orders {
+public class Order {
     private Long id;
     private LocalDate sellDate;
     private LocalDate orderDate;
@@ -20,7 +20,7 @@ public class Orders {
 
     @Override
     public String toString() {
-        return "Orders{" +
+        return "Order{" +
                 "id=" + id +
                 ", sellDate=" + sellDate +
                 ", orderDate=" + orderDate +
