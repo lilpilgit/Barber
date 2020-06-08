@@ -1,3 +1,4 @@
+<%@ page import="functions.StaticFunc" %>
 <%@ page import="model.mo.Order" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
@@ -76,7 +77,7 @@
                     <tbody>
                     <%
                         int i = 1; /* contatore per il numero di ordini */
-                        if (logisticOrders.size() != 0) {
+                        if (logisticOrders != null && logisticOrders.size() != 0) {
                             for (Order l : logisticOrders) {
                     %>
                     <tr>
@@ -93,12 +94,13 @@
                         <td><%=l.getStatus()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                                    data-target="#alertSetStatusOrder"
+                                    data-toggle="modal"
+                                    onclick="setTmpIdStatus(<%=l.getId()%>);"><i
                                     class="fas fa-pencil-alt"></i>
                             </button>
-                            <button type="button" class="tablebutton" style="color: black;"><i
-                                    class="far fa-trash-alt"></i>
-                            </button>
+
                         </td>
                     </tr>
                     <%}%>
@@ -114,6 +116,61 @@
     </main>
 </div>
 
+<input type="hidden" id="tmpIdStatus" value="">
+<!--MODAL DI CONFERMA MODIFICA STATUS -->
+<div class="modal fade" id="alertSetStatusOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle" style="color: rgba(211,4,0,0.75)">You are modifying
+                    status of order...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to modify status of order.<br><br>Select one of this possible status:<br><br>
+                <input type="radio" id="nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>" required>
+                <label for="nothing_new"><%=StaticFunc.NOTHING_NEW%>
+                </label><br>
+                <input type="radio" id="processing" name="status" value="<%=StaticFunc.PROCESSING%>">
+                <label for="processing"><%=StaticFunc.PROCESSING%>
+                </label><br>
+                <input type="radio" id="sent" name="status" value="<%=StaticFunc.SENT%>">
+                <label for="sent"><%=StaticFunc.SENT%>
+                </label><br>
+                <input type="radio" id="delivering" name="status" value="<%=StaticFunc.DELIVERING%>">
+                <label for="delivering"><%=StaticFunc.DELIVERING%>
+                </label><br>
+                <input type="radio" id="delivered" name="status" value="<%=StaticFunc.DELIVERED%>">
+                <label for="delivered"><%=StaticFunc.DELIVERED%>
+                </label><br>
+                <input type="radio" id="canceled" name="status" value="<%=StaticFunc.CANCELED%>">
+                <label for="canceled"><%=StaticFunc.CANCELED%>
+                </label><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+
+                <!-- TODO AGGIORNARE CON FUNZIONE GENERICA deleteById contenuta in admin.js come con show-customers -->
+
+
+                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="modifyStatusOrder(document.getElementById('tmpIdStatus').value,'status')">Modify status
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA MODIFICA STATUS -->
+<form method="post" id="order_action">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idOrder" value="">
+    <input type="hidden" name="status" value="">
+</form>
 
 <script>
     window.addEventListener("load", () => {

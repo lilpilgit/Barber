@@ -437,3 +437,14 @@ function setTmpId(id) {
      * Set id of object to delete before confirm this action into the modal */
     document.getElementById('tmpIdDel').value = id;
 }
+
+function cancelOrder(idOrder) {
+    /**
+     * Set name of hidden input to idProduct and value to id of product to show and set value of controllerAction to home.Product.showProduct
+     * inside page of orders
+     */
+    let form = document.getElementById('order_action');
+    form.elements['controllerAction'].value = 'home.Orders.cancelOrder';
+    form.elements['idOrder'].value = idOrder;
+    form.submit();
+}

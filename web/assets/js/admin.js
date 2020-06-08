@@ -50,6 +50,9 @@ function setTmpId(id) {
     document.getElementById('tmpIdDel').value = id;
 }
 
+/* TODO DA UNIFICARE LE 2 FUNZIONI*/
+function setTmpIdStatus(id){    document.getElementById('tmpIdStatus').value = id;}
+
 function deleteEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with
@@ -203,3 +206,21 @@ function setCurrentDate(id) {
     document.getElementById(id).value = today;
 }
 
+function modifyStatusOrder(idOrder, status) {
+
+    let form = document.getElementById('order_action');
+    let radios = document.getElementsByName(status);
+
+    for (let i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            form.elements['status'].value = radios[i].value;
+            // only one radio can be logically checked, don't check the rest
+            break;
+        }
+    }
+
+
+    form.elements['controllerAction'].value = 'admin.Logistics.modifyStatus';
+    form.elements['idOrder'].value = idOrder;
+    form.submit();
+}

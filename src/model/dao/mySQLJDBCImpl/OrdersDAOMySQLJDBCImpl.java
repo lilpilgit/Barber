@@ -188,11 +188,11 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     }
 
     @Override
-    public boolean cancelById(Long idOrder){
+    public boolean modifyStatusById(Long idOrder,String status){
         /**
-         * Set status to canceled
+         * Modify status
          *
-         * @return true if cancel go correctly otherwise raise exception
+         * @return true if modified correctly otherwise raise exception
          */
         query
                 = "UPDATE ORDERS"
@@ -201,7 +201,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
-            ps.setString(i++,StaticFunc.CANCELED);
+            ps.setString(i++,status);
             ps.setLong(i++, idOrder);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");

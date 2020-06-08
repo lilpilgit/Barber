@@ -1,5 +1,6 @@
 package home.controller;
 
+import functions.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.OrdersDAO;
 import model.dao.UserDAO;
@@ -128,7 +129,7 @@ public class Orders {
             /* setto l'id dell'ordine da cancellare sulla base dell'id ricevuto */
             idOrderToCancel = Long.valueOf(request.getParameter("idOrder"));
 
-            canceled = ordersDAO.cancelById(idOrderToCancel);
+            canceled = ordersDAO.modifyStatusById(idOrderToCancel, StaticFunc.CANCELED);
 
             commonView(daoFactory, loggedUser, request); /* setto l'attributo "orders" all'interno della request */
 
