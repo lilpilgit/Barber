@@ -48,7 +48,7 @@ public class Profile {
 
             userDAO = daoFactory.getUserDAO();
 
-            user = userDAO.findByEmail(loggedUser.getEmail());
+            user = userDAO.findById(loggedUser.getId());
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();

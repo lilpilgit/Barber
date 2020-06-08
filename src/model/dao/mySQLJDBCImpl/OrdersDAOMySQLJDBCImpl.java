@@ -34,10 +34,10 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     @Override
     public Order insert(User customer,BigDecimal totalPrice, ArrayList<ExtendedProduct> items) {
         /**
-         * This method allows you to insert an order.
+         * This method allows you to insert an order with correlated items list.
          * @params
          *              User customer: object of customer that do order
-         *              BigDecimal totalPrice: total price of order calculater client-side
+         *              BigDecimal totalPrice: total price of order calculated client-side
          *              ArrayList<ExtendendProduct> items: products to add to ITEMS_LIST into Database
          * @return Returns the order inserted correctly in the DB otherwise raises an exception
          * */
@@ -191,16 +191,17 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     public ArrayList<Order> fetchOrdersByCustomerId(Long id) {
 
         /**
-         * Con questo metodo e' possibile elencare tutti gli ordini eseguiti da un cliente in base al suo id
+         * Fetch all orders by id of customer
          */
 
         ArrayList<Order> listOrders = new ArrayList<>();
 
-        query = "SELECT * FROM ORDERS WHERE ID_CUSTOMER = ? AND DELETED = 0;";
+        query = "SELECT * FROM ORDERS WHERE ID_CUSTOMER = ? AND DELETED = 0 ORDER BY ORDER_DATE DESC;";
 
         try {
+            int i = 1;
             ps = connection.prepareStatement(query);
-            ps.setLong(1, id);
+            ps.setLong(i++, id);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
@@ -213,7 +214,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         }
         try {
             while (rs.next()) {
-                listOrders.add(readOrders(rs));
+                listOrders.add(readOrder(rs));
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
@@ -344,9 +345,9 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             throw new RuntimeException(e);
         }
         try {
-            extendedProduct.setMaxOrderQuantity(rs.getInt("P.QUANTITY"));
+            extendedProduct.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"P.QUANTITY\")");
+            System.err.println("Errore nella extendedProduct.setMaxOrderQuantity(rs.getInt(\"MAX_ORDER_QTY\"));");
             throw new RuntimeException(e);
         }
         try {
@@ -371,22 +372,24 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         /* Setto gli attributi esclusivi di ExtendedProduct */
 
         try {
-            extendedProduct.setRequiredQuantity(rs.getInt("IL.QUANTITY"));
+            extendedProduct.setRequiredQuantity(rs.getInt("QUANTITY"));
         }  catch (SQLException e) {
-            System.err.println("Errore nella rs.getBoolean(\"IL.QUANTITY\")");
+            System.err.println("Errore nella extendedProduct.setRequiredQuantity(rs.getInt(\"QUANTITY\"));");
             throw new RuntimeException(e);
         }
 
         return extendedProduct;
     }
 
-    private Order readOrders(ResultSet rs) {
+    private Order readOrder(ResultSet rs) {
 
         /**
          * Con questo metodo si costruisce l'oggetto Order contenente tutti i dati raccolti nel db
          */
 
         Order order = new Order();
+        User customer = new User();
+        order.setCustomer(customer);
 
         try {
             order.setId(rs.getLong("ID"));
@@ -433,7 +436,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         try {
             order.getCustomer().setId(rs.getLong("ID_CUSTOMER"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
+            System.err.println("Errore nella order.getCustomer().setId(rs.getLong(\"ID_CUSTOMER\"));");
             throw new RuntimeException(e);
         }
 
