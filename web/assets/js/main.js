@@ -1,9 +1,3 @@
-/* GLOBAL VARIABLE */
-
-var RESULT_CHANGE_DESIRED_QTY = false; /* variabile globale per gestire il risultato tornato dalla request AJAX */
-
-/* *************** */
-
 function setButtonActive(id) {
     /**
      * Add the class "active2" to the button of navbar based on actual active page
@@ -427,3 +421,19 @@ function goToCheckout(nameGroup) {
     }
 }
 
+function showProductFromOrder(idProduct) {
+    /**
+     * Set name of hidden input to idProduct and value to id of product to show and set value of controllerAction to home.Product.showProduct
+     * inside page of orders
+     */
+    let form = document.getElementById('order_action');
+    form.elements['controllerAction'].value = 'home.Product.showProduct';
+    form.elements['idProduct'].value = idProduct;
+    form.submit();
+}
+
+function setTmpId(id) {
+    /**
+     * Set id of object to delete before confirm this action into the modal */
+    document.getElementById('tmpIdDel').value = id;
+}

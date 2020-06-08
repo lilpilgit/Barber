@@ -17,6 +17,8 @@ public interface OrdersDAO {
      */
 
     Order insert(User customer, BigDecimal totalPrice, ArrayList<ExtendedProduct> items);
+    boolean cancelById(Long idOrder);
+    ArrayList<Order> fetchAllOrdersForLogistics();
     ArrayList<Order> fetchOrdersByCustomerId(Long id);
     ArrayList<ExtendedProduct> listOrderedProducts(Long id);
 

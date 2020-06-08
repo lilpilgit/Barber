@@ -1,6 +1,6 @@
-<%@ page import="model.mo.Product" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.mo.Order" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     /*    *//* Prendo l'ArrayList<Employee> di tutti gli impiegati *//*
@@ -35,6 +35,12 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* Prendo l'array list di ordini con i parametri relativi al cliente */
+    ArrayList<Order> logisticOrders = null;
+    if (request.getAttribute("logisticOrders") != null) {
+        logisticOrders = (ArrayList<Order>) request.getAttribute("logisticOrders");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Logistics";
 
@@ -46,7 +52,7 @@
 <%@include file="/templates/admin-head.jsp" %>
 <body>
 
-<%@include file="../../templates/admin-sidebar.jsp"%>
+<%@include file="../../templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
@@ -67,48 +73,50 @@
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-                    <%--            <tbody>
-                                <%
-                                    int i = 1; /* contatore per il numero di impiegati */
-
-                                    for (Employee e : employees) {
-                                %>
-                                <tr>
-                                    <th scope="row"><%=i%>
-                                    </th>
-                                    <td><%=e.getId()%>
-                                    </td>
-                                    <td><%=e.getUser().getSurname()%>
-                                    </td>
-                                    <td><%=e.getUser().getName()%>
-                                    </td>
-                                    <td><%=e.getUser().getPhone()%>
-                                    </td>
-                                    <td><%=e.getUser().getEmail()%>
-                                    </td>
-                                    <td><%=e.getUser().getAddress()%>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="tablebutton" style="color: #1ae2dd;"><i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button type="button" class="tablebutton" style="color: black;"><i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <%}%>
-                                </tbody>--%>
+                    <tbody>
+                    <%
+                        int i = 1; /* contatore per il numero di ordini */
+                        if (logisticOrders.size() != 0) {
+                            for (Order l : logisticOrders) {
+                    %>
+                    <tr>
+                        <th scope="row"><%=i%>
+                        </th>
+                        <td><%=l.getId()%>
+                        </td>
+                        <td><%=l.getCustomer().getEmail()%>
+                        </td>
+                        <td><%=l.getCustomer().getName()%> , <%=l.getCustomer().getSurname()%>
+                        </td>
+                        <td><%=l.getCustomer().getPhone()%>
+                        </td>
+                        <td><%=l.getStatus()%>
+                        </td>
+                        <td>
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"><i
+                                    class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="tablebutton" style="color: black;"><i
+                                    class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <%}%>
+                    </tbody>
                 </table>
             </div>
         </div>
-        <%--        <%}else{%>
-                <h1>Non ci sono dipendenti mi disp...</h1>
-                <%}%>--%>
+        <%
+        } else {
+        %>
+        <h1>Non ci sono ordini mi disp...</h1>
+        <%}%>
     </main>
 </div>
 
 
 <script>
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
 
     })
 </script>

@@ -772,18 +772,10 @@ public class Products {
             /* trovo l'utente da flaggare come cancellato */
             product = productDAO.findProductById(idToDelete);
 
-            /* Effettuo la cancellazione del cliente usando il metodo delete dello UserDAO in quanto il flag DELETED
-             * è presente solamente nella tabella USER */
 
-            deleted = productDAO.delete(product); /* Se non viene sollevata l'eccezione, l'impiegato è stato cancellato correttamente*/
+            deleted = productDAO.delete(product);
 
-            /* Chiamo la commonView che si occuperà di ricaricare la lista dei clienti aggiornata, togliendo quelli eliminati
-             *  e scaricare le informazioni riguardo la struttura che stiamo gestendo. È necessario chiamarla in quanto la cancellazione,
-             * a differenza dell'aggiunta non ha una propria pagina, ma consiste nel click di un semplice bottone ( il cestino ) pertanto è
-             * necessario ricaricare la lista dei dipendenti aggiornata ( chiamando appunto la commonView ) e solo settare ( come faccio sotto )
-             * la viewUrl alla pagina show-customer.jsp */
-            commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
-
+            commonView(daoFactory, request);
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -795,7 +787,7 @@ public class Products {
                 /* Se il cliente è stato inserito cancellato committo la transazione */
                 System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato cancellato correttamente .*/
-                applicationMessage = "Customer deleted SUCCESSFULLY.";
+                applicationMessage = "Product deleted SUCCESSFULLY.";
             }
 
 

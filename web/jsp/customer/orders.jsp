@@ -1,8 +1,8 @@
 <%@page import="functions.StaticFunc" %>
+<%@ page import="model.mo.ExtendedProduct" %>
 <%@ page import="model.mo.Order" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.mo.ExtendedProduct" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -54,9 +54,11 @@
     <!-- RICORDARSI DI INCREMENTARE GLI ID PER OGNI CARD -->
     <!-- STARE ATTENTI AL VALORE data-target CHE DEVE CORRISPONDERE CON L'ID DEL CONTENUTO DELLA CARD -->
     <div class="container px-3 py-4" id="accordion">
-        <%for (Order order : orders) {%>
+        <% int numberCollapse = 0;
+            for (Order order : orders) {
+        %>
         <div class="card">
-            <div class="card-header " id="headingOne">
+            <div class="card-header " id="heading_<%=numberCollapse%>">
                 <h6 class="mb-0 ">
 
                     <div class="row">
@@ -73,19 +75,22 @@
                                 <%-- deleted --%>
                                 <%-- annulled --%>
                               <%
+                                  boolean allowCancelOrder = false;
                                   String valueProgressBar = "0";
-                                  boolean canceled = false;
+                                  boolean canceled = false; /*TODO settare colore rosso di sfondo per ordini cancellati*/
                                   if (order.getStatus().equals(StaticFunc.NOTHING_NEW)) {
                                       valueProgressBar = "0";
+                                      allowCancelOrder = true; /* è ancora in tempo per cancellarlo */
                                   } else if (order.getStatus().equals(StaticFunc.PROCESSING)) {
                                       valueProgressBar = "25";
+                                      allowCancelOrder = true; /* è ancora in tempo per cancellarlo */
                                   } else if (order.getStatus().equals(StaticFunc.SENT)) {
                                       valueProgressBar = "50";
-                                  } else if(order.getStatus().equals(StaticFunc.DELIVERING)) {
+                                  } else if (order.getStatus().equals(StaticFunc.DELIVERING)) {
                                       valueProgressBar = "75";
-                                  } else if(order.getStatus().equals(StaticFunc.DELIVERED)) {
+                                  } else if (order.getStatus().equals(StaticFunc.DELIVERED)) {
                                       valueProgressBar = "100";
-                                  } else if(order.getStatus().equals(StaticFunc.CANCELED)) {
+                                  } else if (order.getStatus().equals(StaticFunc.CANCELED)) {
                                       canceled = true;
                                   }
                               %>
@@ -96,15 +101,17 @@
                         </div>
                         <div class="col-auto py-0">
                             <button class="btn btn-outline-secondary float-right" data-toggle="collapse"
-                                    data-target="#collapseOne"
-                                    title="show ordered products " aria-expanded="true" aria-controls="collapseOne">
+                                    data-target="#collapse_<%=numberCollapse%>"
+                                    title="Show ordered products " aria-expanded="true"
+                                    aria-controls="collapse_<%=numberCollapse%>>">
                                 Show
                             </button>
                         </div>
                     </div>
                 </h6>
             </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapse_<%=numberCollapse%>" class="collapse" aria-labelledby="heading_<%=numberCollapse%>>"
+                 data-parent="#accordion">
                 <div class="card-body pt-3">
                     <div class="card pt-4">
                         <table class="table table-hover shopping-cart-wrap col-8 align-self-center">
@@ -116,7 +123,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <%for (ExtendedProduct item : order.getItemList()){%>
+                            <%for (ExtendedProduct item : order.getItemList()) {%>
                             <tr>
                                 <!-- ATTENZIONE PER ESSERE CORRETTI, IL FETCH DEI PRODOTTI DOVREBBE INCLUDERE ANCHE QUELLI CANCELLATI -->
                                 <td>
@@ -124,9 +131,11 @@
                                         <div class="img-wrap"><img src="img/products/<%=item.getPictureName()%>"
                                                                    class="img-thumbnail img-sm"></div>
                                         <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate"><%=item.getName()%></h6>
+                                            <h6 class="title text-truncate"><%=item.getName()%>
+                                            </h6>
                                             <dl class="param param-inline small">
-                                                <dt>Producer: <%=item.getProducer()%></dt>
+                                                <dt>Producer: <%=item.getProducer()%>
+                                                </dt>
                                             </dl>
                                         </figcaption>
                                     </div>
@@ -136,7 +145,8 @@
                                 </td>
 
                                 <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
+                                    <button class="btn btn-outline-secondary" title="See more about product"
+                                            onclick="showProductFromOrder(<%=item.getId()%>)">Show more
                                     </button>
                                 </td>
                             </tr>
@@ -150,7 +160,7 @@
                                 </td>
                             </tr>
                             <!--la sell date va mostrata solo se il prodotto è stato spedito-->
-                            <%if(valueProgressBar.equals("100")){%>
+                            <%if (valueProgressBar.equals("100")) {%>
                             <tr>
                                 <td colspan="100%">
                                     <span><b>SELL DATE:</b><%=order.getSellDate()%></span>
@@ -167,15 +177,20 @@
                                     <span><b>STATUS ORDER:</b> <%=order.getStatus()%></span>
                                 </td>
                             </tr>
+                            <%if (allowCancelOrder) {%>
                             <tr class="text-center">
                                 <td colspan="100%">
                                     <span>
                             <!-- TODO SE LA BARRA DI PROGRESSO E' SUPERIORE AL 25% NON MOSTRARE IL BOTTONE! PERCHE' SIGNIFICA CHE E' STATO SPEDITO-->
                                     <button class="btn btn-danger"
+                                            data-target="#alertDeleteOrder"
+                                            data-toggle="modal"
+                                            onclick="setTmpId(<%=order.getId()%>);"
                                             title="Please.. Don't do this!!!">Cancel Order</button>
                             </span>
                                 </td>
                             </tr>
+                            <%}%>
                             </tfoot>
                             <!-------------------------------- END OF TABLE FOOTER ------------------------------------>
                         </table>
@@ -184,203 +199,74 @@
                 <!--container end.//-->
             </div>
         </div>
-        <%}/* fine del ciclo for per quanto riguarda ciascun ordine*/%>
-
-        <!-- CANCELLA DA QUI -------------------------------------------------------------------------------->
-        <div class="card">
-            <div class="card-header " id="heading2">
-                <h6 class="mb-0 ">
-                    <div class="row">
-                        <div class="col pt-2">ORDER ID: --inserire id--</div>
-                        <div class="col pt-2">ORDER DATE: 2020-12-12</div>
-                        <div class="col-5 pt-2"><span class="float-left pr-3">STATUS:</span><span class="progress">
-                            <!-- PER MODIFICARE STATO AVANZAMENTO CAMBIARE width: 0/25/50/75/100 e aria-valuenow= 0/25/50/75/100 -->
-                            <span class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75"
-                                  aria-valuemin="0" aria-valuemax="100"></span>
-                         </span>
-                        </div>
-                        <div class="col-auto py-0">
-                            <button class="btn btn-outline-secondary float-right" data-toggle="collapse"
-                                    data-target="#collapse2"
-                                    title="show ordered products " aria-expanded="true" aria-controls="collapse2">
-                                Show
-                            </button>
-                        </div>
-                    </div>
-                </h6>
-            </div>
-            <div id="collapse2" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body pt-3">
-                    <div class="card pt-4">
-                        <table class="table table-hover shopping-cart-wrap col-8 align-self-center">
-                            <thead class="text-muted">
-                            <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col" class="text-center">Ordered Quantity</th>
-                                <th scope="col"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="img-wrap"><img src="img/products/product3.jpg"
-                                                                   class="img-thumbnail img-sm"></div>
-                                        <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate">Product name goes here </h6>
-                                            <dl class="param param-inline small">
-                                                <dt>Producer:</dt>
-                                            </dl>
-                                        </figcaption>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="font-weight-bold"><h4>8</h4></span>
-                                </td>
-
-                                <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="img-wrap"><img src="img/products/product3.jpg"
-                                                                   class="img-thumbnail img-sm"></div>
-                                        <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate">Product name goes here </h6>
-                                            <dl class="param param-inline small">
-                                                <dt>Producer:</dt>
-                                            </dl>
-                                        </figcaption>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="font-weight-bold"><h4>8</h4></span>
-                                </td>
-
-                                <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="img-wrap"><img src="img/products/product3.jpg"
-                                                                   class="img-thumbnail img-sm"></div>
-                                        <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate">Product name goes here </h6>
-                                            <dl class="param param-inline small">
-                                                <dt>Producer:</dt>
-                                            </dl>
-                                        </figcaption>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="font-weight-bold"><h4>8</h4></span>
-                                </td>
-
-                                <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="img-wrap"><img src="img/products/product3.jpg"
-                                                                   class="img-thumbnail img-sm"></div>
-                                        <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate">Product name goes here </h6>
-                                            <dl class="param param-inline small">
-                                                <dt>Producer:</dt>
-                                            </dl>
-                                        </figcaption>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="font-weight-bold"><h4>8</h4></span>
-                                </td>
-
-                                <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="img-wrap"><img src="img/products/product3.jpg"
-                                                                   class="img-thumbnail img-sm"></div>
-                                        <figcaption class="media-body pl-1">
-                                            <h6 class="title text-truncate">Product name goes here </h6>
-                                            <dl class="param param-inline small">
-                                                <dt>Producer:</dt>
-                                            </dl>
-                                        </figcaption>
-                                    </div>
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="font-weight-bold"><h4>8</h4></span>
-                                </td>
-
-                                <td class="text-right align-middle">
-                                    <button class="btn btn-outline-secondary" title="See more about product">Show more
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="100%">
-                                    <span><b>SHIPPING ADDRESS:</b> Italy Veneto Padova Via bianconiglio 12 45080 </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="100%">
-                                    <span><b>SELL DATE:</b> 2020-12-12 </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="100%">
-                                    <span><b>TOTAL PRICE:</b> 9000 &euro;</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="100%">
-                                    <span><b>STATUS ORDER:</b> spedito</span>
-                                </td>
-                            </tr>
-                            <tr class="text-center">
-                                <td colspan="100%">
-                                    <span>
-                            <!-- TODO SE LA BARRA DI PROGRESSO E' SUPERIORE AL 25% NON MOSTRARE IL BOTTONE! PERCHE' SIGNIFICA CHE E' STATO SPEDITO-->
-                                    <button class="btn btn-danger"
-                                            title="Please.. Don't do this!!!">Cancel Order</button>
-                            </span>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div> <!-- card.// -->
-                </div>
-                <!--container end.//-->
-            </div>
-        </div>
-        <!-- FINO A QUI -------------------------------------------------------------------------------->
-
+        <%
+                numberCollapse++;
+            }/* fine del ciclo for per quanto riguarda ciascun ordine*/%>
 
     </div>
 </div>
+
+
+<input type="hidden" id="tmpIdDel" value="">
+<!--MODAL DI CONFERMA ELIMINAZIONE ORDINE-->
+<div class="modal fade" id="alertDeleteOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle" style="color: rgba(211,4,0,0.75)">You are canceling
+                    an order...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You are attempting to permanently cancel an order.<br><br>Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+
+                <!-- TODO AGGIORNARE CON FUNZIONE GENERICA deleteById contenuta in admin.js come con show-customers -->
+
+
+                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
+                        style="background-color: rgba(255,5,3,0.66)"
+                        onclick="cancelOrder(document.getElementById('tmpIdDel').value)">Cancel
+                    order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FINE MODAL DI CONFERMA ELIMINAZIONE ORDINE-->
+
+
+<form method="post" id="order_action">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idProduct" value="">
+    <input type="hidden" name="idOrder" value="">
+
+</form>
 
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
+
     });
+
+    function cancelOrder(idOrder) {
+        /**
+         * Set name of hidden input to idProduct and value to id of product to show and set value of controllerAction to home.Product.showProduct
+         * inside page of orders
+         */
+        let form = document.getElementById('order_action');
+        form.elements['controllerAction'].value = 'home.Orders.cancelOrder';
+        form.elements['idOrder'].value = idOrder;
+        form.submit();
+    }
 </script>
 </body>
 </html>

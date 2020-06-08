@@ -1,12 +1,15 @@
 package admin.controller;
 
 import model.dao.DAOFactory;
+import model.dao.OrdersDAO;
 import model.dao.UserDAO;
+import model.mo.Order;
 import model.mo.User;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -23,6 +26,8 @@ public class Logistics {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        OrdersDAO ordersDAO = null;
+        ArrayList<Order> logisticOrders = null;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -46,14 +51,9 @@ public class Logistics {
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
+            ordersDAO = daoFactory.getOrdersDAO();
 
-            //TODO METTERE QI LE CALL SUL DB
-
-
-
-
-
-
+            logisticOrders = ordersDAO.fetchAllOrdersForLogistics();
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -86,8 +86,10 @@ public class Logistics {
         request.setAttribute("loggedOn", loggedUser != null);
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
-        /* Setto gli attributi della request che verranno processati dalla show-logistics.jsp */
+        /* 3) Setto gli attributi della request che verranno processati dalla show-logistics.jsp */
         request.setAttribute("viewUrl", "admin/show-logistics");
+        /* 4) Setto l'array list di ordini da mostrare all'admin */
+        request.setAttribute("logisticOrders",logisticOrders);
 
     }
 }

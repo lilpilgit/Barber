@@ -188,6 +188,42 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     }
 
     @Override
+    public boolean cancelById(Long idOrder){
+        /**
+         * Set status to canceled
+         *
+         * @return true if cancel go correctly otherwise raise exception
+         */
+        query
+                = "UPDATE ORDERS"
+                + " SET STATUS = ?"
+                + " WHERE ID = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++,StaticFunc.CANCELED);
+            ps.setLong(i++, idOrder);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        try{
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close();");
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    @Override
     public ArrayList<Order> fetchOrdersByCustomerId(Long id) {
 
         /**
@@ -215,6 +251,55 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         try {
             while (rs.next()) {
                 listOrders.add(readOrder(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return listOrders;
+    }
+
+    @Override
+    public ArrayList<Order> fetchAllOrdersForLogistics() {
+        /**
+         * Fetch all orders for logistics admin area.
+         */
+
+        ArrayList<Order> listOrders = new ArrayList<>();
+
+        query =
+                "SELECT ORDERS.ID,U.EMAIL,U.NAME,U.SURNAME,U.PHONE,STATUS "
+              + "FROM ORDERS INNER JOIN USER U on ORDERS.ID_CUSTOMER = U.ID ORDER BY ORDER_DATE DESC;";
+
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            while (rs.next()) {
+                listOrders.add(readOrderForLogistics(rs));
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
@@ -381,6 +466,60 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         return extendedProduct;
     }
 
+    private Order readOrderForLogistics(ResultSet rs){
+
+        /**
+         * Read order's attributes with correlated customer's info for logistics admin area.
+         */
+
+        Order order = new Order();
+        User customer = new User();
+        order.setCustomer(customer);
+
+        /* Setto gli attributi standard di Order */
+
+        try {
+            order.setId(rs.getLong("ID"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getLong(\"ID\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            order.setStatus(rs.getString("STATUS"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.setStatus(rs.getString(\"STATUS\"));");
+            throw new RuntimeException(e);
+        }
+        /* Setto gli attributi aggiuntivi provenienti da Customer */
+
+        try {
+            order.getCustomer().setEmail(rs.getString("EMAIL"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.getCustomer().setEmail(rs.getString(\"EMAIL\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            order.getCustomer().setName(rs.getString("NAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.getCustomer().setName(rs.getString(\"NAME\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            order.getCustomer().setSurname(rs.getString("SURNAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.getCustomer().setSurname(rs.getString(\"SURNAME\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            order.getCustomer().setPhone(rs.getString("PHONE"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.getCustomer().setPhone(rs.getString(\"PHONE\"));");
+            throw new RuntimeException(e);
+        }
+
+        return order;
+    }
+
     private Order readOrder(ResultSet rs) {
 
         /**
@@ -404,7 +543,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             throw new RuntimeException(e);
         }
         try {
-            order.setSellDate(rs.getObject("ORDER_DATE", LocalDate.class));
+            order.setOrderDate(rs.getObject("ORDER_DATE", LocalDate.class));
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getObject(\"ORDER_DATE\", LocalDate.class)");
             throw new RuntimeException(e);
