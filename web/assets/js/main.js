@@ -448,3 +448,47 @@ function cancelOrder(idOrder) {
     form.elements['idOrder'].value = idOrder;
     form.submit();
 }
+
+function setDateBook(id) {
+    /**
+     * Return current date in format gg-mm-aaaa
+     * */
+
+    let today = new Date();
+    let maxfield = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    console.log(today);
+
+    maxfield.setDate(maxfield.getDate() + 7);
+
+    dd = maxfield.getDate();
+    mm = maxfield.getMonth() + 1; //January is 0!
+    yyyy = maxfield.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    maxfield = yyyy + '-' + mm + '-' + dd;
+    console.log(maxfield);
+
+    document.getElementById(id).value = today;
+    document.getElementById(id).setAttribute("min", today);
+    document.getElementById(id).setAttribute("max", maxfield);
+}
