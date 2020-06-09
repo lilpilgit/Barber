@@ -1,9 +1,6 @@
 package home.controller;
 
-import model.dao.DAOFactory;
-import model.dao.OrdersDAO;
-import model.dao.ProductDAO;
-import model.dao.UserDAO;
+import model.dao.*;
 import model.mo.ExtendedProduct;
 import model.mo.Product;
 import model.mo.User;
@@ -150,6 +147,7 @@ public class Checkout {
         OrdersDAO ordersDAO = null;
         UserDAO userDAO = null;
         User customer = null;
+        CartDAO cartDAO = null; /* necessario per poter rimuovere i prodotti acquistati */
         ArrayList<ExtendedProduct> items = new ArrayList<>(); /* prodotti da aggiungere alla ITEMS_LIST */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
@@ -181,6 +179,8 @@ public class Checkout {
 
             userDAO = daoFactory.getUserDAO();
 
+            cartDAO = daoFactory.getCartDAO();
+
             customer = userDAO.findById(loggedUser.getId());
 
             /* fetch dei parametri passati dalla pagina checkout.jsp */
@@ -201,11 +201,18 @@ public class Checkout {
             }
 
 
-            /* Effettuo l'inserimento del nuovo prodotto */
+            /* Effettuo l'inserimento del nuovo prodotto nella tabella degli ordini */
 
             ordersDAO.insert(customer, totalPrice, items);
             inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
-            applicationMessage = "Order received correctly, check the status in your order section.";
+
+            if(inserted){
+                /* se gli ordini sono andati a buon fine devo rimuovere i prodotti dal carrello dell'utente */
+                for (ExtendedProduct boughtItem : items){
+                    cartDAO.removeProductFromCart(loggedUser,boughtItem.getId());
+                }
+                applicationMessage = "Order received correctly, check the status in your order section.";
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();

@@ -121,7 +121,7 @@
                             <button type="button" class="trashbutton" title="Delete"
                                     data-target="#alert<%=subject%>"
                                     data-toggle="modal"
-                                    onclick=setTmpId(<%=p.getId()%>)>
+                                    onclick=setTmpId(<%=p.getId()%>,'tmpId')>
                                 <i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
@@ -171,10 +171,6 @@
 
 
 <script>
-    function setTmpId(id) {
-        document.getElementById("tmpId").value = id;
-        console.log("ID SETTATO TMP: " + document.getElementById("tmpId").value);
-    }
     window.addEventListener("load",() =>{
 
     })

@@ -432,10 +432,10 @@ function showProductFromOrder(idProduct) {
     form.submit();
 }
 
-function setTmpId(id) {
+function setTmpId(id,hiddenDrawer) {
     /**
-     * Set id of object to delete before confirm this action into the modal */
-    document.getElementById('tmpIdDel').value = id;
+     * Set id of object to delete/insert/modify into a temporary "drawer" before confirm this action into the modal */
+    document.getElementById(hiddenDrawer).value = id;
 }
 
 function cancelOrder(idOrder) {

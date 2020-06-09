@@ -1,38 +1,3 @@
-/*function enableSidebar() {
-    /!* jQuery for dropdown sidebar menu *!/
-    jQuery(function ($) {
-        $(".sidebar-dropdown > a").on('click', function () {
-            console.log("click");
-            $(".sidebar-submenu").slideUp(200);
-            if (
-                $(this)
-                    .parent()
-                    .hasClass("active")
-            ) {
-                $(".sidebar-dropdown").removeClass("active");
-                $(this)
-                    .parent()
-                    .removeClass("active");
-            } else {
-                $(".sidebar-dropdown").removeClass("active");
-                $(this)
-                    .next(".sidebar-submenu")
-                    .slideDown(200);
-                $(this)
-                    .parent()
-                    .addClass("active");
-            }
-        });
-
-        $("#close-sidebar").on('click', function () {
-            $(".page-wrapper").removeClass("toggled");
-        });
-        $("#show-sidebar").on('click', function () {
-            $(".page-wrapper").addClass("toggled");
-        });
-    });
-}*/
-
 function showResult(result, message) {
     /**
      * show alert with message returned from server
@@ -44,14 +9,11 @@ function showResult(result, message) {
 
 }
 
-function setTmpId(id) {
+function setTmpId(id,hiddenDrawer) {
     /**
-     * Set id of object to delete before confirm this action into the modal */
-    document.getElementById('tmpIdDel').value = id;
+     * Set id of object to delete/insert/modify into a temporary "drawer" before confirm this action into the modal */
+    document.getElementById(hiddenDrawer).value = id;
 }
-
-/* TODO DA UNIFICARE LE 2 FUNZIONI*/
-function setTmpIdStatus(id){    document.getElementById('tmpIdStatus').value = id;}
 
 function deleteEmployee(id) {
     /**
@@ -113,7 +75,6 @@ function unBlockById(id, user, controller) {
     formUserID.submit();
     console.log(index + "==> " + controller + ".unBlocked" + user + " for " + id + " Successful called");
 }
-
 
 function showcaseById(id, status) {
     /**

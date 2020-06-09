@@ -23,6 +23,7 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* array list di ordini da visualizzare */
     ArrayList<Order> orders = null;
     if (request.getAttribute("orders") != null) {
         orders = (ArrayList<Order>) request.getAttribute("orders");
@@ -154,27 +155,37 @@
                             <%} /* fine del ciclo for per quanto riguarda ciascun item dell'ordine*/%>
                             <!----------------------------------- TABLE FOOTER ---------------------------------------->
                             <tfoot>
+                            <%
+
+                                /* Faccio il replace dell'address per poterlo formattare diversamente */
+                                String shippingAddressFormatted = null;
+                                /* Effettuo il replace di | con , */
+                                if (order.getShippingAddress() != null) {
+                                    shippingAddressFormatted = order.getShippingAddress().replace('|', ',');
+                                    shippingAddressFormatted = shippingAddressFormatted.substring(0, shippingAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                                }
+                            %>
                             <tr>
                                 <td colspan="100%">
-                                    <span><b>SHIPPING ADDRESS:</b><%=order.getShippingAddress()%></span>
+                                    <span><b>SHIPPING ADDRESS:</b>&nbsp;&nbsp;<%=shippingAddressFormatted%></span>
                                 </td>
                             </tr>
                             <!--la sell date va mostrata solo se il prodotto è stato spedito-->
                             <%if (valueProgressBar.equals("100")) {%>
                             <tr>
                                 <td colspan="100%">
-                                    <span><b>SELL DATE:</b><%=order.getSellDate()%></span>
+                                    <span><b>SELL DATE:&nbsp;&nbsp;</b><%=order.getSellDate()%></span>
                                 </td>
                             </tr>
                             <%}%>
                             <tr>
                                 <td colspan="100%">
-                                    <span><b>TOTAL PRICE:</b> <%=order.getTotPrice()%> &euro;</span>
+                                    <span><b>TOTAL PRICE:&nbsp;&nbsp;</b> <%=order.getTotPrice()%> &euro;</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="100%">
-                                    <span><b>STATUS ORDER:</b> <%=order.getStatus()%></span>
+                                    <span><b>STATUS ORDER:&nbsp;&nbsp;</b> <%=order.getStatus()%></span>
                                 </td>
                             </tr>
                             <%if (allowCancelOrder) {%>
@@ -185,7 +196,7 @@
                                     <button class="btn btn-danger"
                                             data-target="#alertDeleteOrder"
                                             data-toggle="modal"
-                                            onclick="setTmpId(<%=order.getId()%>);"
+                                            onclick="setTmpId(<%=order.getId()%>,'tmpIdDel');"
                                             title="Please.. Don't do this!!!">Cancel Order</button>
                             </span>
                                 </td>

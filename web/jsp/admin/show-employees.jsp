@@ -110,7 +110,7 @@
                             <button type="button" class="trashbutton" title="Delete"
                                     data-target="#alert<%=user%>"
                                     data-toggle="modal"
-                                    onclick="setTmpId(<%=e.getId()%>);">
+                                    onclick="setTmpId(<%=e.getId()%>,'tmpIdDel');">
                                 <i class="far fa-trash-alt"></i>
                             </button>
                         </td>

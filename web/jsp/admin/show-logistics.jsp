@@ -97,7 +97,7 @@
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     data-target="#alertSetStatusOrder"
                                     data-toggle="modal"
-                                    onclick="setTmpIdStatus(<%=l.getId()%>);"><i
+                                    onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');"><i
                                     class="fas fa-pencil-alt"></i>
                             </button>
 
@@ -131,7 +131,8 @@
             </div>
             <div class="modal-body">
                 You are attempting to modify status of order.<br><br>Select one of this possible status:<br><br>
-                <input type="radio" id="nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>" required>
+
+                <input type="radio" id="nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>" checked="true">
                 <label for="nothing_new"><%=StaticFunc.NOTHING_NEW%>
                 </label><br>
                 <input type="radio" id="processing" name="status" value="<%=StaticFunc.PROCESSING%>">
@@ -149,6 +150,7 @@
                 <input type="radio" id="canceled" name="status" value="<%=StaticFunc.CANCELED%>">
                 <label for="canceled"><%=StaticFunc.CANCELED%>
                 </label><br>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
