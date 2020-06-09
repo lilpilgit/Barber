@@ -412,6 +412,31 @@ hr.light-100 {
     margin-top: 30px;
     font-style: italic;
 }
+/* ------------------------------------------------- RESULT CHECKOUT PAGE ------------------------------------------- */
+
+.result-checkout-container {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.result-checkout-title {
+    font-weight: bold;
+    font-size: 3em;
+    padding: 25px;
+}
+
+.result-checkout-thumb {
+    vertical-align: middle;
+    height: 120px;
+    width: 120px;
+}
+
+.result-checkout-container p {
+    margin-top: 30px;
+    font-style: italic;
+}
 
 
 /* ------------------------------------------------- PRODUCT PAGE --------------------------------------------------- */

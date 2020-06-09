@@ -27,6 +27,9 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* non mostrare l'alert predefinito */
+    boolean showAlert = false;
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Order";
 
@@ -38,23 +41,39 @@
 <head>
     <title>Title</title>
 </head>
-<%@include file="/templates/head.jsp"%>
+<%@include file="/templates/head.jsp" %>
 
 <body>
 
-<%@include file="/templates/header.jsp"%>
+<%@include file="/templates/header.jsp" %>
 
-<h1>PAGINA DI PROVA</h1>
+<div class="row padding">
+    <%
+        if (result != null && result.equals("success")) {
+            /* order added successfully */
+    %>
+    <div class="result-checkout-container">
+        <h3 class="result-checkout">It's all OK!</h3>
+        <div>
+            <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina,
+                 una volta customizzato in ogni pagina l'alert a seconda se lo si vuole o meno si potrà toglierlo dalla head.jsp-->
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json" background="transparent"
+                           speed="1" style="width: 300px; height: 300px;" autoplay></lottie-player>
+            <p><%=applicationMessage%>
+            </p>
+        </div>
+    </div>
+    <%}%>
+</div>
 
-<p>
-    Sulla base del valore di result mostrare l'application messagge e magari un immagine carina che fa capire
-    che l'ordine è andato a buon fne dopodichè aggiungere magari un link in cui si punta alla sezione ordini
-    del cliente con scritto Tieni traccia dei tuoi ordini o roba simile (IN INGLESE)
-</p>
 
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
+
+        /* bypasso l'alert di default */
+        showMessage = function() {};
     });
 </script>
 </body>

@@ -115,7 +115,7 @@
 <div class="container py-2">
     <div class="row padding">
         <%
-            if (products_to_show.isEmpty()) {
+            if (products_to_show != null && products_to_show.isEmpty()) {
                 /*there is no product to display*/
         %>
         <div class="no-products-container">
