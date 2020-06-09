@@ -81,7 +81,7 @@
                             for (Order l : logisticOrders) {
                     %>
                     <tr>
-                        <th scope="row"><%=i%>
+                        <th scope="row"><%=i++%>
                         </th>
                         <td><%=l.getId()%>
                         </td>
