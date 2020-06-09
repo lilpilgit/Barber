@@ -45,7 +45,7 @@
     <div class="d-flex justify-content-center" >
         <div class="col-4 pt-4 my-5 book-box" >
             <label for="appointment-date">Select a date:</label>
-            <input type="date" id="appointment-date" name="appointment date" min="2020-05-29" max="2020-05-31">
+            <input type="date" id="appointment-date" name="appointment date" >
             <hr>
             <label for="time">Choose an hour:</label>
             <select id="time" name="time">
@@ -82,6 +82,7 @@
 <script type="text/javascript">
 
     window.addEventListener("load",() =>{
+        setDateBook("appointment-date");
     });
 </script>
 </body>
