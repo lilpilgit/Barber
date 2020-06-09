@@ -191,7 +191,7 @@ public class Staff {
             System.err.println(structure);
             /* Effettuo l'inserimento del nuovo dipendente */
             try {
-                employeeDAO.insert(null, structure, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, birth_date, fiscal_code, 'E' );
+                employeeDAO.insert(null, structure, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, birth_date, fiscal_code, 'E');
                 inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
@@ -253,54 +253,6 @@ public class Staff {
         }
         /* 6) l'UNICA struttura da mostrare all'interno del text-field readonly */
         request.setAttribute("structure", structure);
-
-        /* TODO: SE SI DECIDE DI IMPLEMENTARE IL CARICAMENTO FOTO PRENDERE SPUNTO DA TALE CODICE */
-
-        /*        List<FileItem> items = (List<FileItem>) request.getAttribute("items");
-         *//*Path in cui sono contenute le immagini caricare dall'admin*//*
-        String imagePath = request.getServletContext().getRealPath("/img/employees");
-        *//*HashMap per contenere i formField che non sono di tipo file*//*
-        FileItem imgField = null; *//*item che contiene il file immagine passato con il form */
-
-        /*// Process the uploaded items
-        Iterator<FileItem> iter = items.iterator();
-        while (iter.hasNext()) {
-            FileItem item = iter.next();
-            if (item.isFormField()) {
-                String fieldName = item.getFieldName();
-                *//*Filtro i parametri da usare per l'inserimento nel DB*//*
-                if (fieldName.equals("name")) name = item.getString();
-                else if (fieldName.equals("surname")) surname = item.getString();
-                else if (fieldName.equals("sex")) sex = item.getString().charAt(0);
-                else if (fieldName.equals("email")) email = item.getString();
-                else if (fieldName.equals("phone")) phone = item.getString();
-                else if (fieldName.equals("hire_date")) hire_date = LocalDate.parse(item.getString());
-                    *//*dal form ricevo solo l'ID della struttura che poi utilizzerò per cercare la riga relativa alla struttura che mi interessa*//*
-                else if (fieldName.equals("structure")) {
-                    try {
-                        id_structure = Long.parseLong(item.getString());
-                    } catch (NumberFormatException e) {
-                        *//*TODO:da rivedere come gestire tale situazione anche se non dovrebbe accadere in quanto le strutture sono
-         *  scaricate dal DB*//*
-
-                        id_structure = 1L; *//*the L is necessary because is a Long*//*
-                    }
-                }
-                else if (fieldName.equals("name")) name = item.getString();
-            } else {
-                *//*Dato che salverò il file immagine nel filesystem con il nome costituito dal codice fiscale dell'impiegato
-         * (così da poterlo sovrascrivere nel momento in cui verrà scelta una nuova immagine), mi salvo l'item
-         * all'interno di un FileItem (imgField) così da aggiungere il file solo se l'inserimento sul DB è andato
-         * a buon fine.*//*
-
-                imgField = item;
-                *//*                String fileExtension = FilenameUtils.getExtension(item.getName()); *//**//*recupero l'estensione del file*//**//*
-         *//**//*TODO:CONTROLLARE ESTENSIONE DEL FILE E SE NON RICONOSCIUTA TRA QUELLE VALIDE SETTARE IMMAGINE DI DEFAULT*//**//*
-                String uploadedFilePath = imagePath + "/" + fiscal_code + "." + fileExtension;
-                File uploadedFile = new File(uploadedFilePath);
-                item.write(uploadedFile);*//*
-            }
-        }*/
     }
 
     public static void showEmployees(HttpServletRequest request, HttpServletResponse response) {

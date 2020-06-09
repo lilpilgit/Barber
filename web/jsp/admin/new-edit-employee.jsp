@@ -73,7 +73,7 @@
     <!--Main content of the page-->
     <main class="page-content">
 
-        <form id='form_add_employee' method="post" class="needs-validation">
+        <form id="form_add_employee" method="post" class="needs-validation">
             <div class="form-row justify-content-center">
                 <%if (structurePresent) {%>
                 <div class="text-center">

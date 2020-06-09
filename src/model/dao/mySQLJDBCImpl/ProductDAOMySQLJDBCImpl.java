@@ -208,10 +208,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     @Override
     public Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
-                          String picName, String description, Integer maxOrderQuantity, String category, Structure structure) throws DuplicatedObjectException {
+                          String basePicName, String description, Integer maxOrderQuantity, String category, Structure structure) throws DuplicatedObjectException {
         /**
          * This method allows you to indifferently insert a product.
-         * @params id parameter is DUMMY for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
+         * @params
+         *          Long id : DUMMY parameter for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
+         *          String picName: get base file name "product_" and append id of product
          * @return Returns the product inserted correctly in the DB otherwise raises an exception
          * */
 
@@ -223,7 +225,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         product.setDiscount(discount);
         product.setName(name);
         product.setInsertDate(insertDate);
-        product.setPictureName(picName);
         product.setDescription(description);
         product.setMaxOrderQuantity(maxOrderQuantity);
         product.setCategory(category);
@@ -347,9 +348,11 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             }
         }
 
-        /* L'unico campo che rimane da settare è l'ID. */
+        /* Rimane da settare l'ID. */
         product.setId(newId);
 
+        /* Rimane da settare la pictureName del tipo product_ID */
+        product.setPictureName(basePicName + newId);
 
         query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {

@@ -8,15 +8,20 @@ import model.exception.DuplicatedObjectException;
 import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class Products {
 
@@ -28,24 +33,27 @@ public class Products {
         /**
          * Instantiates a ProductDAO to be able to enter the new product in Database.
          */
-        String producer;
-        BigDecimal price;
-        Integer discount;
-        String name;
-        LocalDate insertDate;
-        String pictureName;
-        String description;
-        Integer maxOrderQuantity;
-        String category;
-
+        String producer = null;
+        BigDecimal price = null;
+        Integer discount = null;
+        String name = null;
+        LocalDate insertDate = null;
+        String description = null;
+        Integer maxOrderQuantity = null;
+        String category = null;
         String submit; /*mi aspetto che il value sia "add_new_product"*/
+        String basePicName = "product_"; /* file di name che funge come base */
+        String pictureName = null; /* nome del file da calcolare a runtime */
+
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         ProductDAO productDAO = null;
+        Product productInserted = null; /* serve per conoscere l'id del prodotto appena aggiunto */
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
         Structure structure = null;
+        FileItem imgField = null;
 
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
@@ -57,6 +65,51 @@ public class Products {
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
+            /* Dato che è previsto il caricamento dell'immagine, prendo l'attributo attributesMultipart */
+            List<FileItem> items = (List<FileItem>) request.getAttribute("attributesMultipart");
+
+            String imagePath = request.getServletContext().getRealPath(Configuration.PRODUCTS_IMAGE_WEB_PATH);
+
+            /* Processo i field del form inviatomi */
+            Iterator<FileItem> iter = items.iterator();
+            while (iter.hasNext()) {
+                FileItem item = iter.next();
+                if (item.isFormField()) {
+                    /* se è un campo della form NON BINARIO lo inserisco all'interno dell'HashMap<String,String>*/
+                    String fieldName = item.getFieldName();
+
+                    /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
+                    if (fieldName.equals("producer")) {
+                        producer = item.getString();/*required*/
+                    } else if (fieldName.equals("name")) {
+                        name = item.getString();/*required*/
+                    } else if (fieldName.equals("category")) {
+                        category = item.getString();/*required*/
+                    } else if (fieldName.equals("description")) {
+                        description = item.getString();/*required*/
+                    } else if (fieldName.equals("price")) {
+                        price = BigDecimal.valueOf(Double.parseDouble(item.getString()));/*required*/
+                    } else if (fieldName.equals("discount")) {
+                        discount = Integer.parseInt(item.getString());/*required*/
+                    } else if (fieldName.equals("maxOrderQuantity")) {
+                        maxOrderQuantity = Integer.parseInt(item.getString());/*required*/
+                    } else if (fieldName.equals("insertDate")) {
+                        insertDate = LocalDate.parse(item.getString());/*not required*/
+                    } else if (fieldName.equals("submit")) {
+                        submit = item.getString();/*not required*/
+                    }
+
+                } else {
+                    /* altrimenti non si tratta di un campo della form ma di un file binario */
+                    /* Dato che salverò il file immagine nel filesystem con il nome con tale pattern : product_<id_del_prodotto>
+                     * (così da poterlo sovrascrivere nel momento in cui verrà scelta una nuova immagine), mi salvo l'item
+                     * all'interno di un FileItem (imgField) così da aggiungere il file solo se l'inserimento sul DB è andato
+                     * a buon fine.*/
+                    imgField = item; /*required*/
+                }
+            }
+
+
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
             sessionDAOFactory.beginTransaction();
@@ -65,19 +118,6 @@ public class Products {
 
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
-
-            /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
-            producer = request.getParameter("producer");/*required*/
-            name = request.getParameter("name");/*required*/
-            category = request.getParameter("category");/*required*/
-            description = request.getParameter("description");/*required*/
-            price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price"))); /*required*/
-            discount = Integer.parseInt(request.getParameter("discount"));/*required*/
-            maxOrderQuantity = Integer.parseInt(request.getParameter("maxOrderQuantity"));/*required*/
-            pictureName = request.getParameter("pic_name");/*required*/
-            insertDate = LocalDate.parse(request.getParameter("insert_date"));/*not required*/
-            submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_product"*/
-
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -93,7 +133,7 @@ public class Products {
             System.err.println(structure);
             /* Effettuo l'inserimento del nuovo prodotto */
             try {
-                productDAO.insert(null, producer, price, discount, name, insertDate, pictureName, description, maxOrderQuantity, category, structure);
+                productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, basePicName, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
@@ -105,10 +145,18 @@ public class Products {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
             if (inserted) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato inserito correttamente .*/
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto sia stato inserito correttamente .*/
                 applicationMessage = "Product inserted SUCCESSFULLY.";
                 System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+                /* Procedo al salvataggio dell'immagine sul disco */
+                String fileExtension = FilenameUtils.getExtension(imgField.getName()); /* recupero l'estensione del file */
+                pictureName = basePicName + productInserted.getId();
+                String uploadedFilePath = imagePath + "/" + pictureName + "." + fileExtension;
+                File uploadedFile = new File(uploadedFilePath);
+                imgField.write(uploadedFile);/* scrivo sul file appena creato */
             }
 
 
@@ -118,7 +166,7 @@ public class Products {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
 
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-                /* Se viene fatto il rollback della transazione il dipendente non è stato inserito .*/
+                /* Se viene fatto il rollback della transazione il prodotto non è stato inserito .*/
                 applicationMessage = "Product insertion ERROR.";
 
             } catch (Throwable t) {
@@ -155,53 +203,7 @@ public class Products {
         }
         request.setAttribute("structure", structure);
 
-        /* TODO: SE SI DECIDE DI IMPLEMENTARE IL CARICAMENTO FOTO PRENDERE SPUNTO DA TALE CODICE */
 
-        /*        List<FileItem> items = (List<FileItem>) request.getAttribute("items");
-         *//*Path in cui sono contenute le immagini caricare dall'admin*//*
-        String imagePath = request.getServletContext().getRealPath("/img/employees");
-        *//*HashMap per contenere i formField che non sono di tipo file*//*
-        FileItem imgField = null; *//*item che contiene il file immagine passato con il form */
-
-        /*// Process the uploaded items
-        Iterator<FileItem> iter = items.iterator();
-        while (iter.hasNext()) {
-            FileItem item = iter.next();
-            if (item.isFormField()) {
-                String fieldName = item.getFieldName();
-                *//*Filtro i parametri da usare per l'inserimento nel DB*//*
-                if (fieldName.equals("name")) name = item.getString();
-                else if (fieldName.equals("surname")) surname = item.getString();
-                else if (fieldName.equals("sex")) sex = item.getString().charAt(0);
-                else if (fieldName.equals("email")) email = item.getString();
-                else if (fieldName.equals("phone")) phone = item.getString();
-                else if (fieldName.equals("hire_date")) hire_date = LocalDate.parse(item.getString());
-                    *//*dal form ricevo solo l'ID della struttura che poi utilizzerò per cercare la riga relativa alla struttura che mi interessa*//*
-                else if (fieldName.equals("structure")) {
-                    try {
-                        id_structure = Long.parseLong(item.getString());
-                    } catch (NumberFormatException e) {
-                        *//*TODO:da rivedere come gestire tale situazione anche se non dovrebbe accadere in quanto le strutture sono
-         *  scaricate dal DB*//*
-
-                        id_structure = 1L; *//*the L is necessary because is a Long*//*
-                    }
-                }
-                else if (fieldName.equals("name")) name = item.getString();
-            } else {
-                *//*Dato che salverò il file immagine nel filesystem con il nome costituito dal codice fiscale dell'impiegato
-         * (così da poterlo sovrascrivere nel momento in cui verrà scelta una nuova immagine), mi salvo l'item
-         * all'interno di un FileItem (imgField) così da aggiungere il file solo se l'inserimento sul DB è andato
-         * a buon fine.*//*
-
-                imgField = item;
-                *//*                String fileExtension = FilenameUtils.getExtension(item.getName()); *//**//*recupero l'estensione del file*//**//*
-         *//**//*TODO:CONTROLLARE ESTENSIONE DEL FILE E SE NON RICONOSCIUTA TRA QUELLE VALIDE SETTARE IMMAGINE DI DEFAULT*//**//*
-                String uploadedFilePath = imagePath + "/" + fiscal_code + "." + fileExtension;
-                File uploadedFile = new File(uploadedFilePath);
-                item.write(uploadedFile);*//*
-            }
-        }*/
     }
 
     public static void showProducts(HttpServletRequest request, HttpServletResponse response) {

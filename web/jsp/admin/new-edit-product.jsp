@@ -65,7 +65,7 @@
     <!--Main content of the page-->
     <main class="page-content text-center">
 
-        <form id="form_edit_product" method="post" class="needs-validation">
+        <form id="form_edit_product" method="post" enctype="multipart/form-data" class="needs-validation">
             <br>
             <div class="form-row justify-content-center">
                 <div class="col-md-2 mb-1">
@@ -122,8 +122,8 @@
             </div>
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-3">
-                    <label for="Pic_name">Picture</label>
-                    <input type="text" name="pic_name" id="Pic_name" required
+                    <label for="Picture_name">Picture</label>
+                    <input type="file" name="picture" id="Picture_name" required
                            value="<%=(action.equals("modify")) ? productToEdit.getPictureName() : ""%>"
                            class="form-control">
                 </div>

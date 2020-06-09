@@ -45,7 +45,7 @@ public class Dispatcher extends HttpServlet {
             ServletFileUpload upload = new ServletFileUpload(factory);
             List<FileItem> items = null; /* vado a fare il parsing della request e ottengo una lista di FileItem ( che fa parte anche essa delle librerie di FileUpload)*/
             try {
-                items = upload.parseRequest(request);
+                items = upload.parseRequest(request); /* Dentro items ho sia i parametri HTTP che i file binari */
             } catch (FileUploadException e) {
                 System.err.println("DISPATCHER ==> Errore nella items = upload.parseRequest(request);");
                 e.printStackTrace();
@@ -54,7 +54,7 @@ public class Dispatcher extends HttpServlet {
              *ho sia i file che i parametri HTTP normali dunque è evidente che devo trattarli in modo diverso, in particolare devo
              *salvare nella request come attributi proprio questa lista di items che contiene sia i files che i parametri HTTP */
 
-            request.setAttribute("items", items); /*inserisco come attributi della request gli items*/
+            request.setAttribute("attributesMultipart", items); /*inserisco come attributi della request gli items*/
 
             for (FileItem item : items) { /*per ciascuno degli items verifico se si tratta di un file o di un form field*/
                 if (item.isFormField() && item.getFieldName().equals("controllerAction")) {
