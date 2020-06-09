@@ -377,6 +377,17 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct , nam
 
 }
 
+function findSlot(openingTime, closingTime) {
+    console.log(openingTime);
+    console.log(closingTime);
+
+
+    let start = new Date(openingTime);
+
+    console.log(start);
+
+}
+
 function goToCheckout(nameGroup) {
 
     let form = document.getElementById('action_checkout');
