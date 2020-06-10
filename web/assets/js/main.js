@@ -377,14 +377,34 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct , nam
 
 }
 
-function findSlot(openingTime, closingTime) {
-    console.log(openingTime);
-    console.log(closingTime);
+function findSlot(idStructure, pickedDate) {
+    /**
+     * Send AJAX request with POST method to controller to find the reserved time for a specific selectedDate
+     *
+     *
+     * @type {XMLHttpRequest}
+     */
 
+    let xhttp = new XMLHttpRequest();
 
-    let start = new Date(openingTime);
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            result = JSON.parse(this.responseText).result;
+            if (result === "success") {
+                alert("Modificato!");
+            } else if (result === "fail") {
+                alert("Non è stato modificato!");
+            } else {
+                alert("ERRORE NEL BACKEND!");
+            }
+        }
+    };
 
-    console.log(start);
+    xhttp.open("POST", "app", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate);
+    console.log("The structure open at:" + idStructure);
+    console.log("Customer selected date:" + pickedDate);
 
 }
 
@@ -480,10 +500,7 @@ function setDateBook(id) {
     }
 
     today = yyyy + '-' + mm + '-' + dd;
-    console.log(today);
-
     maxfield.setDate(maxfield.getDate() + 7);
-
     dd = maxfield.getDate();
     mm = maxfield.getMonth() + 1; //January is 0!
     yyyy = maxfield.getFullYear();
@@ -497,7 +514,6 @@ function setDateBook(id) {
     }
 
     maxfield = yyyy + '-' + mm + '-' + dd;
-    console.log(maxfield);
 
     document.getElementById(id).value = today;
     document.getElementById(id).setAttribute("min", today);

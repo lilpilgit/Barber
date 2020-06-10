@@ -52,12 +52,12 @@
         <div class="col-4 pt-4 my-5 book-box" >
             <label for="appointment-date">Select a date:</label>
             <input type="date" id="appointment-date" name="appointment date"
-                   onchange="findSlot('<%=structure.getOpeningTime()%>' , '<%=structure.getClosingTime()%>')">
+                   onchange="findSlot('<%=structure.getId()%>' , this.value)">
             <hr>
             <label for="time">Choose an hour:</label>
             <select id="time" name="time">
-<%--                <option value="09:00">09.00 AM</option>
-                <option value="09:30">09.30 AM</option>
+                <option disabled selected>Before, choose a date</option>
+<%--                <option value="09:30">09.30 AM</option>
                 <option value="10:00">10.00 AM</option>
                 <option value="10:30">10.30 AM</option>
                 <option value="11:00">11.00 AM</option>
@@ -89,7 +89,6 @@
 <script type="text/javascript">
     window.addEventListener("load",() =>{
         setDateBook("appointment-date");
-
     });
 </script>
 </body>

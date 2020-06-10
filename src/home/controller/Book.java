@@ -1,8 +1,6 @@
 package home.controller;
 
-import model.dao.DAOFactory;
-import model.dao.StructureDAO;
-import model.dao.UserDAO;
+import model.dao.*;
 import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
