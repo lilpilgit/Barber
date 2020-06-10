@@ -401,7 +401,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<Product> findShowcaseProduct() {
         ArrayList<Product> listProduct = new ArrayList<>();
-        query = "SELECT * FROM PRODUCT WHERE SHOWCASE = 1;";
+        query = "SELECT * FROM PRODUCT WHERE SHOWCASE = 1 AND DELETED = 0;";
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
