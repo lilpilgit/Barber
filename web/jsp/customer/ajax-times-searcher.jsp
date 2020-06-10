@@ -25,9 +25,9 @@
     UserDAO userDAO = null;
     Structure structure = null;
     StructureDAO structureDAO = null;
-    Booking booking = null;
     BookingDAO bookingDAO = null;
-    ArrayList<Booking> bookings;
+    ArrayList<Booking> bookings = null;
+    ArrayList<String> availableTimes = null;
 
     User user = null;
     Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
@@ -64,6 +64,9 @@
 
         user = userDAO.findById(loggedUser.getId());
 
+        bookingDAO = daoFactory.getBookingDAO();
+        structureDAO = daoFactory.getStructureDAO();
+
         /* setto l'id della struttura sulla base dell'id ricevuto */
         idStructure = Long.valueOf(request.getParameter("idStructure"));
 
@@ -90,8 +93,6 @@
         /* Commit sul db */
         daoFactory.commitTransaction();
 
-
-
     } catch (Exception e) {
         try {
             if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
@@ -111,6 +112,22 @@
         } catch (Throwable t) {
         }
     }
+
+
+
+
+
+
+
 %>
 
+            { "result": "success",
 
+            "availableTimes":
+
+            [ time1, time2,
+
+
+            ]
+
+            }

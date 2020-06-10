@@ -93,8 +93,7 @@
                     <label for="Description">Description</label>
                     <textarea class="form-control" name="description" id="Description" required
                               rows="8" form="form_edit_product"
-                              style="resize: none;"><%=(action.equals("modify")) ? productToEdit.getDescription() : ""%>
-                    </textarea>
+                              style="resize: none;"><%=(action.equals("modify")) ? productToEdit.getDescription() : ""%></textarea>
                 </div>
             </div>
             <hr>
@@ -123,7 +122,7 @@
             <!--https://plugins.krajee.com/file-avatar-upload-demo snippet per modifica e caricamento immagine -->
             <%if (action.equals("modify")) {%>
             <div class="form-row justify-content-center">
-                <div class="col-md-12">
+                <div class="col-md-6">
 
                     <div class="card-shop"><!-- da modificare eventualmente-->
                         <div class="text-center ">
@@ -134,7 +133,8 @@
                 </div>
             </div>
             <%}%>
-            <div class="form-row justify-content-center">
+            <div class="form-row justify-content-center pb-4">
+                <div class="col-6">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Picture product</span>
@@ -144,6 +144,7 @@
                     <input type="file" name="picture" class="custom-file-input form-control"
                            id="Picture" <%=(action.equals("modify")) ? "" : "required"%>>
                     <label class="custom-file-label" for="Picture">Choose image</label>
+                </div>
                 </div>
             </div>
 
