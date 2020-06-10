@@ -54,6 +54,7 @@ public class Products {
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
         Structure structure = null;
         FileItem imgField = null;
+        String fileExtension = null;
 
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
@@ -93,10 +94,10 @@ public class Products {
                         discount = Integer.parseInt(item.getString());/*required*/
                     } else if (fieldName.equals("maxOrderQuantity")) {
                         maxOrderQuantity = Integer.parseInt(item.getString());/*required*/
-                    } else if (fieldName.equals("insertDate")) {
+                    } else if (fieldName.equals("insert_date")) {
                         insertDate = LocalDate.parse(item.getString());/*not required*/
                     } else if (fieldName.equals("submit")) {
-                        submit = item.getString();/*not required*/
+                        submit = item.getString();/* required*/
                     }
 
                 } else {
@@ -106,6 +107,7 @@ public class Products {
                      * all'interno di un FileItem (imgField) così da aggiungere il file solo se l'inserimento sul DB è andato
                      * a buon fine.*/
                     imgField = item; /*required*/
+                    fileExtension = FilenameUtils.getExtension(imgField.getName()); /* recupero l'estensione del file */
                 }
             }
 
@@ -133,7 +135,7 @@ public class Products {
             System.err.println(structure);
             /* Effettuo l'inserimento del nuovo prodotto */
             try {
-                productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, basePicName, description, maxOrderQuantity, category, structure);
+                productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, basePicName, fileExtension, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
@@ -152,11 +154,11 @@ public class Products {
                 System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
                 /* Procedo al salvataggio dell'immagine sul disco */
-                String fileExtension = FilenameUtils.getExtension(imgField.getName()); /* recupero l'estensione del file */
+
                 pictureName = basePicName + productInserted.getId();
                 String uploadedFilePath = imagePath + "/" + pictureName + "." + fileExtension;
                 File uploadedFile = new File(uploadedFilePath);
-                imgField.write(uploadedFile);/* scrivo sul file appena creato */
+                imgField.write(uploadedFile);/* scrivo sul file appena creato il contenuto binario del file passato dalla form */
             }
 
 
@@ -577,17 +579,32 @@ public class Products {
         /**
          * Instantiates a ProductDAO to be able to edit the existing product in Database.
          */
-
+        String productId = null;
+        String producer = null;
+        BigDecimal price = null;
+        Integer discount = null;
+        String name = null;
+        LocalDate insertDate = null;
+        String description = null;
+        Integer maxOrderQuantity = null;
+        String category = null;
         String submit; /*mi aspetto che il value sia "edit_product"*/
+        String basePicName = "product_"; /* file di name che funge come base */
+        String picture_name_stored = null; /* il nome attuale del file immagine */
+        Boolean inShowcase = null; /* per sapere se il prodotto da modificare è nello showcase o meno */
 
+        DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
+        User loggedUser = null;
         ProductDAO productDAO = null; /* DAO Necessario per poter effettuare la modifica */
         Product productToEdit = null;
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare la modifica */
         Structure structure = null;
         Product originalProduct = null; /* l'oggetto intatto ancora con i campi non modificati */
-        DAOFactory sessionDAOFactory = null; //per i cookie
-        User loggedUser = null;
+        FileItem imgField = null;
+        String fileExtension = null;
+        boolean changeImage = false;
+
 
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
@@ -601,6 +618,68 @@ public class Products {
             sessionFactoryParameters.put("response", response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
+            /* Dato che è previsto il caricamento dell'immagine, prendo l'attributo attributesMultipart */
+            List<FileItem> items = (List<FileItem>) request.getAttribute("attributesMultipart");
+
+            String imagePath = request.getServletContext().getRealPath(Configuration.PRODUCTS_IMAGE_WEB_PATH);
+
+            /* Processo i field del form inviatomi */
+            Iterator<FileItem> iter = items.iterator();
+            while (iter.hasNext()) {
+                FileItem item = iter.next();
+                if (item.isFormField()) {
+                    /* se è un campo della form NON BINARIO lo inserisco all'interno dell'HashMap<String,String>*/
+                    String fieldName = item.getFieldName();
+
+                    /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
+                    if (fieldName.equals("producer")) {
+                        producer = item.getString();/*required*/
+                    } else if (fieldName.equals("productId")) {
+                        productId = item.getString(); /* hidden */
+                    } else if (fieldName.equals("picture_name_stored")) {
+                        picture_name_stored = item.getString();
+                    } else if (fieldName.equals("name")) {
+                        name = item.getString();/*required*/
+                    } else if (fieldName.equals("category")) {
+                        category = item.getString();/*required*/
+                    } else if (fieldName.equals("description")) {
+                        description = item.getString();/*required*/
+                    } else if (fieldName.equals("price")) {
+                        price = BigDecimal.valueOf(Double.parseDouble(item.getString()));/*required*/
+                    } else if (fieldName.equals("discount")) {
+                        discount = Integer.parseInt(item.getString());/*required*/
+                    } else if (fieldName.equals("maxOrderQuantity")) {
+                        maxOrderQuantity = Integer.parseInt(item.getString());/*required*/
+                    } else if (fieldName.equals("insert_date")) {
+                        insertDate = LocalDate.parse(item.getString());/*not required*/
+                    } else if (fieldName.equals("showcase")) {
+                        inShowcase = Boolean.parseBoolean(item.getString());
+                    } else if (fieldName.equals("submit")) {
+                        submit = item.getString();/*required*/
+                    }
+
+                } else {
+                    if (item.getSize() != 0) {
+                        System.out.println("DIMENZIONE INVIATA " + item.getSize());
+                        /* È STATO PASSATO ANCHE UN FILE DUNQUE SIGNIFICA CHE VA SOVRASCRITTO */
+                        /* altrimenti non si tratta di un campo della form ma di un file binario */
+                        /* Dato che salverò il file immagine nel filesystem con il nome con tale pattern : product_<id_del_prodotto>
+                         * (così da poterlo sovrascrivere nel momento in cui verrà scelta una nuova immagine), mi salvo l'item
+                         * all'interno di un FileItem (imgField) così da aggiungere il file solo se l'inserimento sul DB è andato
+                         * a buon fine.*/
+                        changeImage = true;
+                        imgField = item; /*required*/
+                        fileExtension = FilenameUtils.getExtension(imgField.getName()); /* recupero l'estensione del file */
+                    } else {
+                        changeImage = false;
+                        System.out.println("NON SI VUOLE MODIFICARE IL FILE IMMAGINE!");
+                    }
+                }
+            }
+
+
+
+
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
             sessionDAOFactory.beginTransaction();
@@ -609,8 +688,6 @@ public class Products {
 
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
-
-            /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -628,11 +705,11 @@ public class Products {
 
             /* In caso di modifica, il form contiene un campo hidden con name="productId" che mi viene
              * passato dalla JSP e consente di poter scaricare dal DB l'impiegato con quel determinato ID */
-            originalProduct = productDAO.findProductById(Long.valueOf(request.getParameter("productId")));
+            originalProduct = productDAO.findProductById(Long.valueOf(productId));
 
             /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
              * quale passare alla pagina new-edit-product.jsp */
-            productToEdit = productDAO.findProductById(Long.valueOf(request.getParameter("productId")));
+            productToEdit = productDAO.findProductById(Long.valueOf(productId));
 
             /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
              * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
@@ -641,18 +718,17 @@ public class Products {
              * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
              * */
 
-            productToEdit.setName(request.getParameter("name"));
-            productToEdit.setProducer(request.getParameter("producer"));
-            productToEdit.setCategory(request.getParameter("category"));
-            productToEdit.setDescription(request.getParameter("description"));
-            productToEdit.setPictureName(request.getParameter("pic_name"));
-            productToEdit.setInsertDate(LocalDate.parse(request.getParameter("insert_date")));
-            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price")));
+            productToEdit.setName(name);
+            productToEdit.setProducer(producer);
+            productToEdit.setCategory(category);
+            productToEdit.setDescription(description);
+            productToEdit.setPictureName((changeImage) ? basePicName + productId + "." + fileExtension : picture_name_stored);
+            productToEdit.setInsertDate(insertDate);
             productToEdit.setPrice(price);
-            productToEdit.setDiscount(Integer.parseInt(request.getParameter("discount")));
-            productToEdit.setMaxOrderQuantity(Integer.parseInt(request.getParameter("maxOrderQuantity")));
+            productToEdit.setDiscount(discount);
+            productToEdit.setMaxOrderQuantity(maxOrderQuantity);
             productToEdit.setDeleted(false);
-            productToEdit.setShowcase(true);
+            productToEdit.setShowcase(inShowcase);
             productToEdit.setStructure(structure);
 
 
@@ -670,7 +746,29 @@ public class Products {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
             if (edited) {
+                if (changeImage) {
+                    System.out.println("SI VUOLE MODIFICARE IL FILE IMMAGINE!");
+                    /* E' stata passata anche una nuova immagine, devo cancellare quella vecchia
+                     * ( per permettere a inotify di registrare tale evento e cancellarmi il file
+                     *  anche dalla cartella img/products di sviluppo) e scrivere il nuovo file con lo stesso nome */
+                    String oldFileUploadedPath = imagePath + "/" + picture_name_stored; /* stesso nome */
+                    System.out.println("oldFileUploadedPath ==> " + oldFileUploadedPath);
+                    File oldFileUploaded = new File(oldFileUploadedPath); /* vecchio file*/
+
+                    /* cancello il vecchio file */
+                    if(oldFileUploaded.delete()){
+                        System.err.println("VECCHIO FILE CANCELLATO CORRETTAMENTE");
+                    }
+
+                    /* file cancellato con successo, scrivo il nuovo file */
+                    String newFileUploadedPath = imagePath + "/" + basePicName + productId + "." + fileExtension; /* stesso nome */
+                    System.out.println("newFileUploadedPath ==> " + newFileUploadedPath);
+                    File newUploadedFile = new File(newFileUploadedPath);
+                    imgField.write(newUploadedFile); /* scrivo sul file appena creato il contenuto binario del file passato dalla form */
+
+                }
                 /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato modificato correttamente .*/
                 applicationMessage = "Product modified SUCCESSFULLY.";
                 System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
@@ -684,7 +782,7 @@ public class Products {
 
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Se viene fatto il rollback della transazione non è stato modificato .*/
-                applicationMessage = "Employee modification ERROR.";
+                applicationMessage = "Product modification ERROR.";
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
             }
@@ -771,7 +869,7 @@ public class Products {
             /* è necessario prendersi solo lo userDAO per poter settare su uno specifico utente il flag DELETED */
             productDAO = daoFactory.getProductDAO();
 
-            /* trovo l'utente da flaggare come cancellato */
+            /* trovo il prodotto da flaggare come cancellato */
             product = productDAO.findProductById(idToDelete);
 
 

@@ -23,12 +23,18 @@ public interface ProductDAO {
      */
 
     boolean update(Product product) throws DuplicatedObjectException;
+
     boolean delete(Product product);
+
     boolean modifyShowcase(Product product, Boolean status);
+
     Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
-                   String picName, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException;
+                   String basePicName, String fileExtension, String description, Integer quantity, String category, Structure structure) throws DuplicatedObjectException;
+
     ArrayList<Product> findShowcaseProduct();
+
     Product findProductById(Long id);
+
     /* TODO DA RIPRENDERE IN MANO PERCHE' IMPLEMENTATA IN SHOP.JSP */
     ArrayList<Product> findAllProducts();
 
@@ -36,6 +42,8 @@ public interface ProductDAO {
     ArrayList<Product> fetchAllProducts();
 
     ArrayList<String> findAllCategories();
+
     ArrayList<String> findAllProducers();
-    ArrayList<Product> findFilteredProducts(String category,String producer);
+
+    ArrayList<Product> findFilteredProducts(String category, String producer);
 }

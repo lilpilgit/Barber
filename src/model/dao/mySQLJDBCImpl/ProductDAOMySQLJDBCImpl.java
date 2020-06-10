@@ -149,9 +149,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
          * @return true if delete go correctly otherwise raise exception
          */
         query
-                = "UPDATE PRODUCT"
-                + " SET DELETED = '1'"
-                + " WHERE ID = ?";
+                = "UPDATE PRODUCT "
+                + "SET DELETED = 1 "
+                + "WHERE ID = ?";
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
@@ -208,7 +208,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     @Override
     public Product insert(Long id, String producer, BigDecimal price, Integer discount, String name, LocalDate insertDate,
-                          String basePicName, String description, Integer maxOrderQuantity, String category, Structure structure) throws DuplicatedObjectException {
+                          String basePicName, String fileExtension, String description, Integer maxOrderQuantity, String category, Structure structure) throws DuplicatedObjectException {
         /**
          * This method allows you to indifferently insert a product.
          * @params
@@ -247,7 +247,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         System.err.println("PRICE =>>" + product.getPrice());
         System.err.println("DISCOUNT =>>" + product.getDiscount());
         System.err.println("MAX_ORDER_QTY =>>" + product.getMaxOrderQuantity());
-
 
 
         try {
@@ -351,8 +350,8 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         /* Rimane da settare l'ID. */
         product.setId(newId);
 
-        /* Rimane da settare la pictureName del tipo product_ID */
-        product.setPictureName(basePicName + newId);
+        /* Rimane da settare la pictureName del tipo product_ID.extension */
+        product.setPictureName(basePicName + newId + fileExtension);
 
         query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
@@ -401,7 +400,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<Product> findShowcaseProduct() {
         ArrayList<Product> listProduct = new ArrayList<>();
-        query = "SELECT * FROM PRODUCT WHERE SHOWCASE = 1;";
+        query = "SELECT * FROM PRODUCT WHERE SHOWCASE = 1 AND DELETED = 0;";
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -443,7 +442,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public Product findProductById(Long id) {
         Product product = new Product();
-        String query = "SELECT * FROM PRODUCT WHERE ID = ?;";
+        String query = "SELECT * FROM PRODUCT WHERE ID = ? AND DELETED = 0;";
         try {
             ps = connection.prepareStatement(query);
             ps.setLong(1, id);
@@ -491,7 +490,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
      */
     public ArrayList<Product> findAllProducts() {
         ArrayList<Product> listProduct = new ArrayList<>();
-        query = "SELECT * FROM PRODUCT ORDER BY INSERT_DATE DESC;";
+        query = "SELECT * FROM PRODUCT WHERE DELETED = 0 ORDER BY INSERT_DATE DESC;";
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -537,7 +536,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
         ArrayList<Product> products = new ArrayList<>();
         /* Seleziono tutti i prodotti in ordine alfabetico per nome */
-        query = "SELECT * FROM PRODUCT WHERE DELETED = '0' ORDER BY NAME;";
+        query = "SELECT * FROM PRODUCT WHERE DELETED = 0 ORDER BY NAME;";
 
         try {
             ps = connection.prepareStatement(query);
@@ -581,7 +580,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<String> findAllCategories() {
         ArrayList<String> listCategory = new ArrayList<>();
-        query = "SELECT DISTINCT CATEGORY FROM PRODUCT ORDER BY CATEGORY;";
+        query = "SELECT DISTINCT CATEGORY FROM PRODUCT WHERE DELETED = 0 ORDER BY CATEGORY;";
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -623,7 +622,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<String> findAllProducers() {
         ArrayList<String> listProducers = new ArrayList<>();
-        query = "SELECT DISTINCT PRODUCER FROM PRODUCT ORDER BY PRODUCER;"; /*search producers order alphabetically from A to Z*/
+        query = "SELECT DISTINCT PRODUCER FROM PRODUCT WHERE DELETED = 0 ORDER BY PRODUCER;"; /*search producers order alphabetically from A to Z*/
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -665,7 +664,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<Product> findFilteredProducts(String category, String producer) {
         ArrayList<Product> listProduct = new ArrayList<>();
-        query = "SELECT * FROM PRODUCT WHERE CATEGORY LIKE ? AND PRODUCER LIKE ? ORDER BY INSERT_DATE DESC;";
+        query = "SELECT * FROM PRODUCT WHERE CATEGORY LIKE ? AND PRODUCER LIKE ? AND DELETED = 0 ORDER BY INSERT_DATE DESC;";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, category);
@@ -800,7 +799,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         try {
             product.setDeleted(rs.getBoolean("DELETED"));
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);
         }

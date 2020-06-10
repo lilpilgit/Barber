@@ -60,7 +60,7 @@
 <html lang="en">
 <%@include file="/templates/admin-head.jsp" %>
 <body>
-<%@include file="/templates/admin-sidebar.jsp"%>
+<%@include file="/templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content text-center">
@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Discount">Discount</label>
-                    <input type="number" name="discount" id="Discount" min="0" max="100"  required
+                    <input type="number" name="discount" id="Discount" min="0" max="100" required
                            value="<%=(action.equals("modify")) ? productToEdit.getDiscount() : "0"%>"
                            class="form-control">
                 </div>
@@ -120,13 +120,40 @@
                            class="form-control">
                 </div>
             </div>
+            <!--https://plugins.krajee.com/file-avatar-upload-demo snippet per modifica e caricamento immagine -->
+            <%if (action.equals("modify")) {%>
             <div class="form-row justify-content-center">
-                <div class="col-md-3 mb-3">
-                    <label for="Picture_name">Picture</label>
-                    <input type="file" name="picture" id="Picture_name" required
-                           value="<%=(action.equals("modify")) ? productToEdit.getPictureName() : ""%>"
-                           class="form-control">
+                <div class="col-md-12">
+
+                    <div class="card-shop"><!-- da modificare eventualmente-->
+                        <div class="text-center ">
+                            <div class="tab-content-shop"><img src="img/products/<%=productToEdit.getPictureName()%>"
+                                                               alt="<%=productToEdit.getPictureName()%>"></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <%}%>
+            <div class="form-row justify-content-center">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Picture product</span>
+                    </div>
+                </div>
+                <div class="custom-file">
+                    <input type="file" name="picture" class="custom-file-input form-control"
+                           id="Picture" <%=(action.equals("modify")) ? "" : "required"%>>
+                    <label class="custom-file-label" for="Picture">Choose image</label>
+                </div>
+            </div>
+
+            <%if (action.equals("modify")) {%>
+            <input type="hidden" name="picture_name_stored"
+                   id="Picture_name_stored" readonly required
+                   value="<%=productToEdit.getPictureName()%>">
+            <%}%>
+
+            <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <label for="Insert_date">Insert Date </label>
                     <input type="date" name="insert_date" id="Insert_date" required readonly
@@ -134,6 +161,7 @@
                            class="form-control">
                 </div>
             </div>
+
             <hr>
             <br>
             <button type="submit" id="submit-edit-product" class="btn btn-primary" name="submit"
@@ -144,16 +172,31 @@
             <%if (action.equals("modify")) {%>
             <input type="hidden" name="productId" value="<%=productToEdit.getId()%>"/>
             <%}%>
+            <!-- parametro per sapere se è nello showcase o meno -->
+            <%if (action.equals("modify")) {%>
+            <input type="hidden" name="showcase" value="<%=productToEdit.inShowcase()%>"/>
+            <%}%>
         </form>
     </main>
 </div>
 
 
 <script>
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
         <%if(!action.equals("modify")){%>
-            setCurrentDate("Insert_date");
-            <%}%>
+        setCurrentDate("Insert_date");
+        <%}%>
+
+        /* use javascript to show the name of the choosed file,
+         * as written in the documentation: https://v4-alpha.getbootstrap.com/components/forms/#file-browser
+        */
+        $('#Picture').on('change', function () {
+            //get the file name
+            let fileName = $(this).val().replace('C:\\fakepath\\', " ");
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName);
+        })
+
     })
 </script>
 </body>
