@@ -1,6 +1,6 @@
-<%@page import="model.mo.Product" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Structure" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -19,6 +19,12 @@
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+
+    Structure structure = null;
+    if (request.getAttribute("structure") != null) {
+        /* SE MI È STATO PASSATO L'ATTRIBUTO structure */
+        structure = (Structure) request.getAttribute("structure");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
@@ -45,11 +51,12 @@
     <div class="d-flex justify-content-center" >
         <div class="col-4 pt-4 my-5 book-box" >
             <label for="appointment-date">Select a date:</label>
-            <input type="date" id="appointment-date" name="appointment date" >
+            <input type="date" id="appointment-date" name="appointment date"
+                   onchange="findSlot('<%=structure.getOpeningTime()%>' , '<%=structure.getClosingTime()%>')">
             <hr>
             <label for="time">Choose an hour:</label>
             <select id="time" name="time">
-                <option value="09:00">09.00 AM</option>
+<%--                <option value="09:00">09.00 AM</option>
                 <option value="09:30">09.30 AM</option>
                 <option value="10:00">10.00 AM</option>
                 <option value="10:30">10.30 AM</option>
@@ -67,7 +74,7 @@
                 <option value="16:30">04.30 PM</option>
                 <option value="17:00">05.00 PM</option>
                 <option value="17:30">05.30 PM</option>
-                <option value="18:00">06.00 PM</option>
+                <option value="18:00">06.00 PM</option>--%>
             </select>
             <hr>
             <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
@@ -80,9 +87,9 @@
 
 <%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
-
     window.addEventListener("load",() =>{
         setDateBook("appointment-date");
+
     });
 </script>
 </body>

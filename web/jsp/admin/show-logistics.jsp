@@ -94,7 +94,7 @@
                         <td><%=l.getStatus()%>
                         </td>
                         <td>
-                            <button type="button" cturass="tablebutton" style="color: #1ae2dd;"
+                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     data-target="#alertSetStatusOrder"
                                     data-toggle="modal"
                                     onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');"><i
