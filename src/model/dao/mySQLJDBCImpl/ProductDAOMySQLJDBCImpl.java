@@ -351,7 +351,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         product.setId(newId);
 
         /* Rimane da settare la pictureName del tipo product_ID.extension */
-        product.setPictureName(basePicName + newId + fileExtension);
+        product.setPictureName(basePicName + newId + "." + fileExtension);
 
         query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
