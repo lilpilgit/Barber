@@ -152,6 +152,8 @@ public class Book {
                 applicationMessage = e.getMessage();
                 e.printStackTrace();
             }
+
+            /* Setto l'attributo alreadyBooked */
             commonView(daoFactory,loggedUser,request);
 
 
