@@ -207,7 +207,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
         boolean exist; /* flag per sapere se esiste o meno l'appuntamento */
         try {
-            exist = rs.next(); /*se esiste almeno una riga non posso inserire l'appuntamento!!!*/
+            exist = rs.next(); /*se esiste almeno una riga non posso effettuare l'appuntamento!!!*/
         } catch (SQLException e) {
             System.err.println("Errore nella exist = rs.next();");
             throw new RuntimeException(e);
