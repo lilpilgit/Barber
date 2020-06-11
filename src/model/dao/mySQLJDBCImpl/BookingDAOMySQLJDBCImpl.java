@@ -33,12 +33,12 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         booking.setHourStart(hourStart);
         booking.setCustomer(customer);
         booking.setStructure(structure);
-        Long newId= null;
+        Long newId = null;
 
 
         /* CON TALE QUERY CONTROLLO SE ESISTE GIA' UN APPUNTAMENTO PER LA STESSA DATA E LA STESSA ORA */
 
-        query ="SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ?;";
+        query = "SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ?;";
 
         System.err.println("DATE =>>" + booking.getDate());
         System.err.println("HOUR_START =>>" + booking.getHourStart());
@@ -77,7 +77,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         if (exist) {
             /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
             throw new DuplicatedObjectException("BookingDAOJDBCImpl.insert: Tentativo di inserimento di " +
-                    "un appuntamento già esistente con data: {" + booking.getDate() + "} e ora {" +booking.getHourStart() + "}");
+                    "un appuntamento già esistente con data: {" + booking.getDate() + "} e ora {" + booking.getHourStart() + "}");
         }
 
         /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
@@ -187,8 +187,8 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     public boolean alreadyBooked(User customer) {
 
         /**
-        * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
-        */
+         * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
+         */
 
         query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND DELETED = 0;";
         try {
@@ -230,7 +230,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     @Override
     public ArrayList<Booking> findBookingsByDate(LocalDate date) {
         /**
-         * Il metodo permette di cercare tutti gli appuntamenti presi in una determinata data <date>
+         * Fetch all bookings to show in customer area by specified date
          */
         ArrayList<Booking> bookings = new ArrayList<>();
         query = "SELECT * FROM BOOKING WHERE DATE = ? AND DELETED = 0 ORDER BY HOUR_START ASC;";
@@ -251,6 +251,56 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         try {
             while (rs.next()) {
                 bookings.add(readBooking(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return bookings;
+    }
+
+    @Override
+    public ArrayList<Booking> findBookingsByDateForAdmin(LocalDate date) {
+        /**
+         * Fetch all bookings for admin area with customer attributes by JOIN
+         */
+        ArrayList<Booking> bookings = new ArrayList<>();
+        query =
+                "SELECT BOOKING.ID,HOUR_START,BOOKING.DELETED,BOOKING.DELETED_REASON,NAME,SURNAME,EMAIL,PHONE "
+                        + "FROM BOOKING INNER JOIN USER ON BOOKING.ID_CUSTOMER = USER.ID "
+                        + "WHERE DATE = ? "
+                        + "ORDER BY HOUR_START ASC;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setDate(i++, Date.valueOf(date));
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            while (rs.next()) {
+                bookings.add(readBookingForAdmin(rs));
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
@@ -330,4 +380,69 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
         return booking;
     }
+
+    private Booking readBookingForAdmin(ResultSet rs) {
+
+        /**
+         * Read some booking's field with some useful information about customer correlated.
+         */
+
+        Booking booking = new Booking();
+        Structure structure = new Structure();
+        User customer = new User();
+        booking.setStructure(structure);
+        booking.setCustomer(customer);
+
+        try {
+            booking.setId(rs.getLong("ID"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getLong(\"ID\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.setDeleted(rs.getBoolean("DELETED"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.setDeletedReason(rs.getString("DELETED_REASON"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getString(\"DELETED_REASON\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.setHourStart(rs.getTime("HOUR_START"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.getTime(\"HOUR_START\")");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.getCustomer().setName(rs.getString("NAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella booking.getCustomer().setName(rs.getString(\"NAME\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.getCustomer().setSurname(rs.getString("SURNAME"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella booking.getCustomer().setSurname(rs.getString(\"SURNAME\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.getCustomer().setEmail(rs.getString("EMAIL"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella booking.getCustomer().setEmail(rs.getString(\"EMAIL\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            booking.getCustomer().setPhone(rs.getString("PHONE"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella booking.getCustomer().setPhone(rs.getString(\"PHONE\"));");
+            throw new RuntimeException(e);
+        }
+
+        return booking;
+    }
+
 }

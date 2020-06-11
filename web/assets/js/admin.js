@@ -18,7 +18,7 @@ function setTmpId(id,hiddenDrawer) {
 function deleteEmployee(id) {
     /**
      * for form with ID ==> action, set value of hidden input field with
-     * name="controllerAction" to "Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
+     * name="controllerAction" to "admin.Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
      * with name="employeeID" to parameter id
      */
     /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
@@ -184,4 +184,16 @@ function modifyStatusOrder(idOrder, status) {
     form.elements['controllerAction'].value = 'admin.Logistics.modifyStatus';
     form.elements['idOrder'].value = idOrder;
     form.submit();
+}
+
+function showBookingsAdmin(){
+    /**
+     * for form with ID ==> action, set value of hidden input field with
+     * name="controllerAction" to "admin.Bookings.showBookings"
+     */
+    let formBookingAction = document.getElementById('action');
+    formBookingAction.elements['controllerAction'].value = 'admin.Bookings.showBookings';
+    /* la data sarà passata in automatico grazie al parametro form="action" messo dentro l'input di tipo date della navbar */
+    formBookingAction.submit();
+
 }

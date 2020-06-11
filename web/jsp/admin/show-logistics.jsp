@@ -4,12 +4,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    /*    *//* Prendo l'ArrayList<Employee> di tutti gli impiegati *//*
-    boolean areEmployees = false;
-    ArrayList<Employee> employees = (ArrayList<Employee>) request.getAttribute("employees");
-    if (employees != null && employees.size() != 0)
-        areEmployees = true;*/
-
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
@@ -41,6 +35,9 @@
     if (request.getAttribute("logisticOrders") != null) {
         logisticOrders = (ArrayList<Order>) request.getAttribute("logisticOrders");
     }
+    boolean areOrders = false;
+    if (logisticOrders != null && logisticOrders.size() != 0)
+        areOrders = true;
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Logistics";
@@ -52,7 +49,6 @@
 <html lang="en">
 <%@include file="/templates/admin-head.jsp" %>
 <body>
-
 <%@include file="../../templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
@@ -77,7 +73,7 @@
                     <tbody>
                     <%
                         int i = 1; /* contatore per il numero di ordini */
-                        if (logisticOrders != null && logisticOrders.size() != 0) {
+                        if (areOrders) {
                             for (Order l : logisticOrders) {
                     %>
                     <tr>

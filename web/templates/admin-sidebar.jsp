@@ -84,8 +84,8 @@
     </nav>
     <form id="controller" method="post">
         <input type="hidden" name="controllerAction" value="">
+        <input type="hidden" name="currentDate" id="currentDate" value="">
     </form>
-
     <form id="logoutForm" method="post">
         <input type="hidden" name="controllerAction" value="home.Home.logout">
     </form>

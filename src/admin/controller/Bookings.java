@@ -1,12 +1,16 @@
 package admin.controller;
 
+import model.dao.BookingDAO;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
+import model.mo.Booking;
 import model.mo.User;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Bookings {
@@ -19,6 +23,7 @@ public class Bookings {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        LocalDate currentDate = null;
         try {
             /* Inizializzo il cookie di sessione */
             HashMap sessionFactoryParameters = new HashMap<String, Object>();
@@ -41,9 +46,11 @@ public class Bookings {
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
+            currentDate = LocalDate.parse(request.getParameter("currentDate"));
 
-            //commonview??? serve verament????
+            System.out.println("OOOOOOOOOOOO "+ currentDate);
 
+            commonView(daoFactory,currentDate,request); /* setto l'attributo "bookings" */
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -76,7 +83,20 @@ public class Bookings {
         request.setAttribute("loggedOn", loggedUser != null);
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
+        /* 3) Attributo riguardante la viewUrl da visualizzare */
         request.setAttribute("viewUrl", "admin/show-bookings");
+    }
+
+    private static void commonView(DAOFactory daoFactory,LocalDate currentDate,HttpServletRequest request){
+        BookingDAO bookingDAO = daoFactory.getBookingDAO();
+        ArrayList<Booking> bookings = bookingDAO.findBookingsByDateForAdmin(currentDate);
+
+        /* La lista di prenotazioni da mostrare*/
+        request.setAttribute("bookings", bookings);
+
+        /* Data da mostrare di volta in volta nel calendario della navbar */
+        request.setAttribute("currentDate",currentDate);
+
     }
 
 }

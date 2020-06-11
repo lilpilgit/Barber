@@ -219,36 +219,28 @@ public class Book {
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 
         /**
-         * Set attribute "cart" inside request
+         * Set attribute "structure" and "alreadyBooked" inside request
          */
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
         Structure structure = null;
         BookingDAO bookingDAO = null;
-
         boolean bookedStatus = false;
 
-
+        /* Faccio il fetch della struttura */
         structureDAO = daoFactory.getStructureDAO();
         structure = structureDAO.fetchStructure();
 
+        /* Controllo se ci sta già un appuntamento prenotato */
         bookingDAO = daoFactory.getBookingDAO();
-
-
         bookedStatus = bookingDAO.alreadyBooked(loggedUser);
 
         System.err.println("PRENOTAZIONE GIA' EFFETTUATA? ==> " + bookedStatus);
-
-        UserDAO userDAO = daoFactory.getUserDAO();
-        User user = null;
-
-        user = userDAO.findById(loggedUser.getId());
 
 
         /* 3) Attributo che indica quale struttura e' selezionata (Nel nostro caso solo una) */
         request.setAttribute("structure", structure);
         /* 4) Attributo che indica se un cliente ha gia' effettuato un appuntamento futuro */
         request.setAttribute("alreadyBooked", bookedStatus);
-        /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
 
     }
 }

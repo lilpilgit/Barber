@@ -24,6 +24,7 @@
 </head>
 <script>
     window.addEventListener("load",() =>{
+        setCurrentDate('currentDate');
         setButtonActiveSidebar('<%=idBtnAttivo%>');
         <%if(resultPresent){%>
         showResult("<%=result%>", "Message:\n<%=applicationMessage%>");

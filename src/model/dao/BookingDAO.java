@@ -29,4 +29,6 @@ public interface BookingDAO {
     boolean alreadyBooked(User customer);
 
     ArrayList<Booking> findBookingsByDate(LocalDate date);
+
+    ArrayList<Booking> findBookingsByDateForAdmin(LocalDate date);
 }
