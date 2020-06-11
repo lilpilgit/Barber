@@ -374,7 +374,6 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct , nam
         console.log("NON SI PUÒ MODIFICARE SEI FUORI RANGE!");
     }
 
-
 }
 
 function findSlot(idStructure, pickedDate) {
@@ -386,13 +385,38 @@ function findSlot(idStructure, pickedDate) {
      */
 
     let result = "fail";
-    let availableTimes = null;
+    let availableTimes = [];
+    let obj = null;
     let xhttp = new XMLHttpRequest();
+
+    function addOption(freeTime) {
+        let time = document.getElementById("time");
+        let option = document.createElement("option");
+        option.text = (freeTime);
+        time.add(option);
+    }
 
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            availableTimes = JSON.parse(this.responseText);
+            obj = JSON.parse(this.responseText);
+            if (obj.result === "success") {
+                console.log("result: " + obj.result);
 
+                /* Prima di tutto rimuovo tutti gli elementi dalla select */
+                let sel = document.getElementById('time');
+                for (let i = sel.length - 1; i >= 1; i--) {
+                    sel.remove(i);
+                }
+
+                /* Inserisco gli orari disponibili all'interno della select */
+                for (let i = 0; i < obj.availableTimes.length; i++) {
+                    console.log(obj.availableTimes[i]);
+                    addOption(obj.availableTimes[i]);
+                }
+
+            } else if (obj.result === "fail") {
+                alert("ERRORE NEL BACKEND!!");
+            } else alert("Valore di result sconosciuto nel JSON");
         }
     };
 
