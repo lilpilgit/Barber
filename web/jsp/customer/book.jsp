@@ -4,6 +4,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento della prenotazione è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
@@ -56,21 +64,29 @@
             <hr>
             <label for="time">Choose an hour:</label>
             <select id="time" name="time">
-                <option disabled selected>Before, choose a date</option>
             </select>
             <hr>
-            <button class="btn btnheader active2" onclick="setNavFormHome('Home.showShop')" type="button" id='showShop'>
+            <button class="btn btnheader active2" onclick="bookNow('<%=loggedUser.getId()%>', 'time', 'appointment-date')"
+                    type="button" id='book-now'>
                 Book Now!
             </button>
         </div>
     </div>
 </div>
+<form method="post" id="action_book">
+    <input type="hidden" name="controllerAction" value="">
+    <input type="hidden" name="idCustomer" value="">
+    <input type="hidden" name="selected_date" value="">
+    <input type="hidden" name="selected_time" value="">
+</form>
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
 <%@ include file="/templates/footer.html"%>
 <script type="text/javascript">
+
     window.addEventListener("load",() =>{
         setDateBook("appointment-date");
+        findSlot('<%=structure.getId()%>' , document.getElementById("appointment-date").value);
     });
 </script>
 </body>

@@ -1,6 +1,7 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.BookingDAO;
+import model.exception.DuplicatedObjectException;
 import model.mo.Booking;
 import model.mo.Structure;
 import model.mo.User;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
+    final private String COUNTER_ID = "bookingId";
     private Connection connection;
     private PreparedStatement ps;
     private String query;
@@ -19,6 +21,121 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
     public BookingDAOMySQLJDBCImpl(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public Booking insert(LocalDate date, Time hourStart, User customer, Structure structure) throws DuplicatedObjectException {
+        /*Setto l'oggetto di cui andrò a verificarne l'esistenza prima di inserirlo nel DB*/
+        Booking booking = new Booking();
+        booking.setDeleted(false);
+        booking.setDeletedReason(null);
+        booking.setDate(date);
+        booking.setHourStart(hourStart);
+        booking.setCustomer(customer);
+        booking.setStructure(structure);
+        Long newId= null;
+
+        /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
+         * UN NUOVO APPUNTAMENTO DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
+         * NUMERO PER PRENOTAZIONI DIVERSE SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
+        query =
+                "UPDATE COUNTER"
+                        + " SET VALUE = VALUE + 1"
+                        + " WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+
+        /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
+        query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++, COUNTER_ID);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+
+        /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
+        try {
+            rs.next();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next();");
+            throw new RuntimeException(e);
+        }
+
+        /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
+        try {
+            newId = rs.getLong("VALUE");
+        } catch (SQLException e) {
+            System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
+            throw new RuntimeException(e);
+        } finally {
+            /* IL resultSet una volta letto l'id non serve più */
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println("Errore nella rs.close();");
+                throw new RuntimeException(e);
+            }
+        }
+
+        booking.setId(newId);
+
+        query = "INSERT INTO BOOKING(ID, DELETED, DELETED_REASON, DATE, HOUR_START, ID_CUSTOMER, ID_STRUCTURE) VALUES (?,?,?,?,?,?,?);";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, booking.getId());
+            ps.setBoolean(i++, booking.isDeleted());
+            ps.setString(i++, booking.getDeletedReason());
+            ps.setDate(i++, Date.valueOf(booking.getDate()));
+            ps.setTime(i++, booking.getHourStart());
+            ps.setLong(i++, booking.getCustomer().getId());
+            ps.setLong(i++, booking.getStructure().getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        /*
+         * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe User
+         * appena inserito
+         * */
+        return booking;
     }
 
     @Override

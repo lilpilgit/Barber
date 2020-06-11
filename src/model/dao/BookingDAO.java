@@ -1,7 +1,11 @@
 package model.dao;
 
+import model.exception.DuplicatedObjectException;
 import model.mo.Booking;
+import model.mo.User;
+import model.mo.Structure;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -19,6 +23,8 @@ public interface BookingDAO {
      *
      * @return all the products that must be shown in the showcase of the homepage
      */
+
+    Booking insert(LocalDate date, Time hourStart, User customer, Structure structure) throws DuplicatedObjectException;
 
     ArrayList<Booking> findBookingsByDate(LocalDate date);
 }
