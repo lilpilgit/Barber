@@ -184,6 +184,50 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     }
 
     @Override
+    public boolean alreadyBooked(User customer) {
+
+        /**
+        * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
+        */
+
+        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ?;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, customer.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        boolean exist; /* flag per sapere se esiste o meno l'appuntamento */
+        try {
+            exist = rs.next(); /*se esiste almeno una riga non posso inserire l'appuntamento!!!*/
+        } catch (SQLException e) {
+            System.err.println("Errore nella exist = rs.next();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return exist;
+    }
+
+    @Override
     public ArrayList<Booking> findBookingsByDate(LocalDate date) {
         /**
          * Il metodo permette di cercare tutti gli appuntamenti presi in una determinata data <date>
@@ -286,5 +330,4 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
         return booking;
     }
-
 }
