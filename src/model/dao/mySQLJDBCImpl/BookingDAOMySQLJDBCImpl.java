@@ -2,6 +2,8 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.BookingDAO;
 import model.mo.Booking;
+import model.mo.Structure;
+import model.mo.User;
 
 
 import java.sql.*;
@@ -25,10 +27,12 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          * Il metodo permette di cercare tutti gli appuntamenti presi in una determinata data <date>
          */
         ArrayList<Booking> bookings = new ArrayList<>();
-        query = "SELECT * FROM BOOKING WHERE DATE = ? ORDER BY HOUR_START ASC;";
+        query = "SELECT * FROM BOOKING WHERE DATE = ? AND DELETED = 0 ORDER BY HOUR_START ASC;";
         try {
+            int i = 1;
             ps = connection.prepareStatement(query);
-            ps.setDate(1, Date.valueOf(date));
+            ps.setDate(i++, Date.valueOf(date));
+            System.err.println("ps.toString() ==> " + ps.toString());
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
@@ -41,7 +45,10 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
         try {
             while (rs.next()) {
-                bookings.add(readBooking(rs));
+                Booking booking = readBooking(rs);
+                System.err.println("sono quiiiiiiiiiiiii");
+                System.err.println(booking);
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
@@ -73,6 +80,11 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          */
 
         Booking booking = new Booking();
+        Structure structure = new Structure();
+        User customer = new User();
+        booking.setStructure(structure);
+        booking.setCustomer(customer);
+
         try {
             booking.setId(rs.getLong("ID"));
         } catch (SQLException e) {
@@ -116,7 +128,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
 
-        System.err.println("Letto: " + booking.toString());
         return booking;
     }
 

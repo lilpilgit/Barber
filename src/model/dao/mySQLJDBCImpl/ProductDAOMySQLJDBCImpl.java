@@ -240,7 +240,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         query =
                 "SELECT ID"
                         + " FROM PRODUCT"
-                        + " WHERE NAME = ?;";
+                        + " WHERE NAME = ? AND DELETED = 0;";
 
         System.err.println("NAME =>>" + product.getName());
         System.err.println("PRODUCER =>>" + product.getProducer());
