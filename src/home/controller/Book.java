@@ -98,6 +98,7 @@ public class Book {
         UserDAO userDAO = null;
         User user = null;
         BookingDAO bookingDAO = null;
+        StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
         Booking bookInserted = null; /* serve per conoscere l'id del prodotto appena aggiunto */
         Structure structure = null;
 
@@ -137,16 +138,22 @@ public class Book {
 
             bookingDAO = daoFactory.getBookingDAO();
 
+            /* Prendo l'unica struttura */
 
+            structureDAO = daoFactory.getStructureDAO();
 
-            /* Effettuo l'inserimento del nuovo dipendente */
+            structure = structureDAO.fetchStructure();
+
+            /* Effettuo l'inserimento del nuovo appuntamento */
             try {
                 bookingDAO.insert(date, time, user, structure);
-                inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
+                inserted = true; /* Se non viene sollevata l'eccezione, l'appuntamento è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 applicationMessage = e.getMessage();
                 e.printStackTrace();
             }
+            commonView(daoFactory,loggedUser,request);
+
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
