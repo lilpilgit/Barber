@@ -128,6 +128,7 @@ public class Book {
             /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
             date = LocalDate.parse(request.getParameter("selected_date"));
             time = Time.valueOf(request.getParameter("selected_time"));
+            System.err.println("VALORE DI TIME: " + time + " VALORE DI DATE: " + date);
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -138,6 +139,8 @@ public class Book {
             userDAO = daoFactory.getUserDAO();
 
             user = userDAO.findById(loggedUser.getId());
+
+            bookingDAO = daoFactory.getBookingDAO();
 
             structureDAO = daoFactory.getStructureDAO();
 

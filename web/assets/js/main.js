@@ -404,7 +404,7 @@ function findSlot(idStructure, pickedDate) {
 
                 /* Prima di tutto rimuovo tutti gli elementi dalla select */
                 let sel = document.getElementById('time');
-                for (let i = sel.length - 1; i >= 1; i--) {
+                for (let i = sel.length - 1; i >= 0; i--) {
                     sel.remove(i);
                 }
 
@@ -433,15 +433,17 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
     let selectedOptionTime = document.getElementById(selectedTime);
     let date = document.getElementById(selectedDate).value;
     let time;
+    let formattedTime;
 
     time = selectedOptionTime.options[selectedOptionTime.selectedIndex].text;
 
-    console.log("Selected time: "+ time + " Selected date: " + date + " Id User: " + loggedUserId);
+    formattedTime = time + ":00";
 
     form.elements['controllerAction'].value = 'home.Book.bookAppointment';
     form.elements['idCustomer'].value = loggedUserId;
     form.elements['selected_date'].value = date;
-    form.elements['selected_time'].value = time;
+    form.elements['selected_time'].value = formattedTime;
+    console.log("Selected time: "+ formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
     form.submit();
 }
 
