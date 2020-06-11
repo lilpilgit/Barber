@@ -191,6 +191,8 @@ public class Book {
             } catch (Throwable t) {
             }
         }
+
+
         /* Setto gli attributi della request che verranno processati dalla book.jsp */
         /* 1) Attributo che indica se è loggato oppure no */
         request.setAttribute("loggedOn", loggedUser != null);
@@ -198,10 +200,12 @@ public class Book {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+        /* 4) Attributo che indica in quale struttura si trova loggato l'utente */
+        request.setAttribute("structure", structure);
+        /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
          *     form per consentire un nuovo inserimento */
         request.setAttribute("viewUrl", "customer/book");
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        /* 6) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (inserted) {
             /* SUCCESS */
             request.setAttribute("result", "success");
