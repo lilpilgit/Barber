@@ -190,7 +190,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
         */
 
-        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ?;";
+        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND DELETED = 0;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);

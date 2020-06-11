@@ -72,7 +72,12 @@
             <select id="time" name="time">
             </select>
             <hr>
-            <button class="btn btnheader active2" onclick="bookNow('<%=loggedUser.getId()%>', 'time', 'appointment-date')"
+            <button class="btn btnheader active2"
+                    <%if (!alreadyBooked) {%>
+                    onclick="bookNow('<%=loggedUser.getId()%>', 'time', 'appointment-date')"
+                    <%} else {%>
+                    onclick="alert('You have already an appointment!')"
+                    <%}%>
                     type="button" id='book-now'>
                 Book Now!
             </button>
