@@ -109,7 +109,7 @@
 
     LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
 
-    ArrayList<LocalTime> freeSlots = new ArrayList<>();
+    ArrayList<LocalTime> freeSlots = new ArrayList<LocalTime>();
 
 
 
