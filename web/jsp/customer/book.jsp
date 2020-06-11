@@ -17,7 +17,7 @@
         alreadyBooked = (Boolean) request.getAttribute("alreadyBooked");
     }
 
-    System.err.println("book.jsp ==> " + alreadyBooked);
+    System.err.println("book.jsp =====> " + alreadyBooked);
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
