@@ -58,8 +58,6 @@
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
-        System.err.println("FINO A QUI TUTTO BENE...");
-
         daoFactory.beginTransaction();
 
         userDAO = daoFactory.getUserDAO();
@@ -74,22 +72,14 @@
 
         structure = structureDAO.fetchStructure();
         openingTime = structure.getOpeningTime().toLocalTime();
-        System.err.println("Valore di openingTime: " + openingTime);
         closingTime = structure.getClosingTime().toLocalTime();
-        System.err.println("Valore di closingTime: " + closingTime);
         slot = structure.getSlot().toLocalTime();
-        System.err.println("Valore di slot: " + slot);
 
         /* setto la data selezionata dall'utente */
         pickedDate = LocalDate.parse(request.getParameter("pickedDate"));
-        System.err.println("Valore di pickedDate: " + pickedDate );
 
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
-
-        System.err.println("toString di bookings:" + bookings.toString());
-
-
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
@@ -118,24 +108,29 @@
     }
 
     LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
-    ArrayList<LocalTime> freeSlots = null;  /* salvo gli slot vuoti in un arraylist */
+
+    ArrayList<LocalTime> freeSlots = new ArrayList<>();
+
+
+
+    for(Booking b : bookings)
+       System.err.println("Trovata prenotazione ore: " + b.getHourStart());
+
     int i = 0;
 
-                System.err.println("Inizio ciclo for");
+    for (indexTime = LocalTime.of(openingTime.getHour() , openingTime.getMinute(), openingTime.getSecond());
+        !indexTime.equals(closingTime); indexTime = indexTime.plusMinutes(slot.getMinute())) {
 
-                for(Booking b : bookings)
-                    System.err.println("Trovata: " + b.getHourStart());
-
-//    for (indexTime.adjustInto(openingTime); indexTime.equals(closingTime.minusMinutes(slot.getMinute())); indexTime = indexTime.plusMinutes(slot.getMinute())) {
-//
-//                        System.err.println("Dentro ciclo for");
-//        if(indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
+//        if (i < bookings.size() && indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
+//            System.err.println("Trovato appuntamento");
 //            i++;
-//            } else {
-//            freeSlots.add(indexTime);
-//            System.err.println("Aggiunto nell'array: " + indexTime);
+//        } else {
+            System.err.println("Aggiungo a slot liberi: "+ indexTime);
+            freeSlots.add(indexTime);
 //        }
-//    }
+
+        }
+
 
     result = "success";
 %>

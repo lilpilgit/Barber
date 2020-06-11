@@ -32,7 +32,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             int i = 1;
             ps = connection.prepareStatement(query);
             ps.setDate(i++, Date.valueOf(date));
-            System.err.println("ps.toString() ==> " + ps.toString());
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
@@ -45,16 +44,12 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
         try {
             while (rs.next()) {
-                Booking booking = readBooking(rs);
-                System.err.println("sono quiiiiiiiiiiiii");
-                System.err.println(booking);
-                bookings.add(booking);
+                bookings.add(readBooking(rs));
             }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
@@ -69,7 +64,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
 
-        System.err.println("DIMENSIONE ARRAY: " + bookings.size());
         return bookings;
     }
 
