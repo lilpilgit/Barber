@@ -414,6 +414,9 @@ function findSlot(idStructure, pickedDate) {
                     addOption(obj.availableTimes[i]);
                 }
 
+                if (obj.availableTimes.length === 0)
+                    addOption("Change date :(");
+
             } else if (obj.result === "fail") {
                 alert("ERRORE NEL BACKEND!!");
             } else alert("Valore di result sconosciuto nel JSON");
