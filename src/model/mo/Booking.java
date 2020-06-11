@@ -1,6 +1,6 @@
 package model.mo;
 
-import java.time.Instant;
+import java.sql.Time;
 import java.time.LocalDate;
 
 public class Booking {
@@ -8,7 +8,7 @@ public class Booking {
     private Boolean deleted;                /* Booking deleted or not? */
     private String deletedReason;
     private LocalDate date;
-    private Instant hourStart;
+    private Time hourStart;
 
     /* 1 : 1 User */
     private User customer;
@@ -60,11 +60,11 @@ public class Booking {
         this.date = date;
     }
 
-    public Instant getHourStart() {
+    public Time getHourStart() {
         return hourStart;
     }
 
-    public void setHourStart(Instant hourStart) {
+    public void setHourStart(Time hourStart) {
         this.hourStart = hourStart;
     }
 

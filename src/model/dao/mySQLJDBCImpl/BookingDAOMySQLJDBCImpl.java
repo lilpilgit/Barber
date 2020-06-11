@@ -61,6 +61,8 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             System.err.println("Errore nella ps.close()");
             throw new RuntimeException(e);
         }
+
+        System.err.println("DIMENSIONE ARRAY: " + bookings.size());
         return bookings;
     }
 
@@ -86,7 +88,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         try {
             booking.setDeletedReason(rs.getString("DELETED_REASON"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
+            System.err.println("Errore nella rs.getString(\"DELETED_REASON\")");
             throw new RuntimeException(e);
         }
         try {
@@ -96,9 +98,9 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
         try {
-            booking.setHourStart(rs.getTime("HOUR_START").toInstant());
+            booking.setHourStart(rs.getTime("HOUR_START"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getObject(\"HOUR_START\", Instant.class)");
+            System.err.println("Errore nella rs.getTime(\"HOUR_START\")");
             throw new RuntimeException(e);
         }
         try {
@@ -114,6 +116,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
 
+        System.err.println("Letto: " + booking.toString());
         return booking;
     }
 

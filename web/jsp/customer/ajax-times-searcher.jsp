@@ -8,8 +8,8 @@
 <%@ page import="services.config.Configuration"%>
 <%@ page import="java.sql.Time"%>
 <%@ page import="java.time.LocalDate"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="java.time.LocalTime"%>
+<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
 
 <%
@@ -28,11 +28,13 @@
     BookingDAO bookingDAO = null;
     ArrayList<Booking> bookings = null;
     ArrayList<String> availableTimes = null;
+    String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
     User user = null;
     Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
-    Time openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
-    Time closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
+    LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
+    LocalTime closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
+    LocalTime slot = null; /* parametro che serve per fare lo scanning degli appuntamenti in una giornata */
     LocalDate pickedDate = null; /* parametro che rappresenta l'ora selezionata dall'utente */
 
     boolean changed = false;
@@ -70,22 +72,24 @@
         /* setto l'id della struttura sulla base dell'id ricevuto */
         idStructure = Long.valueOf(request.getParameter("idStructure"));
 
-        /* TODO NON ESISTE IL METODO CHE FA IL FETCH IN BASE ALL'ID Struttura... ANDREBBE CREATO, CREARLO?
-        *   tra l'altro andrebbe fatto il fetch dei booking anche in riferimento all'id struttura passato */
-
         structure = structureDAO.fetchStructure();
-        openingTime = structure.getOpeningTime();
-        closingTime = structure.getClosingTime();
+        openingTime = structure.getOpeningTime().toLocalTime();
+        System.err.println("Valore di openingTime: " + openingTime);
+        closingTime = structure.getClosingTime().toLocalTime();
+        System.err.println("Valore di closingTime: " + closingTime);
+        slot = structure.getSlot().toLocalTime();
+        System.err.println("Valore di slot: " + slot);
 
         /* setto la data selezionata dall'utente */
         pickedDate = LocalDate.parse(request.getParameter("pickedDate"));
+        System.err.println("Valore di pickedDate: " + pickedDate );
 
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
 
-        System.err.println("Valore di openingTime: " + openingTime);
-        System.err.println("Valore di openingTime: " + closingTime);
-        System.err.println("VALORE DI PICKEDDATE: " + pickedDate );
+        System.err.println("toString di bookings:" + bookings.toString());
+
+
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
@@ -113,12 +117,27 @@
         }
     }
 
+    LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
+    ArrayList<LocalTime> freeSlots = null;  /* salvo gli slot vuoti in un arraylist */
+    int i = 0;
 
+                System.err.println("Inizio ciclo for");
 
+                for(Booking b : bookings)
+                    System.err.println("Trovata: " + b.getHourStart());
 
+//    for (indexTime.adjustInto(openingTime); indexTime.equals(closingTime.minusMinutes(slot.getMinute())); indexTime = indexTime.plusMinutes(slot.getMinute())) {
+//
+//                        System.err.println("Dentro ciclo for");
+//        if(indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
+//            i++;
+//            } else {
+//            freeSlots.add(indexTime);
+//            System.err.println("Aggiunto nell'array: " + indexTime);
+//        }
+//    }
 
-
-
+    result = "success";
 %>
 
             { "result": "success",
