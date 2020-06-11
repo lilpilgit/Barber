@@ -6,10 +6,10 @@ import model.mo.Booking;
 import model.mo.Structure;
 import model.mo.User;
 
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 
 public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
@@ -34,6 +34,51 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         booking.setCustomer(customer);
         booking.setStructure(structure);
         Long newId= null;
+
+
+        /* CON TALE QUERY CONTROLLO SE ESISTE GIA' UN APPUNTAMENTO PER LA STESSA DATA E LA STESSA ORA */
+
+        query ="SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ?;";
+
+        System.err.println("DATE =>>" + booking.getDate());
+        System.err.println("HOUR_START =>>" + booking.getHourStart());
+
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setDate(i++, java.sql.Date.valueOf(booking.getDate()));
+            ps.setTime(i++, booking.getHourStart());
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        boolean exist; /* flag per sapere se esiste o meno già l'appuntamento */
+        try {
+            exist = rs.next(); /*se esiste almeno una riga non posso inserire l'appuntamento!!!*/
+        } catch (SQLException e) {
+            System.err.println("Errore nella exist = rs.next();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        if (exist) {
+            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            throw new DuplicatedObjectException("BookingDAOJDBCImpl.insert: Tentativo di inserimento di " +
+                    "un appuntamento già esistente con data: {" + booking.getDate() + "} e ora {" +booking.getHourStart() + "}");
+        }
 
         /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
          * UN NUOVO APPUNTAMENTO DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO

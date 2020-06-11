@@ -147,7 +147,6 @@ public class Book {
             /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo insert() su employeeDAO ) */
             structure = structureDAO.fetchStructure();
 
-            System.err.println(structure);
             /* Effettuo l'inserimento del nuovo dipendente */
             try {
                 bookingDAO.insert(date, time, user, structure);
