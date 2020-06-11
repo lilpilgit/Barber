@@ -12,6 +12,12 @@
         resultPresent = true;
     }
 
+    boolean alreadyBooked = false;
+    if (request.getAttribute("alreadyBooked") != null) {
+        alreadyBooked = (Boolean) request.getAttribute("alreadyBooked");
+        alreadyBooked = true;
+    }
+
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {

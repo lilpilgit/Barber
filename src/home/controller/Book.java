@@ -27,7 +27,9 @@ public class Book {
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
+        BookingDAO bookingDAO = null;
         User loggedUser = null;
+        boolean bookedStatus = false;
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
         Structure structure = null;
 
@@ -52,6 +54,10 @@ public class Book {
 
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
+
+            bookingDAO = daoFactory.getBookingDAO();
+            bookedStatus = bookingDAO.alreadyBooked(loggedUser);
+            System.err.println("PRENOTAZIONE GIA' EFFETTUATA? ==> " + bookedStatus);
 
             structureDAO = daoFactory.getStructureDAO();
             structure = structureDAO.fetchStructure();
@@ -84,7 +90,9 @@ public class Book {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) Attributo che indica quale struttura e' selezionata (Nel nostro caso solo una) */
         request.setAttribute("structure", structure);
-        /* 4) Setto quale view devo mostrare */
+        /* 4) Attributo che indica se un cliente ha gia' effettuato un appuntamento futuro */
+        request.setAttribute("alreadyBooked", bookedStatus);
+        /* 5) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "customer/book");
     }
 
