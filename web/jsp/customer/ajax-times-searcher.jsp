@@ -6,10 +6,10 @@
 <%@ page import="model.mo.Structure"%>
 <%@ page import="model.mo.User"%>
 <%@ page import="services.config.Configuration"%>
-<%@ page import="java.sql.Time"%>
 <%@ page import="java.time.LocalDate"%>
 <%@ page import="java.time.LocalTime"%>
-<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
 
 <%
@@ -27,7 +27,6 @@
     StructureDAO structureDAO = null;
     BookingDAO bookingDAO = null;
     ArrayList<Booking> bookings = null;
-    ArrayList<String> availableTimes = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
     User user = null;
@@ -52,17 +51,12 @@
 
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
 
-        /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
-        loggedUser = sessionUserDAO.findLoggedUser();
-
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
         daoFactory.beginTransaction();
 
         userDAO = daoFactory.getUserDAO();
-
-        user = userDAO.findById(loggedUser.getId());
 
         bookingDAO = daoFactory.getBookingDAO();
         structureDAO = daoFactory.getStructureDAO();
@@ -111,37 +105,24 @@
 
     ArrayList<LocalTime> freeSlots = new ArrayList<LocalTime>();
 
-
-
-    for(Booking b : bookings)
-       System.err.println("Trovata prenotazione ore: " + b.getHourStart());
-
     int i = 0;
 
     for (indexTime = LocalTime.of(openingTime.getHour() , openingTime.getMinute(), openingTime.getSecond());
         !indexTime.equals(closingTime); indexTime = indexTime.plusMinutes(slot.getMinute())) {
 
-//        if (i < bookings.size() && indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
-//            System.err.println("Trovato appuntamento");
-//            i++;
-//        } else {
-            System.err.println("Aggiungo a slot liberi: "+ indexTime);
+        if (i < bookings.size() && indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
+            System.err.println("Trovato appuntamento alle: " + bookings.get(i).getHourStart());
+            i++;
+        } else {
             freeSlots.add(indexTime);
-//        }
-
         }
-
+    }
 
     result = "success";
 %>
-
             { "result": "success",
-
-            "availableTimes":
-
-            [ time1, time2,
-
-
-            ]
-
+              "availableTimes":[ <% for(i = 0; i < freeSlots.size(); i++) { %>
+                                      <%=freeSlots.get(i)%><%=i!=freeSlots.size()-1?",":""%>
+                                      <%}%>
+                               ]
             }
