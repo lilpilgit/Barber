@@ -385,18 +385,14 @@ function findSlot(idStructure, pickedDate) {
      * @type {XMLHttpRequest}
      */
 
+    let result = "fail";
+    let availableTimes = null;
     let xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            result = JSON.parse(this.responseText).result;
-            if (result === "success") {
-                alert("Modificato!");
-            } else if (result === "fail") {
-                alert("Non è stato modificato!");
-            } else {
-                alert("ERRORE NEL BACKEND!");
-            }
+            availableTimes = JSON.parse(this.responseText);
+
         }
     };
 
