@@ -18,6 +18,8 @@
         alreadyBooked = true;
     }
 
+    System.err.println(alreadyBooked);
+
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
