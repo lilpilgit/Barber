@@ -41,6 +41,8 @@ public interface ProductDAO {
     /* FUNZIONE AGGIORNATA CON METODO MVC */
     ArrayList<Product> fetchAllProducts();
 
+    ArrayList<Product> findProductsByString(String searchString);
+
     ArrayList<String> findAllCategories();
 
     ArrayList<String> findAllProducers();

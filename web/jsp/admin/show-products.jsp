@@ -1,6 +1,6 @@
 <%@ page import="model.mo.Product" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String subject = "Product";
@@ -38,6 +38,11 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    String searchedString = null;
+    if (request.getAttribute("searchedString") != null) {
+        searchedString = (String) request.getAttribute("searchedString");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Products";
 
@@ -48,7 +53,7 @@
 <html lang="en">
 <%@include file="/templates/admin-head.jsp" %>
 <body>
-<%@include file="../../templates/admin-sidebar.jsp"%>
+<%@include file="../../templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
@@ -60,13 +65,24 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto"></ul>
-                <form class="form-inline my-2 my-md-0">
-                    <input class="form-control" type="text" placeholder="Search">
+                <form class="form-inline my-2 my-md-0" method="post">
+                    <input class="form-control" type="text" name="searchString" id="searchString" placeholder="Search"
+                           required>
+                    <input type="hidden" name="controllerAction" value="admin.Products.searchProducts">
+                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                 </form>
             </div>
         </nav>
         <%if (areProducts) {%>
         <div class="row justify-content-center">
+            <%
+                if (searchedString != null) {%>
+            <h3>You searched for: <%=searchedString%></h3><br>
+            <form method="post">
+                <button type="submit" class="btn btn-default"><i class="fad fa-globe-europe"></i></button>
+                <input type="hidden" name="controllerAction" value="admin.Products.showProducts">
+            </form>
+            <%}%>
             <div class="col-auto">
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -161,7 +177,8 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">Delete <%=subject%>
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">
+                    Delete <%=subject%>
                 </button>
             </div>
         </div>
@@ -171,7 +188,7 @@
 
 
 <script>
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
 
     })
 </script>

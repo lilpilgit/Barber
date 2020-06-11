@@ -666,9 +666,63 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         ArrayList<Product> listProduct = new ArrayList<>();
         query = "SELECT * FROM PRODUCT WHERE CATEGORY LIKE ? AND PRODUCER LIKE ? AND DELETED = 0 ORDER BY INSERT_DATE DESC;";
         try {
+            int i = 1;
             ps = connection.prepareStatement(query);
-            ps.setString(1, category);
-            ps.setString(2, producer);
+            ps.setString(i++, category);
+            ps.setString(i++, producer);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            while (rs.next()) {
+                listProduct.add(readProduct(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return listProduct;
+    }
+
+    public ArrayList<Product> findProductsByString(String searchString){
+        ArrayList<Product> listProduct = new ArrayList<>();
+        /*
+         *  When searching for partial strings in MySQL with LIKE
+         *  you will match case-insensitive by default.
+         */
+        query =
+                "SELECT * FROM PRODUCT "
+              + "WHERE (CATEGORY LIKE ? OR NAME LIKE ? OR PRODUCER LIKE ? ) AND DELETED = 0 "
+              + "ORDER BY INSERT_DATE DESC;";
+        try {
+            int i = 1;
+            String formattedSearchString = "%" + searchString + "%";
+            ps = connection.prepareStatement(query);
+            ps.setString(i++,formattedSearchString);
+            ps.setString(i++,formattedSearchString);
+            ps.setString(i++,formattedSearchString);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
