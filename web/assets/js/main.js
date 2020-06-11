@@ -381,7 +381,7 @@ function findSlot(idStructure, pickedDate) {
      * Send AJAX request with POST method to controller to find the reserved time for a specific selectedDate
      *
      *
-     * @type {XMLHttpRequest}
+     * @type {string}
      */
 
     let result = "fail";

@@ -29,6 +29,7 @@ public interface UserDAO {
 
     boolean unBlockCustomer(User user) throws UnsupportedOperationException;
 
+    ArrayList<User> findEmployeesByString(String searchString);
 
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();

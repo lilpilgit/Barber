@@ -67,7 +67,7 @@
             <div class="col-auto">
 
 
-                <p>Ciaooooo</p>
+
 
             </div>
         </div>

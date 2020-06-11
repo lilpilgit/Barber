@@ -1,5 +1,5 @@
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String user = "Employee";
@@ -38,6 +38,11 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    String searchedString = null;
+    if (request.getAttribute("searchedString") != null) {
+        searchedString = (String) request.getAttribute("searchedString");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Staff";
 
@@ -49,7 +54,7 @@
 <%@include file="/templates/admin-head.jsp" %>
 <body>
 
-<%@include file="/templates/admin-sidebar.jsp"%>
+<%@include file="/templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
@@ -61,12 +66,30 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto"></ul>
-                <form class="form-inline my-2 my-md-0">
-                    <input class="form-control" type="text" placeholder="Search">
+                <form class="form-inline my-2 my-md-0" method="post">
+                    <input class="form-control" type="text" name="searchString" id="searchString" placeholder="Search"
+                           required>
+                    <input type="hidden" name="controllerAction" value="admin.Staff.searchStaff">
+                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                 </form>
             </div>
         </nav>
-        <%if (areEmployees) {%>
+        <%
+            if (areEmployees) {
+                if (searchedString != null) {
+        %>
+        <div class="row justify-content-center">
+
+            <h3>You searched for: <%=searchedString%>
+            </h3><br>
+        </div>
+        <div class="row justify-content-center">
+            <form method="post">
+                <button type="submit" class="btn btn-default"><i class="fad fa-globe-europe"></i>Show all</button>
+                <input type="hidden" name="controllerAction" value="admin.Staff.showEmployees">
+            </form>
+        </div>
+        <%}%>
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">

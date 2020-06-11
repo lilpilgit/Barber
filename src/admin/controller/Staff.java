@@ -2,9 +2,11 @@ package admin.controller;
 
 import functions.StaticFunc;
 import model.dao.DAOFactory;
+import model.dao.ProductDAO;
 import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
+import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
@@ -688,6 +690,96 @@ public class Staff {
         }
         /* 7) l'UNICA struttura da mostrare all'interno del text-field readonly */
         request.setAttribute("structure", structure);
+
+    }
+
+    public static void searchStaff(HttpServletRequest request, HttpServletResponse response){
+
+        /**
+         * Instantiates an ProductsDAO to be able to show filtered Employees in Database on a search string.
+         */
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
+        User loggedUser = null;
+        String searchString = null;
+        UserDAO userDAO = null;
+        ArrayList<User> foundEmployees = null;
+        StructureDAO structureDAO = null;
+        Structure structure = null;
+
+
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* DAOFactory per manipolare i dati sul DB */
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            searchString = request.getParameter("searchString");
+
+            /* Inizio la transazione sul Database*/
+            daoFactory.beginTransaction();
+
+            userDAO = daoFactory.getUserDAO();
+
+            foundEmployees = userDAO.findEmployeesByString(searchString);
+
+            structureDAO = daoFactory.getStructureDAO();
+
+            structure = structureDAO.fetchStructure();
+
+            /* Commit della transazione sul db */
+            daoFactory.commitTransaction();
+
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close della transazione sul db */
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+
+            } catch (Throwable t) {
+            }
+        }
+
+        /* 1) Attributo che indica se è loggato oppure no */
+        request.setAttribute("loggedOn", loggedUser != null);
+        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+        request.setAttribute("loggedUser", loggedUser);
+        /* 3) Quale jsp mostrare */
+        request.setAttribute("viewUrl", "admin/show-employees");
+        /* 4) Stringa usata nella ricerca da ri-mostrare all'utente */
+        request.setAttribute("searchedString",searchString);
+        /* 5) Lista degli impiegati trovati sulla base della query string */
+        request.setAttribute("employees", foundEmployees);
+        /* 6) Struttura di riferimento */
+        request.setAttribute("structure", structure);
+
 
     }
 

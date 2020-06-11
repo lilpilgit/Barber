@@ -939,7 +939,7 @@ public class Products {
     public static void searchProducts(HttpServletRequest request, HttpServletResponse response) {
 
         /**
-         * Instantiates an ProductsDAO to be able to show ALL Products in Database.
+         * Instantiates an ProductsDAO to be able to show filtered Products in Database on a search string.
          */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db

@@ -73,19 +73,23 @@
                 </form>
             </div>
         </nav>
-        <%if (areProducts) {%>
+        <%
+            if (areProducts) {
+
+                if (searchedString != null) {
+        %>
         <div class="row justify-content-center">
-            <%
-                if (searchedString != null) {%>
-            <h3>You searched for: <%=searchedString%></h3><br>
+
+            <h3>You searched for: <%=searchedString%>
+            </h3><br>
         </div>
         <div class="row justify-content-center">
             <form method="post">
                 <button type="submit" class="btn btn-default"><i class="fad fa-globe-europe"></i>Show all</button>
                 <input type="hidden" name="controllerAction" value="admin.Products.showProducts">
             </form>
-            <%}%>
         </div>
+        <%}%>
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">

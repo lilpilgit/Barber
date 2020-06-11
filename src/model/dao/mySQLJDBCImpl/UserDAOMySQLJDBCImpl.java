@@ -2,7 +2,6 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.mo.ExtendedProduct;
 import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
@@ -77,8 +76,8 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             ps = connection.prepareStatement(query);
             int i = 1;
             ps.setString(i++, user.getEmail());
-            if(yesAdditionalQuery)
-                ps.setString(i++,user.getFiscalCode());
+            if (yesAdditionalQuery)
+                ps.setString(i++, user.getFiscalCode());
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);
@@ -183,7 +182,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         String additionalQuery1 = (yesAdditionalQuery) ? "ID_STRUCTURE," : "";
         String additionalQuery2 = (yesAdditionalQuery) ? "?," : "";
 
-        query = "INSERT INTO USER(ID," +  additionalQuery1 + " EMAIL, NAME, SURNAME, ADDRESS, PHONE, PASSWORD, BIRTH_DATE, FISCAL_CODE, TYPE, BLOCKED, DELETED) VALUES(?," +  additionalQuery2 + "?,?,?,?,?,?,?,?,?,?,?);";
+        query = "INSERT INTO USER(ID," + additionalQuery1 + " EMAIL, NAME, SURNAME, ADDRESS, PHONE, PASSWORD, BIRTH_DATE, FISCAL_CODE, TYPE, BLOCKED, DELETED) VALUES(?," + additionalQuery2 + "?,?,?,?,?,?,?,?,?,?,?);";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -492,6 +491,58 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         throw new UnsupportedOperationException("Not supported for DB. Only cookie");
     }
 
+    @Override
+    public ArrayList<User> findEmployeesByString(String searchString) {
+        ArrayList<User> listEmployees = new ArrayList<>();
+        /*
+         *  When searching for partial strings in MySQL with LIKE
+         *  you will match case-insensitive by default.
+         */
+        query =
+                "SELECT * FROM USER "
+                        + "WHERE (NAME LIKE ? OR SURNAME LIKE ?) AND DELETED = 0 AND TYPE = 'E' "
+                        + "ORDER BY ID;";
+        try {
+            int i = 1;
+            String formattedSearchString = "%" + searchString + "%";
+            ps = connection.prepareStatement(query);
+            ps.setString(i++, formattedSearchString);
+            ps.setString(i++, formattedSearchString);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            while (rs.next()) {
+                listEmployees.add(readUser(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return listEmployees;
+    }
 
     @Override
     public ArrayList<User> fetchAllOnType(char userType) {
