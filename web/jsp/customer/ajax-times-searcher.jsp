@@ -21,15 +21,12 @@
 
     DAOFactory sessionDAOFactory = null; //per i cookie
     DAOFactory daoFactory = null; //per il db
-    User loggedUser = null;
-    UserDAO userDAO = null;
     Structure structure = null;
     StructureDAO structureDAO = null;
     BookingDAO bookingDAO = null;
     ArrayList<Booking> bookings = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
-    User user = null;
     Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
     LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
     LocalTime closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
@@ -55,8 +52,6 @@
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
         daoFactory.beginTransaction();
-
-        userDAO = daoFactory.getUserDAO();
 
         bookingDAO = daoFactory.getBookingDAO();
         structureDAO = daoFactory.getStructureDAO();
