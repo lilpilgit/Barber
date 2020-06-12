@@ -85,6 +85,16 @@ public class Dispatcher extends HttpServlet {
             } finally {
                 out.close();
             }
+        } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
+            RequestDispatcher jspReservedSlot = request.getRequestDispatcher("jsp/customer/ajax-get-booking.jsp");
+            try {
+                jspReservedSlot.forward(request, response);
+            } catch (ServletException e) {
+                System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
+                e.printStackTrace();
+            } finally {
+                out.close();
+            }
         } else {
             if (controllerAction == null)
 
