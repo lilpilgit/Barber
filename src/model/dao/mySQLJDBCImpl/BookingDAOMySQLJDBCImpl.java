@@ -27,7 +27,8 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     public Booking insert(LocalDate date, Time hourStart, User customer, Structure structure) throws DuplicatedObjectException {
         /*Setto l'oggetto di cui andrò a verificarne l'esistenza prima di inserirlo nel DB*/
         Booking booking = new Booking();
-        booking.setDeleted(false);
+        /* Se deleted e' null la prenotazione e' valida, se 1 e' cancellata dall'utente, se 0 e' cancellata dall'amministratore*/
+        booking.setDeleted(null);
         booking.setDeletedReason(null);
         booking.setDate(date);
         booking.setHourStart(hourStart);
@@ -190,7 +191,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
          */
 
-        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND DELETED = 0;";
+        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND DELETED IS NULL;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -233,7 +234,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          * Fetch all bookings to show in customer area by specified date
          */
         ArrayList<Booking> bookings = new ArrayList<>();
-        query = "SELECT * FROM BOOKING WHERE DATE = ? AND DELETED = 0 ORDER BY HOUR_START ASC;";
+        query = "SELECT * FROM BOOKING WHERE DATE = ? AND DELETED IS NULL ORDER BY HOUR_START ASC;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
