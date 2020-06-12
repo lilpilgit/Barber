@@ -14,7 +14,7 @@
 
 <%
     /**
-     * Fetch arraylist of booking time for a specific date.
+     * Fetch the last booked appointment of a specific customer.
      *
      * WARNING! This method is compatible only with AJAX request.
      */
