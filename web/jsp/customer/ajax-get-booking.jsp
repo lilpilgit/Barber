@@ -4,9 +4,9 @@
 <%@ page import="model.dao.UserDAO"%>
 <%@ page import="model.mo.Booking"%>
 <%@ page import="model.mo.Structure"%>
+<%@ page import="model.mo.User"%>
 <%@ page import="services.config.Configuration"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
 
 <%
@@ -20,17 +20,19 @@
     DAOFactory daoFactory = null; //per il db
     Structure structure = null;
     StructureDAO structureDAO = null;
+    User loggedUser = null;
+    UserDAO userDAO = null;
+    User user = null;
     BookingDAO bookingDAO = null;
     Booking booking = null;
     ArrayList<Booking> bookings = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
-    Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
+    boolean alreadyBooked = false;
+
     Long idCustomer = null; /* parametro che indica l'id del cliente che sta cliccando su booking */
 
     boolean changed = false;
-
-    System.err.println("E' QUI LA FESTAAAAAAAAAAAAAAAAAA???? ");
 
     try {
         /* Inizializzo il cookie di sessione */
@@ -45,6 +47,9 @@
 
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
 
+         /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+        loggedUser = sessionUserDAO.findLoggedUser();
+
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -54,6 +59,10 @@
 
         idCustomer = Long.valueOf(request.getParameter("idCustomer"));
 
+        alreadyBooked = bookingDAO.alreadyBooked(loggedUser);
+
+        /* Se non sono stati effettuati appuntamenti, eseguo la getLastBooking che mi trova l'ultimo appuntamento */
+        if (alreadyBooked) {
         structureDAO = daoFactory.getStructureDAO();
 
         /* Faccio il fetch dell'unica struttura che ho nel db */
@@ -61,6 +70,7 @@
 
         /* Creo l'oggetto booking che conterra' tutte le informazioni riferite allo status dell'ultimo appuntamento */
         booking = bookingDAO.getLastBooking(idCustomer, structure.getId());
+        }
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
@@ -94,9 +104,10 @@
 
     {
     	"result": "<%=result%>",
+    	"alreadyBooked":"<%=alreadyBooked%>"<%if (alreadyBooked) {%>,
     	"idBooking": "<%=booking.getId()%>",
     	"deleted": "<%=booking.isDeleted()%>",
     	"deletedReason": "<%=booking.getDeletedReason()%>",
     	"date": "<%=booking.getDate()%>",
-    	"hourStart": "<%=booking.getHourStart()%>"
+    	"hourStart": "<%=booking.getHourStart()%>"<%}%>
     }
