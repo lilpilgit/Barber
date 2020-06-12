@@ -431,7 +431,7 @@ function findSlot(idStructure, pickedDate) {
 
 }
 
-function findBooking(idStructure, idCustomer) {
+function findBooking(idCustomer) {
     /**
      * Send AJAX request with POST method to controller to find the reserved booking for the logged User
      *
@@ -439,7 +439,6 @@ function findBooking(idStructure, idCustomer) {
      * @type {string}
      */
 
-    console.log("nella findBooking")
     let result = "fail";
     let obj = null;
     let xhttp = new XMLHttpRequest();
@@ -458,7 +457,7 @@ function findBooking(idStructure, idCustomer) {
 
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // xhttp.send("controllerAction=home.Book.getBooking&idStructure=" + idStructure + "&idCustomer=" + idCustomer);
+    // xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer);
     console.log("The current structure is: " + idStructure);
     console.log("The logged user is: " + idCustomer);
 }

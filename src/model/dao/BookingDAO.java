@@ -32,6 +32,8 @@ public interface BookingDAO {
 
     Booking findBookingByIdForAdmin(Long id);
 
+    Booking getLastBooking(Long idCustomer, Long idStructure);
+
     ArrayList<Booking> findBookingsByDate(LocalDate date);
 
     ArrayList<Booking> findBookingsByDateForAdmin(LocalDate date);

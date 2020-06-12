@@ -75,7 +75,7 @@
                             <!-- TODO Far vedere il pulsante Bookings solo se si e' prenotato un appuntamento -->
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
-                                        id='showBookings' onclick="findBooking( 1 , <%=loggedUser.getId()%>)"
+                                        id='showBookings' onclick="findBooking(<%=loggedUser.getId()%>)"
                                         data-toggle="modal" data-target="#modalBookings">
                                     Bookings
                                 </button>
