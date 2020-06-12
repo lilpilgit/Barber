@@ -441,6 +441,7 @@ function findBooking(idCustomer) {
 
     let result = "fail";
     let obj = null;
+    let time = null;
     let xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {
@@ -451,7 +452,8 @@ function findBooking(idCustomer) {
                 console.log(obj);
                 if (obj.alreadyBooked === "true") {
                     document.getElementById("booked-date").innerText = obj.date;
-                    document.getElementById("booked-time").innerText = obj.hourStart;
+                    time = obj.hourStart.split(':');
+                    document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
                     document.getElementById("not-booked-yet").remove();
                 } else if (obj.alreadyBooked === "false") {
                     document.getElementById("ModalLabelBook").innerHTML = "";
@@ -468,7 +470,6 @@ function findBooking(idCustomer) {
     xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer);
     console.log("The logged user is: " + idCustomer);
 }
-
 
 function bookNow(loggedUserId, selectedTime, selectedDate) {
     let form = document.getElementById('action_book');

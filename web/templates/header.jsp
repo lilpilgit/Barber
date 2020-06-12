@@ -165,6 +165,20 @@
                     </tr>
                     </tbody>
                 </table>
+<%--   TEXT AREA DELETED REASON         --%>
+<%--                <div>
+                    <form method="post" id="deleteBooking">
+                        <textarea style="width: 100%;resize: none" rows="5" required="" placeholder="Because..." name="deletedReason"></textarea>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" id="ultimateBtnDel" class="btn btn-primary" style="background-color: rgba(255,5,3,0.66)">Delete booking
+                            </button>
+                            <input type="hidden" name="controllerAction" value="admin.Bookings.deleteBooking">
+                            <input type="hidden" class="form-control" value="2020-06-12" name="currentDate">
+                        </div>
+                    </form>
+                </div>--%>
                 <div class="py-4 align-middle" id="not-booked-yet">
                     <h5>You haven't made a booking yet! </h5>
                     <button class="btn btnheader active2 pt-1" type="button" id='showBookNow'
