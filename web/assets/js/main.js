@@ -431,6 +431,8 @@ function findSlot(idStructure, pickedDate) {
 
 }
 
+
+
 function bookNow(loggedUserId, selectedTime, selectedDate) {
     let form = document.getElementById('action_book');
     let selectedOptionTime = document.getElementById(selectedTime);
