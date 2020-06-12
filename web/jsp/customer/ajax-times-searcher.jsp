@@ -115,7 +115,7 @@
 
     result = "success";
 %>
-            { "result": "success",
+            { "result": "<%=result%>",
               "availableTimes":[ <% for(i = 0; i < freeSlots.size(); i++) { %>
                                       "<%=freeSlots.get(i)%>"<%=i!=freeSlots.size()-1?",":""%>
                                       <%}%>
