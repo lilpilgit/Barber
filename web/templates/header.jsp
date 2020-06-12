@@ -30,7 +30,6 @@
                                         onclick=setNavFormHome('admin.Welcome.welcome')>Admin
                                     Area
                                 </button>
-                                <a href="manage" class="btn btn-default gold font-weight-light" ></a>
                             </li>
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button" id="logoutAdmin"
@@ -402,37 +401,6 @@
         let navForm = document.getElementById('navForm');
         navForm.elements['controllerAction'].value = value;
         navForm.submit();
-    }
-
-    function findBooking(idStructure, idCustomer) {
-        /**
-         * Send AJAX request with POST method to controller to find the reserved booking for the logged User
-         *
-         *
-         * @type {string}
-         */
-
-        let result = "fail";
-        let obj = null;
-        let xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                obj = JSON.parse(this.responseText);
-                if (obj.result === "success") {
-                    console.log("result: " + obj.result);
-
-                } else if (obj.result === "fail") {
-                    alert("ERRORE NEL BACKEND!!");
-                } else alert("Valore di result sconosciuto nel JSON");
-            }
-        };
-
-        xhttp.open("POST", "app", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        // xhttp.send("controllerAction=home.Book.getBooking&idStructure=" + idStructure + "&idCustomer=" + idCustomer);
-        console.log("The current structure is: " + idStructure);
-        console.log("The logged user is: " + idCustomer);
     }
 </script>
 <!--form per decidere quale controller e method chiamare quando vengono cliccati i pulsanti della navbar-->

@@ -357,6 +357,5 @@ public class Cart {
         /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
         request.setAttribute("cart", cart);
 
-
     }
 }
