@@ -151,8 +151,8 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>30 Agosto 2020</td>
-                        <td>15:00</td>
+                        <td id="booked-date"></td>
+                        <td id="booked-time"></td>
                         <td>
                             <button type="button" class="trashbutton" title="Delete appointment"
                                     data-target="#alert"

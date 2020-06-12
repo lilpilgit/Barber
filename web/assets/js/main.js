@@ -449,6 +449,8 @@ function findBooking(idCustomer) {
             if (obj.result === "success") {
                 console.log("result: " + obj.result);
                 console.log(obj);
+                document.getElementById("booked-date").innerText = obj.date;
+                document.getElementById("booked-time").innerText = obj.hourStart;
             } else if (obj.result === "fail") {
                 alert("ERRORE NEL BACKEND!!");
             } else alert("Valore di result sconosciuto nel JSON");
