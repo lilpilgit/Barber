@@ -4,10 +4,7 @@
 <%@ page import="model.dao.UserDAO"%>
 <%@ page import="model.mo.Booking"%>
 <%@ page import="model.mo.Structure"%>
-<%@ page import="model.mo.User"%>
 <%@ page import="services.config.Configuration"%>
-<%@ page import="java.time.LocalDate"%>
-<%@ page import="java.time.LocalTime"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
@@ -32,6 +29,8 @@
     Long idCustomer = null; /* parametro che indica l'id del cliente che sta cliccando su booking */
 
     boolean changed = false;
+
+    System.err.println("E' QUI LA FESTAAAAAAAAAAAAAAAAAA???? ");
 
     try {
         /* Inizializzo il cookie di sessione */
@@ -99,5 +98,5 @@
     	"deleted": "<%=booking.isDeleted()%>",
     	"deletedReason": "<%=booking.getDeletedReason()%>",
     	"date": "<%=booking.getDate()%>",
-    	"hourStart": "<%=booking.getHourStart()%>",
+    	"hourStart": "<%=booking.getHourStart()%>"
     }

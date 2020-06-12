@@ -458,7 +458,6 @@ function findBooking(idCustomer) {
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer);
-    console.log("The current structure is: " + idStructure);
     console.log("The logged user is: " + idCustomer);
 }
 
