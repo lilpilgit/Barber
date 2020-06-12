@@ -1,10 +1,8 @@
 package model.dao.mySQLJDBCImpl;
 
-import home.controller.Book;
 import model.dao.BookingDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.Booking;
-import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -246,7 +244,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
-            ps.setString(i++,booking.getDeletedReason());
+            ps.setString(i++, booking.getDeletedReason());
             ps.setLong(i++, booking.getId());
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
@@ -352,6 +350,58 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
 
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return booking;
+    }
+
+    @Override
+    public Booking getLastBooking(Long idCustomer, Long idStructure) {
+        /**
+         * Fetch only the last appointment that has not been canceled by the client
+         * */
+
+        Booking booking = new Booking();
+        /* Trova solo l'ultima prenotazione che e' stata effettuata che si trova nello stato deleted = <null>
+        * oppure che e' stata cancellata dall'admin e quindi con stato deleted = 0. Inoltre, la prenotazione si
+        * deve trovare in una data futura rispetto alla CURDATE() */
+
+        String query = "SELECT * FROM BOOKING WHERE (ID, ID_CUSTOMER) IN (SELECT MAX(ID) AS ID, ID_CUSTOMER " +
+                       "FROM BOOKING GROUP BY ID_CUSTOMER) AND (DELETED <> 1 OR DELETED IS NULL) " +
+                       "AND ID_CUSTOMER = ? AND DATE >= CURDATE() AND ID_STRUCTURE = ?;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, idCustomer);
+            ps.setLong(i++, idStructure);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            if (rs.next()) { //the element with this id is present
+                booking = readBooking(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
         try {
             ps.close();
         } catch (SQLException e) {
@@ -490,7 +540,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         try {
             boolean status = rs.getBoolean("DELETED");
             /* se è null significa che la prenotazione è ancora valida dunque lascio a null il wrapper Boolean deleted */
-            if(!rs.wasNull()){
+            if (!rs.wasNull()) {
                 booking.setDeleted(status); /* metterò il valore true o false che sia */
             }
 
