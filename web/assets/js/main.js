@@ -449,8 +449,14 @@ function findBooking(idCustomer) {
             if (obj.result === "success") {
                 console.log("result: " + obj.result);
                 console.log(obj);
-                document.getElementById("booked-date").innerText = obj.date;
-                document.getElementById("booked-time").innerText = obj.hourStart;
+                if (obj.alreadyBooked === "true") {
+                    document.getElementById("booked-date").innerText = obj.date;
+                    document.getElementById("booked-time").innerText = obj.hourStart;
+                    document.getElementById("not-booked-yet").remove();
+                } else if (obj.alreadyBooked === "false") {
+                    document.getElementById("ModalLabelBook").innerHTML = "";
+                    document.getElementById("book-table-result").remove();
+                }
             } else if (obj.result === "fail") {
                 alert("ERRORE NEL BACKEND!!");
             } else alert("Valore di result sconosciuto nel JSON");

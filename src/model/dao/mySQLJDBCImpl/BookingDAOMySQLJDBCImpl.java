@@ -41,7 +41,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
         /* CON TALE QUERY CONTROLLO SE ESISTE GIA' UN APPUNTAMENTO PER LA STESSA DATA E LA STESSA ORA */
 
-        query = "SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ?;";
+        query = "SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ? AND DELETED IS NULL;";
 
         System.err.println("DATE =>>" + booking.getDate());
         System.err.println("HOUR_START =>>" + booking.getHourStart());

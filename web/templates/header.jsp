@@ -135,13 +135,13 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" style="border-bottom: 2px solid black;">
-                <h5 class="modal-title" id="ModalLabel">You booked an appointment on:</h5>
+                <h5 class="modal-title" id="ModalLabelBook">You booked an appointment on:</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-center">
-                <table class="table table-bordered" style="box-shadow: 5px 5px 15px grey;">
+                <table class="table table-bordered" id="book-table-result" style="box-shadow: 5px 5px 15px grey;">
                     <thead>
                     <tr>
                         <th>Date</th>
@@ -165,6 +165,13 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="py-4 align-middle" id="not-booked-yet">
+                    <h5>You haven't made a booking yet! </h5>
+                    <button class="btn btnheader active2 pt-1" type="button" id='showBookNow'
+                            onclick=setNavFormHome('home.Book.showBook')>
+                        Book now!
+                    </button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
