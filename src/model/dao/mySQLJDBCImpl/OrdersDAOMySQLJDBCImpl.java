@@ -1,12 +1,10 @@
 package model.dao.mySQLJDBCImpl;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
+import com.sun.istack.internal.Nullable;
 import functions.StaticFunc;
 import model.dao.OrdersDAO;
-import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
 import model.mo.Order;
-import model.mo.Product;
 import model.mo.User;
 
 import java.math.BigDecimal;
@@ -29,10 +27,12 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     private String query;
     private ResultSet rs;
 
-    public OrdersDAOMySQLJDBCImpl (Connection connection) { this.connection = connection; }
+    public OrdersDAOMySQLJDBCImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
-    public Order insert(User customer,BigDecimal totalPrice, ArrayList<ExtendedProduct> items) {
+    public Order insert(User customer, BigDecimal totalPrice, ArrayList<ExtendedProduct> items) {
         /**
          * This method allows you to insert an order with correlated items list.
          * @params
@@ -152,7 +152,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
 
         /* ora bisogna inserire una riga per ogni prodotto acquistato all'interno della tabella ITEMS_LIST */
         query = "INSERT INTO ITEMS_LIST(ID_PRODUCT, ID_ORDER, QUANTITY) VALUES(?,?,?);";
-        for (ExtendedProduct item : order.getItemList()){
+        for (ExtendedProduct item : order.getItemList()) {
             try {
                 int i = 1;
                 ps = connection.prepareStatement(query);
@@ -188,20 +188,26 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
     }
 
     @Override
-    public boolean modifyStatusById(Long idOrder,String status){
+    public boolean modifyStatusById(Long idOrder, String status, @Nullable LocalDate sellDate) {
         /**
-         * Modify status
-         *
+         * Modify status. If status is >= 50 ( status greater than or equal to StaticFunc.SENT ) set SELL_DATE to date passed by client.
+         * @param LocalDate sellDate : may be null if status is < 50
          * @return true if modified correctly otherwise raise exception
          */
+        boolean yesAdditionalQuery = (sellDate != null);
+        String addedQuery = (yesAdditionalQuery) ? "SELL_DATE = ?," : "";
         query
                 = "UPDATE ORDERS"
-                + " SET STATUS = ?"
+                + " SET "
+                + addedQuery
+                + " STATUS = ? "
                 + " WHERE ID = ?";
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
-            ps.setString(i++,status);
+            if (yesAdditionalQuery)
+                ps.setDate(i++, Date.valueOf(sellDate));
+            ps.setString(i++, status);
             ps.setLong(i++, idOrder);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
@@ -214,7 +220,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             throw new RuntimeException(e);
         }
 
-        try{
+        try {
             ps.close();
         } catch (SQLException e) {
             System.err.println("Errore nella ps.close();");
@@ -234,7 +240,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
 
         query = "SELECT * FROM ORDERS WHERE ID_CUSTOMER = ? AND DELETED = 0 ORDER BY ORDER_DATE DESC, ID DESC;";
         /* ORDINO SULLA DATA DECRESCENTE OVVERO PER ORDINI PIÙ RECENTI MA ANCHE SULL'ID CHE ESSENDO INCREMENTALE, PER ORDINI
-        *  EFFETTUATI NELLA STESSA DATA MI CONSENTE DI VISUALIZZARLI ANCHE IN QUESTO CASO PER ORDINI PIÙ RECENTE */
+         *  EFFETTUATI NELLA STESSA DATA MI CONSENTE DI VISUALIZZARLI ANCHE IN QUESTO CASO PER ORDINI PIÙ RECENTE */
 
         try {
             int i = 1;
@@ -283,13 +289,12 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         ArrayList<Order> listOrders = new ArrayList<>();
 
         query =
-                "SELECT ORDERS.ID,U.EMAIL,U.NAME,U.SURNAME,U.PHONE,STATUS "
-              + "FROM ORDERS INNER JOIN USER U on ORDERS.ID_CUSTOMER = U.ID ORDER BY ORDER_DATE DESC, ID DESC;";
+                "SELECT ORDERS.ID,SELL_DATE,U.EMAIL,U.NAME,U.SURNAME,U.PHONE,STATUS "
+                        + "FROM ORDERS INNER JOIN USER U on ORDERS.ID_CUSTOMER = U.ID ORDER BY ORDER_DATE DESC, ID DESC;";
         /* ORDINO SULLA DATA DECRESCENTE OVVERO PER ORDINI PIÙ RECENTI MA ANCHE SULL'ID CHE ESSENDO INCREMENTALE, PER ORDINI
          *  EFFETTUATI NELLA STESSA DATA MI CONSENTE DI VISUALIZZARLI ANCHE IN QUESTO CASO PER ORDINI PIÙ RECENTE */
 
         try {
-            int i = 1;
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
@@ -418,7 +423,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         try {
             extendedProduct.setInsertDate(rs.getObject("INSERT_DATE", LocalDate.class));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getDate(\"INSERT_DATE\")");
+            System.err.println("Errore nella extendedProduct.setInsertDate(rs.getObject(\"INSERT_DATE\", LocalDate.class));");
             throw new RuntimeException(e);
         }
         try {
@@ -453,7 +458,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         }
         try {
             extendedProduct.setDeleted(rs.getBoolean("DELETED"));
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);
         }
@@ -462,7 +467,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
 
         try {
             extendedProduct.setRequiredQuantity(rs.getInt("QUANTITY"));
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Errore nella extendedProduct.setRequiredQuantity(rs.getInt(\"QUANTITY\"));");
             throw new RuntimeException(e);
         }
@@ -470,7 +475,7 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         return extendedProduct;
     }
 
-    private Order readOrderForLogistics(ResultSet rs){
+    private Order readOrderForLogistics(ResultSet rs) {
 
         /**
          * Read order's attributes with correlated customer's info for logistics admin area.
@@ -485,7 +490,13 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         try {
             order.setId(rs.getLong("ID"));
         } catch (SQLException e) {
-            System.err.println("Errore nella rs.getLong(\"ID\")");
+            System.err.println("Errore nella order.setId(rs.getLong(\"ID\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            order.setSellDate(rs.getObject("SELL_DATE", LocalDate.class));
+        } catch (SQLException e) {
+            System.err.println("Errore nella order.setSellDate(rs.getObject(\"SELL_DATE\", LocalDate.class));");
             throw new RuntimeException(e);
         }
         try {

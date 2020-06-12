@@ -1,10 +1,12 @@
 package model.dao;
 
+import com.sun.istack.internal.Nullable;
 import model.mo.ExtendedProduct;
 import model.mo.Order;
 import model.mo.User;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface OrdersDAO {
@@ -17,7 +19,7 @@ public interface OrdersDAO {
      */
 
     Order insert(User customer, BigDecimal totalPrice, ArrayList<ExtendedProduct> items);
-    boolean modifyStatusById(Long idOrder,String status);
+    boolean modifyStatusById(Long idOrder,String status,@Nullable LocalDate sellDate);
     ArrayList<Order> fetchAllOrdersForLogistics();
     ArrayList<Order> fetchOrdersByCustomerId(Long id);
     ArrayList<ExtendedProduct> listOrderedProducts(Long id);

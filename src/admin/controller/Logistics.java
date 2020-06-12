@@ -10,6 +10,7 @@ import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -101,6 +102,7 @@ public class Logistics {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         Long idOrderToModify = null;
         String status = null;
+        LocalDate sellDate = null;
 
         boolean modified = false;
 
@@ -134,7 +136,18 @@ public class Logistics {
             /* setto lo status dell'ordine da modificare sulla base dello status ricevuto */
             status = request.getParameter("status");
 
-            modified = ordersDAO.modifyStatusById(idOrderToModify, status);
+            /* se lo status è superiore o uguale a SENT flaggo l'ordine come già venduto */
+            if (status.equals(StaticFunc.SENT)) {
+                sellDate = LocalDate.parse(request.getParameter("sellDate"));
+            } else if (status.equals(StaticFunc.DELIVERING)) {
+                sellDate = LocalDate.parse(request.getParameter("sellDate"));
+            } else if (status.equals(StaticFunc.DELIVERED)) {
+                sellDate = LocalDate.parse(request.getParameter("sellDate"));
+            } else if (status.equals(StaticFunc.CANCELED)) {
+                sellDate = LocalDate.parse(request.getParameter("sellDate"));
+            }
+            System.out.println("NEL CONTROLLER LOGISTICS ==> " + sellDate);
+            modified = ordersDAO.modifyStatusById(idOrderToModify, status, sellDate);
 
             commonView(daoFactory, request); /* setto l'attributo "logisticOrders" all'interno della request */
 

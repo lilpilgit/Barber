@@ -179,10 +179,10 @@ function modifyStatusOrder(idOrder, status) {
             break;
         }
     }
-
-
     form.elements['controllerAction'].value = 'admin.Logistics.modifyStatus';
     form.elements['idOrder'].value = idOrder;
+    /* setto la data corrente nel campo hidden  */
+    setCurrentDate('sellDate');
     form.submit();
 }
 
@@ -196,4 +196,59 @@ function showBookingsAdmin(){
     /* la data sarà passata in automatico grazie al parametro form="action" messo dentro l'input di tipo date della navbar */
     formBookingAction.submit();
 
+}
+
+function setRadiosStatusOrder(actualStatus) {
+    /**
+     * Set status of radio button based on actual status and disable previous radio button possibility
+     */
+    /* radio buttons presenti all'interno del modal, setto come checked solo quello corrispondente all'attuale status */
+    let radio_nothing_new = document.getElementById('radio_nothing_new');
+    let radio_processing = document.getElementById('radio_processing');
+    let radio_sent = document.getElementById('radio_sent');
+    let radio_delivering = document.getElementById('radio_delivering');
+    let radio_delivered = document.getElementById('radio_delivered');
+    let radio_canceled = document.getElementById('radio_canceled');
+
+    switch (actualStatus) {
+        case 0:
+            radio_nothing_new.checked = true;
+            break;
+        case 25:
+            radio_processing.checked = true;
+            /* disabilito quelli precedenti */
+            radio_nothing_new.disabled = true;
+            break;
+        case 50:
+            radio_sent.checked = true;
+            /* disabilito quelli precedenti */
+            radio_nothing_new.disabled = true;
+            radio_processing.disabled = true;
+            break;
+        case 75:
+            radio_delivering.checked = true;
+            /* disabilito quelli precedenti */
+            radio_nothing_new.disabled = true;
+            radio_processing.disabled = true;
+            radio_sent.disabled = true;
+            break;
+        case 100:
+            radio_delivered.checked = true;
+            /* disabilito quelli precedenti */
+            radio_nothing_new.disabled = true;
+            radio_processing.disabled = true;
+            radio_sent.disabled = true;
+            radio_delivering.disabled = true;
+            break;
+            /* nel case -1 non si dovrebbe mai entrare teoricamente perchè il modal è inaccessibile in quanto scompare l'icona */
+        case -1:
+            radio_canceled.checked = true;
+            /* disabilito quelli precedenti */
+            radio_nothing_new.disabled = true;
+            radio_processing.disabled = true;
+            radio_sent.disabled = true;
+            radio_delivering.disabled = true;
+            radio_delivered.disabled = true;
+            break;
+    }
 }

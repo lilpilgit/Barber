@@ -129,7 +129,7 @@ public class Orders {
             /* setto l'id dell'ordine da cancellare sulla base dell'id ricevuto */
             idOrderToCancel = Long.valueOf(request.getParameter("idOrder"));
 
-            canceled = ordersDAO.modifyStatusById(idOrderToCancel, StaticFunc.CANCELED);
+            canceled = ordersDAO.modifyStatusById(idOrderToCancel, StaticFunc.CANCELED,null);
 
             commonView(daoFactory, loggedUser, request); /* setto l'attributo "orders" all'interno della request */
 

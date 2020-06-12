@@ -73,10 +73,31 @@
                     <tbody>
                     <%
                         int i = 1; /* contatore per il numero di ordini */
+                        String popoverSellDate = "";
                         if (areOrders) {
                             for (Order l : logisticOrders) {
+                                int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
+                                boolean canceled = false; /* flag per sapere se è cancellato */
+                                boolean delivered = false; /* flag per sapere se è stato consegnato dunque ordine completato */
+                                if (l.getStatus().equals(StaticFunc.NOTHING_NEW)) {
+                                    valueStatus = 0;
+                                } else if (l.getStatus().equals(StaticFunc.PROCESSING)) {
+                                    valueStatus = 25;
+                                } else if (l.getStatus().equals(StaticFunc.SENT)) {
+                                    valueStatus = 50;
+                                } else if (l.getStatus().equals(StaticFunc.DELIVERING)) {
+                                    valueStatus = 75;
+                                } else if (l.getStatus().equals(StaticFunc.DELIVERED)) {
+                                    valueStatus = 100;
+                                    delivered = true;
+                                    System.out.println("l.getSellDate() ==> " + l.getSellDate());
+                                    popoverSellDate = "data-toggle='popover' data-trigger='hover' title='Sell Date' data-content='" + l.getSellDate() + "'";
+                                } else if (l.getStatus().equals(StaticFunc.CANCELED)) {
+                                    valueStatus = -1;
+                                    canceled = true;
+                                }
                     %>
-                    <tr>
+                    <tr class="<%=(canceled) ? "table-danger" : (delivered) ? "table-success" : ""%>" <%=(delivered) ? popoverSellDate : ""%>>
                         <th scope="row"><%=i++%>
                         </th>
                         <td><%=l.getId()%>
@@ -89,14 +110,19 @@
                         </td>
                         <td><%=l.getStatus()%>
                         </td>
-                        <td>
+                        <td><%if (canceled) {%>
+                            <i class="fas fa-times-circle"></i>
+                            <%}else if(delivered){%>
+                            <i class="fas fa-clipboard-check"></i>
+                            <%}else {%>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     data-target="#alertSetStatusOrder"
                                     data-toggle="modal"
-                                    onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');"><i
-                                    class="fas fa-pencil-alt"></i>
+                                    onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');setRadiosStatusOrder(<%=valueStatus%>)">
+                                <i
+                                        class="fas fa-pencil-alt"></i>
                             </button>
-
+                            <%}%>
                         </td>
                     </tr>
                     <%}%>
@@ -107,7 +133,7 @@
         <%
         } else {
         %>
-        <h1>Non ci sono ordini mi disp...</h1>
+        <h1>There aren't orders...</h1>
         <%}%>
     </main>
 </div>
@@ -128,23 +154,23 @@
             <div class="modal-body">
                 You are attempting to modify status of order.<br><br>Select one of this possible status:<br><br>
 
-                <input type="radio" id="nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>" checked="true">
-                <label for="nothing_new"><%=StaticFunc.NOTHING_NEW%>
+                <input type="radio" id="radio_nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>">
+                <label for="radio_nothing_new"><%=StaticFunc.NOTHING_NEW%>
                 </label><br>
-                <input type="radio" id="processing" name="status" value="<%=StaticFunc.PROCESSING%>">
-                <label for="processing"><%=StaticFunc.PROCESSING%>
+                <input type="radio" id="radio_processing" name="status" value="<%=StaticFunc.PROCESSING%>">
+                <label for="radio_processing"><%=StaticFunc.PROCESSING%>
                 </label><br>
-                <input type="radio" id="sent" name="status" value="<%=StaticFunc.SENT%>">
-                <label for="sent"><%=StaticFunc.SENT%>
+                <input type="radio" id="radio_sent" name="status" value="<%=StaticFunc.SENT%>">
+                <label for="radio_sent"><%=StaticFunc.SENT%>
                 </label><br>
-                <input type="radio" id="delivering" name="status" value="<%=StaticFunc.DELIVERING%>">
-                <label for="delivering"><%=StaticFunc.DELIVERING%>
+                <input type="radio" id="radio_delivering" name="status" value="<%=StaticFunc.DELIVERING%>">
+                <label for="radio_delivering"><%=StaticFunc.DELIVERING%>
                 </label><br>
-                <input type="radio" id="delivered" name="status" value="<%=StaticFunc.DELIVERED%>">
-                <label for="delivered"><%=StaticFunc.DELIVERED%>
+                <input type="radio" id="radio_delivered" name="status" value="<%=StaticFunc.DELIVERED%>">
+                <label for="radio_delivered"><%=StaticFunc.DELIVERED%>
                 </label><br>
-                <input type="radio" id="canceled" name="status" value="<%=StaticFunc.CANCELED%>">
-                <label for="canceled"><%=StaticFunc.CANCELED%>
+                <input type="radio" id="radio_canceled" name="status" value="<%=StaticFunc.CANCELED%>">
+                <label for="radio_canceled"><%=StaticFunc.CANCELED%>
                 </label><br>
 
             </div>
@@ -168,11 +194,16 @@
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idOrder" value="">
     <input type="hidden" name="status" value="">
+    <input type="hidden" name="sellDate" id="sellDate" value="">
 </form>
 
 <script>
     window.addEventListener("load", () => {
+        /* necessario per il popover  */
 
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({})
+        });
     })
 </script>
 </body>
