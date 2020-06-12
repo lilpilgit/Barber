@@ -1,7 +1,7 @@
 <%@ page import="model.mo.Booking" %>
 <%@ page import="model.mo.User" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String user = "Booking";
@@ -66,8 +66,13 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
             <div class="form-inline">
                 <label for="Booking-Date" class="pr-2" style="color: #818894;">Select a date: </label>
-                <input type="date" class="form-control" value="<%=dataToShow%>" name="currentDate" id="Booking-Date" form="action"
+                <input type="date" class="form-control" value="<%=dataToShow%>" name="currentDate" id="Booking-Date"
+                       form="action"
                        onchange="showBookingsAdmin();">
+                <ul class="legend">
+                    <li><span class="legendDeletedByCustomer"></span>DELETED BY CUSTOMER</li>
+                    <li><span class="legendDeletedByAdmin"></span>DELETED BY ADMIN</li>
+                </ul>
             </div>
         </nav>
         <div class="row justify-content-center">
@@ -89,27 +94,58 @@
                         int i = 1; /* contatore per il numero di impiegati */
 
                         for (Booking b : bookings) {
+                            /*
+                             * flag char per sapere se è stato cancellato dall'admin ==> DELETED 0/FALSE
+                             * o se è stato cancellato dal cliente ==> DELETED 1/TRUE
+                             * Di default lo metto su N che sta per 'da NESSUNO'
+                             */
+                            char isDeletedBy = 'N';
                             Boolean deletedStatus = b.isDeleted();
+                            String class_color_row = ""; /* di default nessun colore */
+                            String tr = "<tr>"; /* di default è una semplice riga */
+                            String title = "";
+                            System.err.println("JSP ===> " + deletedStatus);
+                            if (deletedStatus != null) {
+                                /* è stato cancellato da qualcuno...da chi? */
+                                if (!deletedStatus) /* è false, cancellato dall'admin */ {
+                                    isDeletedBy = 'A';
+                                    class_color_row = "table-danger";
+                                    title = "Posted by you";
+                                } else /* è true, cancellato dal CLIENTE */ {
+                                    isDeletedBy = 'C';
+                                    class_color_row = "table-warning";
+                                    title = "Posted by the customer";
+                                }
+                                /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"","&quot;") + "'>";
+                            }
+
                     %>
-                    <tr class="<%=deletedStatus ? "table-danger" : ""%>">
-                        <th scope="row"><%=i++%>
-                        </th>
-                        <td><%=b.getHourStart()%>
-                        </td>
-                        <td><%=b.getCustomer().getName()%> , <%=b.getCustomer().getSurname()%>
-                        </td>
-                        <td><%=b.getCustomer().getEmail()%>
-                        </td>
-                        <td><%=b.getCustomer().getPhone()%>
-                        </td>
-                        <td>
-                            <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=user%>"
-                                    data-toggle="modal"
-                                    onclick=setTmpId(<%=b.getId()%>,'tmpId')>
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
+
+                    <%=tr%>
+                    <th scope="row"><%=i++%>
+                    </th>
+                    <td><%=b.getHourStart()%>
+                    </td>
+                    <td><%=b.getCustomer().getName()%> , <%=b.getCustomer().getSurname()%>
+                    </td>
+                    <td><%=b.getCustomer().getEmail()%>
+                    </td>
+                    <td><%=b.getCustomer().getPhone()%>
+                    </td>
+                    <td>
+                        <%if (isDeletedBy == 'N') {%>
+                        <button type="button" class="trashbutton" title="Delete"
+                                data-target="#alert<%=user%>"
+                                data-toggle="modal"
+                                onclick=setTmpId(<%=b.getId()%>,'tmpId')>
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                        <%} else /* è stato cancellato da qualcuno dunque mostro la deleted reason */ {%>
+                        <i class="far fa-calendar-times"></i>
+                        <%}%>
+                        <%--                            <i class="fas fa-info-circle"></i>--%>
+                    </td>
                     </tr>
                     <%}%>
                     </tbody>
@@ -128,7 +164,7 @@
 
 <input type="hidden" id="tmpIdDel" value="">
 <!--MODAL DI CONFERMA CANCELLAZIONE PRENOTAZIONE-->
-<div class="modal fade" id="alert<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="alert<%=user%>Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -158,16 +194,21 @@
         </div>
     </div>
 </div>
-<!--FINE MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
 
 
 <script>
 
     window.addEventListener("load", () => {
-<%--        <%if(dataToShow == null){%>--%>
-<%--            /* la chiamo solamente se è la prima volta che devo*/--%>
-<%--            setCurrentDate("Booking-Date");--%>
-<%--        <%}%>--%>
+        <%--        <%if(dataToShow == null){%>--%>
+        <%--            /* la chiamo solamente se è la prima volta che devo*/--%>
+        <%--            setCurrentDate("Booking-Date");--%>
+        <%--        <%}%>--%>
+        /* necessario per il popover  */
+
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({})
+        });
+
     })
 
 </script>

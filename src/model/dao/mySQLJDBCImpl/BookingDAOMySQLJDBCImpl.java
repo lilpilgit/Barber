@@ -402,7 +402,12 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
         try {
-            booking.setDeleted(rs.getBoolean("DELETED"));
+            boolean status = rs.getBoolean("DELETED");
+            /* se è null significa che la prenotazione è ancora valida dunque lascio a null il wrapper Boolean deleted */
+            if(!rs.wasNull()){
+                booking.setDeleted(status); /* metterò il valore true o false che sia */
+            }
+
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);
