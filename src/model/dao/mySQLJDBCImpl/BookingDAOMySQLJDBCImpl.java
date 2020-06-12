@@ -1,8 +1,10 @@
 package model.dao.mySQLJDBCImpl;
 
+import home.controller.Book;
 import model.dao.BookingDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.Booking;
+import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -230,6 +232,43 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     }
 
     @Override
+    public boolean deleteForAdmin(Booking booking) {
+        /**
+         * Flag with 0 DELETED column in USER table and set DELETED_REASON
+         *
+         * @return true if delete go correctly otherwise raise exception
+         */
+        query
+                = "UPDATE BOOKING"
+                + " SET DELETED = 0, "
+                + "     DELETED_REASON = ?"
+                + "WHERE ID = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            int i = 1;
+            ps.setString(i++,booking.getDeletedReason());
+            ps.setLong(i++, booking.getId());
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeUpdate();");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    @Override
     public ArrayList<Booking> findBookingsByDate(LocalDate date) {
         /**
          * Fetch all bookings to show in customer area by specified date
@@ -273,6 +312,53 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
 
         return bookings;
+    }
+
+    @Override
+    public Booking findBookingByIdForAdmin(Long id) {
+        /**
+         * Fetch only booking with DELETED == NULL, i.e. which has not been canceled by admin or customer
+         * */
+        Booking booking = new Booking();
+        String query = "SELECT * FROM BOOKING WHERE ID = ? AND DELETED IS NULL;"; /* trova solo le prenotazioni non cancellate sia da admin che da customer*/
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, id);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            if (rs.next()) { //the element with this id is present
+                booking = readBooking(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+        return booking;
     }
 
     @Override
@@ -328,7 +414,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     private Booking readBooking(ResultSet rs) {
 
         /**
-         * In questo metodo vado a settare tutti i campi di ogni colonna di BOOKING.
+         * In this method we set all booking's fields from table BOOKING
          */
 
         Booking booking = new Booking();

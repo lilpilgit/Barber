@@ -28,6 +28,10 @@ public interface BookingDAO {
 
     boolean alreadyBooked(User customer);
 
+    boolean deleteForAdmin(Booking booking);
+
+    Booking findBookingByIdForAdmin(Long id);
+
     ArrayList<Booking> findBookingsByDate(LocalDate date);
 
     ArrayList<Booking> findBookingsByDateForAdmin(LocalDate date);

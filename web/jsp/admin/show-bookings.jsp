@@ -104,7 +104,6 @@
                             String class_color_row = ""; /* di default nessun colore */
                             String tr = "<tr>"; /* di default è una semplice riga */
                             String title = "";
-                            System.err.println("JSP ===> " + deletedStatus);
                             if (deletedStatus != null) {
                                 /* è stato cancellato da qualcuno...da chi? */
                                 if (!deletedStatus) /* è false, cancellato dall'admin */ {
@@ -117,7 +116,7 @@
                                     title = "Posted by the customer";
                                 }
                                 /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
-                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"","&quot;") + "'>";
+                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
                             }
 
                     %>
@@ -136,9 +135,9 @@
                     <td>
                         <%if (isDeletedBy == 'N') {%>
                         <button type="button" class="trashbutton" title="Delete"
-                                data-target="#alert<%=user%>"
+                                data-target="#alert<%=user%>Delete"
                                 data-toggle="modal"
-                                onclick=setTmpId(<%=b.getId()%>,'tmpId')>
+                                onclick=setTmpId(<%=b.getId()%>,'tmpIdDel')>
                             <i class="far fa-trash-alt"></i>
                         </button>
                         <%} else /* è stato cancellato da qualcuno dunque mostro la deleted reason */ {%>
@@ -162,7 +161,7 @@
     </main>
 </div>
 
-<input type="hidden" id="tmpIdDel" value="">
+<input type="hidden" id="tmpIdDel" name="bookingID" value="" form="deleteBooking">
 <!--MODAL DI CONFERMA CANCELLAZIONE PRENOTAZIONE-->
 <div class="modal fade" id="alert<%=user%>Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -176,20 +175,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                You are attempting to delete a booking.<br><br>Are you sure you want to continue?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                You are attempting to delete a booking.<br><br>Please provide a deleted reason to be shown to the
+                customer
+                <form method="post" id="deleteBooking">
+                    <textarea style="width: 100%;resize: none" rows="5" required placeholder="Because..." name="deletedReason"></textarea>
 
-
-                <!-- TODO AGGIORNARE CON FUNZIONE GENERICA deleteById contenuta in admin.js come con show-customers -->
-
-
-                <button type="button" id="ultimateBtnDel" class="btn btn-primary"
-                        style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteEmployee(document.getElementById('tmpIdDel').value)">Delete
-                    employee
-                </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="ultimateBtnDel" class="btn btn-primary"
+                                style="background-color: rgba(255,5,3,0.66)">Delete booking
+                        </button>
+                        <input type="hidden" name="controllerAction" value="admin.Bookings.deleteBooking">
+                        <input type="hidden" class="form-control" value="<%=dataToShow%>" name="currentDate">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
