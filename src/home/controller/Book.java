@@ -1,9 +1,11 @@
 package home.controller;
 
-import model.dao.*;
+import model.dao.BookingDAO;
+import model.dao.DAOFactory;
+import model.dao.StructureDAO;
+import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.Booking;
-import model.mo.ExtendedProduct;
 import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
@@ -12,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Book {
@@ -143,6 +144,8 @@ public class Book {
             structureDAO = daoFactory.getStructureDAO();
 
             structure = structureDAO.fetchStructure();
+
+            System.err.println("VALORE DATE: " + date + " VALORE TIME " + time + " Valore USER " + user.getId() + " VALORE STRUCTURE " + structure.getId());
 
             /* Effettuo l'inserimento del nuovo appuntamento */
             try {

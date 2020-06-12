@@ -66,11 +66,11 @@
     <div class="d-flex justify-content-center" >
         <div class="col-4 pt-4 my-5 book-box" >
             <label for="appointment-date">Select a date:</label>
-            <input type="date" id="appointment-date" name="appointment date"
+            <input type="date" id="appointment-date" name="appointment date" required
                    onchange="findSlot('<%=structure.getId()%>' , this.value)">
             <hr>
             <label for="time">Choose an hour:</label>
-            <select id="time" name="time">
+            <select id="time" name="time" required>
             </select>
             <hr>
             <button class="btn btnheader active2"

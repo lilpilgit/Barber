@@ -25,10 +25,12 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
     @Override
     public Booking insert(LocalDate date, Time hourStart, User customer, Structure structure) throws DuplicatedObjectException {
+
+        /* Se deleted e' null la prenotazione e' valida (NON VIENE SETTATA LA isDeleted cosi' e' null di default)
+        , se 1 e' cancellata dall'utente, se 0 e' cancellata dall'amministratore*/
+
         /*Setto l'oggetto di cui andrò a verificarne l'esistenza prima di inserirlo nel DB*/
         Booking booking = new Booking();
-        /* Se deleted e' null la prenotazione e' valida, se 1 e' cancellata dall'utente, se 0 e' cancellata dall'amministratore*/
-        booking.setDeleted(null);
         booking.setDeletedReason(null);
         booking.setDate(date);
         booking.setHourStart(hourStart);
@@ -148,12 +150,11 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 
         booking.setId(newId);
 
-        query = "INSERT INTO BOOKING(ID, DELETED, DELETED_REASON, DATE, HOUR_START, ID_CUSTOMER, ID_STRUCTURE) VALUES (?,?,?,?,?,?,?);";
+        query = "INSERT INTO BOOKING(ID, DELETED_REASON, DATE, HOUR_START, ID_CUSTOMER, ID_STRUCTURE) VALUES (?,?,?,?,?,?);";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
             ps.setLong(i++, booking.getId());
-            ps.setBoolean(i++, booking.isDeleted());
             ps.setString(i++, booking.getDeletedReason());
             ps.setDate(i++, Date.valueOf(booking.getDate()));
             ps.setTime(i++, booking.getHourStart());
