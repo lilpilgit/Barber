@@ -145,7 +145,7 @@
                                     <span class="font-weight-bold"><h4><%=item.getRequiredQuantity()%></h4></span>
                                 </td>
 
-                                <td class="text-right align-middle">
+                                <td class="align-middle">
                                     <button class="btn btn-outline-secondary" title="See more about product"
                                             onclick="showProductFromOrder(<%=item.getId()%>)">Show more
                                     </button>

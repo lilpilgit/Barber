@@ -457,7 +457,7 @@ hr.light-100 {
 .up-count {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 0px;
-    margin-left: -4px;
+    margin-left: -2px;
     margin-top: -4px;
     border-top-left-radius: 0;
     border-top-right-radius: 6px;
@@ -466,7 +466,7 @@ hr.light-100 {
 .down-count {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    margin-right: -8px;
+    margin-right: -6px;
     margin-top: -4px;
     border-bottom-left-radius: 6px;
     border-top-left-radius: 6px;
@@ -1200,6 +1200,7 @@ var {
 
 .table td, .table th {
     vertical-align: middle; !important;
+    padding: 12px 0 12px 0;
 }
 
 

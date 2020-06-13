@@ -141,7 +141,7 @@
                     </h4>
                     <p class="card-text">&euro;<%=product.getPrice()%>
                     </p>
-                    <div class="container">
+                    <div class="container pb-2">
                         <button class="btn btn-dark" onclick=setProductForm('<%=product.getId()%>')>Show</button>
                     </div>
                 </div>
