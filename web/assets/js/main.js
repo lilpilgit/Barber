@@ -468,7 +468,7 @@ function findBooking(idCustomer) {
                     el = notBookedYet;
                     if (el != null)
                         notBookedYet.remove();
-                } else if (obj.alreadyBooked === "true" && deletedReason !== null) {
+                } else if (obj.alreadyBooked === "false" && deletedReason !== null) {
                     document.getElementById("ModalLabelBook").innerHTML = '<span ' +
                         'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
                     bookedDate.innerText = obj.date;

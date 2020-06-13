@@ -111,7 +111,7 @@
 
     {
     	"result": "<%=result%>",
-    	"alreadyBooked":"<%=alreadyBooked%>"<%if (deletedByAdmin && booking != null) {%>,
+    	"alreadyBooked":"<%=alreadyBooked%>"<%if (alreadyBooked || deletedByAdmin && booking != null) {%>,
     	"idBooking": "<%=booking.getId()%>",
     	"deleted": "<%=booking.isDeleted()%>",
     	"deletedReason": "<%=booking.getDeletedReason()%>",
