@@ -400,7 +400,7 @@ function findSlot(idStructure, pickedDate) {
         if (this.readyState === 4 && this.status === 200) {
             obj = JSON.parse(this.responseText);
             if (obj.result === "success") {
-                console.log("result: " + obj.result);
+                console.log(obj);
 
                 /* Prima di tutto rimuovo tutti gli elementi dalla select */
                 let sel = document.getElementById('time');

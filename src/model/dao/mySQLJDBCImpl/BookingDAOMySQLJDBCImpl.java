@@ -185,50 +185,50 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         return booking;
     }
 
-    @Override
-    public boolean alreadyBooked(User customer) {
-
-        /**
-         * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
-         */
-
-        /* ATTENZIONE: se DELETED = 0 significa he c'e' un appuntamento che e' stato annullato dall'admin*/
-        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND (DELETED IS NULL OR DELETED = 0);";
-        try {
-            int i = 1;
-            ps = connection.prepareStatement(query);
-            ps.setLong(i++, customer.getId());
-        } catch (SQLException e) {
-            System.err.println("Errore nella connection.prepareStatement");
-            throw new RuntimeException(e);
-        }
-        try {
-            rs = ps.executeQuery();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.executeQuery()");
-            throw new RuntimeException(e);
-        }
-        boolean exist; /* flag per sapere se esiste o meno l'appuntamento */
-        try {
-            exist = rs.next(); /*se esiste almeno una riga non posso effettuare l'appuntamento!!!*/
-        } catch (SQLException e) {
-            System.err.println("Errore nella exist = rs.next();");
-            throw new RuntimeException(e);
-        }
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nella rs.close()");
-            throw new RuntimeException(e);
-        }
-        try {
-            ps.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.close()");
-            throw new RuntimeException(e);
-        }
-        return exist;
-    }
+//    @Override
+//    public boolean alreadyBooked(User customer) {
+//
+//        /**
+//         * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
+//         */
+//
+//        /* ATTENZIONE: se DELETED = 0 significa he c'e' un appuntamento che e' stato annullato dall'admin*/
+//        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND (DELETED IS NULL OR DELETED = 0);";
+//        try {
+//            int i = 1;
+//            ps = connection.prepareStatement(query);
+//            ps.setLong(i++, customer.getId());
+//        } catch (SQLException e) {
+//            System.err.println("Errore nella connection.prepareStatement");
+//            throw new RuntimeException(e);
+//        }
+//        try {
+//            rs = ps.executeQuery();
+//        } catch (SQLException e) {
+//            System.err.println("Errore nella ps.executeQuery()");
+//            throw new RuntimeException(e);
+//        }
+//        boolean exist; /* flag per sapere se esiste o meno l'appuntamento */
+//        try {
+//            exist = rs.next(); /*se esiste almeno una riga non posso effettuare l'appuntamento!!!*/
+//        } catch (SQLException e) {
+//            System.err.println("Errore nella exist = rs.next();");
+//            throw new RuntimeException(e);
+//        }
+//        try {
+//            rs.close();
+//        } catch (SQLException e) {
+//            System.err.println("Errore nella rs.close()");
+//            throw new RuntimeException(e);
+//        }
+//        try {
+//            ps.close();
+//        } catch (SQLException e) {
+//            System.err.println("Errore nella ps.close()");
+//            throw new RuntimeException(e);
+//        }
+//        return exist;
+//    }
 
     @Override
     public boolean deleteBooking(Booking booking) {
@@ -370,14 +370,18 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          * Fetch only the last appointment that has not been canceled by the client
          * */
 
-        Booking booking = new Booking();
-        /* Trova solo l'ultima prenotazione che e' stata effettuata che si trova nello stato deleted = <null>
-        * oppure che e' stata cancellata dall'admin e quindi con stato deleted = 0. Inoltre, la prenotazione si
+        Booking booking = null;
+        /* Trova solo l'ultima prenotazione che e' stata effettuata. Inoltre, la prenotazione si
         * deve trovare in una data futura rispetto alla CURDATE() */
 
-        String query = "SELECT * FROM BOOKING WHERE (ID, ID_CUSTOMER) IN (SELECT MAX(ID) AS ID, ID_CUSTOMER " +
-                       "FROM BOOKING GROUP BY ID_CUSTOMER) AND (DELETED <> 1 OR DELETED IS NULL) " +
-                       "AND ID_CUSTOMER = ? AND DATE >= CURDATE() AND ID_STRUCTURE = ?;";
+//        String query = "SELECT * FROM BOOKING WHERE (ID, ID_CUSTOMER) IN (SELECT MAX(ID) AS ID, ID_CUSTOMER " +
+//                       "FROM BOOKING GROUP BY ID_CUSTOMER) AND (DELETED <> 1 OR DELETED IS NULL) " +
+//                       "AND ID_CUSTOMER = ? AND DATE >= CURDATE() AND ID_STRUCTURE = ?;";
+
+
+        String query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = 7 " +
+                "AND ID_STRUCTURE = 1 ORDER BY ID DESC LIMIT 1;";
+
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -395,6 +399,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
         try {
             if (rs.next()) { //the element with this id is present
+                booking = new Booking();
                 booking = readBooking(rs);
             }
         } catch (SQLException e) {

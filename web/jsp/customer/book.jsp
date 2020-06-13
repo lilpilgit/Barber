@@ -12,10 +12,10 @@
         resultPresent = true;
     }
 
-    boolean alreadyBooked = false;
-    if (request.getAttribute("alreadyBooked") != null) {
-        alreadyBooked = (Boolean) request.getAttribute("alreadyBooked");
-    }
+//    boolean alreadyBooked = false;
+//    if (request.getAttribute("alreadyBooked") != null) {
+//        alreadyBooked = (Boolean) request.getAttribute("alreadyBooked");
+//    }
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;
@@ -72,11 +72,11 @@
             </select>
             <hr>
             <button class="btn btnheader active2"
-                    <%if (!alreadyBooked) {%>
+
                     onclick="bookNow('<%=loggedUser.getId()%>', 'time', 'appointment-date')"
-                    <%} else {%>
-                    onclick="alert('You have already an appointment!')"
-                    <%}%>
+
+<%--                    onclick="alert('You have already an appointment!')"--%>
+
                     type="button" id='book-now'>
                 Book Now!
             </button>

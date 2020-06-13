@@ -26,7 +26,7 @@ public interface BookingDAO {
 
     Booking insert(LocalDate date, Time hourStart, User customer, Structure structure) throws DuplicatedObjectException;
 
-    boolean alreadyBooked(User customer);
+//    boolean alreadyBooked(User customer);
 
     boolean deleteBooking(Booking booking);
 

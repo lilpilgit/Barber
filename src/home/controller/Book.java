@@ -352,15 +352,15 @@ public class Book {
 
         /* Controllo se ci sta già un appuntamento prenotato */
         bookingDAO = daoFactory.getBookingDAO();
-        bookedStatus = bookingDAO.alreadyBooked(loggedUser);
-
-        System.err.println("PRENOTAZIONE GIA' EFFETTUATA? ==> " + bookedStatus);
-
+//        bookedStatus = bookingDAO.alreadyBooked(loggedUser);
+//
+//        System.err.println("PRENOTAZIONE GIA' EFFETTUATA? ==> " + bookedStatus);
 
         /* 3) Attributo che indica quale struttura e' selezionata (Nel nostro caso solo una) */
         request.setAttribute("structure", structure);
-        /* 4) Attributo che indica se un cliente ha gia' effettuato un appuntamento futuro */
-        request.setAttribute("alreadyBooked", bookedStatus);
+
+//        /* 4) Attributo che indica se un cliente ha gia' effettuato un appuntamento futuro */
+//        request.setAttribute("alreadyBooked", bookedStatus);
 
     }
 }

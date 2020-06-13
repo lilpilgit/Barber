@@ -28,11 +28,10 @@
     ArrayList<Booking> bookings = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
-    boolean alreadyBooked = false;
-
     Long idCustomer = null; /* parametro che indica l'id del cliente che sta cliccando su booking */
 
-    boolean changed = false;
+    boolean alreadyBooked = false;
+    boolean deletedByAdmin = false;
 
     try {
         /* Inizializzo il cookie di sessione */
@@ -59,10 +58,6 @@
 
         idCustomer = Long.valueOf(request.getParameter("idCustomer"));
 
-        alreadyBooked = bookingDAO.alreadyBooked(loggedUser);
-
-        /* Se non sono stati effettuati appuntamenti, eseguo la getLastBooking che mi trova l'ultimo appuntamento */
-        if (alreadyBooked) {
         structureDAO = daoFactory.getStructureDAO();
 
         /* Faccio il fetch dell'unica struttura che ho nel db */
@@ -70,7 +65,7 @@
 
         /* Creo l'oggetto booking che conterra' tutte le informazioni riferite allo status dell'ultimo appuntamento */
         booking = bookingDAO.getLastBooking(idCustomer, structure.getId());
-        }
+
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
@@ -98,13 +93,29 @@
         }
     }
 
+
+    /* Nel caso in cui la bookingDAO.getLastBooking(idCustomer, structure.getId()); ritorni un oggetto diverso da null
+       significa che c'e' una prenotazione nel db riferita a quell'utente.
+       A questo punto se il valore di DELETED nel db e' null, significa che c'e' una prenotazione che non e' stata
+       cancellata ne' dall'amministratore, ne' dal cliente. Quindi setto alreadyBooked a true per impedire al cliente
+       di effettuare una nuova prenotazione.
+     */
+
+    if (booking != null)
+         if (booking.isDeleted() == null)
+               alreadyBooked = true;
+         if (booking.isDeleted() == false)
+             deletedByAdmin = true;
+
     result = "success";
+
+
 
 %>
 
     {
     	"result": "<%=result%>",
-    	"alreadyBooked":"<%=alreadyBooked%>"<%if (alreadyBooked) {%>,
+    	"alreadyBooked":"<%=alreadyBooked%>"<%if (deletedByAdmin && booking != null) {%>,
     	"idBooking": "<%=booking.getId()%>",
     	"deleted": "<%=booking.isDeleted()%>",
     	"deletedReason": "<%=booking.getDeletedReason()%>",
