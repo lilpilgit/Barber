@@ -192,7 +192,8 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
          * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
          */
 
-        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND DELETED IS NULL;";
+        /* ATTENZIONE: se DELETED = 0 significa he c'e' un appuntamento che e' stato annullato dall'admin*/
+        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND (DELETED IS NULL OR DELETED = 0);";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
