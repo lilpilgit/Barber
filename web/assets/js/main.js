@@ -442,6 +442,12 @@ function findBooking(idCustomer) {
     let time = null;
     let deletedReason = "";
     let xhttp = new XMLHttpRequest();
+    let bookedDate = document.getElementById("booked-date");
+    let bookedTime = document.getElementById("booked-time");
+    let bookingId = document.getElementById("booking-id");
+    let notBookedYet = document.getElementById("not-booked-yet");
+    let deleteBookBtn = document.getElementById("delete-book-btn");
+    let bookTableResult = document.getElementById("book-table-result");
 
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
@@ -455,25 +461,25 @@ function findBooking(idCustomer) {
                 else deletedReason = obj.deletedReason;
 
                 if (obj.alreadyBooked === "true" && deletedReason === null) {
-                    document.getElementById("booked-date").innerText = obj.date;
+                    bookedDate.innerText = obj.date;
                     time = obj.hourStart.split(':');
-                    document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
-                    document.getElementById("booking-id").value = obj.idBooking;
-                    el = document.getElementById("not-booked-yet");
+                    bookedTime.innerText = (time[0] + ":" + time[1]);
+                    bookingId.value = obj.idBooking;
+                    el = notBookedYet;
                     if (el != null)
-                        document.getElementById("not-booked-yet").remove();
+                        notBookedYet.remove();
                 } else if (obj.alreadyBooked === "true" && deletedReason !== null) {
                     document.getElementById("ModalLabelBook").innerHTML = '<span ' +
                         'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
-                    document.getElementById("booked-date").innerText = obj.date;
+                    bookedDate.innerText = obj.date;
                     time = obj.hourStart.split(':');
-                    document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
-                    document.getElementById("booking-id").value = obj.idBooking;
-                    el = document.getElementById("not-booked-yet");
+                    bookedTime.innerText = (time[0] + ":" + time[1]);
+                    bookingId.value = obj.idBooking;
+                    el = notBookedYet;
                     if (el != null)
-                        document.getElementById("not-booked-yet").remove();
-                    el = document.getElementById("delete-book-btn");
-                    document.getElementById("delete-book-btn").remove();
+                        notBookedYet.remove();
+                    el = deleteBookBtn;
+                    deleteBookBtn.remove();
                     document.getElementById('booking-text-area').innerHTML = '<textarea style="width: 100%;' +
                         'resize: none" rows="5" name="deletedReason" readonly>Deleted reason: '+ deletedReason +'</textarea>' +
                         '<button class="btn btnheader active2 mt-3" type="button" id="showBookNow"\n' +
@@ -482,9 +488,9 @@ function findBooking(idCustomer) {
                         '                    </button>';
                 } else if (obj.alreadyBooked === "false" ) {
                     document.getElementById("ModalLabelBook").innerHTML = "";
-                    el = document.getElementById("book-table-result");
+                    el = bookTableResult;
                     if (el != null) {
-                        document.getElementById("book-table-result").remove();
+                        bookTableResult.remove();
                     }
                 }
             } else if (obj.result === "fail") {
