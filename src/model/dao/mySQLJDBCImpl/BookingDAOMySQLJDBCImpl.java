@@ -379,8 +379,8 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
 //                       "AND ID_CUSTOMER = ? AND DATE >= CURDATE() AND ID_STRUCTURE = ?;";
 
 
-        String query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = 7 " +
-                "AND ID_STRUCTURE = 1 ORDER BY ID DESC LIMIT 1;";
+        String query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? " +
+                "AND ID_STRUCTURE = ? ORDER BY ID DESC LIMIT 1;";
 
         try {
             int i = 1;
@@ -399,7 +399,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
         try {
             if (rs.next()) { //the element with this id is present
-                booking = new Booking();
                 booking = readBooking(rs);
             }
         } catch (SQLException e) {
@@ -490,7 +489,11 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             throw new RuntimeException(e);
         }
         try {
-            booking.setDeleted(rs.getBoolean("DELETED"));
+            boolean status = rs.getBoolean("DELETED");
+            /* se è null significa che la prenotazione è ancora valida dunque lascio a null il wrapper Boolean deleted */
+            if (!rs.wasNull()) {
+                booking.setDeleted(status); /* metterò il valore true o false che sia */
+            }
         } catch (SQLException e) {
             System.err.println("Errore nella rs.getBoolean(\"DELETED\")");
             throw new RuntimeException(e);

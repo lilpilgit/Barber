@@ -21,11 +21,9 @@
     Structure structure = null;
     StructureDAO structureDAO = null;
     User loggedUser = null;
-    UserDAO userDAO = null;
-    User user = null;
     BookingDAO bookingDAO = null;
     Booking booking = null;
-    ArrayList<Booking> bookings = null;
+
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
     Long idCustomer = null; /* parametro che indica l'id del cliente che sta cliccando su booking */
@@ -56,15 +54,15 @@
 
         bookingDAO = daoFactory.getBookingDAO();
 
-        idCustomer = Long.valueOf(request.getParameter("idCustomer"));
-
         structureDAO = daoFactory.getStructureDAO();
 
         /* Faccio il fetch dell'unica struttura che ho nel db */
         structure = structureDAO.fetchStructure();
 
         /* Creo l'oggetto booking che conterra' tutte le informazioni riferite allo status dell'ultimo appuntamento */
-        booking = bookingDAO.getLastBooking(idCustomer, structure.getId());
+        booking = bookingDAO.getLastBooking(loggedUser.getId(), structure.getId());
+
+        System.err.println("VALORE DI BOOOOKIING: " + booking);
 
 
         /* Commit fittizio */
@@ -101,11 +99,12 @@
        di effettuare una nuova prenotazione.
      */
 
-    if (booking != null)
-         if (booking.isDeleted() == null)
-               alreadyBooked = true;
-         if (booking.isDeleted() == false)
+    if (booking != null) {
+       if (booking.isDeleted() == null)
+            alreadyBooked = true;
+       else if (!booking.isDeleted())
              deletedByAdmin = true;
+       }
 
     result = "success";
 
