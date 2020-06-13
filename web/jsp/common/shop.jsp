@@ -95,7 +95,7 @@
         <%}%>
     </select>
     <!-- Bottone che submitta la form filterForm con gli hidden input il cui value viene modificati con la setFormFilter() e i relativi listener -->
-    <button type="submit" form="filterForm" class="btn button button1 ml-3 active2" id='filter_btn'>Filter</button>
+    <button type="submit" form="filterForm" class="btn ml-3 active2" id='filter_btn'>Filter</button>
 </div>
 <form name="filterForm" id="filterForm" method="post">
     <input type="hidden" name="controllerAction" value="home.Shop.showShop">

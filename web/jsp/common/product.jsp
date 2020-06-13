@@ -92,19 +92,19 @@
                     <% if (loggedOn && loggedUser.getType() == 'C') {%>
                     <!--COUNTER OF QUANTITY-->
                     <div class="text-center" id="counter_qta" style="height: 73px;" class='main'>
-                        <button id="minus_button" class='down_count btn btn-info' title='Down'><i
+                        <button id="minus_button" class='down-count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
                         <label for="maxOrderQuantity"></label>
                         <input id="maxOrderQuantity" class='counter' name="desiredQty" type="number" max="<%=product.getMaxOrderQuantity()%>" min="1"
                                readonly form="action_product"
                                value='1' required/>
-                        <button id="plus_button" class='up_count btn btn-info' title='Up'><i class='fa fa-plus'></i>
+                        <button id="plus_button" class='up-count btn btn-info' title='Up'><i class='fa fa-plus'></i>
                         </button>
                     </div>
                     <!----------------------->
                     <div class="action text-center">
                         <button class="add-to-cart btn btn-outline-gold" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
-                                class="fas fa-shopping-cart"></span></button>
+                                class="fas fa-shopping-basket"></span></button>
                         <button class="btn like <%=(inWishlist) ? "btn-gold-active" : "btn-outline-gold"%>"
                                 type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
                                 onclick="<%=(inWishlist) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=product.getId() + ");"%>">
