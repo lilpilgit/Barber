@@ -265,16 +265,16 @@ public class Book {
             /* è necessario prendersi solo il bookingDAO per poter settare il flag DELETED e la DELETED_REASON */
             bookingDAO = daoFactory.getBookingDAO();
 
-            /* trovo la prenotazione da flaggare come cancellata (uso findBookingByIdForAdmin perche' mi interessano
+            /* trovo la prenotazione da flaggare come cancellata (uso findBookingById perche' mi interessano
                le prenotazioni con stato null dato che quelle con 1 non le vedo, e quelle con 0 vengono gestite in sola lettura) */
-            bookingToDelete = bookingDAO.findBookingByIdForAdmin(idToDelete);
+            bookingToDelete = bookingDAO.findBookingById(idToDelete);
 
             /* aggiungo i campi che la rendono cancellata dall'utente */
             bookingToDelete.setDeletedReason(deletedReason);
 
             bookingToDelete.setDeleted(true); /* 1 quando viene modificato dal customer */
 
-            deleted = bookingDAO.deleteForAdmin(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
+            deleted = bookingDAO.deleteBooking(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
 
             /* Setto l'attributo alreadyBooked */
             commonView(daoFactory,loggedUser,request);

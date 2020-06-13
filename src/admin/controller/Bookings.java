@@ -137,14 +137,14 @@ public class Bookings {
             bookingDAO = daoFactory.getBookingDAO();
 
             /* trovo la prenotazione da flaggare come cancellata */
-            bookingToDelete = bookingDAO.findBookingByIdForAdmin(idToDelete);
+            bookingToDelete = bookingDAO.findBookingById(idToDelete);
 
             /* aggiungo i campi che la rendono cancellata dall'admin */
             bookingToDelete.setDeletedReason(deletedReason);
 
             bookingToDelete.setDeleted(false); /* 0 quando viene modificato dall'admin */
 
-            deleted = bookingDAO.deleteForAdmin(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
+            deleted = bookingDAO.deleteBooking(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
 
             commonView(daoFactory,currentDate, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
 

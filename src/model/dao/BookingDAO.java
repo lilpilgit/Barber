@@ -28,9 +28,9 @@ public interface BookingDAO {
 
     boolean alreadyBooked(User customer);
 
-    boolean deleteForAdmin(Booking booking);
+    boolean deleteBooking(Booking booking);
 
-    Booking findBookingByIdForAdmin(Long id);
+    Booking findBookingById(Long id);
 
     Booking getLastBooking(Long idCustomer, Long idStructure);
 

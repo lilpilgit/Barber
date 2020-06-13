@@ -230,7 +230,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     }
 
     @Override
-    public boolean deleteForAdmin(Booking booking) {
+    public boolean deleteBooking(Booking booking) {
         /**
          * If you are userType 'A'
          * Flag with 0 DELETED column in USER table and set DELETED_REASON
@@ -317,7 +317,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     }
 
     @Override
-    public Booking findBookingByIdForAdmin(Long id) {
+    public Booking findBookingById(Long id) {
         /**
          * Fetch only booking with DELETED == NULL, i.e. which has not been canceled by admin or customer
          * */
