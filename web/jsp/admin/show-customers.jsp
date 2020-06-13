@@ -1,5 +1,5 @@
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String user = "Customer";
@@ -51,7 +51,7 @@
 <html lang="en">
 <%@include file="/templates/admin-head.jsp" %>
 <body>
-<%@include file="../../templates/admin-sidebar.jsp"%>
+<%@include file="../../templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
@@ -59,7 +59,7 @@
             <div class="col-auto">
                 <%if (areCustomers) {%>
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                         <th scope="col">N°</th>
                         <th scope="col">Id</th>
@@ -83,20 +83,25 @@
                         </td>
                         <td><%=c.getEmail()%>
                         </td>
-                        <td><%=c.getAddress()%>
+                        <%
+                            String customerAddressFormatted = c.getAddress().replace('|', ',');
+                            customerAddressFormatted = customerAddressFormatted.substring(0, customerAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                        %>
+                        <td><%=customerAddressFormatted%>
                         </td>
                         <td><%=c.getPhone()%>
                         </td>
                         <td>
-                            <button type="button" class="tablebutton" style="color: <%=blockedStatus ? "green" : "red"%>;"
+                            <button type="button" class="tablebutton"
+                                    style="color: <%=blockedStatus ? "green" : "red"%>;"
                                     title="<%=blockedStatus ? "Unblock" : "Block"%>"
                                     data-target="#alertBanCust"
                                     data-toggle="modal"
                                     onclick=<% if(blockedStatus) { %>
                                             "unBlockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
-                            <% } else { %>
-                                            "blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
-                            <%}%>
+                                <% } else { %>
+                                "blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
+                                <%}%>
                                 <i class="fas <%=c.isBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
@@ -143,7 +148,8 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpId').value, '<%=user%>','<%=controller%>')">Delete <%=user%>
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=user%>','<%=controller%>')">
+                    Delete <%=user%>
                 </button>
             </div>
         </div>
@@ -152,7 +158,7 @@
 <!--FINE MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
 
 <script>
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
 
     })
 

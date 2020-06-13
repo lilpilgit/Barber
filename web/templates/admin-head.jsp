@@ -18,7 +18,7 @@
             crossorigin="anonymous"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet">
     <link href="assets/css/style-admin.css" rel="stylesheet">
     <script type="text/javascript" src="assets/js/admin.js"></script>
 </head>

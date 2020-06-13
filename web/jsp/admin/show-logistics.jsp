@@ -59,7 +59,7 @@
             <div class="col-auto">
                 <%--        <%if (areEmployees) {%>--%>
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                         <th scope="col">N°</th>
                         <th scope="col">ID</th>

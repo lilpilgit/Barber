@@ -79,7 +79,7 @@
             <div class="col-auto">
                 <%if (areBookings) {%>
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                         <th scope="col">N°</th>
                         <th scope="col">Hour Start</th>
@@ -124,7 +124,8 @@
                     <%=tr%>
                     <th scope="row"><%=i++%>
                     </th>
-                    <td><%=b.getHourStart()%>
+                    <%String[] splittedTime = b.getHourStart().toString().split(":");%>
+                    <td><%=splittedTime[0] + ":" + splittedTime[1]%>
                     </td>
                     <td><%=b.getCustomer().getName()%> , <%=b.getCustomer().getSurname()%>
                     </td>

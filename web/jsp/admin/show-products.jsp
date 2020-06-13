@@ -85,7 +85,7 @@
         </div>
         <div class="row justify-content-center">
             <form method="post">
-                <button type="submit" class="btn btn-default"><i class="fad fa-globe-europe"></i>Show all</button>
+                <button type="submit" class="button6"><i class="fas fa-globe-europe"></i> Show all</button>
                 <input type="hidden" name="controllerAction" value="admin.Products.showProducts">
             </form>
         </div>
@@ -93,12 +93,12 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                         <th scope="col">N°</th>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Maximum Order Quantity</th>
+                        <th scope="col" title="Maximum Order Quantity for each Customer">M.O.Q</th>
                         <th scope="col">Producer</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>

@@ -85,7 +85,7 @@
         </div>
         <div class="row justify-content-center">
             <form method="post">
-                <button type="submit" class="btn btn-default"><i class="fad fa-globe-europe"></i>Show all</button>
+                <button type="submit" class="button6"><i class="fas fa-globe-europe"></i> Show all</button>
                 <input type="hidden" name="controllerAction" value="admin.Staff.showEmployees">
             </form>
         </div>
@@ -93,7 +93,7 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                     <tr>
                         <th scope="col">N°</th>
                         <th scope="col">ID</th>
@@ -124,7 +124,11 @@
                         </td>
                         <td><%=e.getEmail()%>
                         </td>
-                        <td><%=e.getAddress()%>
+                        <%
+                            String employeeAddressFormatted = e.getAddress().replace('|', ',');
+                            employeeAddressFormatted = employeeAddressFormatted.substring(0, employeeAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                        %>
+                        <td><%=employeeAddressFormatted%>
                         </td>
                         <td>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
