@@ -440,6 +440,7 @@ function findBooking(idCustomer) {
     let obj = null;
     let el = null;
     let time = null;
+    let deletedReason = "";
     let xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {
@@ -447,16 +448,39 @@ function findBooking(idCustomer) {
             obj = JSON.parse(this.responseText);
             if (obj.result === "success") {
                 console.log(obj);
-                if (obj.alreadyBooked === "true") {
+                /* Se non e' presente la deletedReason nel db, nel Json trovero' deletedReason = "null" ma essendo stringa
+                *  devo intercettare il valore ed assegnarci un valore null che non sia di tipo stringa */
+                if (obj.deletedReason === "null")
+                    deletedReason = null;
+                else deletedReason = obj.deletedReason;
+
+                if (obj.alreadyBooked === "true" && deletedReason === null) {
                     document.getElementById("booked-date").innerText = obj.date;
                     time = obj.hourStart.split(':');
                     document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
                     document.getElementById("booking-id").value = obj.idBooking;
-                    console.log("VALUE OF INPUT==> " + document.getElementById("booking-id").value)
                     el = document.getElementById("not-booked-yet");
                     if (el != null)
                         document.getElementById("not-booked-yet").remove();
-                } else if (obj.alreadyBooked === "false") {
+                } else if (obj.alreadyBooked === "true" && deletedReason !== null) {
+                    document.getElementById("ModalLabelBook").innerHTML = '<span ' +
+                        'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
+                    document.getElementById("booked-date").innerText = obj.date;
+                    time = obj.hourStart.split(':');
+                    document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
+                    document.getElementById("booking-id").value = obj.idBooking;
+                    el = document.getElementById("not-booked-yet");
+                    if (el != null)
+                        document.getElementById("not-booked-yet").remove();
+                    el = document.getElementById("delete-book-btn");
+                    document.getElementById("delete-book-btn").remove();
+                    document.getElementById('booking-text-area').innerHTML = '<textarea style="width: 100%;' +
+                        'resize: none" rows="5" name="deletedReason" readonly>Deleted reason: '+ deletedReason +'</textarea>' +
+                        '<button class="btn btnheader active2 mt-3" type="button" id="showBookNow"\n' +
+                        '                            onclick=setNavFormHome("home.Book.showBook")>\n' +
+                        '                        Book now!\n' +
+                        '                    </button>';
+                } else if (obj.alreadyBooked === "false" ) {
                     document.getElementById("ModalLabelBook").innerHTML = "";
                     el = document.getElementById("book-table-result");
                     if (el != null) {
