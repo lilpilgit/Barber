@@ -67,10 +67,11 @@
             <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto"></ul>
                 <form class="form-inline my-2 my-md-0" method="post">
-                    <input class="form-control" type="text" name="searchString" id="searchString" placeholder="Search"
+                    <input class="form-control" type="text" name="searchString" id="searchString"
+                           <%if (areEmployees) { if (searchedString != null) {%>placeholder="<%=searchedString%>"<%} else {%>placeholder="Search"<%}}%>
                            required>
                     <input type="hidden" name="controllerAction" value="admin.Staff.searchStaff">
-                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="btn btn-default"><i class="fas fa-search" style="color: #01c5fc"></i></button>
                 </form>
             </div>
         </nav>
@@ -78,14 +79,14 @@
             if (areEmployees) {
                 if (searchedString != null) {
         %>
-        <div class="row justify-content-center">
+<%--        <div class="row justify-content-center">
 
             <h3>You searched for: <%=searchedString%>
             </h3><br>
-        </div>
+        </div>--%>
         <div class="row justify-content-center">
             <form method="post">
-                <button type="submit" class="button6"><i class="fas fa-globe-europe"></i> Show all</button>
+                <button type="submit" class="button6" title="Undo search"><i class="fas fa-globe-europe"></i>Show all</button>
                 <input type="hidden" name="controllerAction" value="admin.Staff.showEmployees">
             </form>
         </div>

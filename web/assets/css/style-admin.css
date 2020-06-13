@@ -665,6 +665,10 @@ table i {
     list-style: none;
 }
 
+.navbar ul {
+    margin-bottom: 0 !important;
+}
+
 .legend li {
     float: left;
     margin-right: 10px;
@@ -676,7 +680,7 @@ table i {
     float: left;
     width: 12px;
     height: 12px;
-    margin: 2px;
+    margin: 7px 5px;
 }
 
 /* your colors */
@@ -692,7 +696,7 @@ table i {
 /*https://fdossena.com/?p=html5cool/buttons/i.frag*/
 button.button6 {
     display: inline-block;
-    padding: 0.7em 1.4em;
+    padding: 0.5em 0.6em;
     margin: 0 0.3em 0.3em 0;
     border-radius: 0.15em;
     box-sizing: border-box;

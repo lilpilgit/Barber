@@ -53,9 +53,9 @@
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
-        <span class="text-center"><h4>Customer's orders</h4></span>
-
+        <span class="text-center"><h3><b>CUSTOMER'S ORDERS</b></h3></span>
         <div class="row justify-content-center">
+            <% if (areOrders) { %>
             <div class="col-auto">
                 <%--        <%if (areEmployees) {%>--%>
                 <table class="table table-hover table-bordered">
@@ -74,7 +74,7 @@
                     <%
                         int i = 1; /* contatore per il numero di ordini */
                         String popoverSellDate = "";
-                        if (areOrders) {
+                        /*if (areOrders) {*/
                             for (Order l : logisticOrders) {
                                 int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
                                 boolean canceled = false; /* flag per sapere se è cancellato */
@@ -111,16 +111,15 @@
                         <td><%=l.getStatus()%>
                         </td>
                         <td><%if (canceled) {%>
-                            <i class="fas fa-times-circle"></i>
+                            <i class="fas fa-times-circle" title="Order deleted"></i>
                             <%}else if(delivered){%>
-                            <i class="fas fa-clipboard-check"></i>
+                            <i class="fas fa-clipboard-check" title="Order delivered"></i>
                             <%}else {%>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     data-target="#alertSetStatusOrder"
                                     data-toggle="modal"
                                     onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');setRadiosStatusOrder(<%=valueStatus%>)">
-                                <i
-                                        class="fas fa-pencil-alt"></i>
+                                    <i class="fas fa-pencil-alt"></i>
                             </button>
                             <%}%>
                         </td>
@@ -133,7 +132,7 @@
         <%
         } else {
         %>
-        <h1>There aren't orders...</h1>
+        <h1>There aren't orders :(</h1>
         <%}%>
     </main>
 </div>
