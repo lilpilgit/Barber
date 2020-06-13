@@ -460,7 +460,7 @@ function findBooking(idCustomer) {
                     deletedReason = null;
                 else deletedReason = obj.deletedReason;
 
-                if (obj.alreadyBooked === "true" && deletedReason === null) {
+                if (obj.alreadyBooked === "true") {
                     bookedDate.innerText = obj.date;
                     time = obj.hourStart.split(':');
                     bookedTime.innerText = (time[0] + ":" + time[1]);
@@ -468,7 +468,7 @@ function findBooking(idCustomer) {
                     el = notBookedYet;
                     if (el != null)
                         notBookedYet.remove();
-                } else if (obj.alreadyBooked === "false" && deletedReason !== null) {
+                } else if (obj.alreadyBooked === "false" && obj.deletedReason !== undefined) {
                     document.getElementById("ModalLabelBook").innerHTML = '<span ' +
                         'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
                     bookedDate.innerText = obj.date;
