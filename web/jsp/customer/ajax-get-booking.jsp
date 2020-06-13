@@ -62,9 +62,6 @@
         /* Creo l'oggetto booking che conterra' tutte le informazioni riferite allo status dell'ultimo appuntamento */
         booking = bookingDAO.getLastBooking(loggedUser.getId(), structure.getId());
 
-        System.err.println("VALORE DI BOOOOKIING: " + booking);
-
-
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
 

@@ -185,51 +185,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         return booking;
     }
 
-//    @Override
-//    public boolean alreadyBooked(User customer) {
-//
-//        /**
-//         * Il metodo permette di verificare se un cliente ha gia' effettuato un appuntamento
-//         */
-//
-//        /* ATTENZIONE: se DELETED = 0 significa he c'e' un appuntamento che e' stato annullato dall'admin*/
-//        query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? AND (DELETED IS NULL OR DELETED = 0);";
-//        try {
-//            int i = 1;
-//            ps = connection.prepareStatement(query);
-//            ps.setLong(i++, customer.getId());
-//        } catch (SQLException e) {
-//            System.err.println("Errore nella connection.prepareStatement");
-//            throw new RuntimeException(e);
-//        }
-//        try {
-//            rs = ps.executeQuery();
-//        } catch (SQLException e) {
-//            System.err.println("Errore nella ps.executeQuery()");
-//            throw new RuntimeException(e);
-//        }
-//        boolean exist; /* flag per sapere se esiste o meno l'appuntamento */
-//        try {
-//            exist = rs.next(); /*se esiste almeno una riga non posso effettuare l'appuntamento!!!*/
-//        } catch (SQLException e) {
-//            System.err.println("Errore nella exist = rs.next();");
-//            throw new RuntimeException(e);
-//        }
-//        try {
-//            rs.close();
-//        } catch (SQLException e) {
-//            System.err.println("Errore nella rs.close()");
-//            throw new RuntimeException(e);
-//        }
-//        try {
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.err.println("Errore nella ps.close()");
-//            throw new RuntimeException(e);
-//        }
-//        return exist;
-//    }
-
     @Override
     public boolean deleteBooking(Booking booking) {
         /**
