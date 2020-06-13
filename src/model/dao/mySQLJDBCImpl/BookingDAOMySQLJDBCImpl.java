@@ -232,18 +232,22 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
     @Override
     public boolean deleteForAdmin(Booking booking) {
         /**
+         * If you are userType 'A'
          * Flag with 0 DELETED column in USER table and set DELETED_REASON
+         * If you are userType 'C'
+         * Flag with 1 DELETED column in USER table and set DELETED_REASON
          *
          * @return true if delete go correctly otherwise raise exception
          */
         query
                 = "UPDATE BOOKING"
-                + " SET DELETED = 0, "
+                + " SET DELETED = ?, "
                 + "     DELETED_REASON = ?"
                 + "WHERE ID = ?";
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
+            ps.setBoolean(i++, booking.isDeleted());
             ps.setString(i++, booking.getDeletedReason());
             ps.setLong(i++, booking.getId());
         } catch (SQLException e) {

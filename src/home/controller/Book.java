@@ -219,6 +219,123 @@ public class Book {
         }
     }
 
+    public static void deleteBooking(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Instantiates a BookingDAO to be able to delete delete booking from Database and set the deletedReason.
+         */
+        Long idToDelete = null; /* id del booking ricevuto da cancellare*/
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        User loggedUser = null;
+        DAOFactory daoFactory = null;
+        BookingDAO bookingDAO = null; /* DAO Necessario per poter effettuare la cancellazione del booking */
+        Booking bookingToDelete = null;
+        String deletedReason = null;
+        LocalDate currentDate = null;
+        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        boolean deleted = false;
+
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* Fetching dell'id dell'appuntamento da cancellare proveniente dal form dentro la pagina show-bookings.jsp */
+            System.err.println("VALORE DI bookingID: " + request.getParameter("bookingID"));
+            idToDelete = Long.valueOf(request.getParameter("bookingID"));
+            /* Fetching della deleted reason */
+            deletedReason = request.getParameter("deletedReason");
+
+            /* DAOFactory per manipolare i dati sul DB */
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            /* Inizio la transazione sul Database*/
+            daoFactory.beginTransaction();
+
+            /* è necessario prendersi solo il bookingDAO per poter settare il flag DELETED e la DELETED_REASON */
+            bookingDAO = daoFactory.getBookingDAO();
+
+            /* trovo la prenotazione da flaggare come cancellata (uso findBookingByIdForAdmin perche' mi interessano
+               le prenotazioni con stato null dato che quelle con 1 non le vedo, e quelle con 0 vengono gestite in sola lettura) */
+            bookingToDelete = bookingDAO.findBookingByIdForAdmin(idToDelete);
+
+            /* aggiungo i campi che la rendono cancellata dall'utente */
+            bookingToDelete.setDeletedReason(deletedReason);
+
+            bookingToDelete.setDeleted(true); /* 1 quando viene modificato dal customer */
+
+            deleted = bookingDAO.deleteForAdmin(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
+
+            /* Setto l'attributo alreadyBooked */
+            commonView(daoFactory,loggedUser,request);
+
+            /* Commit della transazione sul db */
+            daoFactory.commitTransaction();
+
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
+
+            if (deleted) {
+                /* Se l'impiegato è stato  cancellato committo la transazione */
+                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato cancellato correttamente .*/
+                applicationMessage = "Booking deleted SUCCESSFULLY. We are sorry that you had to cancel your appointment.";
+            }
+
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+                /* Se viene fatto il rollback della transazione il dipendente non è stato cancellato .*/
+                applicationMessage = "Booking cancellation ERROR.";
+
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close della transazione sul db */
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+
+            } catch (Throwable t) {
+            }
+        }
+
+        /* Setto gli attributi della request che verranno processati dalla show-employees.jsp */
+        /* 1) Attributo che indica se è loggato oppure no */
+        request.setAttribute("loggedOn", loggedUser != null);
+        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+        request.setAttribute("loggedUser", loggedUser);
+        /* 3) il messaggio da visualizzare nella pagina di elenco solo se non è null */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
+         *     la show-bookings.jsp per consentire altre cancellazioni */
+        request.setAttribute("viewUrl", "customer/book");
+        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        if (deleted) {
+            /* SUCCESS */
+            request.setAttribute("result", "success");
+        } else {
+            /* FAIL */
+            request.setAttribute("result", "fail");
+        }
+    }
+
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 
         /**

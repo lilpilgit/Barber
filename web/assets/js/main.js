@@ -409,10 +409,8 @@ function findSlot(idStructure, pickedDate) {
                 }
 
                 /* Inserisco gli orari disponibili all'interno della select */
-                for (let i = 0; i < obj.availableTimes.length; i++) {
-                    console.log(obj.availableTimes[i]);
+                for (let i = 0; i < obj.availableTimes.length; i++)
                     addOption(obj.availableTimes[i]);
-                }
 
                 if (obj.availableTimes.length === 0)
                     addOption("Change date :(");
@@ -426,7 +424,6 @@ function findSlot(idStructure, pickedDate) {
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate);
-    console.log("The structure open at:" + idStructure);
     console.log("Customer selected date:" + pickedDate);
 
 }
@@ -441,6 +438,7 @@ function findBooking(idCustomer) {
 
     let result = "fail";
     let obj = null;
+    let el = null;
     let time = null;
     let xhttp = new XMLHttpRequest();
 
@@ -448,16 +446,22 @@ function findBooking(idCustomer) {
         if (this.readyState === 4 && this.status === 200) {
             obj = JSON.parse(this.responseText);
             if (obj.result === "success") {
-                console.log("result: " + obj.result);
                 console.log(obj);
                 if (obj.alreadyBooked === "true") {
                     document.getElementById("booked-date").innerText = obj.date;
                     time = obj.hourStart.split(':');
                     document.getElementById("booked-time").innerText = (time[0] + ":" + time[1]);
-                    document.getElementById("not-booked-yet").remove();
+                    document.getElementById("booking-id").value = obj.idBooking;
+                    console.log("VALUE OF INPUT==> " + document.getElementById("booking-id").value)
+                    el = document.getElementById("not-booked-yet");
+                    if (el != null)
+                        document.getElementById("not-booked-yet").remove();
                 } else if (obj.alreadyBooked === "false") {
                     document.getElementById("ModalLabelBook").innerHTML = "";
-                    document.getElementById("book-table-result").remove();
+                    el = document.getElementById("book-table-result");
+                    if (el != null) {
+                        document.getElementById("book-table-result").remove();
+                    }
                 }
             } else if (obj.result === "fail") {
                 alert("ERRORE NEL BACKEND!!");
@@ -468,7 +472,6 @@ function findBooking(idCustomer) {
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer);
-    console.log("The logged user is: " + idCustomer);
 }
 
 function bookNow(loggedUserId, selectedTime, selectedDate) {
@@ -488,6 +491,32 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
     form.elements['selected_time'].value = formattedTime;
     console.log("Selected time: "+ formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
     form.submit();
+}
+
+function showOrRemoveTextArea(option) {
+    if (option === "show") {
+        document.getElementById("delete-book-btn").remove();
+        document.getElementById('booking-text-area').innerHTML = '<form method="post" id="deleteBookingForm">\n' +
+            '                        <textarea style="width: 100%;resize: none" rows="5" required="" placeholder="Because..." name="deletedReason"></textarea>\n' +
+            '\n' +
+            '                        <div class="modal-footer">\n' +
+            '                            <button type="button" class="btn btn-secondary" title="abort-operation" onclick=showOrRemoveTextArea("remove")>Cancel</button>\n' +
+            '                            <button type="submit" id="ultimateBtnDel" class="btn btn-primary" style="background-color: rgba(255,5,3,0.66)">Delete booking\n' +
+            '                            </button>\n' +
+            '                            <input type="hidden" name="controllerAction" value="home.Book.deleteBooking">\n' +
+            '                            <input type="hidden" class="form-control" name="bookingID" value=' + document.getElementById("booking-id").value + '>\n' +
+            '                        </div>\n' +
+            '                    </form>';
+    } else if (option === "remove") {
+        document.getElementById("deleteBookingForm").remove();
+        document.getElementById("td-delete-book-btn").innerHTML = '<button type="button" class="trashbutton" id="delete-book-btn"\n' +
+            '                                    title="Delete appointment"\n' +
+            '                                    data-target="#alert"\n' +
+            '                                    data-toggle="modal"\n' +
+            '                                    onclick=showOrRemoveTextArea(\'show\')>\n' +
+            '                                <i class="far fa-trash-alt"></i>\n' +
+            '                            </button>';
+    }
 }
 
 function goToCheckout(nameGroup) {
