@@ -1177,6 +1177,10 @@ var {
     padding: 0.8rem;
 }
 
+.table td, .table th {
+    vertical-align: middle; !important;
+}
+
 
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
