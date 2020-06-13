@@ -131,15 +131,22 @@ function setSelectedFilter(id_select, filter) {
     }
 }
 
-function setSelectedAttribute(id_select, valueFromDb) {
-    let select = document.getElementById(id_select).options;
+function setSelectedAttribute(id_select, valueFromDb, deselect = false) {
 
-    for (let option = 0; option < select.length; option++) {
-        if (select[option].text === valueFromDb) {
-            select[option].selected = true;
-            break;
+    /* prima controllo se si vuole selezionare o deselezionare l'opzione già presente */
+    if (deselect === true) {
+        document.getElementById(id_select).selectedIndex = "0";
+    } else {
+
+        let select = document.getElementById(id_select).options;
+
+        for (let option = 0; option < select.length; option++) {
+            if (select[option].text === valueFromDb) {
+                select[option].selected = true;
+                break;
+            }
+
         }
-
     }
 }
 
@@ -283,7 +290,7 @@ function modifyTotalPriceAndSaving(nameGroup) {
     /* vedo quali checkbox sono stati checkati */
 
     checkboxes.forEach(function (item) {
-        if(item.checked === true){
+        if (item.checked === true) {
             checkboxes_checked.push(item);
         }
     })
@@ -299,8 +306,8 @@ function modifyTotalPriceAndSaving(nameGroup) {
         totalPrice += parseFloat(eachFinalPrice) * parseInt(desiredQuantity);
 
         /* calcolo il risparmio parziale e lo aggiungo al totale solo se lo sconto è diverso da 0 */
-        if(eachDiscount !== 0){
-            totalSaved = parseFloat(totalSaved) + ( parseInt(desiredQuantity) * ( parseFloat(eachOriginalPrice) * ( parseInt(eachDiscount) / 100.00 ).toPrecision(2) ) );
+        if (eachDiscount !== 0) {
+            totalSaved = parseFloat(totalSaved) + (parseInt(desiredQuantity) * (parseFloat(eachOriginalPrice) * (parseInt(eachDiscount) / 100.00).toPrecision(2)));
             /*                                    |                                             risparmio parziale                                                   |        */
         }
     })
@@ -312,7 +319,7 @@ function modifyTotalPriceAndSaving(nameGroup) {
 
 }
 
-function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct , nameGroup) {
+function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, nameGroup) {
 
     /**
      * Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
@@ -481,12 +488,12 @@ function findBooking(idCustomer) {
                     el = deleteBookBtn;
                     deleteBookBtn.remove();
                     document.getElementById('booking-text-area').innerHTML = '<textarea style="width: 100%;' +
-                        'resize: none" rows="5" name="deletedReason" readonly>Deleted reason: '+ deletedReason +'</textarea>' +
+                        'resize: none" rows="5" name="deletedReason" readonly>Deleted reason: ' + deletedReason + '</textarea>' +
                         '<button class="btn btnheader active2 mt-3" type="button" id="showBookNow"\n' +
                         '                            onclick=setNavFormHome("home.Book.showBook")>\n' +
                         '                        Book now!\n' +
                         '                    </button>';
-                } else if (obj.alreadyBooked === "false" ) {
+                } else if (obj.alreadyBooked === "false") {
                     document.getElementById("ModalLabelBook").innerHTML = "";
                     el = bookTableResult;
                     if (el != null) {
@@ -519,7 +526,7 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
     form.elements['idCustomer'].value = loggedUserId;
     form.elements['selected_date'].value = date;
     form.elements['selected_time'].value = formattedTime;
-    console.log("Selected time: "+ formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
+    console.log("Selected time: " + formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
     form.submit();
 }
 
@@ -604,7 +611,7 @@ function showProductFromOrder(idProduct) {
     form.submit();
 }
 
-function setTmpId(id,hiddenDrawer) {
+function setTmpId(id, hiddenDrawer) {
     /**
      * Set id of object to delete/insert/modify into a temporary "drawer" before confirm this action into the modal */
     document.getElementById(hiddenDrawer).value = id;
@@ -659,4 +666,40 @@ function setDateBook(id) {
     document.getElementById(id).value = today;
     document.getElementById(id).setAttribute("min", today);
     document.getElementById(id).setAttribute("max", maxfield);
+}
+
+function autoFillShippingAddress(checkbox, addressDB) {
+    let statusCheckbox = checkbox.checked;
+    if (statusCheckbox === true) {
+        setSelectedAttribute("State", addressDB[0]);
+        setSelectedAttribute("Region", addressDB[1]);
+        // let isReadOnly = $("#MyCheckbox").prop("checked");
+    } else {
+        setSelectedAttribute("State", "", true);
+        setSelectedAttribute("Region", "", true);
+    }
+
+    let city_field = document.getElementById("City");
+    let cap_field = document.getElementById("Cap");
+    let street_field = document.getElementById("Street");
+    let houseNumber_field = document.getElementById("House-number");
+    let selects = $("#State, #Region"); //JQUERY
+    /*----------------------------------------------------------------*/
+    this.value = (statusCheckbox === true) ? "same" : "different";
+    /*----------------------------------------------------------------*/
+    $(selects).prop("readonly", statusCheckbox);
+    $(selects).toggleClass("not-selectable", statusCheckbox);
+    $(selects).find("option").prop("hidden", statusCheckbox);
+    /*----------------------------------------------------------------*/
+    city_field.readOnly = statusCheckbox;
+    city_field.value = (statusCheckbox === true) ? addressDB[2] : "";
+    /*----------------------------------------------------------------*/
+    cap_field.value = (statusCheckbox === true) ? addressDB[3] : "";
+    cap_field.readOnly = statusCheckbox;
+    /*----------------------------------------------------------------*/
+    street_field.value = (statusCheckbox === true) ? addressDB[4] : "";
+    street_field.readOnly = statusCheckbox;
+    /*----------------------------------------------------------------*/
+    houseNumber_field.value = (statusCheckbox === true) ? addressDB[5] : "";
+    houseNumber_field.readOnly = statusCheckbox;
 }

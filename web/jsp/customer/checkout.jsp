@@ -108,34 +108,46 @@
                     <span>Total (&euro;)</span>
                     <strong><%=totalPrice%>
                     </strong>
-                    <input type="hidden" name="totalPrice" id="totalPrice" value="<%=totalPrice%>" form="buyForm" readonly>
+                    <input type="hidden" name="totalPrice" id="totalPrice" value="<%=totalPrice%>" form="buyForm"
+                           readonly>
                 </li>
             </ul>
 
-            <form class="card p-2">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Promo code">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">Redeem</button>
-                    </div>
-                </div>
-            </form>
+            <%--            <form class="card p-2">--%>
+            <%--                <div class="input-group">--%>
+            <%--                    <input type="text" class="form-control" placeholder="Promo code">--%>
+            <%--                    <div class="input-group-append">--%>
+            <%--                        <button type="submit" class="btn btn-secondary">Redeem</button>--%>
+            <%--                    </div>--%>
+            <%--                </div>--%>
+            <%--            </form>--%>
         </div>
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Shipping address</h4>
-            <form class="needs-validation" novalidate>
+
+
+
+            <form class="needs-validation" id="buyForm" method="post">
+                <hr class="mb-4">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="sameAddress" value="different" id="same-address"
+                           onclick="autoFillShippingAddress(this,addressDB)">
+                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing
+                        address</label>
+                </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="firstName">First name</label>
-                        <input type="text" class="form-control" id="firstName" value="<%=customer.getName()%>" readonly required>
+                        <input type="text" class="form-control" id="firstName" value="<%=customer.getName()%>" readonly
+                               required>
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Last name</label>
-                        <input type="text" class="form-control" id="lastName" value="<%=customer.getSurname()%>" readonly
-                               required>
+                        <input type="text" class="form-control" id="lastName" value="<%=customer.getSurname()%>"
+                               readonly required>
                         <div class="invalid-feedback">
                             Valid last name is required.
                         </div>
@@ -157,15 +169,16 @@
 
                 <div class="mb-3">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" value="<%=customer.getEmail()%>" readonly required>
+                    <input type="email" class="form-control" id="email" value="<%=customer.getEmail()%>" readonly
+                           required>
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-5 mb-3" id="div-state">
                         <label for="State">State</label>
-                        <select class="custom-select d-block w-100" name="state" id="State" readonly required>
+                        <select class="custom-select d-block w-100" name="state" id="State" required>
                             <option selected disabled value="">Choose...</option>
                             <option>ITALY</option>
                         </select>
@@ -173,9 +186,9 @@
                             Please select a valid state.
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3" id="div-region">
                         <label for="Region">Region</label>
-                        <select class="custom-select d-block w-100" name="region" id="Region" readonly required>
+                        <select class="custom-select d-block w-100" name="region" id="Region" required>
                             <option selected disabled value="">Choose...</option>
                             <option>ABRUZZO</option>
                             <option>BASILICATA</option>
@@ -203,8 +216,8 @@
                     </div>
                     <div class="col-md-5 mb-5 text-center">
                         <label for="City">City</label>
-                        <input type="text" class="form-control" name="city" id="City" readonly required
-                               value="<%=splittedAddress[2]%>"
+                        <input type="text" class="form-control" name="city" id="City" required
+                        <%--                               value="<%=splittedAddress[2]%>"--%>
                                oninput="this.value=this.value.toUpperCase();">
                         <div class="invalid-feedback">
                             Please provide a valid city for shipping.
@@ -214,8 +227,8 @@
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label for="Cap">Postal Code</label>
-                        <input type="number" class="form-control" name="cap" id="Cap" readonly required min="0"
-                               value="<%=splittedAddress[3]%>"
+                        <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                        <%--                               value="<%=splittedAddress[3]%>"--%>
                                oninput="this.value=this.value.toUpperCase();">
                         <div class="invalid-feedback">
                             Please provide a valid Postal Code for shipping.
@@ -223,8 +236,8 @@
                     </div>
                     <div class="col-md-5 mb-5">
                         <label for="Street">Street</label>
-                        <input type="text" class="form-control" name="street" id="Street" readonly required
-                               value="<%=splittedAddress[4]%>"
+                        <input type="text" class="form-control" name="street" id="Street" required
+                        <%--                               value="<%=splittedAddress[4]%>"--%>
                                oninput="this.value=this.value.toUpperCase();">
                         <div class="invalid-feedback">
                             Please provide a valid Street for shipping.
@@ -232,8 +245,9 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="House-number">House Number</label>
-                        <input type="number" class="form-control" name="house_number" id="House-number" readonly
-                               value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>" min="0">
+                        <input type="number" class="form-control" name="house_number" id="House-number"
+                        <%--                               value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>"--%>
+                               min="0">
                         <div class="invalid-feedback">
                             Please provide a valid House Number for shipping.
                         </div>
@@ -241,16 +255,11 @@
 
 
                 </div>
-<%--                <hr class="mb-4">--%>
-<%--                <div class="custom-control custom-checkbox">--%>
-<%--                    <input type="checkbox" class="custom-control-input" id="same-address">--%>
-<%--                    <label class="custom-control-label" for="same-address">Shipping address is the same as my billing--%>
-<%--                        address</label>--%>
-<%--                </div>--%>
-<%--                <div class="custom-control custom-checkbox">--%>
-<%--                    <input type="checkbox" class="custom-control-input" id="save-info">--%>
-<%--                    <label class="custom-control-label" for="save-info">Save this information for next time</label>--%>
-<%--                </div>--%>
+
+                <%--                <div class="custom-control custom-checkbox">--%>
+                <%--                    <input type="checkbox" class="custom-control-input" id="save-info">--%>
+                <%--                    <label class="custom-control-label" for="save-info">Save this information for next time</label>--%>
+                <%--                </div>--%>
                 <hr class="mb-4">
 
                 <h4 class="mb-3">Payment</h4>
@@ -305,22 +314,21 @@
                 </div>
                 <hr class="mb-4">
                 <%for (ExtendedProduct ep : checkoutProducts) {%>
-                <input type="hidden" name="ids" value="<%=ep.getId()%>" form="buyForm">
-                <input type="hidden" name="quantities" value="<%=ep.getRequiredQuantity()%>" form="buyForm">
+                <input type="hidden" name="ids" value="<%=ep.getId()%>">
+                <input type="hidden" name="quantities" value="<%=ep.getRequiredQuantity()%>">
                 <%}%>
-                <button class="btn btn-primary btn-lg btn-block" type="submit" form="buyForm">Continue to checkout</button>
+                <input type="hidden" name="controllerAction" value="home.Checkout.processCheckout">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout
+                </button>
             </form>
         </div>
     </div>
 </div>
-<form id="buyForm" method="post">
-    <input type="hidden" name="controllerAction" value="home.Checkout.processCheckout">
-</form>
-
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
+    let addressDB;
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function () {
         'use strict';
@@ -338,11 +346,12 @@
                     form.classList.add('was-validated');
                 }, false);
             });
+
+            /* creo un array con le informazioni di fatturazione prese dal db */
+            addressDB = ["<%=splittedAddress[0]%>", "<%=splittedAddress[1]%>", "<%=splittedAddress[2]%>", "<%=splittedAddress[3]%>", "<%=splittedAddress[4]%>", "<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>"];
+
         }, false);
     })();
-    setSelectedAttribute("State", "<%=splittedAddress[0]%>");
-    setSelectedAttribute("Region", "<%=splittedAddress[1]%>");
-
 
 </script>
 

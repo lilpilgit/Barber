@@ -1,5 +1,6 @@
 package home.controller;
 
+import functions.StaticFunc;
 import model.dao.*;
 import model.mo.ExtendedProduct;
 import model.mo.Product;
@@ -187,6 +188,15 @@ public class Checkout {
             BigDecimal totalPrice = new BigDecimal(request.getParameter("totalPrice"));
             String[] ids = request.getParameterValues("ids");
             String[] quantities = request.getParameterValues("quantities");
+            String state = request.getParameter("state");
+            String region = request.getParameter("region");
+            String city = request.getParameter("city");
+            String cap = request.getParameter("cap");
+            String street = request.getParameter("street");
+            String house_number = request.getParameter("house_number");
+
+            /* aggiungo le informazioni riguardanti la spedizione */
+            customer.setAddress(StaticFunc.formatFinalAddress(state,region,city,street,cap,house_number));
 
 
             for (int i = 0; i < ids.length; i++) {
