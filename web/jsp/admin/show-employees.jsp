@@ -58,7 +58,7 @@
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 sticky-top">
             <button onclick="setControllerAction('admin.Staff.showFormNewEmployee')"
                     class="button-side" type="button" id='showFormNewEmployee'>
                 <i class="fas fa-user-plus pr-3"></i>
