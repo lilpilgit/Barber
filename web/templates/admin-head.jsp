@@ -19,11 +19,15 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
     <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet">
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.com/libraries/Chart.js"></script>
     <link href="assets/css/style-admin.css" rel="stylesheet">
     <script type="text/javascript" src="assets/js/admin.js"></script>
 </head>
 <script>
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
         setCurrentDate('currentDate');
         setButtonActiveSidebar('<%=idBtnAttivo%>');
         <%if(resultPresent){%>

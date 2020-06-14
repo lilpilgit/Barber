@@ -1,5 +1,7 @@
 package functions;
 
+import java.math.BigDecimal;
+
 public class StaticFunc {
 
     private StaticFunc() {
@@ -27,5 +29,13 @@ public class StaticFunc {
         else
             mandatory = mandatory + "|" + " " + "|"; /* aggiungo comunque la | così quando devo splittare l'indirizzo mi ritorna stringa vuota*/
         return mandatory;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
     }
 }

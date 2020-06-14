@@ -1,4 +1,6 @@
 <%@ page import="model.mo.User" %>
+<%@ page import="javafx.util.Pair" %>
+<%@ page import="functions.StaticFunc" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -27,6 +29,18 @@
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
+
+    /* Prendo il parametro "totalWithWithoutDiscount" per conoscere i guadagni totali con e senza sconti */
+    Pair<Double,Double> totalWithWithoutDiscount = null;
+    if (request.getAttribute("totalWithWithoutDiscount") != null) {
+        totalWithWithoutDiscount = (Pair<Double,Double>) request.getAttribute("totalWithWithoutDiscount");
+        System.err.println("totalWithoutDiscount ==> " + totalWithWithoutDiscount.getKey());
+        System.err.println("totalWithDiscount ==> " + totalWithWithoutDiscount.getValue());
+        /*              totalWithoutDiscount <==> key
+         *              totalWithDiscount <==> value
+         * */
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Welcome";
 
@@ -51,12 +65,16 @@
             </div>
             <h5>Altre info o statistiche ...</h5>
             <hr>
+            <div class="col-md-12">
+                <canvas id="myChart"></canvas>
+            </div>
+
         </div>
     </main>
 </div>
 <script>
     window.addEventListener("load",() =>{
-
+        drawChartTotWithWithoutDiscount(<%=StaticFunc.round(totalWithWithoutDiscount.getKey(),2)%>,<%=StaticFunc.round(totalWithWithoutDiscount.getValue(),2)%>);
     });
 </script>
 </body>

@@ -79,5 +79,10 @@ public class CookieDAOFactory extends DAOFactory {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public StatisticsDAO getStatisticsDAO() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

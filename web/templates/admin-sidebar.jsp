@@ -65,6 +65,14 @@
                             <i class="fas fa-building pr-3"></i>
                             Structure
                         </button>
+                    </li>
+                    <li>
+                        <button onclick="setControllerAction('admin.Welcome.welcome')"
+                                class="button-side" type="button" id='showStatistics'>
+                            <i class="fas fa-chart-line pr-3"></i>
+                            Statistics
+                        </button>
+                    </li>
                 </ul>
             </div>
             <!-- sidebar-menu  -->

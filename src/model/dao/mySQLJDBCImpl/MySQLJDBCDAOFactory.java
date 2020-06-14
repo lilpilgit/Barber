@@ -93,4 +93,10 @@ public class MySQLJDBCDAOFactory extends DAOFactory {
         return new WishlistDAOMySQLJDBCImpl(connection);
     }
 
+    @Override
+    public StatisticsDAO getStatisticsDAO() {
+        return new StatisticsDAOMySQLJDBCImpl(connection);
+    }
+
+
 }
