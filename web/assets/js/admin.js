@@ -253,6 +253,40 @@ function setRadiosStatusOrder(actualStatus) {
     }
 }
 
+// function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
+//     let ctx = document.getElementById("myChart").getContext('2d');
+//     let myChart = new Chart(ctx, {
+//         type: 'bar',
+//         data: {
+//             labels: ["Total earnings without applying discounts", "Total earnings by applying discounts","Lost profit"],
+//             datasets: [{
+//                 label: 'Earnings',
+//                 data: [totalWithoutDiscount,totalWithDiscount,lostGain],
+//                 backgroundColor: [
+//                     'rgb(0,167,167,0.2)',
+//                     'rgb(26,51,167,0.2)',
+//                     'rgb(248,34,80,0.2)'
+//                 ],
+//                 borderColor: [
+//                     'rgb(0,167,167)',
+//                     'rgb(26,51,167)',
+//                     'rgb(248,34,80)'
+//                 ],
+//                 borderWidth: 1
+//             }]
+//         },
+//         options: {
+//             scales: {
+//                 yAxes: [{
+//                     ticks: {
+//                         beginAtZero: true
+//                     }
+//                 }]
+//             }
+//         }
+//     });
+// }
+
 function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
     let ctx = document.getElementById("myChart").getContext('2d');
     let myChart = new Chart(ctx, {
@@ -261,21 +295,35 @@ function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
             labels: ["Total earnings without applying discounts", "Total earnings by applying discounts","Lost profit"],
             datasets: [{
                 label: 'Earnings',
-                data: [totalWithoutDiscount,totalWithDiscount,lostGain],
+                data: [totalWithoutDiscount],
                 backgroundColor: [
-                    'rgb(0,167,167,0.2)',
-                    'rgb(26,51,167,0.2)',
+                    'rgb(0,167,167,0.2)'
+                ],
+                borderColor: [
+                    'rgb(0,167,167)'
+                ],
+                borderWidth: 1
+            }, { label: 'Earnings2',
+                data: [totalWithDiscount],
+                backgroundColor: [
+                    'rgb(26,51,167,0.2)'
+                ],
+                borderColor: [
+                    'rgb(26,51,167)'
+                ],
+                borderWidth: 1
+            },{
+                label: 'Earnings3',
+                data: [lostGain],
+                backgroundColor: [
                     'rgb(248,34,80,0.2)'
                 ],
                 borderColor: [
-                    'rgb(0,167,167)',
-                    'rgb(26,51,167)',
                     'rgb(248,34,80)'
                 ],
                 borderWidth: 1
-            }]
-        },
-        options: {
+            }]},
+        options: { responsive: true,
             scales: {
                 yAxes: [{
                     ticks: {
@@ -285,4 +333,5 @@ function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
             }
         }
     });
+
 }
