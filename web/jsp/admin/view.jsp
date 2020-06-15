@@ -1,5 +1,4 @@
 <%@ page import="model.mo.User" %>
-<%@ page import="javafx.util.Pair" %>
 <%@ page import="functions.StaticFunc" %>
 <%@ page import="model.mo.Statistics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

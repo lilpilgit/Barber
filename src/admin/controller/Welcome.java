@@ -1,6 +1,5 @@
 package admin.controller;
 
-import javafx.util.Pair;
 import model.dao.DAOFactory;
 import model.dao.StatisticsDAO;
 import model.dao.UserDAO;
