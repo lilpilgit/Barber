@@ -31,11 +31,11 @@ public class StaticFunc {
         return mandatory;
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+    public static double round(double value, int precision) {
+        if (precision < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
+        bd = bd.setScale(precision, BigDecimal.ROUND_HALF_UP);
         return bd.doubleValue();
     }
 }

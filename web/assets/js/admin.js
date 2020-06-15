@@ -253,22 +253,24 @@ function setRadiosStatusOrder(actualStatus) {
     }
 }
 
-function drawChartTotWithWithoutDiscount(totalWithoutDiscount,totalWithDiscount){
+function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
     let ctx = document.getElementById("myChart").getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Total earnings without applying discounts", "Total earnings by applying discounts"],
+            labels: ["Total earnings without applying discounts", "Total earnings by applying discounts","Lost profit"],
             datasets: [{
-                label: 'Total of Earnings',
-                data: [totalWithoutDiscount,totalWithDiscount],
+                label: 'Earnings',
+                data: [totalWithoutDiscount,totalWithDiscount,lostGain],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
+                    'rgb(0,167,167,0.2)',
+                    'rgb(26,51,167,0.2)',
+                    'rgb(248,34,80,0.2)'
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255,99,132,1)'
+                    'rgb(0,167,167)',
+                    'rgb(26,51,167)',
+                    'rgb(248,34,80)'
                 ],
                 borderWidth: 1
             }]

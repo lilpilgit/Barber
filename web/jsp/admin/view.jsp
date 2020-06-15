@@ -1,6 +1,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="javafx.util.Pair" %>
 <%@ page import="functions.StaticFunc" %>
+<%@ page import="model.mo.Statistics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -30,15 +31,10 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    /* Prendo il parametro "totalWithWithoutDiscount" per conoscere i guadagni totali con e senza sconti */
-    Pair<Double,Double> totalWithWithoutDiscount = null;
-    if (request.getAttribute("totalWithWithoutDiscount") != null) {
-        totalWithWithoutDiscount = (Pair<Double,Double>) request.getAttribute("totalWithWithoutDiscount");
-        System.err.println("totalWithoutDiscount ==> " + totalWithWithoutDiscount.getKey());
-        System.err.println("totalWithDiscount ==> " + totalWithWithoutDiscount.getValue());
-        /*              totalWithoutDiscount <==> key
-         *              totalWithDiscount <==> value
-         * */
+    /* Prendo il parametro "statistics" per conoscere tutte le diverse statistiche calcolate */
+    Statistics statistics = null;
+    if (request.getAttribute("statistics") != null) {
+        statistics = (Statistics) request.getAttribute("statistics");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
@@ -74,7 +70,7 @@
 </div>
 <script>
     window.addEventListener("load",() =>{
-        drawChartTotWithWithoutDiscount(<%=StaticFunc.round(totalWithWithoutDiscount.getKey(),2)%>,<%=StaticFunc.round(totalWithWithoutDiscount.getValue(),2)%>);
+        drawChartEarnings(<%=StaticFunc.round(statistics.getTotEarningsWithoutDiscount(),2)%>,<%=StaticFunc.round(statistics.getTotEarningsWithDiscount(),2)%>,<%=StaticFunc.round(statistics.getLostGain(),2)%>);
     });
 </script>
 </body>

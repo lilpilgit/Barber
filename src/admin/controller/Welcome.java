@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import model.dao.DAOFactory;
 import model.dao.StatisticsDAO;
 import model.dao.UserDAO;
+import model.mo.Statistics;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -26,7 +27,7 @@ public class Welcome {
         UserDAO sessionUserDAO = null;
         User loggedUser = null;
         StatisticsDAO statisticsDAO = null;
-        Pair<Double,Double> totalWithWithoutDiscount = null;
+        Statistics statistics = null;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -50,10 +51,7 @@ public class Welcome {
 
             statisticsDAO = daoFactory.getStatisticsDAO();
 
-            /*              totalWithoutDiscount <==> key
-             *              totalWithDiscount <==> value
-             * */
-            totalWithWithoutDiscount = statisticsDAO.totalEarningsWithAndWithoutDiscount();
+            statistics = statisticsDAO.totalEarningsWithAndWithoutDiscount();
 
 
             /* Commit sul db */
@@ -93,6 +91,6 @@ public class Welcome {
         /* 4) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "admin/view");
         /* 5) Setto il totale guadagni applicando gli sconti e non applicandoli */
-        request.setAttribute("totalWithWithoutDiscount",totalWithWithoutDiscount);
+        request.setAttribute("statistics",statistics);
     }
 }
