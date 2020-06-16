@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-06-16T15:39:51.164Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/83.0.4103.106 Chrome/83.0.4103.106 Safari/537.36" etag="Dj1ASiJ5cAgPr5-TIoHL" version="13.2.4" type="github">
+<mxfile host="app.diagrams.net" modified="2020-06-16T15:41:08.818Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/83.0.4103.106 Chrome/83.0.4103.106 Safari/537.36" etag="y3QOcNkilg9AYBIyndTu" version="13.2.4" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1662" dy="771" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="827" pageHeight="1169" math="0" shadow="0" extFonts="Quicksand^https://fonts.googleapis.com/css?family=Quicksand|Gruppo^https://fonts.googleapis.com/css?family=Gruppo|Pompiere^https://fonts.googleapis.com/css?family=Pompiere">
+    <mxGraphModel dx="1385" dy="643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="827" pageHeight="1169" math="0" shadow="0" extFonts="Quicksand^https://fonts.googleapis.com/css?family=Quicksand|Gruppo^https://fonts.googleapis.com/css?family=Gruppo|Pompiere^https://fonts.googleapis.com/css?family=Pompiere">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -78,6 +78,16 @@
         </mxCell>
         <mxCell id="jN095DMbJzueWw74nH2b-3" value="&lt;b&gt;ITEMS_LIST&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="533.5" y="1000" width="55.5" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jN095DMbJzueWw74nH2b-5" value="" style="curved=1;endArrow=classic;html=1;entryX=0.01;entryY=1.075;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.91;exitY=-0.019;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="EIEGdvuZ-sx4ZcDznCTi-9" target="CbVcJyqTISDlB1ADT2_T-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="440" as="sourcePoint" />
+            <mxPoint x="950" y="390" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="290" />
+              <mxPoint x="325" y="290" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
