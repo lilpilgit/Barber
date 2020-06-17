@@ -60,7 +60,6 @@
     <img src="img/homepage/book.jpg" alt="BookImage">
     <h4>We are open every day from 9:00 to 18:00!</h4>
     <h3>You can book your appointment after selecting the date and time below.</h3>
-    <input type="date" value="2020-06-17">
 
     <div class="d-flex justify-content-center" >
         <div class="col-4 pt-4 my-5 book-box" >
