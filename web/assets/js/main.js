@@ -393,8 +393,37 @@ function findSlot(idStructure, pickedDate) {
 
     let result = "fail";
     let availableTimes = [];
+    let today = new Date();
+    let currentDate;
+    let currentTime;
+    let HH = today.getHours();
+    let MM = today.getMinutes();
+
+    if (HH < 10) {
+        HH = '0' + HH;
+    }
+
+    if (MM < 10) {
+        MM = '0' + MM;
+    }
+
+    currentTime = HH + ":" + MM;
+
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
     let obj = null;
     let xhttp = new XMLHttpRequest();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
 
     function addOption(freeTime) {
         let time = document.getElementById("time");
@@ -417,6 +446,7 @@ function findSlot(idStructure, pickedDate) {
 
                 /* Inserisco gli orari disponibili all'interno della select */
                 for (let i = 0; i < obj.availableTimes.length; i++)
+                    if (obj.availableTimes[i])
                     addOption(obj.availableTimes[i]);
 
                 if (obj.availableTimes.length === 0)
@@ -430,9 +460,8 @@ function findSlot(idStructure, pickedDate) {
 
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate);
+    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate + "&currentTime=" + currentTime + "&currentDate=" + today);
     console.log("Customer selected date:" + pickedDate);
-
 }
 
 function findBooking(idCustomer) {

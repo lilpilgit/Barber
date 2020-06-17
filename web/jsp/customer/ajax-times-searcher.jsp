@@ -30,10 +30,12 @@
     Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
     LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
     LocalTime closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
+    LocalTime currentTime = null; /* parametro che rappresenta l'ora attuale */
     LocalTime slot = null; /* parametro che serve per fare lo scanning degli appuntamenti in una giornata */
     LocalDate pickedDate = null; /* parametro che rappresenta l'ora selezionata dall'utente */
+    LocalDate currentDate = null; /* parametro che rappresenta la data attuale */
 
-    boolean changed = false;
+    boolean isToday = false;
 
     try {
         /* Inizializzo il cookie di sessione */
@@ -62,10 +64,16 @@
         structure = structureDAO.fetchStructure();
         openingTime = structure.getOpeningTime().toLocalTime();
         closingTime = structure.getClosingTime().toLocalTime();
+        /* setto l'ora attuale ricevuta dal client */
+        currentTime = LocalTime.parse(request.getParameter("currentTime"));
+
         slot = structure.getSlot().toLocalTime();
 
         /* setto la data selezionata dall'utente */
         pickedDate = LocalDate.parse(request.getParameter("pickedDate"));
+
+        /* setto la data attuale fornita dal client */
+        currentDate = LocalDate.parse(request.getParameter("currentDate"));
 
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
@@ -96,11 +104,15 @@
         }
     }
 
+
     LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
+    /* verifico se la data di prenotazione e' uguale alla data del client */
+    isToday = pickedDate.isEqual(currentDate);
 
     ArrayList<LocalTime> freeSlots = new ArrayList<LocalTime>();
 
     int i = 0;
+    int j;
 
     for (indexTime = LocalTime.of(openingTime.getHour() , openingTime.getMinute(), openingTime.getSecond());
         !indexTime.equals(closingTime); indexTime = indexTime.plusMinutes(slot.getMinute())) {
@@ -109,7 +121,11 @@
             System.err.println("Trovato appuntamento alle: " + bookings.get(i).getHourStart());
             i++;
         } else {
-            freeSlots.add(indexTime);
+            if (!isToday) {
+                freeSlots.add(indexTime);
+            } else if ((indexTime.compareTo(currentTime) > 0)) {
+                j = indexTime.compareTo(currentTime);
+            }
         }
     }
 
