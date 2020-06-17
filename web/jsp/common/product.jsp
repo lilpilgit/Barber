@@ -123,13 +123,18 @@
         </div>
     </div>
     <div class="container pt-5 text-center">
-        <!-- Usare i cookie per ritornare alla pagina Shop con i parametri di prima?TODO -->
-        <button class="btn btnheader active2" type="button" id='showShop'
-                onclick="history.back()">
+        <button type="submit" class="btn btnheader active2" id="showShop" form="goBackShop">
             Go back to shop
         </button>
     </div>
 </div>
+<form id="goBackShop" method="post">
+    <input type="hidden" name="controllerAction" value="home.Shop.showShop">
+    <input type="hidden" name="filter" value="0">
+    <input type="hidden" name="category" value="All">
+    <input type="hidden" name="brand" value="All">
+</form>
+
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
