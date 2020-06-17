@@ -61,6 +61,7 @@
 <body>
 <%@include file="../../templates/admin-sidebar.jsp" %>
 <div class="page-wrapper chiller-theme toggled">
+
     <!--Main content of the page-->
     <main class="page-content">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
@@ -204,7 +205,6 @@
         <%--            setCurrentDate("Booking-Date");--%>
         <%--        <%}%>--%>
         /* necessario per il popover  */
-
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover({})
         });
