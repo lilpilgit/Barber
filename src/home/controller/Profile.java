@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 public class Profile {
-    private Profile() {}
+    private Profile() {
+    }
 
     public static void showProfile(HttpServletRequest request, HttpServletResponse response) {
         /**
@@ -24,6 +25,8 @@ public class Profile {
         User loggedUser = null;
         UserDAO userDAO = null;
         User user = null;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -50,6 +53,25 @@ public class Profile {
 
             user = userDAO.findById(loggedUser.getId());
 
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(user)) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Nessuna logica di business in questo caso */
+
+            }
+
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
@@ -78,15 +100,16 @@ public class Profile {
             }
         }
 
-
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/profile");
-        /* 4) Setto il cliente da mostrare in base a quale utente è loggato */
-        request.setAttribute("customer", user);
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/profile");
+            /* 4) Setto il cliente da mostrare in base a quale utente è loggato */
+            request.setAttribute("customer", user);
+        }
     }
 
     public static void updateProfile(HttpServletRequest request, HttpServletResponse response) {
@@ -102,6 +125,8 @@ public class Profile {
         User originalUser = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -126,35 +151,60 @@ public class Profile {
 
             userDAO = daoFactory.getUserDAO();
 
-            originalUser = userDAO.findById(loggedUser.getId());
-
-            /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
-             * quale passare alla pagina profile.jsp */
-
-            userToUpdate = userDAO.findById(loggedUser.getId());
-
-
-            /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
-             * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
-
-            userToUpdate.setEmail(request.getParameter("email"));
-            userToUpdate.setName(request.getParameter("name"));
-            userToUpdate.setSurname(request.getParameter("surname"));
-            userToUpdate.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
-            userToUpdate.setPhone(request.getParameter("phone"));
-            /* TODO:cambio password per l'utente */
-            userToUpdate.setType('C');
-            userToUpdate.setBlocked(false);
-            /* TODO:cancellazione account dell'utente */
-
-            /* Effettuo la modifica del cliente */
-            try {
-                edited = userDAO.update(userToUpdate);/* Se non viene sollevata l'eccezione, l'utente è stato modificato correttamente*/
-
-            } catch (DuplicatedObjectException e) {
-                applicationMessage = e.getMessage();
-                e.printStackTrace();
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
             }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                originalUser = userDAO.findById(loggedUser.getId());
+
+                /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
+                 * quale passare alla pagina profile.jsp */
+
+                userToUpdate = userDAO.findById(loggedUser.getId());
+
+
+                /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
+                 * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
+
+                userToUpdate.setEmail(request.getParameter("email"));
+                userToUpdate.setName(request.getParameter("name"));
+                userToUpdate.setSurname(request.getParameter("surname"));
+                userToUpdate.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
+                userToUpdate.setPhone(request.getParameter("phone"));
+                /* TODO:cambio password per l'utente */
+                userToUpdate.setType('C');
+                userToUpdate.setBlocked(false);
+                /* TODO:cancellazione account dell'utente */
+
+                /* Effettuo la modifica del cliente */
+                try {
+                    edited = userDAO.update(userToUpdate);/* Se non viene sollevata l'eccezione, l'utente è stato modificato correttamente*/
+
+                } catch (DuplicatedObjectException e) {
+                    applicationMessage = e.getMessage();
+                    e.printStackTrace();
+                }
+
+                if (edited) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che l'utente sia stato modificato correttamente .*/
+                    applicationMessage = "Your data has been modified SUCCESSFULLY.";
+                }
+
+
+            }
+
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -162,10 +212,6 @@ public class Profile {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (edited) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che l'utente sia stato modificato correttamente .*/
-                applicationMessage = "Your data has been modified SUCCESSFULLY.";
-            }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -191,34 +237,34 @@ public class Profile {
             }
         }
 
+        if (cookieValid) {
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
-
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
-         *     form per consentire ulteriori modifiche sul medesimo impiegato */
-        request.setAttribute("viewUrl", "customer/profile");
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (edited) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+             *     form per consentire ulteriori modifiche sul medesimo impiegato */
+            request.setAttribute("viewUrl", "customer/profile");
+            /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (edited) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
+            /* 4) il cliente che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
+            if (edited) {
+                /* SUCCESS */
+                request.setAttribute("customer", userToUpdate);
+            } else {
+                /* FAIL */
+                request.setAttribute("customer", originalUser);
+            }
         }
-        /* 4) il cliente che è stato modificato e i cui dati aggiornati( o meno ) verranno mostrati nuovamente nella pagina*/
-        if (edited) {
-            /* SUCCESS */
-            request.setAttribute("customer", userToUpdate);
-        } else {
-            /* FAIL */
-            request.setAttribute("customer", originalUser);
-        }
-
     }
 }

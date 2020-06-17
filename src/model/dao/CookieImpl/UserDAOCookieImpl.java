@@ -2,8 +2,6 @@ package model.dao.CookieImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.mo.ExtendedProduct;
-import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -89,7 +87,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -97,7 +95,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -105,7 +103,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -113,7 +111,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -121,7 +119,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -129,7 +127,7 @@ public class UserDAOCookieImpl implements UserDAO {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
-        throw  new UnsupportedOperationException("Not supported for cookie. Only DB");
+        throw new UnsupportedOperationException("Not supported for cookie. Only DB");
     }
 
     @Override
@@ -153,6 +151,27 @@ public class UserDAOCookieImpl implements UserDAO {
 
         return loggedUser;
 
+    }
+
+    @Override
+    public boolean isValid(User userFromDB) {
+        /**
+         * Analyze cookie comparing with current data into the Database
+         * @return true if validity check passed correctly otherwise return false
+         * */
+        /* si poteva differenziare in base al tipo di utente, ma abbiamo scelto di non farlo... */
+
+        if (userFromDB != null) {
+            /* utente presente sul database */
+            /* se è cancellato O è bloccato O entrambi devo ritornare false */
+            if (userFromDB.isDeleted())
+                return false;
+            else if (userFromDB.isBlocked())
+                return false;
+            else
+                return true;
+        }
+        return false;
     }
 
 

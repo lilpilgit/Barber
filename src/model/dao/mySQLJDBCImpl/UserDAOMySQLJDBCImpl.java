@@ -354,7 +354,11 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
     @Override
     public User findById(Long id) {
-        User user = new User();
+        /**
+         * Find user by id.
+         * @return A <User> object if exist into Database otherwise return null.
+         */
+        User user = null; /* se non esiste alcun utente ritorna null */
 
         query =
                 "SELECT *"
@@ -485,6 +489,14 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
 
     @Override
     public User findLoggedUser() {
+        /**
+         * This operation is allowed only in UserDAOCookieImpl, not here.
+         * */
+        throw new UnsupportedOperationException("Not supported for DB. Only cookie");
+    }
+
+    @Override
+    public boolean isValid(User userFromDB) {
         /**
          * This operation is allowed only in UserDAOCookieImpl, not here.
          * */

@@ -24,7 +24,9 @@ public class Orders {
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
+        UserDAO userDAO = null;
         User loggedUser = null;
+        boolean cookieValid = true;
 
 
         try {
@@ -48,7 +50,26 @@ public class Orders {
 
             daoFactory.beginTransaction();
 
-            commonView(daoFactory, loggedUser, request);
+            userDAO = daoFactory.getUserDAO();
+
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Chiamo la commonView */
+                commonView(daoFactory, loggedUser, request);
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -78,14 +99,15 @@ public class Orders {
             }
         }
 
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/orders");
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/orders");
-
+        }
     }
 
     public static void cancelOrder(HttpServletRequest request, HttpServletResponse response) {
@@ -97,11 +119,13 @@ public class Orders {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        UserDAO userDAO = null;
         OrdersDAO ordersDAO = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         Long idOrderToCancel = null;
-
         boolean canceled = false;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -124,14 +148,38 @@ public class Orders {
 
             daoFactory.beginTransaction();
 
-            ordersDAO = daoFactory.getOrdersDAO();
+            userDAO = daoFactory.getUserDAO();
 
-            /* setto l'id dell'ordine da cancellare sulla base dell'id ricevuto */
-            idOrderToCancel = Long.valueOf(request.getParameter("idOrder"));
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
 
-            canceled = ordersDAO.modifyStatusById(idOrderToCancel, StaticFunc.CANCELED,null);
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                ordersDAO = daoFactory.getOrdersDAO();
 
-            commonView(daoFactory, loggedUser, request); /* setto l'attributo "orders" all'interno della request */
+                /* setto l'id dell'ordine da cancellare sulla base dell'id ricevuto */
+                idOrderToCancel = Long.valueOf(request.getParameter("idOrder"));
+
+                canceled = ordersDAO.modifyStatusById(idOrderToCancel, StaticFunc.CANCELED, null);
+
+                commonView(daoFactory, loggedUser, request); /* setto l'attributo "orders" all'interno della request */
+
+                if (canceled) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato cancellato */
+                    applicationMessage = "Order canceled SUCCESSFULLY.";
+                }
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -139,10 +187,6 @@ public class Orders {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (canceled) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato cancellato */
-                applicationMessage = "Order canceled SUCCESSFULLY.";
-            }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -168,23 +212,26 @@ public class Orders {
             }
         }
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+        if (cookieValid) {
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare  */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare */
-        request.setAttribute("viewUrl", "customer/orders");
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (canceled) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare  */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) l'url della pagina da visualizzare */
+            request.setAttribute("viewUrl", "customer/orders");
+            /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (canceled) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
         }
 
     }

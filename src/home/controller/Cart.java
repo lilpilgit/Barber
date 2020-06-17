@@ -24,9 +24,10 @@ public class Cart {
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
+        UserDAO userDAO = null;
         User loggedUser = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
+        boolean cookieValid = true;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -49,7 +50,26 @@ public class Cart {
 
             daoFactory.beginTransaction();
 
-            commonView(daoFactory, loggedUser, request);
+            userDAO = daoFactory.getUserDAO();
+
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Chiamo la commonView */
+                commonView(daoFactory, loggedUser, request);
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -79,13 +99,14 @@ public class Cart {
             }
         }
 
-
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/cart");
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/cart");
+        }
     }
 
     public static void addToCart(HttpServletRequest request, HttpServletResponse response) {
@@ -103,8 +124,9 @@ public class Cart {
         Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello : di default a 1 se viene aggiunto al carrello dalla pagina wishlist.jsp */
         String from = null; /* da quale jsp viene chiamato il metodo */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
         boolean added = false;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -129,37 +151,61 @@ public class Cart {
 
             userDAO = daoFactory.getUserDAO();
 
-            user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
-            idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
 
-            cartDAO = daoFactory.getCartDAO();
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                user = userDAO.findById(loggedUser.getId());
 
-            /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
-             *  base del parametro "from" */
-            from = request.getParameter("from");
-            if (from != null) {
-                if (from.equals("product")) {
-                    /* prendo la quantità scelta da aggiungere al carrello */
-                    desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
-                    added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
-                    /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
-                    Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
-                    System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
+                /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
+                idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-                } else if (from.equals("wishlist")) {
-                    /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
-                    added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
-                    /* aggiunge la wishlist come ArrayList alla request*/
-                    Wishlist.commonView(daoFactory, loggedUser, request);
-                    System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
-                }else if(from.equals("cart")) {
-                    System.out.println("CHIAMATO CON AJAAAAAAAAAAAAAAAAAAX DEVO INCREMENTARE");
+                cartDAO = daoFactory.getCartDAO();
+
+                /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
+                 *  base del parametro "from" */
+                from = request.getParameter("from");
+                if (from != null) {
+                    if (from.equals("product")) {
+                        /* prendo la quantità scelta da aggiungere al carrello */
+                        desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
+                        added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                        /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
+                        Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
+                        System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
+
+                    } else if (from.equals("wishlist")) {
+                        /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
+                        added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                        /* aggiunge la wishlist come ArrayList alla request*/
+                        Wishlist.commonView(daoFactory, loggedUser, request);
+                        System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
+                    } else if (from.equals("cart")) {
+                        System.out.println("CHIAMATO CON AJAAAAAAAAAAAAAAAAAAX DEVO INCREMENTARE");
+                    }
+
+                } else {
+                    throw new RuntimeException("Cart.java ==> non è stato passato alcun parametro 'from'");
                 }
 
-            } else {
-                throw new RuntimeException("Cart.java ==> non è stato passato alcun parametro 'from'");
+                if (added) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto al carrello dell'utente */
+                    applicationMessage = "Product added to cart SUCCESSFULLY.";
+                }
+
             }
 
 
@@ -169,10 +215,6 @@ public class Cart {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (added) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto al carrello dell'utente */
-                applicationMessage = "Product added to cart SUCCESSFULLY.";
-            }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -198,34 +240,36 @@ public class Cart {
             }
         }
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (added) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
-        }
+        if (cookieValid) {
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-
-        /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento  */
-        if (from != null) {
-            if (from.equals("product")) {
-                request.setAttribute("viewUrl", "common/product");
-
-            } else if (from.equals("wishlist")) {
-                request.setAttribute("viewUrl", "customer/wishlist");
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (added) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
             }
-        } else {
-            request.setAttribute("viewUrl", "common/home");
+
+            /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento  */
+            if (from != null) {
+                if (from.equals("product")) {
+                    request.setAttribute("viewUrl", "common/product");
+
+                } else if (from.equals("wishlist")) {
+                    request.setAttribute("viewUrl", "customer/wishlist");
+                }
+            } else {
+                request.setAttribute("viewUrl", "common/home");
+            }
         }
 
     }
@@ -244,8 +288,9 @@ public class Cart {
         Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
         ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
         boolean removed = false;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -270,16 +315,39 @@ public class Cart {
 
             userDAO = daoFactory.getUserDAO();
 
-            user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
-            idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
 
-            cartDAO = daoFactory.getCartDAO();
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                user = userDAO.findById(loggedUser.getId());
 
-            removed = cartDAO.removeProductFromCart(user, idProductToAdd);
+                /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
+                idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
+                cartDAO = daoFactory.getCartDAO();
+
+                removed = cartDAO.removeProductFromCart(user, idProductToAdd);
+
+                commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
+
+                if (removed) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
+                    applicationMessage = "Product removed from cart SUCCESSFULLY.";
+                }
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -287,10 +355,6 @@ public class Cart {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (removed) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
-                applicationMessage = "Product removed from cart SUCCESSFULLY.";
-            }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -316,24 +380,26 @@ public class Cart {
             }
         }
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+        if (cookieValid) {
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
-         *     form per consentire ulteriori modifiche sul medesimo impiegato */
-        request.setAttribute("viewUrl", "customer/cart");
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (removed) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
+             *     form per consentire ulteriori modifiche sul medesimo impiegato */
+            request.setAttribute("viewUrl", "customer/cart");
+            /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (removed) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
         }
 
     }

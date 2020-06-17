@@ -27,13 +27,13 @@ public class Checkout {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
-        User customer;
+        User customer = null;
         UserDAO userDAO = null;
         ArrayList<ExtendedProduct> checkoutProducts = new ArrayList<>(); /* prodotti da mostrare nella pagina di checkout */
         BigDecimal totalPrice = null;
         BigDecimal totalSaved = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
+        boolean cookieValid = true;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -58,37 +58,54 @@ public class Checkout {
 
             userDAO = daoFactory.getUserDAO();
 
-            customer = userDAO.findById(loggedUser.getId()); /* per avere maggiori informazioni riguardo il cliente */
-
-            String checkoutInfo = request.getParameter("checkoutInfo");
-
-            System.err.println("checkoutInfo ===> " + checkoutInfo);
-            JSONObject mainObj = new JSONObject(checkoutInfo);
-            /* prezzo totale al momento del checkout che assumiamo non venga variato anche se nel frattempo variano i prezzi */
-            totalPrice = new BigDecimal((String) mainObj.get("totalPrice"));
-            totalSaved = new BigDecimal((String) mainObj.get("totalSaved"));
-
-            /* array di prodotti da acquistare del tipo ==> "productsToBuy":[{"ID":"1","desiredQty":"1"},{"ID":"4","desiredQty":"4"},{"ID":"5","desiredQty":"2"}] */
-
-            JSONArray productsToBuyArray = (JSONArray) mainObj.get("productsToBuy");
-
-            for (int i = 0; i < productsToBuyArray.length(); i++) {
-                JSONObject productObj = (JSONObject) productsToBuyArray.get(i); /*il singolo oggetto product del tipo {"ID":"1","desiredQty":"1"} */
-                Long ID = Long.valueOf((String) productObj.get("ID"));
-                Integer desiredQty = Integer.valueOf((String) productObj.get("desiredQty"));
-                String name = (String) productObj.get("name");
-                BigDecimal eachFinalPrice = new BigDecimal((String) productObj.get("eachFinalPrice"));
-
-                System.out.println("ID=" + ID + " | desiredQty=" + desiredQty + " | name=" + name + " | eachFinalPrice=" + eachFinalPrice);
-
-                ExtendedProduct productToShow = new ExtendedProduct();
-                productToShow.setId(ID);
-                productToShow.setRequiredQuantity(desiredQty);
-                productToShow.setName(name);
-                productToShow.setPrice(eachFinalPrice);
-                checkoutProducts.add(productToShow);
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
             }
-            System.out.println("totalPrice:" + totalPrice + " | totalSaved:" + totalSaved);
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                customer = userDAO.findById(loggedUser.getId()); /* per avere maggiori informazioni riguardo il cliente */
+
+                String checkoutInfo = request.getParameter("checkoutInfo");
+
+                System.err.println("checkoutInfo ===> " + checkoutInfo);
+                JSONObject mainObj = new JSONObject(checkoutInfo);
+                /* prezzo totale al momento del checkout che assumiamo non venga variato anche se nel frattempo variano i prezzi */
+                totalPrice = new BigDecimal((String) mainObj.get("totalPrice"));
+                totalSaved = new BigDecimal((String) mainObj.get("totalSaved"));
+
+                /* array di prodotti da acquistare del tipo ==> "productsToBuy":[{"ID":"1","desiredQty":"1"},{"ID":"4","desiredQty":"4"},{"ID":"5","desiredQty":"2"}] */
+
+                JSONArray productsToBuyArray = (JSONArray) mainObj.get("productsToBuy");
+
+                for (int i = 0; i < productsToBuyArray.length(); i++) {
+                    JSONObject productObj = (JSONObject) productsToBuyArray.get(i); /*il singolo oggetto product del tipo {"ID":"1","desiredQty":"1"} */
+                    Long ID = Long.valueOf((String) productObj.get("ID"));
+                    Integer desiredQty = Integer.valueOf((String) productObj.get("desiredQty"));
+                    String name = (String) productObj.get("name");
+                    BigDecimal eachFinalPrice = new BigDecimal((String) productObj.get("eachFinalPrice"));
+
+                    System.out.println("ID=" + ID + " | desiredQty=" + desiredQty + " | name=" + name + " | eachFinalPrice=" + eachFinalPrice);
+
+                    ExtendedProduct productToShow = new ExtendedProduct();
+                    productToShow.setId(ID);
+                    productToShow.setRequiredQuantity(desiredQty);
+                    productToShow.setName(name);
+                    productToShow.setPrice(eachFinalPrice);
+                    checkoutProducts.add(productToShow);
+                }
+                System.out.println("totalPrice:" + totalPrice + " | totalSaved:" + totalSaved);
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -118,22 +135,23 @@ public class Checkout {
             }
         }
 
+        if (cookieValid) {
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/checkout");
-        /* 4) Lista dei prodotti da mostrare nel riepilogo del checkout */
-        request.setAttribute("checkoutProducts", checkoutProducts);
-        /* 5) Prezzo totale da pagare */
-        request.setAttribute("totalPrice", totalPrice);
-        /* 6) Totale risparmiato grazie agli sconti */
-        request.setAttribute("totalSaved", totalSaved);
-        /* 7) Oggetto utente per sapere ulteriori informazioni riguardo il cliente */
-        request.setAttribute("customer", customer);
-
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/checkout");
+            /* 4) Lista dei prodotti da mostrare nel riepilogo del checkout */
+            request.setAttribute("checkoutProducts", checkoutProducts);
+            /* 5) Prezzo totale da pagare */
+            request.setAttribute("totalPrice", totalPrice);
+            /* 6) Totale risparmiato grazie agli sconti */
+            request.setAttribute("totalSaved", totalSaved);
+            /* 7) Oggetto utente per sapere ulteriori informazioni riguardo il cliente */
+            request.setAttribute("customer", customer);
+        }
     }
 
     public static void processCheckout(HttpServletRequest request, HttpServletResponse response) {
@@ -152,6 +170,7 @@ public class Checkout {
         ArrayList<ExtendedProduct> items = new ArrayList<>(); /* prodotti da aggiungere alla ITEMS_LIST */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
+        boolean cookieValid = true;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -174,54 +193,71 @@ public class Checkout {
 
             daoFactory.beginTransaction();
 
-            productDAO = daoFactory.getProductDAO();
-
-            ordersDAO = daoFactory.getOrdersDAO();
-
             userDAO = daoFactory.getUserDAO();
 
-            cartDAO = daoFactory.getCartDAO();
-
-            customer = userDAO.findById(loggedUser.getId());
-
-            /* fetch dei parametri passati dalla pagina checkout.jsp */
-            BigDecimal totalPrice = new BigDecimal(request.getParameter("totalPrice"));
-            String[] ids = request.getParameterValues("ids");
-            String[] quantities = request.getParameterValues("quantities");
-            String state = request.getParameter("state");
-            String region = request.getParameter("region");
-            String city = request.getParameter("city");
-            String cap = request.getParameter("cap");
-            String street = request.getParameter("street");
-            String house_number = request.getParameter("house_number");
-
-            /* aggiungo le informazioni riguardanti la spedizione */
-            customer.setAddress(StaticFunc.formatFinalAddress(state,region,city,street,cap,house_number));
-
-
-            for (int i = 0; i < ids.length; i++) {
-                System.out.println("ID " + i + " ==> " + ids[i] + " | quantities ==> " + quantities[i]);
-                /* per ogni id presente nell'array String[] lo converto in Long e ricerco il prodotto nel DB tramite tale ID */
-                Product product = productDAO.findProductById(Long.valueOf(ids[i]));
-                ExtendedProduct extendedProduct = new ExtendedProduct(product);
-                /* setto la quantità desiderata tramite l'array quantities */
-                extendedProduct.setRequiredQuantity(Integer.valueOf(quantities[i]));
-                /* l'aggiungo all'array list di items da passare al metodo insert */
-                items.add(extendedProduct);
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
             }
 
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+                productDAO = daoFactory.getProductDAO();
 
-            /* Effettuo l'inserimento del nuovo prodotto nella tabella degli ordini */
+                ordersDAO = daoFactory.getOrdersDAO();
 
-            ordersDAO.insert(customer, totalPrice, items);
-            inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
+                cartDAO = daoFactory.getCartDAO();
 
-            if(inserted){
-                /* se gli ordini sono andati a buon fine devo rimuovere i prodotti dal carrello dell'utente */
-                for (ExtendedProduct boughtItem : items){
-                    cartDAO.removeProductFromCart(loggedUser,boughtItem.getId());
+                customer = userDAO.findById(loggedUser.getId());
+
+                /* fetch dei parametri passati dalla pagina checkout.jsp */
+                BigDecimal totalPrice = new BigDecimal(request.getParameter("totalPrice"));
+                String[] ids = request.getParameterValues("ids");
+                String[] quantities = request.getParameterValues("quantities");
+                String state = request.getParameter("state");
+                String region = request.getParameter("region");
+                String city = request.getParameter("city");
+                String cap = request.getParameter("cap");
+                String street = request.getParameter("street");
+                String house_number = request.getParameter("house_number");
+
+                /* aggiungo le informazioni riguardanti la spedizione */
+                customer.setAddress(StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number));
+
+
+                for (int i = 0; i < ids.length; i++) {
+                    System.out.println("ID " + i + " ==> " + ids[i] + " | quantities ==> " + quantities[i]);
+                    /* per ogni id presente nell'array String[] lo converto in Long e ricerco il prodotto nel DB tramite tale ID */
+                    Product product = productDAO.findProductById(Long.valueOf(ids[i]));
+                    ExtendedProduct extendedProduct = new ExtendedProduct(product);
+                    /* setto la quantità desiderata tramite l'array quantities */
+                    extendedProduct.setRequiredQuantity(Integer.valueOf(quantities[i]));
+                    /* l'aggiungo all'array list di items da passare al metodo insert */
+                    items.add(extendedProduct);
                 }
-                applicationMessage = "Order received correctly, check the status in your order section.";
+
+
+                /* Effettuo l'inserimento del nuovo prodotto nella tabella degli ordini */
+
+                ordersDAO.insert(customer, totalPrice, items);
+                inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
+
+                if (inserted) {
+                    /* se gli ordini sono andati a buon fine devo rimuovere i prodotti dal carrello dell'utente */
+                    for (ExtendedProduct boughtItem : items) {
+                        cartDAO.removeProductFromCart(loggedUser, boughtItem.getId());
+                    }
+                    applicationMessage = "Order received correctly, check the status in your order section.";
+                }
             }
 
             /* Commit fittizio */
@@ -252,31 +288,24 @@ public class Checkout {
             }
         }
 
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/result-checkout");
+            /* 4) il messaggio da visualizzare */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (inserted) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/result-checkout");
-        /* 4) il messaggio da visualizzare */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (inserted) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
         }
-//        /* 4) Lista dei prodotti da mostrare nel riepilogo del checkout */
-//        request.setAttribute("checkoutProducts",checkoutProducts);
-        /* 5) Prezzo totale da pagare */
-//        request.setAttribute("totalPrice",totalPrice);
-//        /* 6) Totale risparmiato grazie agli sconti */
-//        request.setAttribute("totalSaved",totalSaved);
-//        /* 7) Oggetto utente per sapere ulteriori informazioni riguardo il cliente */
-//        request.setAttribute("customer",customer);
-
     }
 }

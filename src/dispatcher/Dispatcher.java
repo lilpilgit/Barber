@@ -36,6 +36,8 @@ public class Dispatcher extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
+
         if (!isMultipart) {
             /*se non è una multipart tratto tale chiamata HTTP come tutte quelle trattate fin ora*/
             controllerAction = request.getParameter("controllerAction");
@@ -86,9 +88,9 @@ public class Dispatcher extends HttpServlet {
                 out.close();
             }
         } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
-            RequestDispatcher jspReservedSlot = request.getRequestDispatcher("jsp/customer/ajax-get-booking.jsp");
+            RequestDispatcher jspGetBooking = request.getRequestDispatcher("jsp/customer/ajax-get-booking.jsp");
             try {
-                jspReservedSlot.forward(request, response);
+                jspGetBooking.forward(request, response);
             } catch (ServletException e) {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
@@ -96,9 +98,9 @@ public class Dispatcher extends HttpServlet {
                 out.close();
             }
         } else {
-            if (controllerAction == null)
-
+            if (controllerAction == null) {
                 controllerAction = "home.Home.view";
+            }
 
             String[] splittedAction = controllerAction.split("\\.");
             Class<?> controllerClass = null;

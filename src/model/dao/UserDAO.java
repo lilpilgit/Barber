@@ -34,5 +34,6 @@ public interface UserDAO {
     /* Metodi che verranno usati SOLAMENTE nei cookie */
     User findLoggedUser();
 
+    boolean isValid(User userFromDB);
     /* ********************************************** */
 }

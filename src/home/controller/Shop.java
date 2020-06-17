@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Shop {
-    private Shop(){}
+    private Shop() {
+    }
 
     public static void showShop(HttpServletRequest request, HttpServletResponse response) {
         /**
@@ -23,6 +24,7 @@ public class Shop {
         DAOFactory daoFactory = null; //per il db
         DAOFactory sessionDAOFactory = null; //per i cookie
         ProductDAO productDAO = null; /* per fetchare i prodotti */
+        UserDAO userDAO = null;
         User loggedUser = null;
         ArrayList<Product> products = null; /* prodotti fetchati dal db da mostrare nella pagina shop */
         String applicationMessage = null;
@@ -30,6 +32,7 @@ public class Shop {
         ArrayList<String> brands = null; /*produttori da mostrare nel dropdown del filtro */
         String categoryToFilter = "All"; /* voce predefinita nel filtro delle categorie */
         String brandToFilter = "All"; /* voce predefinita nel filtro dei brands */
+        boolean cookieValid = true;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -55,38 +58,52 @@ public class Shop {
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
-            /* Istanzio un DAO per poter fetchare i prodotti */
-            productDAO = daoFactory.getProductDAO();
+            userDAO = daoFactory.getUserDAO();
 
-            /* Prendo tutte le categorie dal database */
-            categories = productDAO.findAllCategories();
-
-            /* Prendo tutti i produttori dal database */
-            brands = productDAO.findAllProducers();
-
-            System.err.println("categoryToFilter" + categoryToFilter);
-            System.err.println("brandToFilter" + brandToFilter);
-            /* Fetching dei parametri  */
-            String toFilter = request.getParameter("filter");
-            System.err.println("toFilter ==>" + toFilter);
-            int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
-            if (toFilter != null) {
-                /* posso provare a parsarlo per evitare NullPointerException*/
-                filter = Integer.parseInt(toFilter);
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
             }
-            System.err.println("filter:" + filter);
-            if (filter == 1) {
-                brandToFilter = request.getParameter("brand");
-                categoryToFilter = request.getParameter("category");
 
-                products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Istanzio un DAO per poter fetchare i prodotti */
+                productDAO = daoFactory.getProductDAO();
+
+                /* Prendo tutte le categorie dal database */
+                categories = productDAO.findAllCategories();
+
+                /* Prendo tutti i produttori dal database */
+                brands = productDAO.findAllProducers();
+
                 System.err.println("categoryToFilter" + categoryToFilter);
                 System.err.println("brandToFilter" + brandToFilter);
-            } else {
-                products = productDAO.findAllProducts();
+                /* Fetching dei parametri  */
+                String toFilter = request.getParameter("filter");
+                System.err.println("toFilter ==>" + toFilter);
+                int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
+                if (toFilter != null) {
+                    /* posso provare a parsarlo per evitare NullPointerException*/
+                    filter = Integer.parseInt(toFilter);
+                }
+                System.err.println("filter:" + filter);
+                if (filter == 1) {
+                    brandToFilter = request.getParameter("brand");
+                    categoryToFilter = request.getParameter("category");
+
+                    products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
+                    System.err.println("categoryToFilter" + categoryToFilter);
+                    System.err.println("brandToFilter" + brandToFilter);
+                } else {
+                    products = productDAO.findAllProducts();
+                }
             }
-
-
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -95,11 +112,32 @@ public class Shop {
             sessionDAOFactory.commitTransaction();
 
 
-            boolean loggedOn = loggedUser != null;
-            /* 1) Attributo che indica se è loggato oppure no */
-            request.setAttribute("loggedOn", loggedOn);
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-            System.err.println("loggedOn==>" + loggedOn);
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+        }
+
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            System.err.println("loggedOn==>" + loggedUser != null);
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             System.err.println("loggedUser=> " + loggedUser);
@@ -117,21 +155,7 @@ public class Shop {
             request.setAttribute("brandFiltered", brandToFilter);
             /* 9) Setto la categoria che era stata selezionata per poterla mostrare nella pagina filtrata all'interno del dropdown */
             request.setAttribute("categoryFiltered", categoryToFilter);
-        } catch (Exception e) {
-            try {
-                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
-                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
-            } catch (Throwable t) {
-            }
-            throw new RuntimeException(e);
-
-        } finally {
-
-            try {
-                if (daoFactory != null) daoFactory.closeTransaction(); /* Close della transazione sul db */
-                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
-            } catch (Throwable t) {
-            }
         }
+
     }
 }

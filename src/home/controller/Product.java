@@ -23,7 +23,10 @@ public class Product {
 
         DAOFactory daoFactory = null; //per il db
         DAOFactory sessionDAOFactory = null; //per i cookie
+        UserDAO userDAO = null;
         User loggedUser = null;
+        boolean cookieValid = true;
+
 
         String applicationMessage = null;
 
@@ -48,16 +51,36 @@ public class Product {
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
-            /* Fetching dei parametri  */
-            String idProduct = request.getParameter("idProduct");
-            Long id = 1L;
-            if (idProduct != null) {
-                /* posso provare a parsarlo per evitare NullPointerException*/
-                id = Long.parseLong(idProduct);
-            }
-            System.err.println("id:" + id);
+            userDAO = daoFactory.getUserDAO();
 
-            commonView(daoFactory, loggedUser, id, request);
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /* La pagina che mostra il dettaglio di ciascun prodotto è pubblica */
+            }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Eseguo la logica di business */
+
+                /* Fetching dei parametri  */
+                String idProduct = request.getParameter("idProduct");
+                Long id = 1L;
+                if (idProduct != null) {
+                    /* posso provare a parsarlo per evitare NullPointerException*/
+                    id = Long.parseLong(idProduct);
+                }
+                System.err.println("id:" + id);
+
+                commonView(daoFactory, loggedUser, id, request);
+            }
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -65,11 +88,32 @@ public class Product {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-            boolean loggedOn = loggedUser != null;
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
+            }
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+        }
+
+        if (cookieValid) {
             /* 1) Attributo che indica se è loggato oppure no */
-            request.setAttribute("loggedOn", loggedOn);
-            System.err.println("loggedOn==>" + loggedOn);
+            request.setAttribute("loggedOn", loggedUser != null);
+            System.err.println("loggedOn==>" + loggedUser != null);
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             System.err.println("loggedUser=> " + loggedUser);
@@ -77,15 +121,6 @@ public class Product {
             request.setAttribute("applicationMessage", applicationMessage);
             /* 4) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "common/product");
-
-        } catch (
-                Exception e) {
-            try {
-                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
-                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
-
-            } catch (Throwable t) {
-            }
         }
     }
 

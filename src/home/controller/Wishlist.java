@@ -25,8 +25,10 @@ public class Wishlist {
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
+        UserDAO userDAO = null;
         ArrayList<Product> wishlist = null; //la wishlist da passare alla jsp
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
+        boolean cookieValid = true;
 
 
         try {
@@ -50,7 +52,26 @@ public class Wishlist {
 
             daoFactory.beginTransaction();
 
-            commonView(daoFactory, loggedUser, request);
+            userDAO = daoFactory.getUserDAO();
+
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
+
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* Chiamo la commonView */
+                commonView(daoFactory, loggedUser, request);
+            }
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -80,13 +101,14 @@ public class Wishlist {
             }
         }
 
-
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) Setto quale view devo mostrare */
-        request.setAttribute("viewUrl", "customer/wishlist");
+        if (cookieValid) {
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) Setto quale view devo mostrare */
+            request.setAttribute("viewUrl", "customer/wishlist");
+        }
     }
 
     public static void addToWishlist(HttpServletRequest request, HttpServletResponse response) {
@@ -103,8 +125,8 @@ public class Wishlist {
         Long idProductToAdd = null; /* il del prodotto da aggiungere alla wishlist */
         String from = null; /* da quale jsp viene chiamato il metodo */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
         boolean added = false;
+        boolean cookieValid = true;
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -131,35 +153,58 @@ public class Wishlist {
 
             user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da aggiungere alla wishlist sulla base dell'id ricevuto */
-            idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(user)) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
 
-            wishlistDAO = daoFactory.getWishlistDAO();
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* setto l'id del prodotto da aggiungere alla wishlist sulla base dell'id ricevuto */
+                idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
 
-            added = wishlistDAO.addProductToWishlist(user, idProductToAdd);
+                wishlistDAO = daoFactory.getWishlistDAO();
 
-            /* IMPORTANTE !!! chiamo la commonView solo dopo che è stato aggiunto il prodotto altrimenti viene falsato il parametro inWishlist */
+                added = wishlistDAO.addProductToWishlist(user, idProductToAdd);
 
-            /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
-             *  base del parametro "from" */
-            from = request.getParameter("from");
-            if (from != null) {
-                if (from.equals("product")) {
-                    /* aggiungo il prodotto alla wishlist dalla pagina product.jsp */
-                    /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
-                    home.controller.Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
-                    System.err.println("AGGIUNTO PRODOTTO ALLA WISHLIST DA DENTRO product.jsp");
+                /* IMPORTANTE !!! chiamo la commonView solo dopo che è stato aggiunto il prodotto altrimenti viene falsato il parametro inWishlist */
 
-                } else if (from.equals("cart")) {
+                /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
+                 *  base del parametro "from" */
+                from = request.getParameter("from");
+                if (from != null) {
+                    if (from.equals("product")) {
+                        /* aggiungo il prodotto alla wishlist dalla pagina product.jsp */
+                        /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
+                        home.controller.Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
+                        System.err.println("AGGIUNTO PRODOTTO ALLA WISHLIST DA DENTRO product.jsp");
+
+                    } else if (from.equals("cart")) {
                     /* aggiunto il prodotto alla wishlist da dentro la pagina cart.jsp /
 
                     /* aggiunge l'oggetto "cart" come ArrayList alla request */
-                    Cart.commonView(daoFactory, loggedUser, request);
-                    System.err.println("AGGIUNTO PRODOTTO ALLA WISHLIST DA DENTRO cart.jsp");
+                        Cart.commonView(daoFactory, loggedUser, request);
+                        System.err.println("AGGIUNTO PRODOTTO ALLA WISHLIST DA DENTRO cart.jsp");
+                    }
+
+                } else {
+                    throw new RuntimeException("Wishlist.java ==> non è stato passato alcun parametro 'from'");
                 }
 
-            } else {
-                throw new RuntimeException("Wishlist.java ==> non è stato passato alcun parametro 'from'");
+
+                if (added) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto alla wishlist dell'utente */
+                    applicationMessage = "Product added to wishlist SUCCESSFULLY.";
+                }
+
             }
 
             /* Commit fittizio */
@@ -168,10 +213,7 @@ public class Wishlist {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (added) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto alla wishlist dell'utente */
-                applicationMessage = "Product added to wishlist SUCCESSFULLY.";
-            }
+
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -197,38 +239,40 @@ public class Wishlist {
             }
         }
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+        if (cookieValid) {
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
-        request.setAttribute("applicationMessage", applicationMessage);
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+            request.setAttribute("applicationMessage", applicationMessage);
 
-        /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (added) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
-        }
-
-        /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento */
-
-        if (from != null) {
-            if (from.equals("product")) {
-                /* aggiungo il prodotto alla wishlist dalla pagina product.jsp */
-                request.setAttribute("viewUrl", "common/product");
-
-            } else if (from.equals("cart")) {
-                /* aggiunto il prodotto alla wishlist da dentro la pagina cart.jsp */
-                request.setAttribute("viewUrl", "customer/cart");
+            /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (added) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
             }
 
-        } else {
-            request.setAttribute("viewUrl", "common/home");
+            /* 5) l'url della pagina da visualizzare dopo aver effettuato l'inserimento */
+
+            if (from != null) {
+                if (from.equals("product")) {
+                    /* aggiungo il prodotto alla wishlist dalla pagina product.jsp */
+                    request.setAttribute("viewUrl", "common/product");
+
+                } else if (from.equals("cart")) {
+                    /* aggiunto il prodotto alla wishlist da dentro la pagina cart.jsp */
+                    request.setAttribute("viewUrl", "customer/cart");
+                }
+
+            } else {
+                request.setAttribute("viewUrl", "common/home");
+            }
         }
 
 
@@ -248,8 +292,9 @@ public class Wishlist {
         Long idProductToRemove = null; /* il del prodotto da rimuovere dalla wishlist */
         String from = null; /* da quale jsp viene chiamato il metodo */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
-
         boolean removed = false;
+        boolean cookieValid = true;
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -276,29 +321,51 @@ public class Wishlist {
 
             user = userDAO.findById(loggedUser.getId());
 
-            /* setto l'id del prodotto da rimuovere dal carrello sulla base dell'id ricevuto */
-            idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
+            /* controllo lo stato dell'utente */
+            if (loggedUser != null) {
+                /* c'è un utente loggato */
+                if (!sessionUserDAO.isValid(user)) {
+                    /* utente non autorizzato, invalido il cookie */
+                    System.out.println("UTENTE NON AUTORIZZATO !");
+                    home.controller.Home.logout(request, response);
+                    cookieValid = false;
+                }
+            } else {
+                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+            }
 
-            wishlistDAO = daoFactory.getWishlistDAO();
+            /* verifico se devo eseguire la logica di business o meno */
+            if (cookieValid) {
+                /* setto l'id del prodotto da rimuovere dal carrello sulla base dell'id ricevuto */
+                idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
 
-            removed = wishlistDAO.removeProductFromWishlist(user, idProductToRemove);
+                wishlistDAO = daoFactory.getWishlistDAO();
 
-            /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
-             *  base del parametro "from" */
-            from = request.getParameter("from");
-            if (from != null) {
-                if (from.equals("cart")) {
-                    /* è stato tolto il prodotto cliccando la stellina dentro la pagina cart.jsp */
-                    Cart.commonView(daoFactory, loggedUser, request); /* aggiungo l'oggetto "cart" che è un ArrayList alla cart.jsp */
-                    System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO cart.jsp");
+                removed = wishlistDAO.removeProductFromWishlist(user, idProductToRemove);
 
-                } else if (from.equals("wishlist")) {
-                    commonView(daoFactory, loggedUser, request); /* setto l'attributo "wishlist" all'interno della request */
-                    System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO wishlist.jsp");
-                } else if (from.equals("product")) {
-                    /* aggiungo l'oggetto "product" e "inWishlist" al'interno della request per sapere quale oggetto visualizzare e se è già nella wishlist */
-                    home.controller.Product.commonView(daoFactory, loggedUser, idProductToRemove, request);
-                    System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO product.jsp");
+                /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
+                 *  base del parametro "from" */
+                from = request.getParameter("from");
+                if (from != null) {
+                    if (from.equals("cart")) {
+                        /* è stato tolto il prodotto cliccando la stellina dentro la pagina cart.jsp */
+                        Cart.commonView(daoFactory, loggedUser, request); /* aggiungo l'oggetto "cart" che è un ArrayList alla cart.jsp */
+                        System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO cart.jsp");
+
+                    } else if (from.equals("wishlist")) {
+                        commonView(daoFactory, loggedUser, request); /* setto l'attributo "wishlist" all'interno della request */
+                        System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO wishlist.jsp");
+                    } else if (from.equals("product")) {
+                        /* aggiungo l'oggetto "product" e "inWishlist" al'interno della request per sapere quale oggetto visualizzare e se è già nella wishlist */
+                        home.controller.Product.commonView(daoFactory, loggedUser, idProductToRemove, request);
+                        System.err.println("RIMOSSO PRODOTTO DALLA WISHLIST DA DENTRO product.jsp");
+                    }
+
+                }
+
+                if (removed) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dalla wishlist dell'utente */
+                    applicationMessage = "Product removed from wishlist SUCCESSFULLY.";
                 }
 
             }
@@ -309,10 +376,6 @@ public class Wishlist {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-            if (removed) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dalla wishlist dell'utente */
-                applicationMessage = "Product removed from wishlist SUCCESSFULLY.";
-            }
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -338,35 +401,36 @@ public class Wishlist {
             }
         }
 
-        /* Setto gli attributi della request che verranno processati dalla profile.jsp */
+        if (cookieValid) {
+            /* Setto gli attributi della request che verranno processati dalla profile.jsp */
 
-        /* 1) Attributo che indica se è loggato oppure no */
-        request.setAttribute("loggedOn", loggedUser != null);
-        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-        request.setAttribute("loggedUser", loggedUser);
-        /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
-        request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione dalla wishlist */
-        if (from != null) {
-            if (from.equals("cart")) {
-                /* decido di rimanere nella pagina cart.jsp*/
-                request.setAttribute("viewUrl", "customer/cart");
-            } else if (from.equals("wishlist")) {
-                request.setAttribute("viewUrl", "customer/wishlist");
-            } else if (from.equals("product")) {
-                request.setAttribute("viewUrl", "common/product");
+            /* 1) Attributo che indica se è loggato oppure no */
+            request.setAttribute("loggedOn", loggedUser != null);
+            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            request.setAttribute("loggedUser", loggedUser);
+            /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
+            request.setAttribute("applicationMessage", applicationMessage);
+            /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione dalla wishlist */
+            if (from != null) {
+                if (from.equals("cart")) {
+                    /* decido di rimanere nella pagina cart.jsp*/
+                    request.setAttribute("viewUrl", "customer/cart");
+                } else if (from.equals("wishlist")) {
+                    request.setAttribute("viewUrl", "customer/wishlist");
+                } else if (from.equals("product")) {
+                    request.setAttribute("viewUrl", "common/product");
+                }
+
             }
-
+            /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (removed) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
         }
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-        if (removed) {
-            /* SUCCESS */
-            request.setAttribute("result", "success");
-        } else {
-            /* FAIL */
-            request.setAttribute("result", "fail");
-        }
-
 
     }
 
