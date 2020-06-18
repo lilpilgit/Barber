@@ -750,7 +750,7 @@ function getCurrentDate() {
 
 function getDateTimeObj(hhmmss, yyyymmdd) {
     /**
-     * Transform a string format HH:MM:SS into a Date format
+     * Transform a string format HH:MM:SS and a string format YYYY-MM-DD into a Date format
      *
      * @type {Date}
      */
