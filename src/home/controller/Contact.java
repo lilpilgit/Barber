@@ -23,6 +23,7 @@ public class Contact {
         DAOFactory daoFactory = null; //per il db
         UserDAO userDAO = null;
         User loggedUser = null;
+        User customer = null;
         boolean cookieValid = true;
 
         try {
@@ -62,7 +63,10 @@ public class Contact {
 
             /* verifico se devo eseguire la logica di business o meno */
             if (cookieValid) {
-                /* In questo caso nessuna business logic */
+                /* Eseguo la business logic */
+                if (loggedUser != null) {
+                    customer = userDAO.findById(loggedUser.getId());
+                }
             }
 
 
@@ -100,6 +104,10 @@ public class Contact {
             request.setAttribute("loggedUser", loggedUser);
             /* 3) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "common/contact");
+            /* 4) Setto l'utente da cui estrapolare i dati necessari */
+            if (loggedUser != null) {
+                request.setAttribute("customer", customer);
+            }
         }
     }
 

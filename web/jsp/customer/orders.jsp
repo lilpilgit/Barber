@@ -92,10 +92,11 @@
                                   } else if (order.getStatus().equals(StaticFunc.DELIVERED)) {
                                       valueProgressBar = "100";
                                   } else if (order.getStatus().equals(StaticFunc.CANCELED)) {
+                                      valueProgressBar = "100";
                                       canceled = true;
                                   }
                               %>
-                            <span class="progress-bar <%=(valueProgressBar.equals("100")) ? "bg-success" : ""%>" role="progressbar" style="width: <%=valueProgressBar%>%;"
+                            <span class="progress-bar <%=(valueProgressBar.equals("100") && !canceled) ? "bg-success" : (canceled) ? "bg-danger" : ""%>" role="progressbar" style="width: <%=valueProgressBar%>%;"
                                   aria-valuenow="<%=valueProgressBar%>"
                                   aria-valuemin="0" aria-valuemax="100"></span>
                          </span>
@@ -171,7 +172,7 @@
                                 </td>
                             </tr>
                             <!--la sell date va mostrata solo se il prodotto è stato spedito-->
-                            <%if (valueProgressBar.equals("100")) {%>
+                            <%if (valueProgressBar.equals("100") && !canceled) {%>
                             <tr>
                                 <td colspan="100%">
                                     <span><b>SELL DATE:&nbsp;&nbsp;</b><%=order.getSellDate()%></span>
@@ -185,7 +186,7 @@
                             </tr>
                             <tr>
                                 <td colspan="100%">
-                                    <span><b>STATUS ORDER:&nbsp;&nbsp;</b> <%=order.getStatus()%></span>
+                                    <span <%=(canceled) ? "style='color: rgba(211,4,0,0.66);'" : (valueProgressBar.equals("100") ? "style='color: rgba(59,143,16,0.76)'" : "")%>><b>STATUS ORDER:&nbsp;&nbsp;</b> <%=order.getStatus()%></span>
                                 </td>
                             </tr>
                             <%if (allowCancelOrder) {%>
@@ -265,6 +266,8 @@
 <script type="text/javascript">
     window.addEventListener("load", () => {
 
+        /* refresh della pagina chiamando il form della navbar */
+        window.setTimeout("setNavFormHome('home.Orders.showOrders')",240000); /* timeout in millisecondi */
     });
 
 

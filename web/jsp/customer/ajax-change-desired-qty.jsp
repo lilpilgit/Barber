@@ -21,7 +21,6 @@
     User user = null;
     Long idProductToChange = null; /* il del prodotto di cui modificare la quantità desiderata nel carrello */
     String operation = null; /* parametro che può assumere i valori "increase" o "decrease" per indicare l'operazione da eseguire sul DB */
-
     boolean changed = false;
 
     try {

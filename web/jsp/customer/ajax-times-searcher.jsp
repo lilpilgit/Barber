@@ -8,8 +8,7 @@
 <%@ page import="services.config.Configuration"%>
 <%@ page import="java.time.LocalDate"%>
 <%@ page import="java.time.LocalTime"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
 
 <%
@@ -24,8 +23,12 @@
     Structure structure = null;
     StructureDAO structureDAO = null;
     BookingDAO bookingDAO = null;
+    User loggedUser = null;
+    UserDAO userDAO = null;
     ArrayList<Booking> bookings = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
+    ArrayList<LocalTime> freeSlots = null;
+    int i = 0;
 
     Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
     LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
@@ -50,6 +53,9 @@
 
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
 
+        /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+        loggedUser = sessionUserDAO.findLoggedUser();
+
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -57,6 +63,8 @@
 
         bookingDAO = daoFactory.getBookingDAO();
         structureDAO = daoFactory.getStructureDAO();
+        userDAO = daoFactory.getUserDAO();
+
 
         /* setto l'id della struttura sulla base dell'id ricevuto */
         idStructure = Long.valueOf(request.getParameter("idStructure"));
@@ -77,6 +85,8 @@
 
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
+
+
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();
@@ -104,15 +114,12 @@
         }
     }
 
-
     LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
     /* verifico se la data di prenotazione e' uguale alla data attuale del client */
     isToday = pickedDate.isEqual(currentDate);
 
-    ArrayList<LocalTime> freeSlots = new ArrayList<LocalTime>();
+    freeSlots = new ArrayList<LocalTime>();
 
-    int i = 0;
-    int j;
 
     for (indexTime = LocalTime.of(openingTime.getHour() , openingTime.getMinute(), openingTime.getSecond());
         !indexTime.equals(closingTime); indexTime = indexTime.plusMinutes(slot.getMinute())) {
@@ -122,16 +129,18 @@
             i++;
         } else {
             /* se non si sta prenotando per la data odierna, salvo tutti gli slot liberi */
-            if (!isToday) {
+            if (!isToday || (isToday && (indexTime.compareTo(currentTime) > 0))) {
                 freeSlots.add(indexTime);
                 /* altrimenti se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
-            } else if ((indexTime.compareTo(currentTime) > 0)) {
-                freeSlots.add(indexTime);
             }
+//            else if () {
+//                freeSlots.add(indexTime);
+//            }
         }
     }
 
     result = "success";
+
 %>
             { "result": "<%=result%>",
               "availableTimes":[ <% for(i = 0; i < freeSlots.size(); i++) { %>

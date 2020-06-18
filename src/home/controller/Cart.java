@@ -315,11 +315,12 @@ public class Cart {
 
             userDAO = daoFactory.getUserDAO();
 
+            user = userDAO.findById(loggedUser.getId());
 
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
                 /* c'è un utente loggato */
-                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                if (!sessionUserDAO.isValid(user)) {
                     /* utente non autorizzato, invalido il cookie */
                     System.out.println("UTENTE NON AUTORIZZATO !");
                     home.controller.Home.logout(request, response);
@@ -332,7 +333,6 @@ public class Cart {
             /* verifico se devo eseguire la logica di business o meno */
             if (cookieValid) {
                 /* Eseguo la logica di business */
-                user = userDAO.findById(loggedUser.getId());
 
                 /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
                 idProductToAdd = Long.valueOf(request.getParameter("idProduct"));

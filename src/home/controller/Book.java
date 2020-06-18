@@ -159,13 +159,11 @@ public class Book {
 
             userDAO = daoFactory.getUserDAO();
 
-            user = userDAO.findById(loggedUser.getId());
-
 
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
                 /* c'è un utente loggato */
-                if (!sessionUserDAO.isValid(user)) {
+                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
                     /* utente non autorizzato, invalido il cookie */
                     System.out.println("UTENTE NON AUTORIZZATO !");
                     home.controller.Home.logout(request, response);
@@ -178,6 +176,9 @@ public class Book {
             /* verifico se devo eseguire la logica di business o meno */
             if (cookieValid) {
                 /* Eseguo la logica di business */
+
+                user = userDAO.findById(loggedUser.getId());
+
                 bookingDAO = daoFactory.getBookingDAO();
 
                 /* Prendo l'unica struttura */

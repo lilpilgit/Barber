@@ -20,6 +20,14 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* Se c'è un utente loggato prendo i suoi dati */
+    User customer = null;
+    if (loggedUser != null) {
+        if (request.getAttribute("customer") != null) {
+            customer = (User) request.getAttribute("customer");
+        }
+    }
+
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di invio messaggio ( se è andata a buon fine o meno) */
     String applicationMessage = null;
@@ -36,10 +44,10 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@include file="/templates/head.jsp"%>
+<%@include file="/templates/head.jsp" %>
 <body>
 
-<%@include file="/templates/header.jsp"%>
+<%@include file="/templates/header.jsp" %>
 
 <!---------------------------------------------- IMAGE CONTACT  ------------------------------------------------------->
 
@@ -47,12 +55,12 @@
     <img src="img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
     <div class="text">CONTACT US!</div>
 </div>
-<%if (contacted!=null && contacted == true) {%>
+<%if (contacted != null && contacted == true) {%>
 <div class="alert alert-success alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Sent! </strong><%="\n" + applicationMessage%>
 </div>
-<%} else if(contacted!=null && contacted == false) {%>
+<%} else if (contacted != null && contacted == false) {%>
 <div class="alert alert-danger alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error! </strong><%="\n" + applicationMessage%>
@@ -69,20 +77,22 @@
                 <!-- Input fields -->
                 <div class="form-group">
                     <label for="contact_name">Name:</label>
-                    <input type="text" pattern="[A-Za-z-.' ]{1,32}" title="Non inserire numeri o caratteri speciali!"
+                    <input type="text" pattern="[A-Za-z-.' ]{1,32}" title="Do not enter numbers or special characters!"
                            class="form-control username" id="contact_name" placeholder="Your name..."
                            oninput="this.value=this.value.toUpperCase();"
-                           name="contact_name" value="<%=(loggedOn)? loggedUser.getName() : ""%>" <%if(loggedOn){%> readonly<%}%> required>
+                           name="contact_name" value="<%=(loggedOn)? customer.getName() : ""%>" <%if(loggedOn){%>
+                           readonly<%}%> required>
                 </div>
                 <div class="form-group">
                     <label for="contact_email">Email:</label>
                     <input type="email" class="form-control" id="contact_email" placeholder="Your email..."
-                           name="contact_email" value="<%=(loggedOn)? loggedUser.getEmail() : ""%>" <%if(loggedOn){%> readonly<%}%>  required>
+                           name="contact_email" value="<%=(loggedOn)? customer.getEmail() : ""%>" <%if(loggedOn){%>
+                           readonly<%}%> required>
                 </div>
 
                 <div class="form-group">
                     <label for="contact_text">Message:</label>
-                    <textarea class="form-control" id="contact_text" name="contact_message" rows="3"
+                    <textarea class="form-control" id="contact_text" name="contact_message" rows="3" placeholder="I'd love to..."
                               required></textarea>
                 </div>
                 <div class="pt-2">
@@ -97,9 +107,9 @@
     </div>
 </div>
 
-<%@ include file="/templates/footer.html"%>
+<%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
     });
 </script>
 </body>

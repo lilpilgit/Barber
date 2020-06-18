@@ -48,7 +48,7 @@ public class Admin {
 
             userDAO = daoFactory.getUserDAO();
 
-            adminToEdit = userDAO.findByEmail(loggedUser.getEmail());
+            adminToEdit = userDAO.findById(loggedUser.getId());
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -130,12 +130,12 @@ public class Admin {
 
             userDAO = daoFactory.getUserDAO();
 
-            originalAdmin = userDAO.findByEmail(loggedUser.getEmail());
+            originalAdmin = userDAO.findById(loggedUser.getId());
 
             /* Li tratto come oggetti separati così da poter decidere alla fine, in base all'esito dell'update
              * quale passare alla pagina profile.jsp */
 
-            adminToEdit = userDAO.findByEmail(loggedUser.getEmail());
+            adminToEdit = userDAO.findById(loggedUser.getId());
 
 
             /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono

@@ -30,6 +30,12 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* Prendo l'oggetto admin con tutte le informazioni necessarie */
+    User admin = null;
+    if(request.getAttribute("admin") != null){
+        admin = (User) request.getAttribute("admin");
+    }
+
     /* Prendo il parametro "statistics" per conoscere tutte le diverse statistiche calcolate */
     Statistics statistics = null;
     if (request.getAttribute("statistics") != null) {
@@ -54,11 +60,11 @@
         <div class="container-fluid">
             <h1>Welcome!</h1>
             <hr>
-            <h2>Hello <strong><%=loggedUser.getName()%></strong></h2>
+            <h2>Hello <strong><%=admin.getName()%></strong></h2>
             <div class="row">
                 <div class="form-group col-md-12" id="to-fill"></div>
             </div>
-            <h5>Altre info o statistiche ...</h5>
+            <h5>Some statistics about your business ...</h5>
             <hr>
             <div class="col-md-12">
                 <canvas id="myChart"></canvas>

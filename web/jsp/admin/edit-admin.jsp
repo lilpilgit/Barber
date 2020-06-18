@@ -66,14 +66,12 @@
                 <div class="col-sm-2 mb-3">
                     <label for="Name">First name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
-                           value="<%=adminToEdit.getName()%>"
-                           oninput="toUpperCase(this)">
+                           value="<%=adminToEdit.getName()%>">
                 </div>
                 <div class="col-sm-2 mb-3">
                     <label for="Surname">Last name</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
-                           value="<%=adminToEdit.getSurname()%>"
-                           oninput="toUpperCase(this)">
+                           value="<%=adminToEdit.getSurname()%>">
                 </div>
             </div>
             <div class="form-row justify-content-center">

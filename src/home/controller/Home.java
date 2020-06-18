@@ -153,7 +153,7 @@ public class Home {
             /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
             if (user == null || !user.getPassword().equals(password)) {
                 sessionUserDAO.delete(null);
-                applicationMessage = "Username e/o password errati!";
+                applicationMessage = "Wrong username or password!";
                 loggedUser = null;
             } else {
                 /* determino il tipo di utente */
@@ -173,7 +173,7 @@ public class Home {
                         if (user.getId() != null && user.isBlocked()) { /* mettendo solo user != null va in errore */
                             /* email e password corretta, utente non cancellato, è un cliente e verifico se è BLOCCATO */
                             sessionUserDAO.delete(null);
-                            applicationMessage = "Il tuo account è stato bloccato. Contattaci per ulteriori informazioni.";
+                            applicationMessage = "Your account has been blocked. Contact us for further information.";
                             loggedUser = null;
                         } else {
                             loggedUser = sessionUserDAO.insert(user.getId(), null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());

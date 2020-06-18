@@ -26,6 +26,7 @@ public class Welcome {
         UserDAO sessionUserDAO = null;
         UserDAO userDAO = null;
         User loggedUser = null;
+        User admin = null;
         StatisticsDAO statisticsDAO = null;
         Statistics statistics = null;
         boolean cookieValid = true;
@@ -53,6 +54,7 @@ public class Welcome {
 
             userDAO = daoFactory.getUserDAO();
 
+            admin = userDAO.findById(loggedUser.getId());
 
             statisticsDAO = daoFactory.getStatisticsDAO();
             statistics = statisticsDAO.totalEarningsWithAndWithoutDiscount();
@@ -83,19 +85,21 @@ public class Welcome {
             } catch (Throwable t) {
             }
         }
-        if (cookieValid) {
-            /* 1) Attributo che indica se è loggato oppure no */
-            request.setAttribute("loggedOn", loggedUser != null);
-            System.err.println("loggedOn==> " + loggedUser != null);
-            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-            request.setAttribute("loggedUser", loggedUser);
-            System.err.println("loggedUser=> " + loggedUser);
-            /* 3) Application messagge da mostrare all'utente */
-            request.setAttribute("applicationMessage", applicationMessage);
-            /* 4) Setto quale view devo mostrare */
-            request.setAttribute("viewUrl", "admin/view");
-            /* 5) Setto il totale guadagni applicando gli sconti e non applicandoli */
-            request.setAttribute("statistics", statistics);
-        }
+
+        /* 1) Attributo che indica se è loggato oppure no */
+        request.setAttribute("loggedOn", loggedUser != null);
+        System.err.println("loggedOn==> " + loggedUser != null);
+        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+        request.setAttribute("loggedUser", loggedUser);
+        System.err.println("loggedUser=> " + loggedUser);
+        /* 3) Application messagge da mostrare all'utente */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 4) Setto quale view devo mostrare */
+        request.setAttribute("viewUrl", "admin/view");
+        /* 5) Setto il totale guadagni applicando gli sconti e non applicandoli */
+        request.setAttribute("statistics", statistics);
+        /* 6) Setto l'oggetto admin da cui estrarre le informazioni utili */
+        request.setAttribute("admin",admin);
+
     }
 }

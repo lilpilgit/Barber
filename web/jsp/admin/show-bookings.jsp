@@ -200,14 +200,14 @@
 <script>
 
     window.addEventListener("load", () => {
-        <%--        <%if(dataToShow == null){%>--%>
-        <%--            /* la chiamo solamente se è la prima volta che devo*/--%>
-        <%--            setCurrentDate("Booking-Date");--%>
-        <%--        <%}%>--%>
+
         /* necessario per il popover  */
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover({})
         });
+
+        /* refresh della pagina chiamando il form della sidebar */
+        window.setTimeout("setControllerAction('admin.Bookings.showBookings')",240000); /* timeout in millisecondi */
 
     })
 

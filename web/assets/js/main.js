@@ -353,19 +353,19 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
             if (this.readyState === 4 && this.status === 200) {
                 result = JSON.parse(this.responseText).result;
                 if (result === "success") {
-                    alert("Modificato!");
                     if (operation === 'increase') {
                         /*i can increase the quantity*/
                         qta_field.value = parseInt(qta_field.value) + 1;
-
+                        alert("Awesome!");
                     } else if (operation === 'decrease') {
                         /*i can decrease the quantity*/
                         qta_field.value -= 1;
+                        alert("What a pity!");
                     }
                     /* devo ricalcolare prezzo totale e risparmio solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
                 } else if (result === "fail") {
-                    alert("Non è stato modificato!");
+                    alert("The quantity could not be changed!");
                 } else {
                     alert("ERRORE NEL BACKEND!");
                 }

@@ -12,8 +12,7 @@
                     </button>
                 </div>
                 <div class="user-info">
-                    <span class="user-name"><%=loggedUser.getName()%>&nbsp;&nbsp;<strong><%=loggedUser.getSurname()%></strong></span>
-                    <span class="user-role">Administrator</span>
+                    <span class="user-name"><strong>Administrator</strong></span>
                 </div>
             </div>
 

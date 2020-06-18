@@ -61,7 +61,7 @@
 <div class="container py-4">
     <div class="cart-box">
         <div class="row justify-content-center pb-4">
-            <h3>Welcome <b><%=loggedUser.getName()%>
+            <h3>Welcome <b><%=customer.getName()%>
             </b> to your edit section</h3>
         </div>
         <hr>

@@ -183,9 +183,6 @@ public class UserDAOCookieImpl implements UserDAO {
         String encodedLoggedUser;
         encodedLoggedUser
                 = loggedUser.getId() + "#"
-                + loggedUser.getEmail() + "#"
-                + loggedUser.getName() + "#"
-                + loggedUser.getSurname() + "#"
                 + loggedUser.getType() + "#";
 
         return encodedLoggedUser;
@@ -202,9 +199,6 @@ public class UserDAOCookieImpl implements UserDAO {
         String[] values = encodedLoggedUser.split("#");
 
         loggedUser.setId(Long.parseLong(values[i++]));
-        loggedUser.setEmail(values[i++]);
-        loggedUser.setName(values[i++]);
-        loggedUser.setSurname(values[i++]);
         loggedUser.setType(values[i++].charAt(0));
 
         return loggedUser;

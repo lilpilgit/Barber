@@ -285,7 +285,7 @@ function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
             } ,
             title: {
                 display: true,
-                text: "Come vanno i miei ordini",
+                text: "My orders",
                 fontSize: 15
             },
             legend: {

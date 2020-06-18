@@ -196,6 +196,7 @@
     <input type="hidden" name="sellDate" id="sellDate" value="">
 </form>
 
+
 <script>
     window.addEventListener("load", () => {
         /* necessario per il popover  */
@@ -203,6 +204,9 @@
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover({})
         });
+
+        /* refresh della pagina chiamando il form della sidebar */
+        window.setTimeout("setControllerAction('admin.Logistics.showLogistics')",240000); /* timeout in millisecondi */
     })
 </script>
 </body>
