@@ -391,38 +391,11 @@ function findSlot(idStructure, pickedDate) {
      * @type {string}
      */
 
-    let today = new Date();
-    let currentTime;
-    let HH = today.getHours();
-    let MM = today.getMinutes();
+    let currentTime = getCurrentTime();
+    let currentDate = getCurrentDate();
 
-    /* Devo formattare il currentTime in modo da ottenere il seguente formato HH:MM */
-    if (HH < 10) {
-        HH = '0' + HH;
-    }
-
-    if (MM < 10) {
-        MM = '0' + MM;
-    }
-
-    currentTime = HH + ":" + MM;
-
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
     let obj = null;
     let xhttp = new XMLHttpRequest();
-
-    /* Devo formattare la data odierna today in modo da ottenere YYYY-MM-DD */
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-
-    today = yyyy + '-' + mm + '-' + dd;
 
     /* Funzione esclusiva per inserire le option nella select di book.jsp */
     function addOption(freeTime) {
@@ -460,7 +433,7 @@ function findSlot(idStructure, pickedDate) {
 
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate + "&currentTime=" + currentTime + "&currentDate=" + today);
+    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate + "&currentTime=" + currentTime + "&currentDate=" + currentDate);
     console.log("Customer selected date:" + pickedDate);
 }
 
@@ -544,22 +517,31 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
     let form = document.getElementById('action_book');
     let selectedOptionTime = document.getElementById(selectedTime);
     let date = document.getElementById(selectedDate).value;
-    let time;
-    let formattedTime;
+    let now = new Date(); /* now rappresenta il momento in cui ho cliccato su book now! */
+    let time = selectedOptionTime.options[selectedOptionTime.selectedIndex].text;
 
-    time = selectedOptionTime.options[selectedOptionTime.selectedIndex].text;
-
-    /* Se ci sono orari disponibili riferiti alla data <date>, allora preparo la form */
+    /* Se ho ricevuto un'orario conforme */
     if (time !== "Change date :(") {
         /* Se ricevo un tempo, devo aggiungere i secondi per poterlo rendere compatibile con il formato TIME di sql */
-        formattedTime = time + ":00";
-        form.elements['controllerAction'].value = 'home.Book.bookAppointment';
-        form.elements['idCustomer'].value = loggedUserId;
-        form.elements['selected_date'].value = date;
-        form.elements['selected_time'].value = formattedTime;
-        console.log("Selected time: " + formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
-        form.submit();
-    } else {
+        let formattedTime = time + ":00";
+        /* creo un oggetto Date da confrontare con now */
+        let timeObj = getTimeAsObj(formattedTime);
+        /* Per risolvere il problema del thinking time, verifico che l'ora per cui sto prenotando, non sia gia' passata */
+        if (now < timeObj) {
+            /* Se ci sono orari disponibili riferiti alla data <date>, allora preparo la form */
+            form.elements['controllerAction'].value = 'home.Book.bookAppointment';
+            form.elements['idCustomer'].value = loggedUserId;
+            form.elements['selected_date'].value = date;
+            form.elements['selected_time'].value = formattedTime;
+            console.log("Selected time: " + formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
+            form.submit();
+        } else {
+            /* Nel caso l'ora per cui si vuole prenotare sia gia' opa */
+            alert ("The time you chose has already passed!\n" +
+                "The page will be reloaded automatically with the new updated data.");
+            setNavFormHome('home.Book.showBook');
+        }
+    } else if (time === "Change date :(") {
         /* Qualora venisse cliccato su Book now! e non ci fossero orari disponibili, mando un alert */
         alert("There are no appointments available on this date :(\n" + "Please try to change the date.");
     }
@@ -668,25 +650,13 @@ function setDateBook(id) {
      * Return current date in format gg-mm-aaaa
      * */
 
-    let today = new Date();
+    let today = getCurrentDate();
     let maxfield = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
 
-    if (dd < 10) {
-        dd = '0' + dd
-    }
-
-    if (mm < 10) {
-        mm = '0' + mm
-    }
-
-    today = yyyy + '-' + mm + '-' + dd;
     maxfield.setDate(maxfield.getDate() + 7);
-    dd = maxfield.getDate();
-    mm = maxfield.getMonth() + 1; //January is 0!
-    yyyy = maxfield.getFullYear();
+    let dd = maxfield.getDate();
+    let mm = maxfield.getMonth() + 1; //January is 0!
+    let yyyy = maxfield.getFullYear();
 
     if (dd < 10) {
         dd = '0' + dd
@@ -737,4 +707,59 @@ function autoFillShippingAddress(checkbox, addressDB) {
     /*----------------------------------------------------------------*/
     houseNumber_field.value = (statusCheckbox === true) ? addressDB[5] : "";
     houseNumber_field.readOnly = statusCheckbox;
+}
+
+function getCurrentTime() {
+    let today = new Date();
+    let currentTime;
+    let HH = today.getHours();
+    let MM = today.getMinutes();
+
+    /* Devo formattare il currentTime in modo da ottenere il seguente formato HH:MM */
+    if (HH < 10) {
+        HH = '0' + HH;
+    }
+
+    if (MM < 10) {
+        MM = '0' + MM;
+    }
+
+    currentTime = HH + ":" + MM;
+    return currentTime;
+}
+
+function getCurrentDate() {
+    let today = new Date();
+    let currentDate;
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    /* Devo formattare la data odierna today in modo da ottenere YYYY-MM-DD */
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    currentDate = yyyy + '-' + mm + '-' + dd;
+    return currentDate;
+}
+
+function getTimeAsObj(hhmmss) {
+    /**
+     * Transform a string format HH:MM:SS into a Date format
+     *
+     * @type {Date}
+     */
+
+    let today = new Date();
+    let splittedTime = hhmmss.split(":");
+    today.setHours(splittedTime[0]);
+    today.setMinutes(splittedTime[1]);
+    today.setSeconds(splittedTime[2]);
+
+    return today;
 }
