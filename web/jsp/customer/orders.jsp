@@ -95,8 +95,7 @@
                                       canceled = true;
                                   }
                               %>
-<%--                            TODO: bisogna creare una classe? perchè così non va--%>
-                            <span class="progress-bar" role="progressbar" style="width: <%=valueProgressBar%>%;<%=(valueProgressBar.equals("100")) ? "color: rgba(20,154,75,0.66);" : ""%>"
+                            <span class="progress-bar <%=(valueProgressBar.equals("100")) ? "bg-success" : ""%>" role="progressbar" style="width: <%=valueProgressBar%>%;"
                                   aria-valuenow="<%=valueProgressBar%>"
                                   aria-valuemin="0" aria-valuemax="100"></span>
                          </span>
