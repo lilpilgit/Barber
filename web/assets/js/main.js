@@ -391,14 +391,12 @@ function findSlot(idStructure, pickedDate) {
      * @type {string}
      */
 
-    let result = "fail";
-    let availableTimes = [];
     let today = new Date();
-    let currentDate;
     let currentTime;
     let HH = today.getHours();
     let MM = today.getMinutes();
 
+    /* Devo formattare il currentTime in modo da ottenere il seguente formato HH:MM */
     if (HH < 10) {
         HH = '0' + HH;
     }
@@ -415,6 +413,7 @@ function findSlot(idStructure, pickedDate) {
     let obj = null;
     let xhttp = new XMLHttpRequest();
 
+    /* Devo formattare la data odierna today in modo da ottenere YYYY-MM-DD */
     if (dd < 10) {
         dd = '0' + dd;
     }
@@ -425,6 +424,7 @@ function findSlot(idStructure, pickedDate) {
 
     today = yyyy + '-' + mm + '-' + dd;
 
+    /* Funzione esclusiva per inserire le option nella select di book.jsp */
     function addOption(freeTime) {
         let time = document.getElementById("time");
         let option = document.createElement("option");
@@ -444,7 +444,7 @@ function findSlot(idStructure, pickedDate) {
                     sel.remove(i);
                 }
 
-                /* Inserisco gli orari disponibili all'interno della select */
+                /* Inserisco gli orari disponibili che trovo nel Json all'interno della select */
                 for (let i = 0; i < obj.availableTimes.length; i++)
                     if (obj.availableTimes[i])
                     addOption(obj.availableTimes[i]);
@@ -549,14 +549,20 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
 
     time = selectedOptionTime.options[selectedOptionTime.selectedIndex].text;
 
-    formattedTime = time + ":00";
-
-    form.elements['controllerAction'].value = 'home.Book.bookAppointment';
-    form.elements['idCustomer'].value = loggedUserId;
-    form.elements['selected_date'].value = date;
-    form.elements['selected_time'].value = formattedTime;
-    console.log("Selected time: " + formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
-    form.submit();
+    /* Se ci sono orari disponibili riferiti alla data <date>, allora preparo la form */
+    if (time !== "Change date :(") {
+        /* Se ricevo un tempo, devo aggiungere i secondi per poterlo rendere compatibile con il formato TIME di sql */
+        formattedTime = time + ":00";
+        form.elements['controllerAction'].value = 'home.Book.bookAppointment';
+        form.elements['idCustomer'].value = loggedUserId;
+        form.elements['selected_date'].value = date;
+        form.elements['selected_time'].value = formattedTime;
+        console.log("Selected time: " + formattedTime + " Selected date: " + date + " Id User: " + loggedUserId);
+        form.submit();
+    } else {
+        /* Qualora venisse cliccato su Book now! e non ci fossero orari disponibili, mando un alert */
+        alert("There are no appointments available on this date :(\n" + "Please try to change the date.");
+    }
 }
 
 function showOrRemoveTextArea(option) {

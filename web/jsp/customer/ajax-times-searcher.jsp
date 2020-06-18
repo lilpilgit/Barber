@@ -106,7 +106,7 @@
 
 
     LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
-    /* verifico se la data di prenotazione e' uguale alla data del client */
+    /* verifico se la data di prenotazione e' uguale alla data attuale del client */
     isToday = pickedDate.isEqual(currentDate);
 
     ArrayList<LocalTime> freeSlots = new ArrayList<LocalTime>();
@@ -121,10 +121,12 @@
             System.err.println("Trovato appuntamento alle: " + bookings.get(i).getHourStart());
             i++;
         } else {
+            /* se non si sta prenotando per la data odierna, salvo tutti gli slot liberi */
             if (!isToday) {
                 freeSlots.add(indexTime);
+                /* altrimenti se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
             } else if ((indexTime.compareTo(currentTime) > 0)) {
-                j = indexTime.compareTo(currentTime);
+                freeSlots.add(indexTime);
             }
         }
     }
