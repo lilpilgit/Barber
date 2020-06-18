@@ -525,9 +525,9 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
         /* Se ricevo un tempo, devo aggiungere i secondi per poterlo rendere compatibile con il formato TIME di sql */
         let formattedTime = time + ":00";
         /* creo un oggetto Date da confrontare con now */
-        let timeObj = getTimeAsObj(formattedTime);
+        let dateTimeObj = getDateTimeObj(formattedTime, date);
         /* Per risolvere il problema del thinking time, verifico che l'ora per cui sto prenotando, non sia gia' passata */
-        if (now < timeObj) {
+        if (now < dateTimeObj) {
             /* Se ci sono orari disponibili riferiti alla data <date>, allora preparo la form */
             form.elements['controllerAction'].value = 'home.Book.bookAppointment';
             form.elements['idCustomer'].value = loggedUserId;
@@ -748,14 +748,15 @@ function getCurrentDate() {
     return currentDate;
 }
 
-function getTimeAsObj(hhmmss) {
+function getDateTimeObj(hhmmss, yyyymmdd) {
     /**
      * Transform a string format HH:MM:SS into a Date format
      *
      * @type {Date}
      */
 
-    let today = new Date();
+    /* Creo un nuovo oggetto Date dove imposto gia' anno-mese-giorno */
+    let today = new Date(yyyymmdd);
     let splittedTime = hhmmss.split(":");
     today.setHours(splittedTime[0]);
     today.setMinutes(splittedTime[1]);
