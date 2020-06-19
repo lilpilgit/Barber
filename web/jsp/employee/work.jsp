@@ -168,7 +168,7 @@
         });
 
         /* refresh della pagina chiamando il form della sidebar */
-        window.setTimeout(refreshWork, 15000); /* timeout in millisecondi */
+        window.setTimeout(refreshWork, 60000); /* timeout in millisecondi */
 
     })
 
