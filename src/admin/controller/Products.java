@@ -283,6 +283,7 @@ public class Products {
          */
         Long idToManage = null; /* id ricevuto */
         Boolean status = false; /* in base allo stato capisco se sto chiedendo di mettere o rimuovere un prodotto dalla vetrina */
+        Boolean fromHome = false; /* If the request comes from the home, I known! */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
@@ -290,6 +291,7 @@ public class Products {
         Product product = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean showcase = false; /* Showcase indica se il prodotto e' o no in vetrina nella home */
+
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -311,6 +313,8 @@ public class Products {
             idToManage = Long.valueOf(request.getParameter("ProductID"));
             /* Fetching dello stato attuale del prodotto, se e' in vetrina o no */
             status = Boolean.valueOf(request.getParameter("ProductStatus"));
+            /* Fetching della provenienza della richiesta, se viene dalla home --> true */
+            fromHome = Boolean.valueOf(request.getParameter("fromHome"));
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -375,7 +379,12 @@ public class Products {
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
          *     la show-customers.jsp per consentire altre operazioni */
-        request.setAttribute("viewUrl", "admin/show-products");
+        if (fromHome) {
+            /* se la richiesta di rimozione del prodotto dalla vetrina viene dalla Home, allora chiamo la view */
+            home.controller.Home.view(request, response);
+        } else {
+            request.setAttribute("viewUrl", "admin/show-products");
+        }
         /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (showcase) {
             /* SUCCESS */

@@ -144,7 +144,9 @@
 <script type="text/javascript">
 
     window.addEventListener("load", () => {
+        <%if (loggedOn) {%>
         handlerCounterQtaProduct("minus_button", "maxOrderQuantity", "plus_button", <%=product.getMaxOrderQuantity()%>);
+        <%}%>
     });
 
 </script>

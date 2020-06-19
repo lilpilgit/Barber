@@ -764,3 +764,21 @@ function getDateTimeObj(hhmmss, yyyymmdd) {
 
     return today;
 }
+
+function removeProductFromShowcase(idProduct) {
+    /**
+     * WARNING!!!! ONLY FOR ADMIN!!
+     * Create the form necessary to remove a product from the showcase
+     */
+
+    let productForm = document.getElementById('showProductForm');
+
+    /*setto il value del campo idProduct del prodotto scelto da visualizzare */
+    productForm.elements['ProductID'].value = idProduct;
+    productForm.elements['ProductStatus'].value = true;
+    productForm.elements['fromHome'].value = true;
+    console.log(productForm);
+    /*submit della form verso il dispatcher*/
+    productForm.submit();
+}
+

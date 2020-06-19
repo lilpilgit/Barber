@@ -114,7 +114,7 @@
                                             </p>
                                             <%} if (loggedOn && loggedUser.getType() == 'A') {%>
                                             <button class="btn btn-outline-secondary" title="Remove from showcase"
-                                                    onclick=setProductForm('<%=product.getId()%>')>Remove
+                                                    onclick=removeProductFromShowcase('<%=product.getId()%>')>Remove
                                             </button>
                                             <%} else {%>
                                             <button class="btn btn-outline-secondary"
@@ -221,7 +221,6 @@
     </div>
 </div>
 
-
 <!-------------------------------------------------- Our Team --------------------------------------------------------->
 <div class="container-fluid py-4 ">
     <div class="row text-center">
@@ -230,35 +229,22 @@
             <div class="container pb-4 ">
                 <img class="img-thumbnail myrounded" src="img/homepage/team.jpg" height="500" alt="Team.jpg">
             </div>
-
-
-            <%-- <div class="container py-4">
-                 <button type="button" class="button button2" data-toggle="collapse" data-target="#demo">Check it!
-                 </button>
-             </div>
-             <div id="demo" class="collapse">
-
-                 <!---------------------------------- Show Team ------------------------------------->
-
-                &lt;%&ndash; <div class="container py-3 ml-auto">
-                     <div class="fixit">
-                         <img class="rounded-circle profile-img" src="img/homepage/Long-Beard-Styles.jpg"
-                              alt="BarbaLungaStyles.jpg">
-                         <h2>Mario Rossi</h2>
-                         <p>Our beard expert will amaze you with many ideas for new styles</p>
-                         <br>
-                     </div>
-                 </div>&ndash;%&gt;
- --%>
-
         </div>
     </div>
 </div>
 </div>
 <!-- form per mostrare il prodotto scelto -->
 <form name="showProductForm" id="showProductForm" method="post">
+    <!-- FOR ADMIN -->
+    <%if (loggedOn && loggedUser.getType() == 'A') {%>
+    <input type="hidden" name="controllerAction" value="admin.Products.manageShowcase">
+    <input type="hidden" name="ProductID" value="">
+    <input type="hidden" name="ProductStatus" value="">
+    <input type="hidden" name="fromHome" value="">
+    <%} else {%>
     <input type="hidden" name="controllerAction" value="home.Product.showProduct">
     <input type="hidden" name="idProduct" value="">
+    <%}%>
 </form>
 <%@ include file="/templates/footer.html" %>
 </body>
