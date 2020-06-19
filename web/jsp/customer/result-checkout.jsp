@@ -54,15 +54,19 @@
     %>
     <div class="result-checkout-container">
         <h3 class="result-checkout">It's all OK!</h3>
-        <div class="container" style="margin-left: 308px;">
-            <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina,
-                 una volta customizzato in ogni pagina l'alert a seconda se lo si vuole o meno si potrà toglierlo dalla head.jsp-->
-            <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
-            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json" background="transparent"
-                           speed="0.5" style="width: 300px; height: 300px;" autoplay></lottie-player>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina,
+                         una volta customizzato in ogni pagina l'alert a seconda se lo si vuole o meno si potrà toglierlo dalla head.jsp-->
+                    <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
+                    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json" background="transparent"
+                                   speed="0.5" style="height: 300px;" autoplay></lottie-player>
+                </div>
+            </div>
+            <p><%=applicationMessage%></p>
         </div>
-        <p><%=applicationMessage%></p>
     </div>
     <%}%>
 </div>
