@@ -3,7 +3,6 @@
 <%@ page import="model.mo.Order" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -38,19 +37,14 @@
 %>
 <!doctype html>
 <html lang="en">
-
 <%@include file="/templates/head.jsp" %>
-
 <body>
-
 <%@include file="/templates/header.jsp" %>
+
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container my-4" style="background-color: #f1e7cb; border-radius: 25px; min-height: 500px;">
-
     <span class="text-center"><h2><br>HERE YOU CAN FIND YOUR ORDERS</h2></span>
-
-    <!-- PRESO DA https://getbootstrap.com/docs/4.0/components/collapse/ -->
 
     <!-- RICORDARSI DI INCREMENTARE GLI ID PER OGNI CARD -->
     <!-- STARE ATTENTI AL VALORE data-target CHE DEVE CORRISPONDERE CON L'ID DEL CONTENUTO DELLA CARD -->
@@ -61,12 +55,12 @@
         <div class="card">
             <div class="card-header " id="heading_<%=numberCollapse%>">
                 <h6 class="mb-0 ">
-
                     <div class="row">
                         <div class="col pt-2">ORDER ID: #<%=order.getId()%>#</div>
                         <div class="col pt-2">ORDER DATE: <%=order.getOrderDate()%>
                         </div>
-                        <div class="col-5 pt-2"><span class="float-left pr-3">STATUS:</span><span class="progress">
+                        <div class="col-5 pt-2"><span class="float-left pr-3">STATUS:</span>
+                            <span class="progress">
                             <!-- PER MODIFICARE STATO AVANZAMENTO CAMBIARE width: 0/25/50/75/100 e aria-valuenow= 0/25/50/75/100 -->
                                 <%--0 = nothing-new--%>
                                 <%--25 = processing--%>
@@ -157,7 +151,6 @@
                             <!----------------------------------- TABLE FOOTER ---------------------------------------->
                             <tfoot>
                             <%
-
                                 /* Faccio il replace dell'address per poterlo formattare diversamente */
                                 String shippingAddressFormatted = null;
                                 /* Effettuo il replace di | con , */
@@ -193,13 +186,12 @@
                             <tr class="text-center">
                                 <td colspan="100%">
                                     <span>
-                            <!-- TODO SE LA BARRA DI PROGRESSO E' SUPERIORE AL 25% NON MOSTRARE IL BOTTONE! PERCHE' SIGNIFICA CHE E' STATO SPEDITO-->
                                     <button class="btn btn-danger"
                                             data-target="#alertDeleteOrder"
                                             data-toggle="modal"
                                             onclick="setTmpId(<%=order.getId()%>,'tmpIdDel');"
                                             title="Please.. Don't do this!!!">Cancel Order</button>
-                            </span>
+                                    </span>
                                 </td>
                             </tr>
                             <%}%>
@@ -217,7 +209,6 @@
 
     </div>
 </div>
-
 
 <input type="hidden" id="tmpIdDel" value="">
 <!--MODAL DI CONFERMA ELIMINAZIONE ORDINE-->
@@ -252,7 +243,6 @@
     </div>
 </div>
 <!--FINE MODAL DI CONFERMA ELIMINAZIONE ORDINE-->
-
 
 <form method="post" id="order_action">
     <input type="hidden" name="controllerAction" value="">
