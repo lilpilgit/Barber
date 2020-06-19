@@ -141,7 +141,7 @@
         <div class="row">
             <div class="col text-center">
                 <form id="logoutForm" method="post">
-                    <input class="btn btn-primary" type="submit" value="Logout">
+                    <input type="submit" class="btn btn-primary"  value="Logout">
                     <input type="hidden" name="controllerAction" value="home.Home.logout">
                 </form>
             </div>
@@ -149,7 +149,7 @@
     </div>
 
 </main>
-<form id="refreshWorkForm">
+<form id="refreshWorkForm" method="post">
     <input type="hidden" name="controllerAction" value="employee.Work.showBookings">
     <input type="hidden" value="<%=dataToShow%>" name="currentDate" id="currentDateRefresh">
 </form>
