@@ -2,7 +2,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -35,15 +34,11 @@
 %>
 <!doctype html>
 <html lang="en">
-
 <%@include file="/templates/head.jsp"%>
-
 <body>
 <%@include file="/templates/header.jsp"%>
 
 <!------------------------------------------------ WishList ----------------------------------------------------->
-
-<!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
 
 <div class="container py-4">
     <div class="cart-box">
