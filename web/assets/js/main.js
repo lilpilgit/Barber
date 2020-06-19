@@ -420,7 +420,7 @@ function findSlot(idStructure, pickedDate) {
                 /* Inserisco gli orari disponibili che trovo nel Json all'interno della select */
                 for (let i = 0; i < obj.availableTimes.length; i++)
                     if (obj.availableTimes[i])
-                    addOption(obj.availableTimes[i]);
+                        addOption(obj.availableTimes[i]);
 
                 if (obj.availableTimes.length === 0)
                     addOption("Change date :(");
@@ -537,7 +537,7 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
             form.submit();
         } else {
             /* Nel caso l'ora per cui si vuole prenotare sia gia' opa */
-            alert ("The time you chose has already passed!\n" +
+            alert("The time you chose has already passed!\n" +
                 "The page will be reloaded automatically with the new updated data.");
             setNavFormHome('home.Book.showBook');
         }
@@ -726,6 +726,29 @@ function getCurrentTime() {
 
     currentTime = HH + ":" + MM;
     return currentTime;
+}
+
+function setCurrentDate(id) {
+    /**
+     * Return current date in format gg-mm-aaaa
+     * */
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    console.log(today);
+    document.getElementById(id).value = today;
 }
 
 function getCurrentDate() {

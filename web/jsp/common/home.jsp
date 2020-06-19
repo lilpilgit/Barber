@@ -30,7 +30,7 @@
         products = (ArrayList<Product>) request.getAttribute("showcase");
     }
 
-    /* Prendo il parametro per decidere cosa fare nel caso in cui la registrazione sia andata a buon fine TODO mostrare il modal di login in automatico in base al fatto che registered sia true o meno */
+    /* Prendo il parametro per decidere cosa fare nel caso in cui la registrazione sia andata a buon fine */
     Boolean registered = null;
     if (request.getAttribute("registered") != null) {
         registered = (Boolean) request.getAttribute("registered");
@@ -112,7 +112,10 @@
                                             <p class="item-price">
                                                 <span>&euro;<%=product.getPrice()%></span>
                                             </p>
-                                            <%} if (loggedOn && loggedUser.getType() == 'A') {%>
+                                            <%
+                                                }
+                                                if (loggedOn && loggedUser.getType() == 'A') {
+                                            %>
                                             <button class="btn btn-outline-secondary" title="Remove from showcase"
                                                     onclick=removeProductFromShowcase('<%=product.getId()%>')>Remove
                                             </button>
@@ -148,9 +151,7 @@
 </div>
 
 <!----------------------------------------------- Link To shop -------------------------------------------------------->
-<%if (loggedOn && loggedUser.getType() == 'A') {%>
-<!-- Se l'utente loggato e' amministratore, non mostro il pulsante See more...  -->
-<%} else if ((loggedUser == null) || (loggedOn && (loggedUser.getType() == 'C'))) {%>
+<%if ((loggedUser == null) || (loggedOn && (loggedUser.getType() == 'C'))) {%>
 <div class="container text-center">
     <button class="btn btnheader active2" onclick="setNavFormHome('home.Shop.showShop')" type="button" id='showShop'>
         See more...
@@ -249,3 +250,16 @@
 <%@ include file="/templates/footer.html" %>
 </body>
 </html>
+<!-- redirect all'area riservata dell'impiegato -->
+<%if (loggedOn && loggedUser.getType() == 'E') {%>
+<form method="post" id="redirectEmployeeArea">
+    <input type="hidden" name="controllerAction" value="employee.Work.showBookings"/>
+    <input type="hidden" class="form-control" value="" name="currentDate" id="currentDateRedirectEmployee">
+</form>
+<script>
+    window.addEventListener("load", () => {
+        setCurrentDate('currentDateRedirectEmployee');
+        document.getElementById('redirectEmployeeArea').submit();
+    });
+</script>
+<%}%>

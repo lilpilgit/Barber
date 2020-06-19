@@ -245,6 +245,7 @@
                                             class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
                                 <input type="hidden" name="controllerAction" value="home.Home.logon"/>
+                                <input type="hidden" class="form-control" value="" name="currentDate" id="currentDate">
                             </form>
                         </div>
 
@@ -405,6 +406,11 @@
     </div>
 </div>
 <%}%>
+<script>
+    window.addEventListener("load",()=>{
+        setCurrentDate('currentDate');
+    });
+</script>
 
 <script>
     function setNavFormHome(value) {

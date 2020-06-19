@@ -63,12 +63,12 @@ public class Home {
                     home.controller.Home.logout(request, response);
                     cookieValid = false;
                 }
-            }else{
+            } else {
                 /* La pagina Home è pubblica anche per gli utenti non loggati */
             }
 
             /* verifico se devo eseguire la logica di business o meno */
-            if(cookieValid){
+            if (cookieValid) {
                 /* Chiamo la commonView */
                 commonView(daoFactory, request);
             }
@@ -122,6 +122,7 @@ public class Home {
         User loggedUser = null;
         UserDAO userDAO = null;
         User user = null;
+        boolean viewEmployee = false; /* viene settato a true solo se si logga il dipendente */
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -167,6 +168,7 @@ public class Home {
                     case 'E':
                         /* EMPLOYEE */
                         loggedUser = sessionUserDAO.insert(user.getId(), null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        viewEmployee = true;
                         break;
                     case 'C':
                         /* CUSTOMER */
@@ -186,10 +188,10 @@ public class Home {
 
 
             }
-
-            /* Chiamo la commonView */
-            commonView(daoFactory, request);
-
+            if (!viewEmployee) {
+                /* Chiamo la commonView solo se si sta loggando il cliente o l'admin */
+                commonView(daoFactory, request);
+            }
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -197,16 +199,6 @@ public class Home {
             sessionDAOFactory.commitTransaction();
 
 
-            /* 1) Attributo che indica se è loggato oppure no */
-            request.setAttribute("loggedOn", loggedUser != null);
-            System.err.println("loggedOn==> " + loggedUser != null);
-            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
-            request.setAttribute("loggedUser", loggedUser);
-            System.err.println("loggedUser=> " + loggedUser);
-            /* 3) Application messagge da mostrare all'utente */
-            request.setAttribute("applicationMessage", applicationMessage);
-            /* 4) Setto quale view devo mostrare */
-            request.setAttribute("viewUrl", "common/home");
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -222,6 +214,21 @@ public class Home {
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
             } catch (Throwable t) {
             }
+        }
+
+        /* 1) Attributo che indica se è loggato oppure no */
+        request.setAttribute("loggedOn", loggedUser != null);
+        System.err.println("loggedOn==> " + loggedUser != null);
+        /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+        request.setAttribute("loggedUser", loggedUser);
+        System.err.println("loggedUser=> " + loggedUser);
+        /* 3) Application messagge da mostrare all'utente */
+        request.setAttribute("applicationMessage", applicationMessage);
+        /* 4) Setto quale view devo mostrare */
+        request.setAttribute("viewUrl", "common/home");
+        /* Chiamo il metodo del controller che si occupa di settare i dati necessari a visualizzare la giornata lavorativa dell'impiegato */
+        if(viewEmployee){
+            employee.controller.Work.showBookings(request,response);
         }
 
     }
