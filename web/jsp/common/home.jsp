@@ -112,10 +112,15 @@
                                             <p class="item-price">
                                                 <span>&euro;<%=product.getPrice()%></span>
                                             </p>
-                                            <%}%>
+                                            <%} if (loggedOn && loggedUser.getType() == 'A') {%>
+                                            <button class="btn btn-outline-secondary" title="Remove from showcase"
+                                                    onclick=setProductForm('<%=product.getId()%>')>Remove
+                                            </button>
+                                            <%} else {%>
                                             <button class="btn btn-outline-secondary"
                                                     onclick=setProductForm('<%=product.getId()%>')>See Product
                                             </button>
+                                            <%}%>
                                         </div>
                                     </div>
                                 </div>
@@ -143,46 +148,22 @@
 </div>
 
 <!----------------------------------------------- Link To shop -------------------------------------------------------->
-
+<%if (loggedOn && loggedUser.getType() == 'A') {%>
+<!-- Se l'utente loggato e' amministratore, non mostro il pulsante See more...  -->
+<%} else if ((loggedUser == null) || (loggedOn && (loggedUser.getType() == 'C'))) {%>
 <div class="container text-center">
     <button class="btn btnheader active2" onclick="setNavFormHome('home.Shop.showShop')" type="button" id='showShop'>
         See more...
     </button>
 </div>
+<%}%>
+
 <div class="container-fluid">
     <div class="row welcome text-center">
         <hr>
     </div>
 </div>
 <%}%>
-
-<!------------------------------------------- FINE SHOWCASE ---------------------------------------------------------->
-
-
-<%--<div class="container py-2">
-    <div class="row padding">
-        <%
-            for (Product product : products) {%>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="text-center">
-                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
-                                                       alt="<%=product.getPictureName()%>"></div>
-                </div>
-                <div class="card-body toBottom text-center">
-                    <h4 class="card-title"><%=product.getName()%>
-                    </h4>
-                    <p class="card-text">&euro;<%=product.getPrice()%>
-                    </p>
-                    <div class="container">
-                        <button class="btn btn-outline-secondary" onclick=setProductForm('<%=product.getId()%>')>See Product</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
-</div>--%>
 
 <!-------------------------------------------------- Image Slider ----------------------------------------------------->
 <div class="container text-center">
