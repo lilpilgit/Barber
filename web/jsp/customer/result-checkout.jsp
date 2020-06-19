@@ -68,6 +68,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
+        /* TODO non FUNZIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!! */
         /* bypasso l'alert di default */
         showMessage = function() {};
     });
