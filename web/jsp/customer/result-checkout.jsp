@@ -21,7 +21,6 @@
         resultPresent = true;
     }
 
-
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
@@ -37,14 +36,9 @@
     String idBtnAttivo = null;
 
 %>
-<html>
-<head>
-    <title>Title</title>
-</head>
+<html lang="en">
 <%@include file="/templates/head.jsp" %>
-
 <body>
-
 <%@include file="/templates/header.jsp" %>
 
 <div class="row padding">
@@ -57,8 +51,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina,
-                         una volta customizzato in ogni pagina l'alert a seconda se lo si vuole o meno si potrà toglierlo dalla head.jsp-->
+                    <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina -->
                     <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
                     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                     <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json" background="transparent"
@@ -75,7 +68,6 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
-
         /* bypasso l'alert di default */
         showMessage = function() {};
     });
