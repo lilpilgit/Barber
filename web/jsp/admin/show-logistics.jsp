@@ -143,7 +143,7 @@
                     </tbody>
                 </table>
             </div>
-            <!--PAGINATION-->
+            <!-- PAGINATION -->
             <nav aria-label="Page navigation Logistics">
                 <ul class="pagination">
                     <%if (currentPage > 2) {%>
