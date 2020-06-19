@@ -167,7 +167,7 @@ function setCurrentDate(id) {
     document.getElementById(id).value = today;
 }
 
-function modifyStatusOrder(idOrder, status) {
+function modifyStatusOrder(idOrder, status,pageToShow) {
 
     let form = document.getElementById('order_action');
     let radios = document.getElementsByName(status);
@@ -181,8 +181,16 @@ function modifyStatusOrder(idOrder, status) {
     }
     form.elements['controllerAction'].value = 'admin.Logistics.modifyStatus';
     form.elements['idOrder'].value = idOrder;
+    form.elements['pageToShow'].value = pageToShow;
     /* setto la data corrente nel campo hidden  */
     setCurrentDate('sellDate');
+    form.submit();
+}
+
+function showParticularPage(idForm, pageToShow) {
+
+    let form = document.getElementById(idForm);
+    form.elements['pageToShow'].value = pageToShow;
     form.submit();
 }
 

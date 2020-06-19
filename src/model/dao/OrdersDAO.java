@@ -23,5 +23,7 @@ public interface OrdersDAO {
     ArrayList<Order> fetchAllOrdersForLogistics();
     ArrayList<Order> fetchOrdersByCustomerId(Long id);
     ArrayList<ExtendedProduct> listOrderedProducts(Long id);
+    public Long countOrdersForLogistics();
+    public ArrayList<Order> fetchRangeOfOrdersForLogistics(Long offset);
 
 }

@@ -39,6 +39,21 @@
     if (logisticOrders != null && logisticOrders.size() != 0)
         areOrders = true;
 
+    /* Prendo il parametro per sapere il numero di pagina da visualizzare al momento */
+    Long currentPage = 1L;
+    if (request.getAttribute("currentPage") != null) {
+        currentPage = (Long) request.getAttribute("currentPage");
+    }
+
+    Long previousPage = currentPage - 1;
+    Long nextPage = currentPage + 1;
+
+    /* Prendo il parametro per sapere il numero totale di pagine da visualizzare*/
+    Long totalNumberOfPages = 1L;
+    if (request.getAttribute("totalNumberOfPages") != null) {
+        totalNumberOfPages = (Long) request.getAttribute("totalNumberOfPages");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Logistics";
 
@@ -53,7 +68,7 @@
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">
-        <span class="text-center"><h3><b>CUSTOMER'S ORDERS</b></h3></span>
+        <h3 class="text-center"><b>CUSTOMER'S ORDERS</b></h3>
         <div class="row justify-content-center">
             <% if (areOrders) { %>
             <div class="col-auto">
@@ -75,27 +90,27 @@
                         int i = 1; /* contatore per il numero di ordini */
                         String popoverSellDate = "";
                         /*if (areOrders) {*/
-                            for (Order l : logisticOrders) {
-                                int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
-                                boolean canceled = false; /* flag per sapere se è cancellato */
-                                boolean delivered = false; /* flag per sapere se è stato consegnato dunque ordine completato */
-                                if (l.getStatus().equals(StaticFunc.NOTHING_NEW)) {
-                                    valueStatus = 0;
-                                } else if (l.getStatus().equals(StaticFunc.PROCESSING)) {
-                                    valueStatus = 25;
-                                } else if (l.getStatus().equals(StaticFunc.SENT)) {
-                                    valueStatus = 50;
-                                } else if (l.getStatus().equals(StaticFunc.DELIVERING)) {
-                                    valueStatus = 75;
-                                } else if (l.getStatus().equals(StaticFunc.DELIVERED)) {
-                                    valueStatus = 100;
-                                    delivered = true;
-                                    System.out.println("l.getSellDate() ==> " + l.getSellDate());
-                                    popoverSellDate = "data-toggle='popover' data-trigger='hover' title='Sell Date' data-content='" + l.getSellDate() + "'";
-                                } else if (l.getStatus().equals(StaticFunc.CANCELED)) {
-                                    valueStatus = -1;
-                                    canceled = true;
-                                }
+                        for (Order l : logisticOrders) {
+                            int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
+                            boolean canceled = false; /* flag per sapere se è cancellato */
+                            boolean delivered = false; /* flag per sapere se è stato consegnato dunque ordine completato */
+                            if (l.getStatus().equals(StaticFunc.NOTHING_NEW)) {
+                                valueStatus = 0;
+                            } else if (l.getStatus().equals(StaticFunc.PROCESSING)) {
+                                valueStatus = 25;
+                            } else if (l.getStatus().equals(StaticFunc.SENT)) {
+                                valueStatus = 50;
+                            } else if (l.getStatus().equals(StaticFunc.DELIVERING)) {
+                                valueStatus = 75;
+                            } else if (l.getStatus().equals(StaticFunc.DELIVERED)) {
+                                valueStatus = 100;
+                                delivered = true;
+                                System.out.println("l.getSellDate() ==> " + l.getSellDate());
+                                popoverSellDate = "data-toggle='popover' data-trigger='hover' title='Sell Date' data-content='" + l.getSellDate() + "'";
+                            } else if (l.getStatus().equals(StaticFunc.CANCELED)) {
+                                valueStatus = -1;
+                                canceled = true;
+                            }
                     %>
                     <tr class="<%=(canceled) ? "table-danger" : (delivered) ? "table-success" : ""%>" <%=(delivered) ? popoverSellDate : ""%>>
                         <th scope="row"><%=i++%>
@@ -112,14 +127,14 @@
                         </td>
                         <td><%if (canceled) {%>
                             <i class="fas fa-times-circle" title="Order deleted"></i>
-                            <%}else if(delivered){%>
+                            <%} else if (delivered) {%>
                             <i class="fas fa-clipboard-check" title="Order delivered"></i>
-                            <%}else {%>
+                            <%} else {%>
                             <button type="button" class="tablebutton" style="color: #1ae2dd;"
                                     data-target="#alertSetStatusOrder"
                                     data-toggle="modal"
                                     onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');setRadiosStatusOrder(<%=valueStatus%>)">
-                                    <i class="fas fa-pencil-alt"></i>
+                                <i class="fas fa-pencil-alt"></i>
                             </button>
                             <%}%>
                         </td>
@@ -128,6 +143,29 @@
                     </tbody>
                 </table>
             </div>
+            <!--PAGINATION-->
+            <nav aria-label="Page navigation Logistics">
+                <ul class="pagination">
+                    <%if (currentPage > 2) {%>
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="showParticularPage('page_action',1);">First Page</a>
+                    </li>
+                    <%}%>
+                    <%if (currentPage > 1) {%>
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=previousPage%>);">Previous</a>
+                    </li>
+                    <%}%>
+                    <%if (currentPage < totalNumberOfPages) {%>
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=nextPage%>);">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=totalNumberOfPages%>)">Last&rsaquo;&rsaquo;</a>
+                    </li>
+                    <%}%>
+                </ul>
+            </nav>
         </div>
         <%
         } else {
@@ -182,7 +220,8 @@
 
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="modifyStatusOrder(document.getElementById('tmpIdStatus').value,'status')">Modify status
+                        onclick="modifyStatusOrder(document.getElementById('tmpIdStatus').value,'status',<%=currentPage%>)">
+                    Modify status
                 </button>
             </div>
         </div>
@@ -194,6 +233,12 @@
     <input type="hidden" name="idOrder" value="">
     <input type="hidden" name="status" value="">
     <input type="hidden" name="sellDate" id="sellDate" value="">
+    <input type="hidden" name="pageToShow" value="">
+</form>
+
+<form method="post" id="page_action">
+    <input type="hidden" name="controllerAction" value="admin.Logistics.showLogistics">
+    <input type="hidden" name="pageToShow" value="">
 </form>
 
 
@@ -206,7 +251,7 @@
         });
 
         /* refresh della pagina chiamando il form della sidebar */
-        window.setTimeout("setControllerAction('admin.Logistics.showLogistics')",240000); /* timeout in millisecondi */
+        window.setTimeout("setControllerAction('admin.Logistics.showLogistics')", 240000); /* timeout in millisecondi */
     })
 </script>
 </body>

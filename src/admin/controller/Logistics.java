@@ -51,7 +51,13 @@ public class Logistics {
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
-            commonView(daoFactory, request);
+            Long pageToShow = 1L;
+            if (request.getParameter("pageToShow") != null) {
+                /* Ovvero ho cliccato sulla bar di pagination */
+                pageToShow = Long.valueOf(request.getParameter("pageToShow"));
+            }
+
+            commonView(daoFactory, pageToShow, request);
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -127,10 +133,15 @@ public class Logistics {
 
             daoFactory.beginTransaction();
 
+            Long pageToShow = 1L;
+            if (request.getParameter("pageToShow") != null) {
+                /* Ovvero ho cliccato sulla bar di pagination */
+                pageToShow = Long.valueOf(request.getParameter("pageToShow"));
+            }
+
             ordersDAO = daoFactory.getOrdersDAO();
 
             /* setto l'id dell'ordine da modificare sulla base dell'id ricevuto */
-            System.err.println("iD ORDER ==> " + request.getParameter("idOrder"));
             idOrderToModify = Long.valueOf(request.getParameter("idOrder"));
 
             /* setto lo status dell'ordine da modificare sulla base dello status ricevuto */
@@ -146,10 +157,10 @@ public class Logistics {
             } else if (status.equals(StaticFunc.CANCELED)) {
                 sellDate = LocalDate.parse(request.getParameter("sellDate"));
             }
-            System.out.println("NEL CONTROLLER LOGISTICS ==> " + sellDate);
+
             modified = ordersDAO.modifyStatusById(idOrderToModify, status, sellDate);
 
-            commonView(daoFactory, request); /* setto l'attributo "logisticOrders" all'interno della request */
+            commonView(daoFactory, pageToShow, request); /* setto l'attributo "logisticOrders" all'interno della request */
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
@@ -207,13 +218,23 @@ public class Logistics {
 
     }
 
-    public static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
+    public static void commonView(DAOFactory daoFactory, Long pageToShow, HttpServletRequest request) {
+
         OrdersDAO ordersDAO = daoFactory.getOrdersDAO();
+        Long offset = (pageToShow - 1) * Configuration.TOT_REC_TO_SHOW_LOGISTICS;
+        int adjacents = 2;
 
-        ArrayList<Order> logisticOrders = ordersDAO.fetchAllOrdersForLogistics();
+        Long totalRecords = ordersDAO.countOrdersForLogistics();
+        Long totalNumberOfPages = (long) (Math.ceil(totalRecords.doubleValue() / Configuration.TOT_REC_TO_SHOW_LOGISTICS.doubleValue()));
+        Long secondLast = totalNumberOfPages - 1; /* total pages minus 1 */
 
+        ArrayList<Order> logisticOrders = ordersDAO.fetchRangeOfOrdersForLogistics(offset);
 
         /* 4) Setto l'array list di ordini da mostrare all'admin */
         request.setAttribute("logisticOrders", logisticOrders);
+        /* 5) Setto il numero totale di pagine da mostrare */
+        request.setAttribute("totalNumberOfPages", totalNumberOfPages);
+        /* 6) Ritorno indietro il numero di pagina che si è scelto di visualizzare */
+        request.setAttribute("currentPage",pageToShow); /* la pageToShow ovvero la pagina che si è scelta di visualizzare diventa la pagina corrente */
     }
 }

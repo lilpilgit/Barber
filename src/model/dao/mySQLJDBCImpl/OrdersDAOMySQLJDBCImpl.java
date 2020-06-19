@@ -6,6 +6,7 @@ import model.dao.OrdersDAO;
 import model.mo.ExtendedProduct;
 import model.mo.Order;
 import model.mo.User;
+import services.config.Configuration;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -376,6 +377,113 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         }
 
         return listProducts;
+    }
+
+    @Override
+    public ArrayList<Order> fetchRangeOfOrdersForLogistics(Long offset) {
+        /**
+         * Fetch a range of orders for logistics admin area.
+         */
+
+        ArrayList<Order> listOrders = new ArrayList<>();
+
+        query =
+                "SELECT ORDERS.ID,SELL_DATE,U.EMAIL,U.NAME,U.SURNAME,U.PHONE,STATUS "
+              + "FROM ORDERS INNER JOIN USER U on ORDERS.ID_CUSTOMER = U.ID "
+              + "ORDER BY ORDER_DATE DESC, ID DESC "
+              + "LIMIT ? OFFSET ? ";
+
+
+        /* ORDINO SULLA DATA DECRESCENTE OVVERO PER ORDINI PIÙ RECENTI MA ANCHE SULL'ID CHE ESSENDO INCREMENTALE, PER ORDINI
+         *  EFFETTUATI NELLA STESSA DATA MI CONSENTE DI VISUALIZZARLI ANCHE IN QUESTO CASO PER ORDINI PIÙ RECENTE */
+
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, Configuration.TOT_REC_TO_SHOW_LOGISTICS);
+            ps.setLong(i++, offset);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            while (rs.next()) {
+                listOrders.add(readOrderForLogistics(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return listOrders;
+    }
+
+    @Override
+    public Long countOrdersForLogistics() {
+        /**
+         * Count the number of orders done by customers.
+         * @return Number of orders done by customers.
+         */
+        Long numberOfOrders = 0L;
+        query = "SELECT COUNT(*) AS NUMBER_OF_ORDERS FROM ORDERS;";
+
+        try {
+            ps = connection.prepareStatement(query);
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+        try {
+            if (rs.next()) {
+                try {
+                    numberOfOrders = rs.getLong("NUMBER_OF_ORDERS");
+                } catch (SQLException e) {
+                    System.err.println("Errore nella numberOfOrders = rs.getLong(\"NUMBER_OF_ORDERS\");");
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.next()");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return numberOfOrders;
     }
 
     private ExtendedProduct readListOrderedProducts(ResultSet rs) {
