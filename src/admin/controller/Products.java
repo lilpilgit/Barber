@@ -377,21 +377,21 @@ public class Products {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) il messaggio da visualizzare nella pagina di elenco solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
-         *     la show-customers.jsp per consentire altre operazioni */
-        if (fromHome) {
-            /* se la richiesta di rimozione del prodotto dalla vetrina viene dalla Home, allora chiamo la view */
-            home.controller.Home.view(request, response);
-        } else {
-            request.setAttribute("viewUrl", "admin/show-products");
-        }
-        /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (showcase) {
             /* SUCCESS */
             request.setAttribute("result", "success");
         } else {
             /* FAIL */
             request.setAttribute("result", "fail");
+        }
+        /* 5) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
+         *     la show-customers.jsp per consentire altre operazioni */
+        if (fromHome) {
+            /* se la richiesta di rimozione del prodotto dalla vetrina viene dalla Home, allora chiamo la view */
+            home.controller.Home.view(request, response);
+        } else {
+            request.setAttribute("viewUrl", "admin/show-products");
         }
 
     }
