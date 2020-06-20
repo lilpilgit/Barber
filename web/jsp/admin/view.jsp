@@ -54,10 +54,10 @@
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Welcome";
+    String menuActiveLink = "Statistics";
 
     /* Parametro per aggiungere la classe "button-side-active" al bottone della pagina in cui si trova */
-    String idBtnAttivo = "";
+    String idBtnAttivo = "showStatistics";
 
 %>
 <!doctype html>
