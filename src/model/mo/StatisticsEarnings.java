@@ -11,11 +11,7 @@ public class StatisticsEarnings {
     /* Perdita di guadagni data dalla differenza di totEarningsWithoutDiscount e totEarningsWithDiscount */
     private Double lostGain;
 
-    /* Per ogni ora di inizio di un appuntamento, il numero totale di appuntamenti richiesti */
-    private HashMap<Time,Integer> totAppointmentForHourStart;
-
     public StatisticsEarnings(){
-        this.totAppointmentForHourStart = new HashMap<Time,Integer>();
         this.totEarningsWithDiscount = 0D;
         this.totEarningsWithoutDiscount = 0D;
         this.lostGain = 0D;
@@ -45,11 +41,4 @@ public class StatisticsEarnings {
         this.lostGain = lostGain;
     }
 
-    public HashMap<Time, Integer> getTotAppointmentForHourStart() {
-        return totAppointmentForHourStart;
-    }
-
-    public void setTotAppointmentForHourStart(HashMap<Time, Integer> totAppointmentForHourStart) {
-        this.totAppointmentForHourStart = totAppointmentForHourStart;
-    }
 }
