@@ -8,9 +8,12 @@ function setButtonActive(id) {
 
 function showMessage(msg) {
     /**
-     * Show message with simple alert TODO:migliorare la grafica anche nella funzione omologa in admin.js
+     * Show message with simple modal
      */
-    alert(msg);
+    /* Before to print, I clean! */
+    document.getElementById("spanMessage").innerHTML = "";
+    document.getElementById('spanMessage').innerHTML = msg;
+    $('#appMessage').modal("show");
 }
 
 function toUpperCase(element) {
@@ -356,11 +359,9 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                     if (operation === 'increase') {
                         /*i can increase the quantity*/
                         qta_field.value = parseInt(qta_field.value) + 1;
-                        alert("Awesome!");
                     } else if (operation === 'decrease') {
                         /*i can decrease the quantity*/
                         qta_field.value -= 1;
-                        alert("What a pity!");
                     }
                     /* devo ricalcolare prezzo totale e risparmio solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
@@ -537,13 +538,13 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
             form.submit();
         } else {
             /* Nel caso l'ora per cui si vuole prenotare sia gia' opa */
-            alert("The time you chose has already passed!\n" +
+            showMessage("The time you chose has already passed!\n" +
                 "The page will be reloaded automatically with the new updated data.");
             setNavFormHome('home.Book.showBook');
         }
     } else if (time === "Change date :(") {
         /* Qualora venisse cliccato su Book now! e non ci fossero orari disponibili, mando un alert */
-        alert("There are no appointments available on this date :(\n" + "Please try to change the date.");
+        showMessage("There are no appointments available on this date :(\n" + "Please try to change the date.");
     }
 }
 

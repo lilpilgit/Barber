@@ -112,7 +112,7 @@
                             <button id="minus_button_<%=ep.getId()%>" class="btn"
                                     title="Down" onclick="changeQuantityProductInCart('decrease', 'quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>,'productsToBuy')"><i
                                     class="fa fa-minus"></i></button>
-                            <button id="plus_button_<%=ep.getId()%>" class="btn"
+                            <button id="plus_button_<%=ep.getId()%>" class="btn plus-cart"
                                     title="Up" onclick="changeQuantityProductInCart('increase','quantity_<%=ep.getId()%>',<%=ep.getMaxOrderQuantity()%>,<%=ep.getId()%>,'productsToBuy')"><i
                                     class="fa fa-plus"></i>
                             </button>

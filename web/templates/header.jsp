@@ -400,11 +400,35 @@
     </div>
 </div>
 <%}%>
+
+<!---------------------------------------- MODAL FOR APPLICATION MESSAGE ---------------------------------------------->
+
+<div class="modal fade" id="appMessage" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center" style="border-bottom: 2px solid black;">
+                <h5 class="modal-title">Application message:</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="applicationMessage">
+                <span style="font-style: italic;" id="spanMessage"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------- END MODAL FOR APPLICATION MESSAGE ------------------------------------------>
+<%if(loggedOn && loggedUser.getType() == 'E') {%>
 <script>
     window.addEventListener("load",()=>{
         setCurrentDate('currentDate');
     });
 </script>
+<%}%>
 
 <script>
     function setNavFormHome(value) {

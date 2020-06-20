@@ -18,7 +18,7 @@
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
     <link href="assets/css/style.css" rel="stylesheet">
     <script type="text/javascript" src="assets/js/main.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--%>
 
 </head>
 <script>
@@ -27,7 +27,7 @@
         setButtonActive("<%=idBtnAttivo%>");
         <%}%>
         <%if(applicationMessage != null) {%>
-        showMessage("<%=applicationMessage%>");
+        showMessage('<%=applicationMessage%>');
         <%}%>
     }
 </script>
