@@ -35,10 +35,8 @@ public interface ProductDAO {
 
     Product findProductById(Long id);
 
-    /* TODO DA RIPRENDERE IN MANO PERCHE' IMPLEMENTATA IN SHOP.JSP */
     ArrayList<Product> findAllProducts();
 
-    /* FUNZIONE AGGIORNATA CON METODO MVC */
     ArrayList<Product> fetchAllProducts();
 
     ArrayList<Product> findProductsByString(String searchString);

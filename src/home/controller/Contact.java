@@ -176,8 +176,6 @@ public class Contact {
                 email = request.getParameter("contact_email");/*required*/
                 text = request.getParameter("contact_message");/*required*/
 
-
-                /* TODO: operazioni di invio email*/
                 contacted = true; /* invio mail sempre a buon fine */
                 System.out.println("Invio dell'email da parte di " + name + "----" + email + "----" + text);
                 applicationMessage = "Message sent correctly. We will contact you as soon as possible.";

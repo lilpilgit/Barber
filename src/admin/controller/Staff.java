@@ -612,7 +612,6 @@ public class Staff {
             employeeToEdit.setSurname(request.getParameter("surname"));
             employeeToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number"))); /* attributo della tabella USER */
             employeeToEdit.setPhone(request.getParameter("phone"));
-            /* TODO:modifica della password dell'impiegato */
             employeeToEdit.setBirthDate(LocalDate.parse(request.getParameter("birth_date")));
             employeeToEdit.setFiscalCode(request.getParameter("fiscal_code"));
             employeeToEdit.setType('E');

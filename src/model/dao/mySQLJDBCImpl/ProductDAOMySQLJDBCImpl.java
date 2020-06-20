@@ -76,7 +76,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
 
         if (exist) {
-            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("ProductDAOJDBCImpl.update: Tentativo di aggiornamento di un prodotto già esistente con nome{" + product.getName() + "}.}.");
         }
         /*Se non è stata sollevata alcuna eccezione, allora possiamo aggiornare i dati */
@@ -278,7 +278,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
 
         if (exist) {
-            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("ProductDAOJDBCImpl.insert: Tentativo di inserimento di un prodotto già esistente con nome: {" + product.getName() + "}.");
         }
 
@@ -533,7 +533,9 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     @Override
     public ArrayList<Product> fetchAllProducts() {
-
+        /**
+         * These method is implemented in admin.Product.commonView
+         */
         ArrayList<Product> products = new ArrayList<>();
         /* Seleziono tutti i prodotti in ordine alfabetico per nome */
         query = "SELECT * FROM PRODUCT WHERE DELETED = 0 ORDER BY NAME;";

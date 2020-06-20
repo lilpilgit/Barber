@@ -78,7 +78,7 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         }
 
         if (exist) {
-            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("BookingDAOJDBCImpl.insert: Tentativo di inserimento di " +
                     "un appuntamento già esistente con data: {" + booking.getDate() + "} e ora {" + booking.getHourStart() + "}");
         }

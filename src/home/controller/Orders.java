@@ -239,7 +239,7 @@ public class Orders {
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
         OrdersDAO ordersDAO = daoFactory.getOrdersDAO();
 
-        /* Prendo TUTTI gli ordini del cliente loggato TODO: fare una visualizzazione per pagine?*/
+        /* Prendo TUTTI gli ordini del cliente loggato */
         ArrayList<Order> orders = ordersDAO.fetchOrdersByCustomerId(loggedUser.getId());
 
         /* Per ogni ordine setto la sua itemList */

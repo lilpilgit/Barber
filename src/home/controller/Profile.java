@@ -186,7 +186,6 @@ public class Profile {
                 /* TODO:cambio password per l'utente */
                 userToUpdate.setType('C');
                 userToUpdate.setBlocked(false);
-                /* TODO:cancellazione account dell'utente */
 
                 /* Effettuo la modifica del cliente */
                 try {

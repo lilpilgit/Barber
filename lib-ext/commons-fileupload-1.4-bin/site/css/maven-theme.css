@@ -214,7 +214,6 @@ a:link.selfref, a:visited.selfref {
   text-decoration: none;
 }
 
-/* Unsure of this. TODO */
 .contentBox h2 a:link, .contentBox h2 a:visited, .contentBox h3 a:link, .contentBox h3 a:visited {
   color: #fff !important;
   text-decoration: underline;

@@ -2,7 +2,6 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 
@@ -104,7 +103,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         }
 
         if (exist) {
-            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("UserDAOJDBCImpl.insert: Tentativo di inserimento di un utente già esistente con email: {" + user.getEmail() + "}.");
         }
 
@@ -281,7 +280,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         }
 
         if (exist) {
-            /*NON È UN ERRORE BLOCCANTE ==> TODO: deve essere gestito a livello di controller dando un messaggio di errore all'utente*/
+            /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("UserDAOJDBCImpl.update: Tentativo di aggiornamento di un utente già esistente con email{" + user.getEmail() + "}.}.");
         }
         /*Se non è stata sollevata alcuna eccezione, allora possiamo aggiornare i dati di utente */

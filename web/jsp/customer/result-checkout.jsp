@@ -26,7 +26,6 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Order";
 
@@ -66,9 +65,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
-        /* TODO non FUNZIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!! */
-        /* bypasso l'alert di default */
-        showMessage = function() {};
+
     });
 </script>
 </body>
