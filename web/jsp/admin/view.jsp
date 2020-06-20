@@ -76,12 +76,16 @@
             </div>
             <h5>Some statistics about your business ...</h5>
             <hr>
-            <div class="col-md-12">
-                <canvas id="barChart"></canvas>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <canvas id="barChart"></canvas>
+                </div>
             </div>
             <br><br>
-            <div class="col-md-12">
-                <canvas id="pieChart"></canvas>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <canvas id="pieChart"></canvas>
+                </div>
             </div>
         </div>
     </main>
@@ -90,15 +94,15 @@
     window.addEventListener("load", () => {
         drawChartEarnings(<%=StaticFunc.round(statisticsEarnings.getTotEarningsWithoutDiscount(),2)%>, <%=StaticFunc.round(statisticsEarnings.getTotEarningsWithDiscount(),2)%>, <%=StaticFunc.round(statisticsEarnings.getLostGain(),2)%>);
         let labelsHourStart = [
-        <%
-            for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {%>
-                "<%=entry.getKey()%>",
-        <%}%>
-                              ];
+            <%
+                for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {%>
+            "<%=entry.getKey()%>",
+            <%}%>
+        ];
 
         let dataHourStart = [
-        <%
-            for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {%>
+            <%
+                for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {%>
             <%=entry.getValue()%>,
             <%}%>
         ];
