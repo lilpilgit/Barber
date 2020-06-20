@@ -181,7 +181,7 @@ function sumTime() {
     minute = minute + second / 60;
     second = second % 60;
 
-    alert('sum of above time= ' + hour + ':' + minute + ':' + second);
+    showMessage('sum of above time= ' + hour + ':' + minute + ':' + second);
 }
 
 function getSelectedDateOfBooking(date_field) {
@@ -347,7 +347,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     } else if (operation === 'decrease' && parseInt(qta_field.value) !== 1) {
         allowAJAX = true;
     } else {
-        alert("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
+        showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
         allowAJAX = false;
     }
     if (allowAJAX) {
@@ -366,9 +366,9 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                     /* devo ricalcolare prezzo totale e risparmio solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
                 } else if (result === "fail") {
-                    alert("The quantity could not be changed!");
+                    showMessage("The quantity could not be changed!");
                 } else {
-                    alert("ERRORE NEL BACKEND!");
+                    showMessage("ERRORE NEL BACKEND!");
                 }
             }
 
@@ -427,8 +427,8 @@ function findSlot(idStructure, pickedDate) {
                     addOption("Change date :(");
 
             } else if (obj.result === "fail") {
-                alert("ERRORE NEL BACKEND!!");
-            } else alert("Valore di result sconosciuto nel JSON");
+                showMessage("ERRORE NEL BACKEND!!");
+            } else showMessage("Valore di result sconosciuto nel JSON");
         }
     };
 
@@ -504,8 +504,8 @@ function findBooking(idCustomer) {
                     }
                 }
             } else if (obj.result === "fail") {
-                alert("ERRORE NEL BACKEND!!");
-            } else alert("Valore di result sconosciuto nel JSON");
+                showMessage("ERRORE NEL BACKEND!!");
+            } else showMessage("Valore di result sconosciuto nel JSON");
         }
     };
 
@@ -605,8 +605,7 @@ function goToCheckout(nameGroup) {
         }
     })
     if (atLeastOne === false) {
-        //TODO: mostrare popover al posto di alert
-        alert("Select at least one product for checkout.");
+        showMessage("Select at least one product for checkout.");
     } else {
         /* posso procedere al checkout */
         console.log(JSON.stringify(checkOutJson));
