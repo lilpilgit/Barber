@@ -92,7 +92,7 @@
                            class="form-control">
                 </div>
                 <div class="col-md-2 mb-3">
-                    <label for="Slot">Slot</label> <!--TODO:step default 60 ==> 60 secondi-->
+                    <label for="Slot">Slot</label>
                     <input type="time" class="form-control" name="slot" id="Slot" required readonly
                            value="<%=structureToEdit.getSlot()%>"
                            class="form-control">

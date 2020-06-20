@@ -102,7 +102,6 @@
                            oninput="toUpperCase(this)">
                 </div>
             </div>
-            <!-- TODO Dare la possibilita' al dipendente di modificare la password -->
             <div class="form-row justify-content-center">
                 <div class="col-md-3">
                     <label for="Email">Email address</label>

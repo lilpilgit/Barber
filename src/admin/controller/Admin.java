@@ -146,12 +146,10 @@ public class Admin {
             adminToEdit.setSurname(request.getParameter("surname"));
             adminToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
             adminToEdit.setPhone(request.getParameter("phone"));
-            /* TODO:cambio password per l'admin */
             adminToEdit.setBirthDate(LocalDate.parse(request.getParameter("birth_date")));
             adminToEdit.setFiscalCode(request.getParameter("fiscal_code"));
             adminToEdit.setType('A');
             adminToEdit.setBlocked(false);
-            /* TODO:cancellazione account dell'admin */
 
             /* Effettuo la modifica dell'admin */
             try {

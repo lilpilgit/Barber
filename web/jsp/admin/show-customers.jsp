@@ -2,7 +2,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String user = "Customer";
+    String subject = "Customer";
     String controller = "admin.Customers";
 /*    Customer c = null;
     Boolean blockedStatus = c.getBlocked();*/
@@ -98,14 +98,14 @@
                                     data-target="#alertBanCust"
                                     data-toggle="modal"
                                     onclick=<% if(blockedStatus) { %>
-                                            "unBlockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
+                                            "unBlockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
                                 <% } else { %>
-                                "blockById(<%=c.getId()%>, '<%=user%>','<%=controller%>')">
+                                "blockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
                                 <%}%>
                                 <i class="fas <%=c.isBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=user%>"
+                                    data-target="#alert<%=subject%>"
                                     data-toggle="modal"
                                     onclick=setTmpId(<%=c.getId()%>,'tmpId')>
                                 <i class="far fa-trash-alt"></i>
@@ -120,7 +120,7 @@
                 <%}%>
                 <form method="post" id="action">
                     <input type="hidden" name="controllerAction" value="">
-                    <input type="hidden" name="<%=user%>ID" value="">
+                    <input type="hidden" name="<%=subject%>ID" value="">
                 </form>
             </div>
         </div>
@@ -130,26 +130,26 @@
 <input type="hidden" id="tmpId" value="">
 
 <!--MODAL DI CONFERMA ELIMINAZIONE CLIENTE-->
-<div class="modal fade" id="alert<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="alert<%=subject%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="DeleteModal" style="color: rgba(211,4,0,0.75)">You are removing
-                    a <%=user%>...</h5>
+                    a <%=subject%>...</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                You are attempting to permanently delete a <%=user%>.<br><br>Are you sure you want to continue?
+                You are attempting to permanently delete a <%=subject%>.<br><br>Are you sure you want to continue?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpId').value, '<%=user%>','<%=controller%>')">
-                    Delete <%=user%>
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">
+                    Delete <%=subject%>
                 </button>
             </div>
         </div>

@@ -21,11 +21,6 @@
                         </button>
                         <ul class="dropdown-menu text-center">
                             <li>
-                                <%--                                <button class="btn btn-default gold font-weight-light" type="button"--%>
-                                <%--                                        id="adminArea"> <!--onclick=setNavFormHome('')-->--%>
-                                <%--                                    <!-- TODO IMPLEMENTARE METODO LOGIN ADMIN -->--%>
-                                <%--                                    Admin Area--%>
-                                <%--                                </button>--%>
                                 <button class="btn btn-default gold font-weight-light" type="button" id="adminArea"
                                         onclick=setNavFormHome('admin.Welcome.welcome')>Admin
                                     Area
@@ -72,7 +67,6 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu text-center">
-                            <!-- TODO Far vedere il pulsante Bookings solo se si e' prenotato un appuntamento -->
                             <li>
                                 <button class="btn btn-default gold font-weight-light" type="button"
                                         id='showBookings' onclick="findBooking(<%=loggedUser.getId()%>)"

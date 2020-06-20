@@ -72,7 +72,7 @@
                               <%
                                   boolean allowCancelOrder = false;
                                   String valueProgressBar = "0";
-                                  boolean canceled = false; /*TODO settare colore rosso di sfondo per ordini cancellati*/
+                                  boolean canceled = false;
                                   if (order.getStatus().equals(StaticFunc.NOTHING_NEW)) {
                                       valueProgressBar = "0";
                                       allowCancelOrder = true; /* è ancora in tempo per cancellarlo */
@@ -228,11 +228,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-
-                <!-- TODO AGGIORNARE CON FUNZIONE GENERICA deleteById contenuta in admin.js come con show-customers -->
-
-
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
                         onclick="cancelOrder(document.getElementById('tmpIdDel').value)">Cancel

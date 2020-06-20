@@ -15,20 +15,6 @@ function setTmpId(id, hiddenDrawer) {
     document.getElementById(hiddenDrawer).value = id;
 }
 
-function deleteEmployee(id) {
-    /**
-     * for form with ID ==> action, set value of hidden input field with
-     * name="controllerAction" to "admin.Staff.deleteEmployee" and set value of hidden input field (of show-employee.jsp)
-     * with name="employeeID" to parameter id
-     */
-    /* Setto la controllerAction usando il form con id="action" che è proprio della show-employee.jsp */
-    let formEmployeeID = document.getElementById('action');
-    formEmployeeID.elements['controllerAction'].value = 'admin.Staff.deleteEmployee';
-    formEmployeeID.elements['employeeID'].value = id;
-    formEmployeeID.submit();
-
-}
-
 function deleteById(id, subject, controller) {
     /**
      * for form with ID ==> action, set value of hidden input field with
@@ -41,7 +27,6 @@ function deleteById(id, subject, controller) {
     formUserID.elements['controllerAction'].value = controller + '.delete' + subject;
     formUserID.elements[index].value = id;
     formUserID.submit();
-
 }
 
 function blockById(id, user, controller) {

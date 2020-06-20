@@ -2,8 +2,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String user = "Employee";
-    String controller = "Staff";
+    String subject = "Employee";
+    String controller = "admin.Staff";
 
     /* Prendo l'ArrayList<Employee> di tutti gli impiegati */
     boolean areEmployees = false;
@@ -136,7 +136,7 @@
                                     onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=user%>"
+                                    data-target="#alert<%=subject%>"
                                     data-toggle="modal"
                                     onclick="setTmpId(<%=e.getId()%>,'tmpIdDel');">
                                 <i class="far fa-trash-alt"></i>
@@ -151,7 +151,7 @@
                 <%}%>
                 <form method="post" id="action">
                     <input type="hidden" name="controllerAction" value="">
-                    <input type="hidden" name="employeeID" value="">
+                    <input type="hidden" name="<%=subject%>ID" value="">
                 </form>
             </div>
         </div>
@@ -160,31 +160,26 @@
 
 <input type="hidden" id="tmpIdDel" value="">
 <!--MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
-<div class="modal fade" id="alert<%=user%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="alert<%=subject%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle" style="color: rgba(211,4,0,0.75)">You are removing
-                    an employee...</h5>
+                    an <%=subject%>...</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                You are attempting to permanently delete an employee.<br><br>Are you sure you want to continue?
+                You are attempting to permanently delete an <%=subject%>.<br><br>Are you sure you want to continue?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-
-                <!-- TODO AGGIORNARE CON FUNZIONE GENERICA deleteById contenuta in admin.js come con show-customers -->
-
-
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteEmployee(document.getElementById('tmpIdDel').value)">Delete
-                    employee
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">Delete
+                    <%=subject%>
                 </button>
             </div>
         </div>
@@ -192,12 +187,9 @@
 </div>
 <!--FINE MODAL DI CONFERMA ELIMINAZIONE DIPENDENTE-->
 
-
 <script>
 
     window.addEventListener("load", () => {
-
-
     })
 
 </script>
