@@ -143,29 +143,19 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="container text-center">
             <!-- PAGINATION -->
-            <nav aria-label="Page navigation Logistics">
-                <ul class="pagination">
-                    <%if (currentPage > 2) {%>
-                    <li class="page-item">
-                        <a class="page-link" href="#" onclick="showParticularPage('page_action',1);">First Page</a>
-                    </li>
-                    <%}%>
-                    <%if (currentPage > 1) {%>
-                    <li class="page-item">
-                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=previousPage%>);">Previous</a>
-                    </li>
-                    <%}%>
-                    <%if (currentPage < totalNumberOfPages) {%>
-                    <li class="page-item">
-                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=nextPage%>);">Next</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" onclick="showParticularPage('page_action',<%=totalNumberOfPages%>)">Last&rsaquo;&rsaquo;</a>
-                    </li>
-                    <%}%>
-                </ul>
-            </nav>
+            <%if (currentPage > 2) {%>
+            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',1);">First Page</a>
+            <%}%>
+            <%if (currentPage > 1) {%>
+            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=previousPage%>);"><i class="fas fa-arrow-left"></i></a>
+            <%}%>
+            <%if (currentPage < totalNumberOfPages) {%>
+            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=nextPage%>);"><i class="fas fa-arrow-right"></i></a>
+            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=totalNumberOfPages%>)">Last&rsaquo;&rsaquo;</a>
+            <%}%>
         </div>
         <%
         } else {
