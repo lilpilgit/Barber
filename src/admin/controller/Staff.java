@@ -355,7 +355,7 @@ public class Staff {
             loggedUser = sessionUserDAO.findLoggedUser();
 
             /* Fetching dell'id dell'impiegato da cancellare proveniente dal form hidden dentro la pagina show-employees.jsp */
-            idToDelete = Long.valueOf(request.getParameter("employeeID"));
+            idToDelete = Long.valueOf(request.getParameter("EmployeeID"));
 
 
             /* DAOFactory per manipolare i dati sul DB */
@@ -474,7 +474,7 @@ public class Staff {
             loggedUser = sessionUserDAO.findLoggedUser();
 
             /* Fetching dei parametri provenienti dal form di modifica e salvataggio nelle variabili locali */
-            idToEdit = Long.valueOf(request.getParameter("employeeID"));
+            idToEdit = Long.valueOf(request.getParameter("EmployeeID"));
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);

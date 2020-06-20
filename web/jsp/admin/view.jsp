@@ -2,8 +2,6 @@
 <%@ page import="model.mo.StatisticsEarnings" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.sql.Time" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.TreeMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
