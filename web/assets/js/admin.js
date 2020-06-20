@@ -9,7 +9,7 @@ function showResult(result, message) {
 
 }
 
-function setTmpId(id,hiddenDrawer) {
+function setTmpId(id, hiddenDrawer) {
     /**
      * Set id of object to delete/insert/modify into a temporary "drawer" before confirm this action into the modal */
     document.getElementById(hiddenDrawer).value = id;
@@ -167,7 +167,7 @@ function setCurrentDate(id) {
     document.getElementById(id).value = today;
 }
 
-function modifyStatusOrder(idOrder, status,pageToShow) {
+function modifyStatusOrder(idOrder, status, pageToShow) {
 
     let form = document.getElementById('order_action');
     let radios = document.getElementsByName(status);
@@ -194,7 +194,7 @@ function showParticularPage(idForm, pageToShow) {
     form.submit();
 }
 
-function showBookingsAdmin(){
+function showBookingsAdmin() {
     /**
      * for form with ID ==> action, set value of hidden input field with
      * name="controllerAction" to "admin.Bookings.showBookings"
@@ -261,15 +261,24 @@ function setRadiosStatusOrder(actualStatus) {
     }
 }
 
-function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
-    let ctx = document.getElementById("myChart").getContext('2d');
+function getRandomColor() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function drawChartEarnings(totalWithoutDiscount, totalWithDiscount, lostGain) {
+    let ctx = document.getElementById("barChart").getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Total earnings without applying discounts", "Total earnings by applying discounts","Lost profit"],
+            labels: ["Total earnings without applying discounts", "Total earnings by applying discounts", "Lost profit"],
             datasets: [{
                 label: 'Earnings',
-                data: [totalWithoutDiscount,totalWithDiscount,lostGain],
+                data: [totalWithoutDiscount, totalWithDiscount, lostGain],
                 backgroundColor: [
                     'rgb(0,167,167,0.2)',
                     'rgb(26,51,167,0.2)',
@@ -290,7 +299,7 @@ function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
                         beginAtZero: true
                     }
                 }]
-            } ,
+            },
             title: {
                 display: true,
                 text: "My orders",
@@ -298,6 +307,29 @@ function drawChartEarnings(totalWithoutDiscount,totalWithDiscount,lostGain){
             },
             legend: {
                 display: false
+            }
+        }
+    });
+}
+
+function drawChartAppointments(labelsHourStart, dataHourStart, backgroundColor) {
+    let ctxP = document.getElementById("pieChart").getContext('2d');
+    let myPieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+            labels: labelsHourStart,
+            datasets: [{
+                data: dataHourStart,
+                backgroundColor: backgroundColor,
+                // hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: "Number of appointments per starting time",
+                fontSize: 15
             }
         }
     });

@@ -3,13 +3,16 @@ package admin.controller;
 import model.dao.DAOFactory;
 import model.dao.StatisticsDAO;
 import model.dao.UserDAO;
-import model.mo.Statistics;
+import model.mo.StatisticsEarnings;
 import model.mo.User;
 import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Welcome {
 
@@ -28,7 +31,8 @@ public class Welcome {
         User loggedUser = null;
         User admin = null;
         StatisticsDAO statisticsDAO = null;
-        Statistics statistics = null;
+        StatisticsEarnings statisticsEarnings = null;
+        TreeMap<Time,Integer> totalAppointmentGroupByHourStart = null;
         boolean cookieValid = true;
 
 
@@ -57,8 +61,10 @@ public class Welcome {
             admin = userDAO.findById(loggedUser.getId());
 
             statisticsDAO = daoFactory.getStatisticsDAO();
-            statistics = statisticsDAO.totalEarningsWithAndWithoutDiscount();
 
+            statisticsEarnings = statisticsDAO.totalEarningsWithAndWithoutDiscount();
+
+            totalAppointmentGroupByHourStart = statisticsDAO.totalAppointmentGroupByHourStartInAYear(LocalDate.now());
 
             /* Commit sul db */
             daoFactory.commitTransaction();
@@ -97,8 +103,10 @@ public class Welcome {
         /* 4) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "admin/view");
         /* 5) Setto il totale guadagni applicando gli sconti e non applicandoli */
-        request.setAttribute("statistics", statistics);
-        /* 6) Setto l'oggetto admin da cui estrarre le informazioni utili */
+        request.setAttribute("statisticsEarnings", statisticsEarnings);
+        /* 6) Setto l'hashmap con il numero totale di appuntamenti in un anno per ogni fascia oraria presente nel db */
+        request.setAttribute("totalAppointmentGroupByHourStart",totalAppointmentGroupByHourStart);
+        /* 7) Setto l'oggetto admin da cui estrarre le informazioni utili */
         request.setAttribute("admin",admin);
 
     }

@@ -1,9 +1,14 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.StatisticsDAO;
-import model.mo.Statistics;
+import model.mo.StatisticsEarnings;
+import model.mo.StatisticsEarnings;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
 
@@ -18,12 +23,14 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
     }
 
     @Override
-    public Statistics totalEarningsWithAndWithoutDiscount() {
+    public StatisticsEarnings totalEarningsWithAndWithoutDiscount() {
         /**
-         * This method return a <Statistic> object with all statistic field set.
-         *
+         * This method return a <Statistic> object with the following fields set:
+         * > totEarningsWithDiscount
+         * > totEarningsWithoutDiscount
+         * > lostGain
          * */
-        Statistics statistics = new Statistics();
+        StatisticsEarnings statisticsEarnings = new StatisticsEarnings();
 
         /*
          SOLDI CHE SI SAREBBERO FATTI SENZA SCONTO vs SOLDI FATTI CON GLI SCONTI APPLICATI
@@ -66,21 +73,21 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
         try {
             while (rs.next()) {
                 try {
-                    statistics.setTotEarningsWithDiscount(rs.getDouble("TOT_EARNINGS_WITH_DISCOUNT"));
+                    statisticsEarnings.setTotEarningsWithDiscount(rs.getDouble("TOT_EARNINGS_WITH_DISCOUNT"));
                 } catch (SQLException e) {
-                    System.err.println("Errore nella statistics.setTotEarningsWithDiscount(rs.getDouble(\"TOT_EARNINGS_WITH_DISCOUNT\"));");
+                    System.err.println("Errore nella statisticsEarnings.setTotEarningsWithDiscount(rs.getDouble(\"TOT_EARNINGS_WITH_DISCOUNT\"));");
                     throw new RuntimeException(e);
                 }
                 try {
-                    statistics.setTotEarningsWithoutDiscount(rs.getDouble("TOT_EARNINGS_WITHOUT_DISCOUNT"));
+                    statisticsEarnings.setTotEarningsWithoutDiscount(rs.getDouble("TOT_EARNINGS_WITHOUT_DISCOUNT"));
                 } catch (SQLException e) {
-                    System.err.println("Errore nella statistics.setTotEarningsWithoutDiscount(rs.getDouble(\"TOT_EARNINGS_WITHOUT_DISCOUNT\"));");
+                    System.err.println("Errore nella statisticsEarnings.setTotEarningsWithoutDiscount(rs.getDouble(\"TOT_EARNINGS_WITHOUT_DISCOUNT\"));");
                     throw new RuntimeException(e);
                 }
                 try {
-                    statistics.setLostGain(rs.getDouble("LOST_GAIN"));
+                    statisticsEarnings.setLostGain(rs.getDouble("LOST_GAIN"));
                 } catch (SQLException e) {
-                    System.err.println("Errore nella statistics.setLostGain(rs.getDouble(\"LOST_GAIN\"));");
+                    System.err.println("Errore nella statisticsEarnings.setLostGain(rs.getDouble(\"LOST_GAIN\"));");
                     throw new RuntimeException(e);
                 }
             }
@@ -105,9 +112,73 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
             throw new RuntimeException(e);
         }
 
-        return statistics;
+        return statisticsEarnings;
     }
 
+    @Override
+    public TreeMap<Time,Integer> totalAppointmentGroupByHourStartInAYear(LocalDate date_for_year){
+        /**
+         * @param: <LocalDate> date_for_year : a date from which to extrapolate the year
+         * This method return a TreeMap<Time,Integer> object with the following field set:
+         *
+         * > totAppointmentForHourStart
+         * */
+        TreeMap<Time,Integer> totAppointmentForHourStart = new TreeMap<Time,Integer>();
+
+        query =
+                "SELECT B.HOUR_START, COUNT(*) AS NUM_TOT_EFFETTUATI "
+              + "FROM BOOKING B "
+              + "WHERE YEAR(B.DATE) = YEAR(?) "
+              + "GROUP BY B.HOUR_START "
+              + "ORDER BY B.HOUR_START;";
+
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setDate(i++,Date.valueOf(date_for_year));
+        } catch (SQLException e) {
+            System.err.println("Errore nella connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.executeQuery();");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            while (rs.next()) {
+                try {
+                    totAppointmentForHourStart.put(rs.getTime("HOUR_START"),rs.getInt("NUM_TOT_EFFETTUATI")) ;
+                } catch (SQLException e) {
+                    System.err.println("Errore nella totAppointmentForHourStart.put(rs.getTime(\"HOUR_START\"),rs.getInt(\"NUM_TOT_EFFETTUATI\"))");
+                    throw new RuntimeException(e);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Errore nella while (rs.next())");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close();");
+            throw new RuntimeException(e);
+
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return totAppointmentForHourStart;
+    }
 
 
 }
