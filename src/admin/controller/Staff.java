@@ -172,9 +172,8 @@ public class Staff {
             /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
              * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
              * */
-            birth_date = LocalDate.parse(request.getParameter("birth_date"));
-            fiscal_code = request.getParameter("fiscal_code");
-            hire_date = LocalDate.parse(request.getParameter("hire_date"));
+            birth_date = LocalDate.parse(request.getParameter("birth_date"));/*required*/
+            fiscal_code = request.getParameter("fiscal_code");/*required*/
             submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_employee"*/
 
 

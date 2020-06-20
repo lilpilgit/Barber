@@ -239,7 +239,7 @@
                                             class="fas fa-sign-in-alt ml-1"></i></button>
                                 </div>
                                 <input type="hidden" name="controllerAction" value="home.Home.logon"/>
-                                <input type="hidden" class="form-control" value="" name="currentDate" id="currentDate">
+                                <input type="hidden" value="" name="currentDate" id="currentDate">
                             </form>
                         </div>
 
@@ -422,7 +422,8 @@
 </div>
 
 <!---------------------------------------- END MODAL FOR APPLICATION MESSAGE ------------------------------------------>
-<%if(loggedOn && loggedUser.getType() == 'E') {%>
+<%if(!loggedOn)
+/* solo se non è loggato devo settare la data corrente così da mostrare il "work day" nel caso in cui provi a loggarsi il dipendente */{%>
 <script>
     window.addEventListener("load",()=>{
         setCurrentDate('currentDate');
