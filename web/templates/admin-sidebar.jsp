@@ -1,17 +1,15 @@
 <div class="page-wrapper chiller-theme toggled">
     <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
-
             <div class="sidebar-header">
                 <div class="user-pic">
-                    <img src="https://champsbarberschool.com/mainsite/wp-content/uploads/2013/12/barber-gallery-7.jpg"
-                         alt="User picture"/>
+                    <img src="img/admin/business-man-3.svg" alt="User picture"/>
                     <button onclick="setControllerAction('admin.Admin.showProfile')" title="Edit your profile"
                             class="button-side" type="button" id='showAdmin'>
                         <i class="fas fa-user-edit"></i>
                     </button>
                 </div>
-                <div class="user-info">
+                <div class="user-info pt-1">
                     <span class="user-name"><strong>Administrator</strong></span>
                 </div>
             </div>
