@@ -92,14 +92,12 @@
                 <div class="col-md-3 mb-3">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getName() : ""%>"
-                           oninput="toUpperCase(this)">
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getName() : ""%>">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
-                           value="<%=(action.equals("modify")) ? employeeToEdit.getSurname() : ""%>"
-                           oninput="toUpperCase(this)">
+                           value="<%=(action.equals("modify")) ? employeeToEdit.getSurname() : ""%>">
                 </div>
             </div>
             <div class="form-row justify-content-center">
