@@ -10,7 +10,6 @@ public class Structure {
     private Time openingTime;
     private Time closingTime;
     private Time slot;        /* This is necessary for scanning the booking appointments */
-                        /*TODO:controllare per quale cazzo di motivo se uso Time sia qui che nel DB che nell'html va in eccezione*/
     private String name;
     private String phone;
 
