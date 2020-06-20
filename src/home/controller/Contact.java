@@ -120,6 +120,7 @@ public class Contact {
         DAOFactory daoFactory = null; //per il db
         UserDAO userDAO = null;
         User loggedUser = null;
+        User customer = null;
         String name;
         String email;
         String text;
@@ -151,10 +152,12 @@ public class Contact {
 
             userDAO = daoFactory.getUserDAO();
 
+            customer = userDAO.findById(loggedUser.getId());
+
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
                 /* c'è un utente loggato */
-                if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
+                if (!sessionUserDAO.isValid(customer)) {
                     /* utente non autorizzato, invalido il cookie */
                     System.out.println("UTENTE NON AUTORIZZATO !");
                     home.controller.Home.logout(request, response);
@@ -172,6 +175,7 @@ public class Contact {
                 name = request.getParameter("contact_name");/*required*/
                 email = request.getParameter("contact_email");/*required*/
                 text = request.getParameter("contact_message");/*required*/
+
 
                 /* TODO: operazioni di invio email*/
                 contacted = true; /* invio mail sempre a buon fine */
@@ -221,6 +225,10 @@ public class Contact {
             request.setAttribute("loggedUser", loggedUser);
             /* 5) oggetto corrispondente al risultato dell'operazione */
             request.setAttribute("contacted", contacted);
+            /* 6) Oggetto contenente le informazioni dell'utente loggato */
+            if(loggedUser != null){
+                request.setAttribute("customer",customer);
+            }
         }
     }
 

@@ -26,8 +26,6 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    /* non mostrare l'alert predefinito */
-    boolean showAlert = false;
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Order";
