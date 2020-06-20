@@ -72,7 +72,6 @@
         <div class="row justify-content-center">
             <% if (areOrders) { %>
             <div class="col-auto">
-                <%--        <%if (areEmployees) {%>--%>
                 <table class="table table-hover table-bordered">
                     <thead class="thead-dark">
                     <tr>
@@ -180,7 +179,6 @@
             </div>
             <div class="modal-body">
                 You are attempting to modify status of order.<br><br>Select one of this possible status:<br><br>
-
                 <input type="radio" id="radio_nothing_new" name="status" value="<%=StaticFunc.NOTHING_NEW%>">
                 <label for="radio_nothing_new"><%=StaticFunc.NOTHING_NEW%>
                 </label><br>
