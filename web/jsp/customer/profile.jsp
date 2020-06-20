@@ -21,7 +21,7 @@
 
     /* prendo il parametro result così da scegliere in modo più semplice i colori del frontend per mostrare il messaggio */
     String result = null; /* "success" or "fail"*/
-    if(request.getAttribute("result") != null){
+    if (request.getAttribute("result") != null) {
         result = (String) request.getAttribute("result");
     }
 
@@ -161,29 +161,6 @@
             </div>
             <input type="hidden" name="controllerAction" value="home.Profile.updateProfile">
         </form>
-        <hr>
-        <div class="form-row justify-content-center">
-            <div class="col-md-3 mb-2">
-                <label for="Oldpwd">Insert old password</label>
-                <input type="password" class="form-control" name="oldpwd" id="Oldpwd" required min="0"
-                       value="">
-            </div>
-            <div class="col-md-3 mb-2">
-                <label for="Newpwd">Insert new password</label>
-                <input type="password" class="form-control" name="newpwd" id="Newpwd" required
-                       value=""
-                       oninput="">
-            </div>
-            <div class="col-md-3 mb-2">
-                <label for="Cnfpwd">Confirm password</label>
-                <input type="password" class="form-control" id="Cnfpwd" min="0" required
-                       value="">
-            </div>
-        </div>
-        <div class="text-center pt-1">
-            <button class="btngeneric">Change password</button>
-        </div>
-        </form>
     </div>
 </div>
 
@@ -192,7 +169,7 @@
 
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
-    window.addEventListener("load",() =>{
+    window.addEventListener("load", () => {
         setSelectedAttribute("State", "<%=splittedAddress[0]%>");
         setSelectedAttribute("Region", "<%=splittedAddress[1]%>");
     })
