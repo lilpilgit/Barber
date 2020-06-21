@@ -63,7 +63,9 @@ public class Profile {
                     cookieValid = false;
                 }
             } else {
-                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+                System.out.println("ACCESSO AD AREA RISERVATA DA PARTE DI UN UTENTE NON LOGGATO. ACCESSO VIETATO. ");
+                cookieValid = false;
+                request.setAttribute("viewUrl", "error/404");
             }
 
             /* verifico se devo eseguire la logica di business o meno */
@@ -161,7 +163,9 @@ public class Profile {
                     cookieValid = false;
                 }
             } else {
-                /*TODO: redirigere a una pagina di errore se si sta provando ad accedere ad una pagina di area riservata senza essere loggati */
+                System.out.println("ACCESSO AD AREA RISERVATA DA PARTE DI UN UTENTE NON LOGGATO. ACCESSO VIETATO. ");
+                cookieValid = false;
+                request.setAttribute("viewUrl", "error/404");
             }
 
             /* verifico se devo eseguire la logica di business o meno */
