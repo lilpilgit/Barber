@@ -8,8 +8,11 @@
 <%@ page import="services.config.Configuration"%>
 <%@ page import="java.time.LocalDate"%>
 <%@ page import="java.time.LocalTime"%>
-<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 
 <%
     /**

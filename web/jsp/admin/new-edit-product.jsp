@@ -2,6 +2,8 @@
 <%@ page import="model.mo.Structure" %>
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 <%
     /* Prendo il parametro "result" che si occupa di indicarmi se la modifica dei dati è andata a buon fine o meno*/
     String result = null;

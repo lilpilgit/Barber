@@ -20,7 +20,9 @@ public class ExtendedProduct extends Product {
         this.setDeleted(product.isDeleted());
     }
 
-    public ExtendedProduct(){}
+    public ExtendedProduct(){
+        super();
+    }
 
     @Override
     public String toString() {

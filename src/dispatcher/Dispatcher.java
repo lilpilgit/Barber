@@ -22,6 +22,7 @@ public class Dispatcher extends HttpServlet {
     String controllerAction = null;
     PrintWriter out = null;
     Method controllerMethod = null;
+    boolean errorPage = false;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         commonOperations(request, response);
@@ -51,6 +52,7 @@ public class Dispatcher extends HttpServlet {
             } catch (FileUploadException e) {
                 System.err.println("DISPATCHER ==> Errore nella items = upload.parseRequest(request);");
                 e.printStackTrace();
+                errorPage = true;
             }
             /*Questa istruzione è però distruttiva per la request in quanto la posso fare solo una volta e dopo di chè dentro items
              *ho sia i file che i parametri HTTP normali dunque è evidente che devo trattarli in modo diverso, in particolare devo
@@ -74,6 +76,7 @@ public class Dispatcher extends HttpServlet {
             } catch (ServletException e) {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
+                errorPage = true;
             } finally {
                 out.close();
             }
@@ -84,6 +87,7 @@ public class Dispatcher extends HttpServlet {
             } catch (ServletException e) {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
+                errorPage = true;
             } finally {
                 out.close();
             }
@@ -94,6 +98,7 @@ public class Dispatcher extends HttpServlet {
             } catch (ServletException e) {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
+                errorPage = true;
             } finally {
                 out.close();
             }
@@ -111,6 +116,7 @@ public class Dispatcher extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
                 e.printStackTrace();
+                errorPage = true;
             }
 
             try {
@@ -119,22 +125,44 @@ public class Dispatcher extends HttpServlet {
             } catch (NoSuchMethodException e) {
                 System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
                 e.printStackTrace();
+                errorPage = true;
             }
 
             try {
                 controllerMethod.invoke(null, request, response);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+                errorPage = true;
             } catch (InvocationTargetException e) {
                 System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
                 e.printStackTrace();
+                errorPage = true;
             }
             /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
              * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
 
             String viewUrl = (String) request.getAttribute("viewUrl");
             System.out.println("viewUrl ==> " + viewUrl);
-            if (viewUrl != null) {
+            if(errorPage){
+                errorPage = false; /* altrimenti rimane sempre a true e se il problema che ha scatenato l'errore viene fixato si continua a vedere la pagina sbagliata*/
+                RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/error/404.jsp");
+                System.out.println("jspToShow ==> " + jspToShow);
+                /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa
+                 *  1) Il forward è un’operazione interna al server o, nel caso di più server coinvolti, è un’operazione server-to-server.
+                 *  2) Il browser è completamente inconsapevole che l’operazione ha avuto luogo, quindi il suo URL originale rimane intatto.
+                 *  3) Qualsiasi ricaricamento del browser nella pagina risultante ripeterà semplicemente la richiesta originale, con l’URL originale.
+                 * */
+
+                try {
+                    jspToShow.forward(request, response); /*LINK INTERESSANTE => https://www.javaboss.it/redirect-vs-forward/*/
+                } catch (ServletException e) {
+                    System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP DI ERRORE NEL DISPATCHER");
+                    e.printStackTrace();
+                } finally {
+                    out.close();
+                }
+            }
+            else if (viewUrl != null) {
                 RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
                 System.out.println("jspToShow ==> " + jspToShow);
                 /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa

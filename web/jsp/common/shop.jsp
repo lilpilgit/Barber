@@ -2,6 +2,8 @@
 <%@page import="model.mo.User" %>
 <%@page import="java.util.ArrayList" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 <%
 
     /* Prendo il parametro "categoryFiltered" per settare il dropdown dopo il refresh della pagina */

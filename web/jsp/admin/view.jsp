@@ -5,6 +5,8 @@
 <%@ page import="java.util.TreeMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     Boolean loggedOn = false;

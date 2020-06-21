@@ -6,8 +6,10 @@
 <%@ page import="model.mo.Structure"%>
 <%@ page import="model.mo.User"%>
 <%@ page import="services.config.Configuration"%>
-<%@ page import="java.util.ArrayList"%><%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 
 <%
     /**

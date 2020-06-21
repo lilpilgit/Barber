@@ -2,6 +2,8 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%

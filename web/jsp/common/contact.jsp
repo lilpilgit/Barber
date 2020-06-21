@@ -1,5 +1,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 <%
 
     /* Prendo il parametro "contacted" che mi consente di sapere se l'email è stata inviata o meno */

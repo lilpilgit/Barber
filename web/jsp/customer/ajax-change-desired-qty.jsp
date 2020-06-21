@@ -5,6 +5,7 @@
 <%@ page import="services.config.Configuration" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/plain" pageEncoding="UTF-8"%>
+<%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
     /**

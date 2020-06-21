@@ -1,6 +1,7 @@
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="model.mo.Structure" %>
+<%@ page errorPage="../error/404.jsp" %>
+<%@ page session="false" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
