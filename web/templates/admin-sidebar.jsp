@@ -98,6 +98,29 @@
         <input type="hidden" name="controllerAction" value="home.Home.view">
     </form>
 </div>
+
+<!---------------------------------------- MODAL FOR APPLICATION MESSAGE ---------------------------------------------->
+
+<div class="modal fade" id="adminAppMessage" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-light bg-dark text-center">
+                <h5 class="modal-title">Application message:</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="applicationMessage" style="min-height: 100px;">
+                <span style="font-style: italic;" id="spanMessage"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------- END MODAL FOR APPLICATION MESSAGE ------------------------------------------>
+
 <script>
     function setControllerAction(value) {
         let form = document.getElementById('controller');

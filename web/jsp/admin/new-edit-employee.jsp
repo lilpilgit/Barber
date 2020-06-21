@@ -75,17 +75,10 @@
 
         <form id="form_add_employee" method="post" class="needs-validation">
             <div class="form-row justify-content-center">
-                <%if (structurePresent) {%>
                 <div class="text-center">
-                    <label for="Structure">You are <%=(action.equals("modify")) ? "modifying an " : "entering an"%>
-                        employee for the
-                        structure:</label>
-                    <input type="text" id="Structure"
-                           value="<%="ID:{" + structure.getId() + "}  " + structure.getName()%>" readonly>
+                    <h4>You are <%=(action.equals("modify")) ? "modifying an " : "entering an"%> Employee</h4>
                 </div>
-                <%}%>
             </div>
-            <br>
             <hr>
             <br>
             <div class="form-row justify-content-center">
@@ -193,9 +186,9 @@
             </div>
             <br>
             <div class="text-center">
-            <button type="submit" id="submit-new-edit-employee" class="btn btn-primary" name="submit"
-                    value="<%=(action.equals("modify")) ? "edit_employee" : "add_new_employee"%>">Send
-            </button>
+                <button type="submit" id="submit-new-edit-employee" class="btn btn-primary" name="submit"
+                        value="<%=(action.equals("modify")) ? "edit_employee" : "add_new_employee"%>">Send
+                </button>
             </div>
             <input type="hidden" name="controllerAction"
                    value="<%=(action.equals("modify")) ? "admin.Staff.editEmployee" : "admin.Staff.addEmployee"%>">

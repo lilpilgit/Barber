@@ -27,7 +27,7 @@
         setCurrentDate('currentDate');
         setButtonActiveSidebar('<%=idBtnAttivo%>');
         <%if(resultPresent){%>
-        showResult("<%=result%>", "Message:\n<%=applicationMessage%>");
+        showResult("<%=result%>", "<%=applicationMessage%>");
         <%}%>
     });
 </script>
