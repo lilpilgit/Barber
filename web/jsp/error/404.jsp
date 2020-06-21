@@ -50,7 +50,7 @@
                     <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
                     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                     <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_eaSxEJ.json"
-                                   background="transparent" speed="0.5" style="width: 300px; height: 300px;"
+                                   background="transparent" speed="0.5" style="height: 300px;"
                                    autoplay></lottie-player>
 
                 </div>
