@@ -70,29 +70,28 @@
                 <ul class="navbar-nav mr-auto"></ul>
                 <form class="form-inline my-2 my-md-0" method="post">
                     <input class="form-control" type="text" name="searchString" id="searchString"
-                           <%if (areEmployees) { if (searchedString != null) {%>placeholder="<%=searchedString%>"<%} else {%>placeholder="Search"<%}}%>
+                           <%if (areEmployees) { if (searchedString != null) {%>placeholder="<%=searchedString%>"
+                           <%} else {%>placeholder="Search"<%}}%>
                            required>
                     <input type="hidden" name="controllerAction" value="admin.Staff.searchStaff">
-                    <button type="submit" class="btn btn-default"><i class="fas fa-search" style="color: #01c5fc"></i></button>
+                    <button type="submit" class="btn btn-default"><i class="fas fa-search" style="color: #01c5fc"></i>
+                    </button>
                 </form>
             </div>
         </nav>
-        <%
-            if (areEmployees) {
-                if (searchedString != null) {
-        %>
-<%--        <div class="row justify-content-center">
+        <%if (searchedString != null) {%>
 
-            <h3>You searched for: <%=searchedString%>
-            </h3><br>
-        </div>--%>
         <div class="row justify-content-center">
             <form method="post">
-                <button type="submit" class="button6" title="Undo search"><i class="fas fa-globe-europe"></i>Show all</button>
+                <button type="submit" class="button6" title="Undo search"><i class="fas fa-globe-europe"></i>Show all
+                </button>
                 <input type="hidden" name="controllerAction" value="admin.Staff.showEmployees">
             </form>
         </div>
         <%}%>
+        <%
+            if (areEmployees) {%>
+
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">
@@ -149,7 +148,9 @@
                     </tbody>
                 </table>
                 <%} else {%>
-                <h1>No employee to show.</h1>
+                <div class="row justify-content-center">
+                    <h1>No employee to show.</h1>
+                </div>
                 <%}%>
                 <form method="post" id="action">
                     <input type="hidden" name="controllerAction" value="">
@@ -180,7 +181,8 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">Delete
+                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">
+                    Delete
                     <%=subject%>
                 </button>
             </div>

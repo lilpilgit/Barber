@@ -66,32 +66,17 @@ public class Dispatcher extends HttpServlet {
 
         /* chiamate AJAX */
         if (controllerAction != null && controllerAction.equals("home.Cart.changeDesiredQuantity")) {
-            RequestDispatcher jspChangeDesiredQty = request.getRequestDispatcher("jsp/customer/ajax-change-desired-qty.jsp");
-            try {
-                jspChangeDesiredQty.forward(request, response);
-            } catch (ServletException e) {
-                System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
+
+            forward(request, response, "jsp/customer/ajax-change-desired-qty.jsp");
+
         } else if (controllerAction != null && controllerAction.equals("home.Book.reservedSlot")) {
-            RequestDispatcher jspReservedSlot = request.getRequestDispatcher("jsp/customer/ajax-times-searcher.jsp");
-            try {
-                jspReservedSlot.forward(request, response);
-            } catch (ServletException e) {
-                System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
+
+            forward(request, response, "jsp/customer/ajax-times-searcher.jsp");
+
         } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
-            RequestDispatcher jspGetBooking = request.getRequestDispatcher("jsp/customer/ajax-get-booking.jsp");
-            try {
-                jspGetBooking.forward(request, response);
-            } catch (ServletException e) {
-                System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
+
+            forward(request, response, "jsp/customer/ajax-get-booking.jsp");
+
         }
         /* chiamate normali ( NON AJAX ) */
         else {
@@ -133,37 +118,39 @@ public class Dispatcher extends HttpServlet {
                 e.printStackTrace();
                 errorPage = true;
             }
+
             /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
              * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
 
             String viewUrl = (String) request.getAttribute("viewUrl");
             System.out.println("viewUrl ==> " + viewUrl);
 
-            if (errorPage) {
+            if (errorPage) { /* deve essere mostrata la pagina di errore... è successo qualcosa di brutto sicuramente... */
 
-                errorPage = false; /* altrimenti rimane sempre a true e se il problema che ha scatenato l'errore viene fixato si continua a vedere la pagina sbagliata*/
-                RequestDispatcher jspError = request.getRequestDispatcher("jsp/error/404.jsp");
-                System.out.println("jspError ==> " + jspError);
+                errorPage = false; /* altrimenti rimane sempre a true anche se il problema che ha scatenato l'errore viene fixato si continua a vedere la pagina sbagliata*/
 
-                try {
-                    jspError.forward(request, response);
-                } catch (ServletException e) {
-                    System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP DI ERRORE NEL DISPATCHER");
-                    e.printStackTrace();
-                }
+                forward(request, response, "jsp/error/404.jsp");
+
             } else if (viewUrl != null) { /* passata con il controller */
-                RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
-                System.out.println("jspToShow ==> " + jspToShow);
+                forward(request, response, "jsp/" + viewUrl + ".jsp");
 
-                try {
-                    jspToShow.forward(request, response);
-                } catch (ServletException e) {
-                    System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
-                    e.printStackTrace();
-                }
             } else {
                 System.err.println("viewUrl È null!!!");
+                /* redirigo sulla home.jsp */
+                forward(request, response, "jsp/home.jsp");
             }
+        }
+    }
+
+    protected void forward(HttpServletRequest request, HttpServletResponse response, String relativePathJSP) {
+        RequestDispatcher jsp = request.getRequestDispatcher(relativePathJSP);
+        System.out.println("jspToShow ==> " + jsp);
+        try {
+            jsp.forward(request, response);
+        } catch (ServletException | IOException e) {
+            System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
+            e.printStackTrace();
+            errorPage = true;
         }
     }
 }

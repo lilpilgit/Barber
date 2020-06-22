@@ -103,19 +103,6 @@
                             }
                         }
                     %>
-
-
-                    <!-- MULTI LANGUAGE -->
-
-                    <!--                        <div class="btn-group">
-                                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="flag-icon flag-icon-gb"></span> ENG
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#"><span class="flag-icon flag-icon-it"></span> ITA</a>
-                                                </div>
-                                            </div>-->
-
                 </div>
             </div>
         </nav>

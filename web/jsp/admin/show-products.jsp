@@ -80,12 +80,7 @@
                 </form>
             </div>
         </nav>
-        <%
-            if (areProducts) {
-
-                if (searchedString != null) {
-        %>
-
+        <%if (searchedString != null) {%>
         <div class="row justify-content-center">
             <form method="post">
                 <button type="submit" class="button6"><i class="fas fa-globe-europe"></i> Show all</button>
@@ -93,6 +88,9 @@
             </form>
         </div>
         <%}%>
+        <%
+            if (areProducts) {%>
+
         <div class="row justify-content-center">
             <div class="col-auto">
                 <table class="table table-hover table-bordered">
@@ -101,7 +99,7 @@
                         <th scope="col">N°</th>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col" title="Maximum Order Quantity for each Customer">M.O.Q</th>
+                        <th scope="col" title="Maximum Order Quantity for each Order">M.O.Q</th>
                         <th scope="col">Producer</th>
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
@@ -156,8 +154,11 @@
                     </tbody>
                 </table>
                 <%} else {%>
-                <h1>There are no products :(</h1>
+                <div class="row justify-content-center">
+                    <h1>There are no products :(</h1>
+                </div>
                 <%}%>
+
                 <form method="post" id="action">
                     <input type="hidden" name="controllerAction" value="">
                     <input type="hidden" name="ProductStatus" value="">

@@ -3,10 +3,12 @@ function showResult(result, message) {
      * show modal with message returned from server
      */
     if (result === 'success') {
+        document.getElementById("applicationMessage").style.backgroundColor = "rgba(43,226,125,0.48)";
         document.getElementById("spanMessage").innerHTML = "";
         document.getElementById('spanMessage').innerHTML = message;
         $('#adminAppMessage').modal("show");
     } else if (result === 'fail') {
+        document.getElementById("applicationMessage").style.backgroundColor = "rgba(232,91,91,0.48)";
         document.getElementById("spanMessage").innerHTML = "";
         document.getElementById('spanMessage').innerHTML = message;
         $('#adminAppMessage').modal("show");
