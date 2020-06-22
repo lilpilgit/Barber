@@ -32,9 +32,6 @@ public class UserDAOCookieImpl implements UserDAO {
 
         User loggedUser = new User();
         loggedUser.setId(id);
-        loggedUser.setEmail(email);
-        loggedUser.setName(name);
-        loggedUser.setSurname(surname);
         loggedUser.setType(type);
 
         Cookie cookie = null;
@@ -83,7 +80,7 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail(String email) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
@@ -91,7 +88,7 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
-    public ArrayList<User> fetchAllOnType(char userType) {
+    public ArrayList<User> fetchAllOnType(char userType) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
@@ -115,7 +112,7 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
-    public ArrayList<User> findEmployeesByString(String searchString) {
+    public ArrayList<User> findEmployeesByString(String searchString) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
@@ -123,7 +120,7 @@ public class UserDAOCookieImpl implements UserDAO {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(Long id) throws UnsupportedOperationException {
         /**
          * This operation is allowed only in UserDAOMySQLJDBCImpl, not here.
          * */
@@ -143,6 +140,7 @@ public class UserDAOCookieImpl implements UserDAO {
 
         if (cookies != null) {
             for (int i = 0; i < cookies.length && loggedUser == null; i++) {
+
                 if (cookies[i].getName().equals("loggedUser")) {
                     loggedUser = decode(cookies[i].getValue());
                 }
@@ -173,7 +171,6 @@ public class UserDAOCookieImpl implements UserDAO {
         }
         return false;
     }
-
 
     private String encode(User loggedUser) {
 

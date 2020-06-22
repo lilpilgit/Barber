@@ -33,9 +33,9 @@
     }
 
     /* Prendo il parametro per decidere cosa fare nel caso in cui la registrazione sia andata a buon fine */
-    Boolean registered = null;
-    if (request.getAttribute("registered") != null) {
-        registered = (Boolean) request.getAttribute("registered");
+    Boolean result = null;
+    if (request.getAttribute("result") != null) {
+        result = (Boolean) request.getAttribute("result");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */

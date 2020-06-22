@@ -264,12 +264,15 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
 
         boolean exist; /* flag per sapere se esiste o meno */
+
         try {
             exist = rs.next(); /*se esiste almeno una riga non posso inserire altro!!!*/
+            System.out.println("exist ==> " + exist);
         } catch (SQLException e) {
             System.err.println("Errore nella exist = rs.next();");
             throw new RuntimeException(e);
         }
+
         try {
             rs.close();
         } catch (SQLException e) {
@@ -280,114 +283,115 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         if (exist) {
             /*NON È UN ERRORE BLOCCANTE*/
             throw new DuplicatedObjectException("ProductDAOJDBCImpl.insert: Tentativo di inserimento di un prodotto già esistente con nome: {" + product.getName() + "}.");
-        }
+        } else {
 
-        /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
-         * UN NUOVO IMPIEGATO DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
-         * NUMERO PER IMPIEGATI DIVERSI SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
-        query =
-                "UPDATE COUNTER"
-                        + " SET VALUE = VALUE + 1"
-                        + " WHERE ID = ?";
+            /*LOCK SULL'OPERAZIONE DI AGGIORNAMENTO DELLA RIGA PERTANTO UNA QUALSIASI ALTRA TRANSAZIONE CHE PROVA AD AGGIUNGERE
+             * UN NUOVO IMPIEGATO DEVE ASPETTARE CHE TALE TRANSAZIONE FINISCA E SONO SICURO CHE NON VERRÀ STACCATO 2 VOLTE LO STESSO
+             * NUMERO PER IMPIEGATI DIVERSI SU CHIAMATE HTTP DIVERSE SU TRANSAZIONI DIVERSE*/
+            query =
+                    "UPDATE COUNTER"
+                            + " SET VALUE = VALUE + 1"
+                            + " WHERE ID = ?";
 
-        try {
-            ps = connection.prepareStatement(query);
-            int i = 1;
-            ps.setString(i++, COUNTER_ID);
-        } catch (SQLException e) {
-            System.err.println("Errore nella connection.prepareStatement");
-            throw new RuntimeException(e);
-        }
-        try {
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.executeUpdate();");
-            throw new RuntimeException(e);
-        }
-
-        /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
-        query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
-
-        try {
-            ps = connection.prepareStatement(query);
-            int i = 1;
-            ps.setString(i++, COUNTER_ID);
-        } catch (SQLException e) {
-            System.err.println("Errore nella connection.prepareStatement(query)");
-            throw new RuntimeException(e);
-        }
-        try {
-            rs = ps.executeQuery();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.executeQuery();");
-            throw new RuntimeException(e);
-        }
-
-        /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
-        try {
-            rs.next();
-        } catch (SQLException e) {
-            System.err.println("Errore nella rs.next();");
-            throw new RuntimeException(e);
-        }
-
-        /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
-        try {
-            newId = rs.getLong("VALUE");
-        } catch (SQLException e) {
-            System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
-            throw new RuntimeException(e);
-        } finally {
-            /* IL resultSet una volta letto l'id non serve più in quanto rimane da fare solo l'INSERT di PRODUCT*/
             try {
-                rs.close();
+                ps = connection.prepareStatement(query);
+                int i = 1;
+                ps.setString(i++, COUNTER_ID);
             } catch (SQLException e) {
-                System.err.println("Errore nella rs.close();");
+                System.err.println("Errore nella connection.prepareStatement");
+                throw new RuntimeException(e);
+            }
+            try {
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Errore nella ps.executeUpdate();");
+                throw new RuntimeException(e);
+            }
+
+            /*LEGGO L'ID APPENA PRIMA INCREMENTATO PER POTERLO USARE ALL'INTERNO DELLA INSERT*/
+            query = "SELECT VALUE FROM COUNTER WHERE ID = ?";
+
+            try {
+                ps = connection.prepareStatement(query);
+                int i = 1;
+                ps.setString(i++, COUNTER_ID);
+            } catch (SQLException e) {
+                System.err.println("Errore nella connection.prepareStatement(query)");
+                throw new RuntimeException(e);
+            }
+            try {
+                rs = ps.executeQuery();
+            } catch (SQLException e) {
+                System.err.println("Errore nella ps.executeQuery();");
+                throw new RuntimeException(e);
+            }
+
+            /*SPOSTO IL PUNTATORE DEL RESULT SET SULLA PRIMA ( E UNICA IN QUESTO CASO ) RIGA RITORNATA DALLA QUERY*/
+            try {
+                rs.next();
+            } catch (SQLException e) {
+                System.err.println("Errore nella rs.next();");
+                throw new RuntimeException(e);
+            }
+
+            /*      !!! SALVO IL NUOVO ID NELLA VARIABILE newId !!!      */
+            try {
+                newId = rs.getLong("VALUE");
+            } catch (SQLException e) {
+                System.err.println("Errore nella newId = rs.getLong(\"VALUE\");");
+                throw new RuntimeException(e);
+            } finally {
+                /* IL resultSet una volta letto l'id non serve più in quanto rimane da fare solo l'INSERT di PRODUCT*/
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    System.err.println("Errore nella rs.close();");
+                    throw new RuntimeException(e);
+                }
+            }
+
+            /* Rimane da settare l'ID. */
+            product.setId(newId);
+
+            /* Rimane da settare la pictureName del tipo product_ID.extension */
+            product.setPictureName(basePicName + newId + "." + fileExtension);
+            /*                     product_      100      .        png*/
+
+            query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            try {
+                int i = 1;
+                ps = connection.prepareStatement(query);
+                ps.setLong(i++, product.getId());
+                ps.setString(i++, product.getProducer());
+                ps.setBigDecimal(i++, product.getPrice());
+                ps.setInt(i++, product.getDiscount());
+                ps.setString(i++, product.getName());
+                ps.setDate(i++, Date.valueOf(product.getInsertDate()));
+                ps.setString(i++, product.getPictureName());
+                ps.setString(i++, product.getDescription());
+                ps.setInt(i++, product.getMaxOrderQuantity());
+                ps.setString(i++, product.getCategory());
+                ps.setBoolean(i++, product.inShowcase());
+                ps.setBoolean(i++, product.isDeleted());
+                ps.setLong(i++, product.getStructure().getId());
+            } catch (SQLException e) {
+                System.err.println("Errore nella connection.prepareStatement");
+                throw new RuntimeException(e);
+            }
+            try {
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Errore nella ps.executeUpdate()");
+                throw new RuntimeException(e);
+            }
+
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                System.err.println("Errore nella ps.close()");
                 throw new RuntimeException(e);
             }
         }
-
-        /* Rimane da settare l'ID. */
-        product.setId(newId);
-
-        /* Rimane da settare la pictureName del tipo product_ID.extension */
-        product.setPictureName(basePicName + newId + "." + fileExtension);
-
-        query = "INSERT INTO PRODUCT(ID, PRODUCER, PRICE, DISCOUNT, NAME, INSERT_DATE, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY, SHOWCASE, DELETED, ID_STRUCTURE ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        try {
-            int i = 1;
-            ps = connection.prepareStatement(query);
-            ps.setLong(i++, product.getId());
-            ps.setString(i++, product.getProducer());
-            ps.setBigDecimal(i++, product.getPrice());
-            ps.setInt(i++, product.getDiscount());
-            ps.setString(i++, product.getName());
-            ps.setDate(i++, Date.valueOf(product.getInsertDate()));
-            ps.setString(i++, product.getPictureName());
-            ps.setString(i++, product.getDescription());
-            ps.setInt(i++, product.getMaxOrderQuantity());
-            ps.setString(i++, product.getCategory());
-            ps.setBoolean(i++, product.inShowcase());
-            ps.setBoolean(i++, product.isDeleted());
-            ps.setLong(i++, product.getStructure().getId());
-        } catch (SQLException e) {
-            System.err.println("Errore nella connection.prepareStatement");
-            throw new RuntimeException(e);
-        }
-        try {
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.executeUpdate()");
-            throw new RuntimeException(e);
-        }
-
-        try {
-            ps.close();
-        } catch (SQLException e) {
-            System.err.println("Errore nella ps.close()");
-            throw new RuntimeException(e);
-        }
-
         /*
          * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe User
          * appena inserito
@@ -708,7 +712,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         return listProduct;
     }
 
-    public ArrayList<Product> findProductsByString(String searchString){
+    public ArrayList<Product> findProductsByString(String searchString) {
         ArrayList<Product> listProduct = new ArrayList<>();
         /*
          *  When searching for partial strings in MySQL with LIKE
@@ -716,15 +720,15 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
          */
         query =
                 "SELECT * FROM PRODUCT "
-              + "WHERE (CATEGORY LIKE ? OR NAME LIKE ? OR PRODUCER LIKE ? ) AND DELETED = 0 "
-              + "ORDER BY INSERT_DATE DESC;";
+                        + "WHERE (CATEGORY LIKE ? OR NAME LIKE ? OR PRODUCER LIKE ? ) AND DELETED = 0 "
+                        + "ORDER BY INSERT_DATE DESC;";
         try {
             int i = 1;
             String formattedSearchString = "%" + searchString + "%";
             ps = connection.prepareStatement(query);
-            ps.setString(i++,formattedSearchString);
-            ps.setString(i++,formattedSearchString);
-            ps.setString(i++,formattedSearchString);
+            ps.setString(i++, formattedSearchString);
+            ps.setString(i++, formattedSearchString);
+            ps.setString(i++, formattedSearchString);
         } catch (SQLException e) {
             System.err.println("Errore nella connection.prepareStatement");
             throw new RuntimeException(e);

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
 @WebServlet(name = "Dispatcher", urlPatterns = {"/app"})
 public class Dispatcher extends HttpServlet {
     String controllerAction = null;
-    PrintWriter out = null;
     Method controllerMethod = null;
     boolean errorPage = false;
 
@@ -33,18 +31,16 @@ public class Dispatcher extends HttpServlet {
     }
 
     protected void commonOperations(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        out = response.getWriter();
         response.setContentType("text/html;charset=UTF-8");
 
-        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request); /* true se è stato submittato un form di tipo multipart/form-data*/
 
         if (!isMultipart) {
-            /*se non è una multipart tratto tale chiamata HTTP come tutte quelle trattate fin ora*/
+            /* se non è una multipart tratto tale chiamata HTTP come tutte quelle trattate fin ora */
             controllerAction = request.getParameter("controllerAction");
-            System.err.println("DISPATCHER ==> controllerAction no multipart : " + controllerAction);
+            System.err.println("DISPATCHER ==> controllerAction nel caso NO MULTIPART : " + controllerAction);
         } else {
-            DiskFileItemFactory factory = new DiskFileItemFactory(); /*serve a creare tutti i gestori per i file che arrivano in upload */
+            DiskFileItemFactory factory = new DiskFileItemFactory(); /* serve a creare tutti i gestori per i file che arrivano in upload */
             ServletFileUpload upload = new ServletFileUpload(factory);
             List<FileItem> items = null; /* vado a fare il parsing della request e ottengo una lista di FileItem ( che fa parte anche essa delle librerie di FileUpload)*/
             try {
@@ -77,8 +73,6 @@ public class Dispatcher extends HttpServlet {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
-            } finally {
-                out.close();
             }
         } else if (controllerAction != null && controllerAction.equals("home.Book.reservedSlot")) {
             RequestDispatcher jspReservedSlot = request.getRequestDispatcher("jsp/customer/ajax-times-searcher.jsp");
@@ -88,8 +82,6 @@ public class Dispatcher extends HttpServlet {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
-            } finally {
-                out.close();
             }
         } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
             RequestDispatcher jspGetBooking = request.getRequestDispatcher("jsp/customer/ajax-get-booking.jsp");
@@ -99,14 +91,15 @@ public class Dispatcher extends HttpServlet {
                 System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
-            } finally {
-                out.close();
             }
-        } else {
+        }
+        /* chiamate normali ( NON AJAX ) */
+        else {
+
             if (controllerAction == null) {
                 controllerAction = "home.Home.view";
             }
-
+            /* CARICO LA CLASSE DA CUI RICHIAMARE IL METODO */
             String[] splittedAction = controllerAction.split("\\.");
             Class<?> controllerClass = null;
             try {
@@ -114,16 +107,18 @@ public class Dispatcher extends HttpServlet {
                 System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
                 //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
             } catch (ClassNotFoundException e) {
-                System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
             }
+
+            /* INVOCO IL METODO */
 
             try {
                 controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
                 System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
             } catch (NoSuchMethodException e) {
-                System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
             }
@@ -134,7 +129,7 @@ public class Dispatcher extends HttpServlet {
                 e.printStackTrace();
                 errorPage = true;
             } catch (InvocationTargetException e) {
-                System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER MANAGE");
+                System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
                 e.printStackTrace();
                 errorPage = true;
             }
@@ -143,41 +138,28 @@ public class Dispatcher extends HttpServlet {
 
             String viewUrl = (String) request.getAttribute("viewUrl");
             System.out.println("viewUrl ==> " + viewUrl);
-            if(errorPage){
+
+            if (errorPage) {
+
                 errorPage = false; /* altrimenti rimane sempre a true e se il problema che ha scatenato l'errore viene fixato si continua a vedere la pagina sbagliata*/
-                RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/error/404.jsp");
-                System.out.println("jspToShow ==> " + jspToShow);
-                /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa
-                 *  1) Il forward è un’operazione interna al server o, nel caso di più server coinvolti, è un’operazione server-to-server.
-                 *  2) Il browser è completamente inconsapevole che l’operazione ha avuto luogo, quindi il suo URL originale rimane intatto.
-                 *  3) Qualsiasi ricaricamento del browser nella pagina risultante ripeterà semplicemente la richiesta originale, con l’URL originale.
-                 * */
+                RequestDispatcher jspError = request.getRequestDispatcher("jsp/error/404.jsp");
+                System.out.println("jspError ==> " + jspError);
 
                 try {
-                    jspToShow.forward(request, response); /*LINK INTERESSANTE => https://www.javaboss.it/redirect-vs-forward/*/
+                    jspError.forward(request, response);
                 } catch (ServletException e) {
                     System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP DI ERRORE NEL DISPATCHER");
                     e.printStackTrace();
-                } finally {
-                    out.close();
                 }
-            }
-            else if (viewUrl != null) {
+            } else if (viewUrl != null) { /* passata con il controller */
                 RequestDispatcher jspToShow = request.getRequestDispatcher("jsp/" + viewUrl + ".jsp");
                 System.out.println("jspToShow ==> " + jspToShow);
-                /*^^^^^^^^^^^^^^^ viene recuperato un nuovo oggetto RequestDispatcher associato alla nuova risorsa
-                 *  1) Il forward è un’operazione interna al server o, nel caso di più server coinvolti, è un’operazione server-to-server.
-                 *  2) Il browser è completamente inconsapevole che l’operazione ha avuto luogo, quindi il suo URL originale rimane intatto.
-                 *  3) Qualsiasi ricaricamento del browser nella pagina risultante ripeterà semplicemente la richiesta originale, con l’URL originale.
-                 * */
 
                 try {
-                    jspToShow.forward(request, response); /*LINK INTERESSANTE => https://www.javaboss.it/redirect-vs-forward/*/
+                    jspToShow.forward(request, response);
                 } catch (ServletException e) {
                     System.err.println("Servlet Exception ==> FORWARD VERSO LA JSP NEL DISPATCHER");
                     e.printStackTrace();
-                } finally {
-                    out.close();
                 }
             } else {
                 System.err.println("viewUrl È null!!!");

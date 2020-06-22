@@ -42,6 +42,7 @@ public abstract class DAOFactory {
     public abstract StatisticsDAO getStatisticsDAO();
 
     public static DAOFactory getDAOFactory(String whichFactory, HashMap factoryParameters) {
+        /* ritorna oggetti che rappresentano le istanze delle classi concrete che consentono di accedere effettivamente al DB, ai cookie ...*/
         if (whichFactory.equals(MYSQLJDBCIMPL)) {
             return new MySQLJDBCDAOFactory(factoryParameters);
         } else if (whichFactory.equals(COOKIEIMPL)) {

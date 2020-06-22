@@ -113,7 +113,7 @@ public class Home {
 
     public static void logon(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Check validity of creds on DB and set cookie. After that call common/home.jsp
+         * Check validity of credentials on DB and set cookie. After that call common/home.jsp
          */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
@@ -136,6 +136,7 @@ public class Home {
             sessionDAOFactory.beginTransaction();
 
             sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
+
             loggedUser = sessionUserDAO.findLoggedUser();
 
             /* DAOFactory per manipolare i dati sul DB */
@@ -149,11 +150,12 @@ public class Home {
 
             /* check delle credenziali sul database */
             userDAO = daoFactory.getUserDAO();
+
             user = userDAO.findByEmail(email); /* tale utente esiste???? */
 
             /* se l'utente con tale email non esiste oppure ha inserito una password sbagliata */
             if (user == null || !user.getPassword().equals(password)) {
-                sessionUserDAO.delete(null);
+                sessionUserDAO.delete(null); /* crea un cookie vuoto */
                 applicationMessage = "Wrong username or password!";
                 loggedUser = null;
             } else {
@@ -163,22 +165,22 @@ public class Home {
                     case 'A':
                         /* ADMIN */
                         /* ulteriori operazioni */
-                        loggedUser = sessionUserDAO.insert(user.getId(), null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        loggedUser = sessionUserDAO.insert(user.getId(), null, null,null, null, null, null, null, null, null, user.getType());
                         break;
                     case 'E':
                         /* EMPLOYEE */
-                        loggedUser = sessionUserDAO.insert(user.getId(), null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                        loggedUser = sessionUserDAO.insert(user.getId(), null, null,null, null, null, null, null, null, null, user.getType());
                         viewEmployee = true;
                         break;
                     case 'C':
                         /* CUSTOMER */
                         if (user.getId() != null && user.isBlocked()) { /* mettendo solo user != null va in errore */
                             /* email e password corretta, utente non cancellato, è un cliente e verifico se è BLOCCATO */
-                            sessionUserDAO.delete(null);
+                            sessionUserDAO.delete(null); /* crea un cookie vuoto */
                             applicationMessage = "Your account has been blocked. Contact us for further information.";
                             loggedUser = null;
                         } else {
-                            loggedUser = sessionUserDAO.insert(user.getId(), null, user.getEmail(), user.getName(), user.getSurname(), null, null, null, null, null, user.getType());
+                            loggedUser = sessionUserDAO.insert(user.getId(), null, null, null, null, null, null, null, null, null, user.getType());
                         }
                         break;
                     default:
@@ -192,6 +194,7 @@ public class Home {
                 /* Chiamo la commonView solo se si sta loggando il cliente o l'admin */
                 commonView(daoFactory, request);
             }
+
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -309,7 +312,6 @@ public class Home {
         String email;
         String password;
         String phone;
-        String fiscal_code;
         String state;
         String region;
         String city;
@@ -349,8 +351,8 @@ public class Home {
 
             try {
                 userDAO.insert(null, null, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, null, null, 'C');
-
                 registered = true; /* se non viene sollevata l'eccezione riesco a settarlo a true */
+
             } catch (DuplicatedObjectException e) {
                 System.out.println("HOME.JAVA ==> Errore durante la registrazione.");
                 applicationMessage = "Email already registered";
@@ -393,14 +395,14 @@ public class Home {
         /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (registered) {
             /* SUCCESS */
-            request.setAttribute("registered", true);
+            request.setAttribute("result", true);
         } else {
             /* FAIL */
-            request.setAttribute("registered", false);
+            request.setAttribute("result", false);
         }
         /* 4) il booleano per sapere se è loggato o meno ( dopo la registrazione non posso essere loggato ) */
         request.setAttribute("loggedOn", false);
-        /* 4) oggetto corrispondente all'utente loggato ( dopo la registrazione non posso essere loggato dunque null ) */
+        /* 5) oggetto corrispondente all'utente loggato ( dopo la registrazione non posso essere loggato dunque null ) */
         request.setAttribute("loggedUser", null);
 
     }

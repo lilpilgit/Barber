@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,9 +71,11 @@ public class Products {
             List<FileItem> items = (List<FileItem>) request.getAttribute("attributesMultipart");
 
             String imagePath = request.getServletContext().getRealPath(Configuration.PRODUCTS_IMAGE_WEB_PATH);
+            /*   http://localhost:8080/ INTERNET  ==> LOCALE  { /home/user/----/img/products } questo è imagePath */
 
             /* Processo i field del form inviatomi */
             Iterator<FileItem> iter = items.iterator();
+
             while (iter.hasNext()) {
                 FileItem item = iter.next();
                 if (item.isFormField()) {
@@ -128,20 +131,23 @@ public class Products {
             daoFactory.beginTransaction();
 
             productDAO = daoFactory.getProductDAO();
+
             structureDAO = daoFactory.getStructureDAO();
 
             /* Scarico dal DB l'UNICA struttura  */
             structure = structureDAO.fetchStructure();
-            System.err.println(structure);
+
             /* Effettuo l'inserimento del nuovo prodotto */
             try {
                 productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, basePicName, fileExtension, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
+                System.err.println("CHIAMATO NELLA PRODUCTS");
                 applicationMessage = e.getMessage();
                 e.printStackTrace();
             }
 
+            System.err.println("DOPO IL CATCH DI DUPLICATED");
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -155,8 +161,8 @@ public class Products {
 
                 /* Procedo al salvataggio dell'immagine sul disco */
 
-                pictureName = basePicName + productInserted.getId();
-                String uploadedFilePath = imagePath + "/" + pictureName + "." + fileExtension;
+                pictureName = basePicName + productInserted.getId() + "." + fileExtension; /* product_100.jpg */
+                String uploadedFilePath = imagePath + "/" + pictureName;
                 File uploadedFile = new File(uploadedFilePath);
                 imgField.write(uploadedFile);/* scrivo sul file appena creato il contenuto binario del file passato dalla form */
             }
