@@ -2,7 +2,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page errorPage="../error/404.jsp" %>
+<%--<%@ page errorPage="../error/404.jsp" %>--%>
 <%@ page session="false" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -61,7 +61,22 @@
 <!--------------------------------------------- Product view ------------------------------------------------------->
 
 <div class="container pt-5 pb-5">
+    <%
+        /* il prodotto nel frattempo è stato cancellato o è stato passato un prodotto non esistente ... */
+        if (product == null) {%>
+    <div class="card2 text-center">
+
+        <h2>Oops! The product you were looking for doesn't exist</h2>
+        <div class="container justify-content-center">
+
+            <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                 width="300">
+        </div>
+        <h4 class="text-muted font-italic" style="padding-top: 10px">You can try another search or go back to our home page.</h4>
+    </div>
+    <%} else {%>
     <div class="card2">
+
         <div class="container-fluid">
             <div class="wrapper row">
                 <div class="preview col-md-6">
@@ -96,7 +111,8 @@
                         <button id="minus_button" class='down-count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
                         <label for="maxOrderQuantity"></label>
-                        <input id="maxOrderQuantity" class='counter' name="desiredQty" type="number" max="<%=product.getMaxOrderQuantity()%>" min="1"
+                        <input id="maxOrderQuantity" class='counter' name="desiredQty" type="number"
+                               max="<%=product.getMaxOrderQuantity()%>" min="1"
                                readonly form="action_product"
                                value='1' required/>
                         <button id="plus_button" class='up-count btn btn-info' title='Up'><i class='fa fa-plus'></i>
@@ -104,14 +120,15 @@
                     </div>
                     <!----------------------->
                     <div class="action text-center">
-                        <button class="add-to-cart btn btn-outline-gold" type="button" onclick="addProductToCart(<%=product.getId()%>)" ><span
+                        <button class="add-to-cart btn btn-outline-gold" type="button"
+                                onclick="addProductToCart(<%=product.getId()%>)"><span
                                 class="fas fa-shopping-basket"></span></button>
                         <button class="btn like <%=(inWishlist) ? "btn-gold-active" : "btn-outline-gold"%>"
                                 type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
                                 onclick="<%=(inWishlist) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=product.getId() + ");"%>">
                             <span class="fas fa-star"></span></button>
                     </div>
-                    <%}else{%>
+                    <%} else {%>
                     <button class="logged" type="button" id='showModal'
                             data-target="#loginModal"
                             data-toggle="modal">
@@ -123,6 +140,7 @@
             </div>
         </div>
     </div>
+    <%}%>
     <div class="container pt-5 text-center">
         <button type="submit" class="btn btnheader active2" id="showShop" form="goBackShop">
             Go back to shop
@@ -145,7 +163,7 @@
 <script type="text/javascript">
 
     window.addEventListener("load", () => {
-        <%if (loggedOn) {%>
+        <%if (product != null && loggedOn) {%>
         handlerCounterQtaProduct("minus_button", "maxOrderQuantity", "plus_button", <%=product.getMaxOrderQuantity()%>);
         <%}%>
     });

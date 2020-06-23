@@ -133,6 +133,8 @@ public class Product {
 
         product = productDAO.findProductById(id);
 
+        System.err.println("product to show " + product);
+
         if (loggedUser != null) {
             /* controllo necessario altrimenti va in errore se non si è utenti loggati e si prova a visualizzare la pagina product */
             inWishlist = wishlistDAO.inWishlist(loggedUser, id);

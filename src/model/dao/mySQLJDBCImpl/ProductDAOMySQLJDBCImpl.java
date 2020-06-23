@@ -445,7 +445,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
 
     @Override
     public Product findProductById(Long id) {
-        Product product = new Product();
+        Product product = null;
         String query = "SELECT * FROM PRODUCT WHERE ID = ? AND DELETED = 0;";
         try {
             ps = connection.prepareStatement(query);
