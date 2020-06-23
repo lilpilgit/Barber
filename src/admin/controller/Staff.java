@@ -118,7 +118,6 @@ public class Staff {
         String surname;
         String email;
         String phone;
-        LocalDate hire_date;
         LocalDate birth_date;
         String fiscal_code;
         String state;
@@ -204,10 +203,12 @@ public class Staff {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (inserted) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato inserito correttamente .*/
                 applicationMessage = "Employee inserted SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             }
 
 
@@ -388,9 +389,9 @@ public class Staff {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (deleted) {
-                /* Se l'impiegato è stato  cancellato committo la transazione */
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato cancellato correttamente .*/
                 applicationMessage = "Employee deleted SUCCESSFULLY.";
             }
@@ -631,10 +632,12 @@ public class Staff {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (edited) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato modificato correttamente .*/
                 applicationMessage = "Employee modified SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             }
 
 
@@ -743,6 +746,7 @@ public class Staff {
 
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
+
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
 

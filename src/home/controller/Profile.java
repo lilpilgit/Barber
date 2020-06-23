@@ -187,7 +187,6 @@ public class Profile {
                 userToUpdate.setSurname(request.getParameter("surname"));
                 userToUpdate.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
                 userToUpdate.setPhone(request.getParameter("phone"));
-                /* TODO:cambio password per l'utente */
                 userToUpdate.setType('C');
                 userToUpdate.setBlocked(false);
 
@@ -196,15 +195,9 @@ public class Profile {
                     edited = userDAO.update(userToUpdate);/* Se non viene sollevata l'eccezione, l'utente è stato modificato correttamente*/
 
                 } catch (DuplicatedObjectException e) {
-                    applicationMessage = e.getMessage();
+                    applicationMessage = "Error: Your data could not be updated. The email entered already exists.";
                     e.printStackTrace();
                 }
-
-                if (edited) {
-                    /* Solo se viene committata la transazione senza errori siamo sicuri che l'utente sia stato modificato correttamente .*/
-                    applicationMessage = "Your data has been modified SUCCESSFULLY.";
-                }
-
 
             }
 
@@ -216,6 +209,11 @@ public class Profile {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+            if (edited) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che l'utente sia stato modificato correttamente .*/
+                applicationMessage = "Your data has been modified SUCCESSFULLY.";
+            }
 
         } catch (Exception e) {
             try {

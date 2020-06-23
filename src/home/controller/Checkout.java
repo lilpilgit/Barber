@@ -172,6 +172,7 @@ public class Checkout {
         ArrayList<ExtendedProduct> items = new ArrayList<>(); /* prodotti da aggiungere alla ITEMS_LIST */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean inserted = false;
+        boolean removedFromCart = true; /* posto a true, scatta a false se almeno uno dei prodotti non è stato rimosso dal carrello dopo l'ordine */
         boolean cookieValid = true;
 
         try {
@@ -258,9 +259,8 @@ public class Checkout {
                 if (inserted) {
                     /* se gli ordini sono andati a buon fine devo rimuovere i prodotti dal carrello dell'utente */
                     for (ExtendedProduct boughtItem : items) {
-                        cartDAO.removeProductFromCart(loggedUser, boughtItem.getId());
+                        removedFromCart = removedFromCart && cartDAO.removeProductFromCart(loggedUser, boughtItem.getId());
                     }
-                    applicationMessage = "Order received correctly, check the status in your order section.";
                 }
             }
 
@@ -271,6 +271,11 @@ public class Checkout {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+            if(inserted && removedFromCart){
+                /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato salvato nel database correttamente */
+                applicationMessage = "Order received correctly, check the status in your order section.";
+            }
 
         } catch (Exception e) {
             try {

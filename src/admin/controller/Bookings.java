@@ -155,10 +155,10 @@ public class Bookings {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (deleted) {
-                /* Se l'impiegato è stato  cancellato committo la transazione */
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato cancellato correttamente .*/
+                /* Solo se viene committata la transazione senza errori siamo sicuri che la prenotazione sia stata cancellato correttamente .*/
                 applicationMessage = "Booking deleted SUCCESSFULLY.";
             }
 

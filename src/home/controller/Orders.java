@@ -178,10 +178,6 @@ public class Orders {
 
                 commonView(daoFactory, loggedUser, request); /* setto l'attributo "orders" all'interno della request */
 
-                if (canceled) {
-                    /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato cancellato */
-                    applicationMessage = "Order canceled SUCCESSFULLY.";
-                }
             }
 
             /* Commit fittizio */
@@ -191,6 +187,12 @@ public class Orders {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+            if (canceled) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato cancellato */
+                applicationMessage = "Order canceled SUCCESSFULLY.";
+            }
+
 
         } catch (Exception e) {
             try {

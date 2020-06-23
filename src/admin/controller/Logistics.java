@@ -168,11 +168,13 @@ public class Logistics {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (modified) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato modificato */
                 applicationMessage = "Status order modified SUCCESSFULLY.";
             }
-            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
 
         } catch (Exception e) {
             try {

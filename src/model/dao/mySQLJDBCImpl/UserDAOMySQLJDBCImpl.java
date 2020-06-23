@@ -60,7 +60,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         query =
                 "SELECT ID"
                         + " FROM USER"
-                        + " WHERE EMAIL = ? " + additionalQuery + ";";
+                        + " WHERE EMAIL = ? AND DELETED = 0 " + additionalQuery + ";";
 
         System.err.println("EMAIL =>>" + user.getEmail());
         System.err.println("FISCAL_CODE =>>" + user.getFiscalCode());
@@ -411,9 +411,9 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
          * @return true if delete go correctly otherwise raise exception
          */
         query
-                = "UPDATE USER"
-                + " SET DELETED = '1'"
-                + " WHERE ID = ?";
+                = "UPDATE USER "
+                + "SET DELETED = 1 "
+                + "WHERE ID = ?";
         try {
             ps = connection.prepareStatement(query);
             int i = 1;

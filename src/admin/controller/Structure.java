@@ -159,10 +159,12 @@ public class Structure {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (edited) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che la struttura sia stata modificata correttamente .*/
                 applicationMessage = "Structure modified SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             }
 
 

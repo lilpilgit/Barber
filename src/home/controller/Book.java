@@ -209,10 +209,6 @@ public class Book {
                 /* Setto l'attributo alreadyBooked */
                 commonView(daoFactory, loggedUser, request);
 
-                if (inserted) {
-                    /* Solo se viene committata la transazione senza errori siamo sicuri che e' stato inserito correttamente .*/
-                    applicationMessage = "Booking inserted SUCCESSFULLY.";
-                }
             }
 
             /* Commit della transazione sul db */
@@ -223,6 +219,12 @@ public class Book {
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
+            if (inserted) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri l'appuntamento e' stato inserito correttamente .*/
+                applicationMessage = "You successfully created your booking!";
+            }
+
+
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -230,7 +232,7 @@ public class Book {
 
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Se viene fatto il rollback della transazione la prenotazione non è stato inserita.*/
-                applicationMessage = "Booking insertion ERROR.";
+                applicationMessage = "Booking creation ERROR.";
 
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
@@ -353,10 +355,6 @@ public class Book {
                 /* Setto l'attributo alreadyBooked */
                 commonView(daoFactory, loggedUser, request);
 
-                if (deleted) {
-                    applicationMessage = "Booking deleted SUCCESSFULLY. We are sorry that you had to cancel your appointment.";
-                }
-
             }
 
             /* Commit della transazione sul db */
@@ -366,6 +364,11 @@ public class Book {
             sessionDAOFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+
+            if (deleted) {
+                applicationMessage = "Booking deleted SUCCESSFULLY. We are sorry that you had to cancel your appointment.";
+            }
 
         } catch (Exception e) {
             try {

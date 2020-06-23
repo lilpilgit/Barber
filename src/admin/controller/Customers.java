@@ -149,9 +149,9 @@ public class Customers {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (deleted) {
-                /* Se il cliente è stato inserito cancellato committo la transazione */
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato cancellato correttamente .*/
                 applicationMessage = "Customer deleted SUCCESSFULLY.";
             }
@@ -265,11 +265,11 @@ public class Customers {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
             if (blocked) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato bloccato correttamente .*/
                 applicationMessage = "Customer blocked SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             }
 
 
@@ -380,11 +380,11 @@ public class Customers {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
             if (unBlocked) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che e' stato sbloccato correttamente .*/
                 applicationMessage = "Customer unblocked SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             }
 
 

@@ -198,18 +198,12 @@ public class Cart {
                         Wishlist.commonView(daoFactory, loggedUser, request);
                         System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
                     } else if (from.equals("cart")) {
-                        System.out.println("CHIAMATO CON AJAAAAAAAAAAAAAAAAAAX DEVO INCREMENTARE");
+                        System.out.println("CHIAMATO CON AJAX ==> DEVO INCREMENTARE");
                     }
 
                 } else {
                     throw new RuntimeException("Cart.java ==> non è stato passato alcun parametro 'from'");
                 }
-
-                if (added) {
-                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto al carrello dell'utente */
-                    applicationMessage = "Product added to cart SUCCESSFULLY.";
-                }
-
             }
 
 
@@ -220,6 +214,11 @@ public class Cart {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+            if (added) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto al carrello dell'utente */
+                applicationMessage = "Product added to cart SUCCESSFULLY.";
+            }
 
         } catch (Exception e) {
             try {
@@ -349,10 +348,6 @@ public class Cart {
 
                 commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
 
-                if (removed) {
-                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
-                    applicationMessage = "Product removed from cart SUCCESSFULLY.";
-                }
             }
 
             /* Commit fittizio */
@@ -362,6 +357,11 @@ public class Cart {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
+            if (removed) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
+                applicationMessage = "Product removed from cart SUCCESSFULLY.";
+            }
 
         } catch (Exception e) {
             try {

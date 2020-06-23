@@ -154,10 +154,11 @@ public class Products {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (inserted) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto sia stato inserito correttamente .*/
                 applicationMessage = "Product inserted SUCCESSFULLY.";
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
                 /* Procedo al salvataggio dell'immagine sul disco */
 
@@ -288,8 +289,8 @@ public class Products {
          * Instantiates an ProductDAO to be able to set/unset showcase from Database.
          */
         Long idToManage = null; /* id ricevuto */
-        Boolean status = false; /* in base allo stato capisco se sto chiedendo di mettere o rimuovere un prodotto dalla vetrina */
-        Boolean fromHome = false; /* If the request comes from the home, I known! */
+        boolean status = false; /* in base allo stato capisco se sto chiedendo di mettere o rimuovere un prodotto dalla vetrina */
+        boolean fromHome = false; /* If the request comes from the home, I known! */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
@@ -318,9 +319,9 @@ public class Products {
             /* Fetching dell'id da bloccare proveniente dal form hidden dentro la pagina show-product.jsp */
             idToManage = Long.valueOf(request.getParameter("ProductID"));
             /* Fetching dello stato attuale del prodotto, se e' in vetrina o no */
-            status = Boolean.valueOf(request.getParameter("ProductStatus"));
+            status = Boolean.parseBoolean(request.getParameter("ProductStatus"));
             /* Fetching della provenienza della richiesta, se viene dalla home --> true */
-            fromHome = Boolean.valueOf(request.getParameter("fromHome"));
+            fromHome = Boolean.parseBoolean(request.getParameter("fromHome"));
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -334,9 +335,6 @@ public class Products {
             /* Negando status, quando chiamo la funzione modifyShowcase settero' il valore inverso a quello presente nel db */
             showcase = productDAO.modifyShowcase(product, !status); /* Se non viene sollevata l'eccezione è stato modificato correttamente*/
 
-            /* Chiamo la commonView in modo da far vedere il risultato aggiornato che si presentera' come un cambiamento
-            a livello grafico (cambio colore scritte o icone) */
-
             commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
 
             /* Commit della transazione sul db */
@@ -345,13 +343,11 @@ public class Products {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
-            if (showcase) {
-                /* Se tutto va a buon fine, committo la transazione */
-                daoFactory.commitTransaction();
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-                /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato aggiornato correttamente .*/
-                applicationMessage = "SUCCESS!";
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
+            if (showcase) {
+                /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato aggiornato correttamente .*/
+                applicationMessage = "The product was " + ((status) ? "added to" : "removed from") + " the showcase SUCCESSFULLY!";
             }
 
         } catch (Exception e) {
@@ -898,10 +894,11 @@ public class Products {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
+            /* Se il prodotto è stato cancellato committo la transazione */
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (deleted) {
-                /* Se il cliente è stato inserito cancellato committo la transazione */
-                System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato cancellato correttamente .*/
+                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto sia stato cancellato correttamente .*/
                 applicationMessage = "Product deleted SUCCESSFULLY.";
             }
 
