@@ -76,7 +76,7 @@
                     <%if (!bookedStatus) {%>
                     onclick="bookNow('<%=loggedUser.getId()%>', 'time', 'appointment-date')"
                     <%} else {%>
-                    onclick="alert('You have already an appointment!')"
+                    onclick="showMessage('You have already an appointment!')"
                     <%}%>
                     type="button" id='book-now'>
                 Book Now!

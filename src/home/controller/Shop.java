@@ -66,7 +66,7 @@ public class Shop {
                 if (!sessionUserDAO.isValid(userDAO.findById(loggedUser.getId()))) {
                     /* utente non autorizzato, invalido il cookie */
                     System.out.println("UTENTE NON AUTORIZZATO !");
-                    home.controller.Home.logout(request, response);
+                    home.controller.Home.logout(request, response); /* loggedOn false, loggedUser null, viewUrl ==> home*/
                     cookieValid = false;
                 }
             }
@@ -82,26 +82,35 @@ public class Shop {
                 /* Prendo tutti i produttori dal database */
                 brands = productDAO.findAllProducers();
 
+//                /* Fetching dei parametri  */
+//                String toFilter = request.getParameter("filter");
+//                System.err.println("toFilter ==>" + toFilter);
+
+//                int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
+
+//                if (toFilter != null) { /* NON È LA PRIMA VOLTA CHE ARRIVO SULLA PAGINA SHOP.JSP OPPURE NON VOGLIO FILTRARE */
+//                    /* posso provare a parsarlo per evitare NullPointerException*/
+//                    filter = Integer.parseInt(toFilter);
+//                }
+//                System.err.println("filter:" + filter);
+
+                if (request.getParameter("brand") != null) {
+                    brandToFilter = request.getParameter("brand");
+                }
+                if (request.getParameter("category") != null) {
+                    categoryToFilter = request.getParameter("category");
+                }
+
                 System.err.println("categoryToFilter" + categoryToFilter);
                 System.err.println("brandToFilter" + brandToFilter);
-                /* Fetching dei parametri  */
-                String toFilter = request.getParameter("filter");
-                System.err.println("toFilter ==>" + toFilter);
-                int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
-                if (toFilter != null) {
-                    /* posso provare a parsarlo per evitare NullPointerException*/
-                    filter = Integer.parseInt(toFilter);
-                }
-                System.err.println("filter:" + filter);
-                if (filter == 1) {
-                    brandToFilter = request.getParameter("brand");
-                    categoryToFilter = request.getParameter("category");
 
-                    products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
-                    System.err.println("categoryToFilter" + categoryToFilter);
-                    System.err.println("brandToFilter" + brandToFilter);
-                } else {
+                if (brandToFilter.equals("All") && categoryToFilter.equals("All")) {
+
                     products = productDAO.findAllProducts();
+
+                } else {
+                    products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
+
                 }
             }
 
@@ -118,6 +127,8 @@ public class Shop {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                applicationMessage = "Error during load shop.";
+
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
@@ -141,7 +152,7 @@ public class Shop {
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             System.err.println("loggedUser=> " + loggedUser);
-            /* 3) Application messagge da mostrare all'utente */
+            /* 3) Application message da mostrare all'utente */
             request.setAttribute("applicationMessage", applicationMessage);
             /* 4) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "common/shop");

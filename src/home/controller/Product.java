@@ -138,9 +138,6 @@ public class Product {
             inWishlist = wishlistDAO.inWishlist(loggedUser, id);
         }
 
-
-        System.err.println("product:" + product);
-        System.err.println("inWishlist:" + inWishlist);
         /* 5) Setto il prodotto da mostrare */
         request.setAttribute("product", product);
         /* 6) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */

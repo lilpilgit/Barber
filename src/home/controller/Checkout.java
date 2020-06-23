@@ -81,6 +81,7 @@ public class Checkout {
                 String checkoutInfo = request.getParameter("checkoutInfo");
 
                 System.err.println("checkoutInfo ===> " + checkoutInfo);
+
                 JSONObject mainObj = new JSONObject(checkoutInfo);
                 /* prezzo totale al momento del checkout che assumiamo non venga variato anche se nel frattempo variano i prezzi */
                 totalPrice = new BigDecimal((String) mainObj.get("totalPrice"));
@@ -104,7 +105,8 @@ public class Checkout {
                     productToShow.setRequiredQuantity(desiredQty);
                     productToShow.setName(name);
                     productToShow.setPrice(eachFinalPrice);
-                    checkoutProducts.add(productToShow);
+
+                    checkoutProducts.add(productToShow); /* aggiungo all'array list dei prodotti da mostrare nel riepilogo */
                 }
                 System.out.println("totalPrice:" + totalPrice + " | totalSaved:" + totalSaved);
             }
@@ -251,7 +253,7 @@ public class Checkout {
                 }
 
 
-                /* Effettuo l'inserimento del nuovo prodotto nella tabella degli ordini */
+                /* Effettuo l'inserimento del nuovo ordine nella tabella degli ordini */
 
                 ordersDAO.insert(customer, totalPrice, items);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
@@ -272,9 +274,9 @@ public class Checkout {
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-            if(inserted && removedFromCart){
-                /* Solo se viene committata la transazione senza errori siamo sicuri che l'ordine è stato salvato nel database correttamente */
-                applicationMessage = "Order received correctly, check the status in your order section.";
+            if(!inserted || !removedFromCart){
+                /* Se c'è stato un errore... */
+                applicationMessage = "Order not received correctly.";
             }
 
         } catch (Exception e) {
@@ -307,7 +309,7 @@ public class Checkout {
             /* 4) il messaggio da visualizzare */
             request.setAttribute("applicationMessage", applicationMessage);
             /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
-            if (inserted) {
+            if (inserted && removedFromCart) {
                 /* SUCCESS */
                 request.setAttribute("result", "success");
             } else {

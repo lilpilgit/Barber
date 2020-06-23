@@ -70,42 +70,51 @@
 
 <!-------------------------------------------- NavBar Product --------------------------------------------------------->
 
-<div class="container pt-4 pb-3" style="border-bottom: 2px solid black;">
-    <label for="category_select_menu">Category:<span>&nbsp;</span></label>
-    <select id="category_select_menu" name="category">
-        <%long id_cat = 0;%>
-        <option id="category_<%=id_cat%>" value="<%=id_cat%>">All</option>
-        <%
-            for (String cat : all_category) {
-                id_cat++;
-        %>
-        <option id="category_<%=id_cat%>" value="<%=id_cat%>"><%=cat%>
-        </option>
-        <%}%>
-    </select>
-    <!-- Dropdown -->
-    <label for="brand_select_menu">Brand:<span>&nbsp;</span></label>
-    <select id="brand_select_menu" name="brand">
-        <%long id_brand = 0;%>
-        <option id="brand_<%=id_brand%>" value="<%=id_brand%>">All</option>
-        <%
-            for (String producer : all_producer) {
-                id_brand++;
-        %>
-        <option id="brand_<%=id_brand%>" value="<%=id_brand%>"><%=producer%>
-        </option>
-        <%}%>
-    </select>
-    <!-- Bottone che submitta la form filterForm con gli hidden input il cui value viene modificati con la setFormFilter() e i relativi listener -->
-    <button type="submit" form="filterForm" class="btn ml-3 active2" id='filter_btn'>Filter</button>
-</div>
 <form name="filterForm" id="filterForm" method="post">
-    <input type="hidden" name="controllerAction" value="home.Shop.showShop">
-    <input type="hidden" name="filter" value="0">
-    <input type="hidden" name="category" value="All">
-    <input type="hidden" name="brand" value="All">
-</form>
 
+<%--    <input type="hidden" name="filter" value="0">--%>
+<%--    <input type="hidden" name="category" value="All">--%>
+<%--    <input type="hidden" name="brand" value="All">--%>
+
+    <div class="container pt-4 pb-3" style="border-bottom: 2px solid black;">
+        <label for="category_select_menu">Category:<span>&nbsp;</span></label>
+        <select id="category_select_menu" name="category">
+            <%int num_cat = 0;%>
+            <option id="category_<%=num_cat%>" value="All">All</option>
+            <%
+                for (String cat : all_category) {
+                    boolean selected = false;
+                    if (cat.equals(categoryFiltered)) {
+                        selected = true;
+                    }
+                    num_cat++;
+            %>
+            <option id="category_<%=num_cat%>" value="<%=cat%>" <%=(selected) ? "selected" : ""%>><%=cat%>
+            </option>
+            <%}%>
+        </select>
+        <!-- Dropdown -->
+        <label for="brand_select_menu">Brand:<span>&nbsp;</span></label>
+        <select id="brand_select_menu" name="brand">
+            <%int num_brand = 0;%>
+            <option id="brand_<%=num_brand%>" value="All">All</option>
+            <%
+                for (String producer : all_producer) {
+                    boolean selected = false;
+                    if (producer.equals(brandFiltered)) {
+                        selected = true;
+                    }
+                    num_brand++;
+            %>
+            <option id="brand_<%=num_brand%>" value="<%=producer%>" <%=(selected) ? "selected" : ""%>><%=producer%>
+            </option>
+            <%}%>
+        </select>
+        <!-- Bottone che submitta la form filterForm con gli hidden input il cui value viene modificati con la setFormFilter() e i relativi listener -->
+        <button type="submit" class="btn ml-3 active2" id='filter_btn'>Filter</button>
+    </div>
+    <input type="hidden" name="controllerAction" value="home.Shop.showShop">
+</form>
 <!-- form per mostrare il prodotto scelto -->
 <form name="showProductForm" id="showProductForm" method="post">
     <input type="hidden" name="controllerAction" value="home.Product.showProduct">
@@ -158,10 +167,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
-        setButtonActive('<%=idBtnAttivo%>');
-        setFilterForm("category_select_menu", "brand_select_menu", "<%=categoryFiltered%>", "<%=brandFiltered%>");
-        setSelectedFilter("category_select_menu", "<%=categoryFiltered%>");
-        setSelectedFilter("brand_select_menu", "<%=brandFiltered%>");
+
     })
 </script>
 </body>

@@ -25,7 +25,10 @@
 
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
-        applicationMessage = (String) request.getAttribute("applicationMessage");
+        if (resultPresent && result.equals("fail")) {
+            /* Mostro il messaggio solo se è andato in errore l'ordine */
+            applicationMessage = (String) request.getAttribute("applicationMessage");
+        }
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
@@ -53,11 +56,20 @@
                     <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina -->
                     <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
                     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json" background="transparent"
-                                   speed="0.5" style="height: 300px;" autoplay></lottie-player>
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json"
+                                   background="transparent"
+                                   speed="1.0" style="height: 300px;" autoplay></lottie-player>
                 </div>
             </div>
-            <p><%=applicationMessage%></p>
+            <p>Order received correctly. Check the status in your order section.</p>
+        </div>
+    </div>
+    <%} else {%>
+    <div class="result-checkout-container">
+        <h3 class="result-checkout">Error in your order...</h3>
+        <div class="container">
+            <h3><%=applicationMessage%>
+            </h3>
         </div>
     </div>
     <%}%>

@@ -586,7 +586,7 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<String> findAllCategories() {
         ArrayList<String> listCategory = new ArrayList<>();
-        query = "SELECT DISTINCT CATEGORY FROM PRODUCT WHERE DELETED = 0 ORDER BY CATEGORY;";
+        query = "SELECT DISTINCT CATEGORY FROM PRODUCT WHERE DELETED = 0 ORDER BY CATEGORY ASC;";
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -670,7 +670,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
     @Override
     public ArrayList<Product> findFilteredProducts(String category, String producer) {
         ArrayList<Product> listProduct = new ArrayList<>();
-        query = "SELECT * FROM PRODUCT WHERE CATEGORY LIKE ? AND PRODUCER LIKE ? AND DELETED = 0 ORDER BY INSERT_DATE DESC;";
+        query =
+                "SELECT * "
+              + "FROM PRODUCT "
+              + "WHERE CATEGORY LIKE ? AND PRODUCER LIKE ? AND DELETED = 0 "
+              + "ORDER BY INSERT_DATE DESC;";
+
         try {
             int i = 1;
             ps = connection.prepareStatement(query);

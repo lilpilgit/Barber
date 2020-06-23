@@ -120,9 +120,6 @@
                             </button>
                         </div>
                     </div>
-<%--                    <script>--%>
-<%--                        changeQuantityProductInCart("minus_button_<%=ep.getId()%>", "quantity_<%=ep.getId()%>", "plus_button_<%=ep.getId()%>", <%=ep.getMaxOrderQuantity()%>, <%=ep.getId()%>);--%>
-<%--                    </script>--%>
                 </td>
                 <td>
                     <!-- mi interessa per il calcolo con javascript il prezzo già scontato pertanto lo salvo in tale campo hidden -->
@@ -196,6 +193,7 @@
 <%@ include file="/templates/footer.html" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
+        modifyTotalPriceAndSaving('productsToBuy');
 
     });
 </script>

@@ -10,7 +10,7 @@ function showMessage(msg) {
     /**
      * Show message with simple modal
      */
-    /* Before to print, I clean! */
+    /* Before print, I clean! */
     document.getElementById("spanMessage").innerHTML = "";
     document.getElementById('spanMessage').innerHTML = msg;
     $('#appMessage').modal("show");
@@ -82,58 +82,6 @@ function setProductForm(idProduct) {
     productForm.submit();
 }
 
-function setFilterForm(id_select_of_category, id_select_of_brand, old_category_chosen, old_brand_chosen) {
-    /*
-    /* BISOGNA PASSARE LE ATTUALI CATEGORIE E BRAND SELEZIONATI PER EVITARE CHE VENGA RICARICATO LA CATEGORIA "All"
-    *  Aggiunge "selected" all'opzione dinamicamente quando l'utente la seleziona.
-    */
-
-    let filterForm = document.getElementById('filterForm');
-
-    /* Prendo il valore della categoria selezionata non appena cambia nel dropdown */
-    let select_for_category = document.getElementById(id_select_of_category);
-    let category_chosen = old_category_chosen; /*   = "All"; BUG!!!!!*/
-
-
-    select_for_category.addEventListener("change", () => {
-        category_chosen = select_for_category.options[select_for_category.selectedIndex].text;
-        /* cambio il value del relativo campo nella form */
-        filterForm.elements['category'].value = category_chosen;
-        filterForm.elements['filter'].value = '1';
-
-        console.log("category_chosen:" + category_chosen);
-        console.log("brand_chosen:" + brand_chosen);
-    });
-
-    /* Prendo il valore del brand selezionato non appena cambia nel dropdown */
-    let select_for_brand = document.getElementById(id_select_of_brand);
-    let brand_chosen = old_brand_chosen;/*   = "All"; BUG!!!!!*/
-    select_for_brand.addEventListener("change", () => {
-        brand_chosen = select_for_brand.options[select_for_brand.selectedIndex].text;
-        /* cambio il value del relativo campo nella form */
-        filterForm.elements['brand'].value = brand_chosen;
-        filterForm.elements['filter'].value = '1';
-        console.log("category_chosen:" + category_chosen);
-        console.log("brand_chosen:" + brand_chosen);
-    });
-
-    console.log("category_chosen:" + category_chosen);
-    console.log("brand_chosen:" + brand_chosen);
-
-}
-
-function setSelectedFilter(id_select, filter) {
-    let select = document.getElementById(id_select).options;
-    if (filter !== "All") {
-        for (let option = 0; option < select.length; option++) {
-            if (select[option].text === filter) {
-                select[option].selected = true;
-                break;
-            }
-        }
-    }
-}
-
 function setSelectedAttribute(id_select, valueFromDb, deselect = false) {
 
     /* prima controllo se si vuole selezionare o deselezionare l'opzione già presente */
@@ -151,45 +99,6 @@ function setSelectedAttribute(id_select, valueFromDb, deselect = false) {
 
         }
     }
-}
-
-function getPageName() {
-    let path = window.location.pathname;
-    let page_name = path.split("/").pop();
-
-    return page_name;
-}
-
-function sumTime() {
-    let time1 = "01:00:00";
-    let time2 = "01:30:00";
-    let time3 = "00:30:00";
-
-    let hour = 0;
-    let minute = 0;
-    let second = 0;
-
-    let splitTime1 = time1.split(':');
-    let splitTime2 = time2.split(':');
-    let splitTime3 = time3.split(':');
-
-    hour = parseInt(splitTime1[0]) + parseInt(splitTime2[0]) + parseInt(splitTime3[0]);
-    minute = parseInt(splitTime1[1]) + parseInt(splitTime2[1]) + parseInt(splitTime3[1]);
-    hour = hour + minute / 60;
-    minute = minute % 60;
-    second = parseInt(splitTime1[2]) + parseInt(splitTime2[2]) + parseInt(splitTime3[2]);
-    minute = minute + second / 60;
-    second = second % 60;
-
-    showMessage('sum of above time= ' + hour + ':' + minute + ':' + second);
-}
-
-function getSelectedDateOfBooking(date_field) {
-    let input = this.value;
-    let dateEntered = new Date(input);
-    console.log(input); //e.g. 2015-11-13
-    console.log(dateEntered); //e.g. Fri Nov 13 2015 00:00:00 GMT+0000 (GMT Standard Time)
-
 }
 
 function showResult(result, message) {
@@ -282,7 +191,7 @@ function modifyTotalPriceAndSaving(nameGroup) {
     let totalPriceSpan = document.getElementById("totalPriceSpan");
     let totalPriceInputHidden = document.getElementById("totalPrice");
     let checkboxes = document.querySelectorAll('input[name="' + nameGroup + '"]');
-    let checkboxes_checked = [];
+    let checkboxes_checked = []; /* conterrà le checkboxes che sono state flaggate */
     let eachOriginalPrice;
     let eachFinalPrice;
     let desiredQuantity;
@@ -291,10 +200,9 @@ function modifyTotalPriceAndSaving(nameGroup) {
     let totalSaved = 0;
 
     /* vedo quali checkbox sono stati checkati */
-
-    checkboxes.forEach(function (item) {
-        if (item.checked === true) {
-            checkboxes_checked.push(item);
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked === true) {
+            checkboxes_checked.push(checkbox);
         }
     })
 
@@ -338,16 +246,17 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
      */
     max_qta = parseInt(max_qta);
     let qta_field = document.getElementById(id_qta);
+    let qta_field_value = parseInt(qta_field.value);
     let result = "fail";
     let allowAJAX = false; /* mi consente di sapere se posso usare AJAX */
     let xhttp = new XMLHttpRequest();
 
-    if (operation === 'increase' && parseInt(qta_field.value) !== max_qta) {
+    if (operation === 'increase' && qta_field_value !== max_qta) {
         allowAJAX = true;
-    } else if (operation === 'decrease' && parseInt(qta_field.value) !== 1) {
+    } else if (operation === 'decrease' && qta_field_value !== 1) {
         allowAJAX = true;
     } else {
-        showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
+        // showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
         allowAJAX = false;
     }
     if (allowAJAX) {
@@ -358,17 +267,17 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                 if (result === "success") {
                     if (operation === 'increase') {
                         /*i can increase the quantity*/
-                        qta_field.value = parseInt(qta_field.value) + 1;
+                        qta_field.value = qta_field_value + 1;
                     } else if (operation === 'decrease') {
                         /*i can decrease the quantity*/
                         qta_field.value -= 1;
                     }
-                    /* devo ricalcolare prezzo totale e risparmio solo dopo aver modificato i text field relativi alla quantità  */
+                    /* devo ricalcolare prezzo totale e risparmio totale solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
                 } else if (result === "fail") {
                     showMessage("The quantity could not be changed!");
                 } else {
-                    showMessage("ERRORE NEL BACKEND!");
+                    showMessage("ERROR ON BACKEND!");
                 }
             }
 

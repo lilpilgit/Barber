@@ -49,10 +49,10 @@
 
         user = userDAO.findById(loggedUser.getId());
 
+        cartDAO = daoFactory.getCartDAO();
+
         /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
         idProductToChange = Long.valueOf(request.getParameter("idProduct"));
-
-        cartDAO = daoFactory.getCartDAO();
 
         /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
         operation = request.getParameter("operation");

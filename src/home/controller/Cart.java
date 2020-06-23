@@ -184,6 +184,7 @@ public class Cart {
                 from = request.getParameter("from");
                 if (from != null) {
                     if (from.equals("product")) {
+                        /* CHIAMATO DALLA PAGINA product.jsp */
                         /* prendo la quantità scelta da aggiungere al carrello */
                         desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
                         added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
@@ -192,13 +193,12 @@ public class Cart {
                         System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
 
                     } else if (from.equals("wishlist")) {
+                        /* CHIAMATO DALLA PAGINA wishlist.jsp */
                         /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
                         added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
                         /* aggiunge la wishlist come ArrayList alla request*/
                         Wishlist.commonView(daoFactory, loggedUser, request);
                         System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
-                    } else if (from.equals("cart")) {
-                        System.out.println("CHIAMATO CON AJAX ==> DEVO INCREMENTARE");
                     }
 
                 } else {
