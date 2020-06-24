@@ -45,7 +45,7 @@
 
 <div class="row padding">
     <%
-        if (result != null && result.equals("success")) {
+        if (resultPresent && result.equals("success")) {
             /* order added successfully */
     %>
     <div class="result-checkout-container">
@@ -53,12 +53,10 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina -->
-                    <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
-                    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_evNjeW.json"
-                                   background="transparent"
-                                   speed="1.0" style="height: 300px;" autoplay></lottie-player>
+                    <img src="img/checkout/result_checkout_success_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                         width="300px">
+                    close_door_one.gif
+
                 </div>
             </div>
             <p>Order received correctly. Check the status in your order section.</p>

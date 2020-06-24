@@ -6,14 +6,14 @@
 <%@ page session="false" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    Boolean loggedOn = false;
+    boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
     User loggedUser = null;
-    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+    if (loggedOn && request.getAttribute("loggedUser") != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
@@ -39,7 +39,7 @@
     }
 
     /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
-    Boolean inWishlist = false;
+    boolean inWishlist = false;
     if (request.getAttribute("inWishlist") != null) {
         inWishlist = (Boolean) request.getAttribute("inWishlist");
     }
@@ -59,7 +59,11 @@
 
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
-
+<div class="container pt-5 text-center">
+    <button type="submit" class="btn btnheader active2" id="showShop" form="goBackShop">
+        Go back to shop
+    </button>
+</div>
 <div class="container pt-5 pb-5">
     <%
         /* il prodotto nel frattempo è stato cancellato o è stato passato un prodotto non esistente ... */
@@ -72,7 +76,8 @@
             <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
                  width="300">
         </div>
-        <h4 class="text-muted font-italic" style="padding-top: 10px">You can try another search or go back to our home page.</h4>
+        <h4 class="text-muted font-italic" style="padding-top: 10px">You can try another search or go back to our home
+            page.</h4>
     </div>
     <%} else {%>
     <div class="card2">
@@ -107,7 +112,7 @@
                     <br>
                     <% if (loggedOn && loggedUser.getType() == 'C') {%>
                     <!--COUNTER OF QUANTITY-->
-                    <div class="text-center" id="counter_qta" style="height: 73px;" class='main'>
+                    <div class="main text-center" id="counter_qta" style="height: 73px;">
                         <button id="minus_button" class='down-count btn btn-info' title='Down'><i
                                 class='fa fa-minus'></i></button>
                         <label for="maxOrderQuantity"></label>
@@ -141,11 +146,6 @@
         </div>
     </div>
     <%}%>
-    <div class="container pt-5 text-center">
-        <button type="submit" class="btn btnheader active2" id="showShop" form="goBackShop">
-            Go back to shop
-        </button>
-    </div>
 </div>
 <form id="goBackShop" method="post">
     <input type="hidden" name="controllerAction" value="home.Shop.showShop">

@@ -2,8 +2,8 @@
 <%@page import="model.mo.User" %>
 <%@page import="java.util.ArrayList" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page errorPage="../error/404.jsp" %>
-<%@ page session="false" %>
+<%@page errorPage="../error/404.jsp" %>
+<%@page session="false" %>
 <%
 
     /* Prendo il parametro "categoryFiltered" per settare il dropdown dopo il refresh della pagina */
@@ -35,19 +35,28 @@
     ArrayList<Product> products_to_show = null;
     if (request.getAttribute("products") != null) {
         products_to_show = (ArrayList<Product>) request.getAttribute("products");
+    } else {
+        throw new RuntimeException("PARAMETRO products_to_show NULL");
     }
 
     /* Prendo l'ArrayList<String> di tutte le categorie */
-    ArrayList<String> all_category = null;
+    ArrayList<String> all_categories = null;
+
     if (request.getAttribute("categories") != null) {
-        all_category = (ArrayList<String>) request.getAttribute("categories");
+        all_categories = (ArrayList<String>) request.getAttribute("categories");
+    } else {
+        throw new RuntimeException("PARAMETRO all_categories NULL");
     }
 
+
     /* Prendo l'ArrayList<String> di tutti i brands */
-    ArrayList<String> all_producer = null;
+    ArrayList<String> all_producers = null;
     if (request.getAttribute("brands") != null) {
-        all_producer = (ArrayList<String>) request.getAttribute("brands");
+        all_producers = (ArrayList<String>) request.getAttribute("brands");
+    } else {
+        throw new RuntimeException("PARAMETRO all_producers NULL");
     }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Shop";
 
@@ -72,9 +81,9 @@
 
 <form name="filterForm" id="filterForm" method="post">
 
-<%--    <input type="hidden" name="filter" value="0">--%>
-<%--    <input type="hidden" name="category" value="All">--%>
-<%--    <input type="hidden" name="brand" value="All">--%>
+    <%--    <input type="hidden" name="filter" value="0">--%>
+    <%--    <input type="hidden" name="category" value="All">--%>
+    <%--    <input type="hidden" name="brand" value="All">--%>
 
     <div class="container pt-4 pb-3" style="border-bottom: 2px solid black;">
         <label for="category_select_menu">Category:<span>&nbsp;</span></label>
@@ -82,7 +91,7 @@
             <%int num_cat = 0;%>
             <option id="category_<%=num_cat%>" value="All">All</option>
             <%
-                for (String cat : all_category) {
+                for (String cat : all_categories) {
                     boolean selected = false;
                     if (cat.equals(categoryFiltered)) {
                         selected = true;
@@ -99,7 +108,7 @@
             <%int num_brand = 0;%>
             <option id="brand_<%=num_brand%>" value="All">All</option>
             <%
-                for (String producer : all_producer) {
+                for (String producer : all_producers) {
                     boolean selected = false;
                     if (producer.equals(brandFiltered)) {
                         selected = true;

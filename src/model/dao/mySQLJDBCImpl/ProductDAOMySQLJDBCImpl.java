@@ -229,8 +229,8 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         product.setMaxOrderQuantity(maxOrderQuantity);
         product.setCategory(category);
         product.setStructure(structure);
-        product.setShowcase(true);
-        product.setDeleted(false);
+        product.setShowcase(false); /* di default non viene messo in vetrina */
+        product.setDeleted(false); /* è stato appena inserito dunque non può essere cancellato */
 
         Long newId = null;
 

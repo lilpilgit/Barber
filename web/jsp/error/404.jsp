@@ -46,13 +46,8 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <!-- TODO: non carica l'animazione ma solo l'immagine finale in quanto c'è l'alert che blocca il caricamento della pagina -->
-                    <!--preso da https://lottiefiles.com/web-player?lottie_url=https%3A%2F%2Fassets2.lottiefiles.com%2Fpackages%2Flf20_evNjeW.json-->
-                    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                    <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_eaSxEJ.json"
-                                   background="transparent" speed="0.5" style="height: 300px;"
-                                   autoplay></lottie-player>
-
+                    <img src="img/error/close_door_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                         width="300px">
                 </div>
             </div>
             <p>There was probably a problem if you are here ... Try again later, we are already working on it
