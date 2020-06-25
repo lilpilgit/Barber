@@ -97,7 +97,7 @@
                          * Di default lo metto su N che sta per 'da NESSUNO'
                          */
                         char isDeletedBy = 'N';
-                        boolean deletedStatus = b.isDeleted();
+                        Boolean deletedStatus = b.isDeleted();
                         String class_color_row = ""; /* di default nessun colore */
                         String tr = "<tr>"; /* di default è una semplice riga */
                         String title = "";

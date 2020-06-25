@@ -103,25 +103,27 @@
                              * Di default lo metto su N che sta per 'da NESSUNO'
                              */
                             char isDeletedBy = 'N';
-                            boolean deletedStatus = b.isDeleted();
+
+                            Boolean deletedStatus = b.isDeleted();
                             String class_color_row = ""; /* di default nessun colore */
                             String tr = "<tr>"; /* di default è una semplice riga */
                             String title = "";
 
-                            if (!deletedStatus) /* è false, cancellato dall'admin */ {
-                                isDeletedBy = 'A';
-                                class_color_row = "table-danger";
-                                title = "Posted by you";
-                                /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                            if (deletedStatus != null) {
+                                if (!deletedStatus) /* è false, cancellato dall'admin */ {
+                                    isDeletedBy = 'A';
+                                    class_color_row = "table-danger";
+                                    title = "Posted by you";
+                                    /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                } else /* è true, cancellato dal CLIENTE */ {
+                                    isDeletedBy = 'C';
+                                    class_color_row = "table-warning";
+                                    title = "Posted by the customer";
+                                    /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                }
                                 tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
-                            } else /* è true, cancellato dal CLIENTE */ {
-                                isDeletedBy = 'C';
-                                class_color_row = "table-warning";
-                                title = "Posted by the customer";
-                                /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
-                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
-                            }
 
+                            }
 
                     %>
 

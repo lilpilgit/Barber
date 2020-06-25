@@ -55,8 +55,6 @@
                 <div class="col-6">
                     <img src="img/checkout/result_checkout_success_once.gif" alt="checkout success" class="rounded mx-auto d-block"
                          width="300px">
-                    close_door_one.gif
-
                 </div>
             </div>
             <p>Order received correctly. Check the status in your order section.</p>
