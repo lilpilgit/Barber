@@ -329,11 +329,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         /* Trova solo l'ultima prenotazione che e' stata effettuata. Inoltre, la prenotazione si
         * deve trovare in una data futura rispetto alla CURDATE() */
 
-//        String query = "SELECT * FROM BOOKING WHERE (ID, ID_CUSTOMER) IN (SELECT MAX(ID) AS ID, ID_CUSTOMER " +
-//                       "FROM BOOKING GROUP BY ID_CUSTOMER) AND (DELETED <> 1 OR DELETED IS NULL) " +
-//                       "AND ID_CUSTOMER = ? AND DATE >= CURDATE() AND ID_STRUCTURE = ?;";
-
-
         String query = "SELECT * FROM BOOKING WHERE DATE >= CURDATE() AND ID_CUSTOMER = ? " +
                 "AND ID_STRUCTURE = ? ORDER BY ID DESC LIMIT 1;";
 

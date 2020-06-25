@@ -28,8 +28,6 @@
 
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
 
-    Long idCustomer = null; /* parametro che indica l'id del cliente che sta cliccando su booking */
-
     boolean alreadyBooked = false;
     boolean deletedByAdmin = false;
 
@@ -113,7 +111,7 @@
 
     {
     	"result": "<%=result%>",
-    	"alreadyBooked":"<%=alreadyBooked%>"<%if (alreadyBooked || deletedByAdmin && booking != null) {%>,
+    	"alreadyBooked":"<%=alreadyBooked%>"<%if (alreadyBooked || deletedByAdmin) {%>,
     	"idBooking": "<%=booking.getId()%>",
     	"deleted": "<%=booking.isDeleted()%>",
     	"deletedReason": "<%=booking.getDeletedReason()%>",

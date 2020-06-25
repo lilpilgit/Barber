@@ -356,7 +356,6 @@ function findBooking(idCustomer) {
 
     let result = "fail";
     let obj = null;
-    let el = null;
     let time = null;
     let deletedReason = "";
     let xhttp = new XMLHttpRequest();
@@ -379,24 +378,26 @@ function findBooking(idCustomer) {
                 else deletedReason = obj.deletedReason;
 
                 if (obj.alreadyBooked === "true") {
+                    /* CASO "GIA' PRENOTATO" */
                     bookedDate.innerText = obj.date;
                     time = obj.hourStart.split(':');
                     bookedTime.innerText = (time[0] + ":" + time[1]);
                     bookingId.value = obj.idBooking;
-                    el = notBookedYet;
-                    if (el != null)
+                    if (notBookedYet != null)
                         notBookedYet.remove();
                 } else if (obj.alreadyBooked === "false" && obj.deletedReason !== undefined) {
+                    /* CASO "CANCELLATO DALL'ADMIN"
+                    Se e' presente la deletedReason, significa che l'admin ha cancellato l'appuntamento
+                     e quindi visualizzo la deletedReason al cliente. AlreadyBooked rimane a false perche' il cliente
+                      ha la possibilita' di prenotare un nuovo appuntamento. */
                     document.getElementById("ModalLabelBook").innerHTML = '<span ' +
                         'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
                     bookedDate.innerText = obj.date;
                     time = obj.hourStart.split(':');
                     bookedTime.innerText = (time[0] + ":" + time[1]);
                     bookingId.value = obj.idBooking;
-                    el = notBookedYet;
-                    if (el != null)
+                    if (notBookedYet != null)
                         notBookedYet.remove();
-                    el = deleteBookBtn;
                     deleteBookBtn.remove();
                     document.getElementById('booking-text-area').innerHTML = '<textarea style="width: 100%;' +
                         'resize: none" rows="5" name="deletedReason" readonly>Deleted reason: ' + deletedReason + '</textarea>' +
@@ -405,9 +406,9 @@ function findBooking(idCustomer) {
                         '                        Book now!\n' +
                         '                    </button>';
                 } else if (obj.alreadyBooked === "false") {
+                    /* CASO: "NON PRENOTATO" */
                     document.getElementById("ModalLabelBook").innerHTML = "";
-                    el = bookTableResult;
-                    if (el != null) {
+                    if (bookTableResult != null) {
                         bookTableResult.remove();
                     }
                 }
