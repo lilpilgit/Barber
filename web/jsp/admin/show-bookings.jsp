@@ -92,7 +92,7 @@
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="fixedheight">
                     <%
                         int i = 1; /* contatore per il numero di impiegati */
 
@@ -126,7 +126,6 @@
                             }
 
                     %>
-
                     <%=tr%>
                     <th scope="row"><%=i++%>
                     </th>
