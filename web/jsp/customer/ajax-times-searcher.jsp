@@ -136,9 +136,6 @@
                 freeSlots.add(indexTime);
                 /* altrimenti se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
             }
-//            else if () {
-//                freeSlots.add(indexTime);
-//            }
         }
     }
 

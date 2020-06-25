@@ -449,7 +449,7 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
             /* Nel caso l'ora per cui si vuole prenotare sia gia' opa */
             showMessage("The time you chose has already passed!\n" +
                 "The page will be reloaded automatically with the new updated data.");
-            setNavFormHome('home.Book.showBook');
+            window.setTimeout("setNavFormHome('home.Book.showBook')", 3000);
         }
     } else if (time === "Change date :(") {
         /* Qualora venisse cliccato su Book now! e non ci fossero orari disponibili, mando un alert */
@@ -688,13 +688,13 @@ function getDateTimeObj(hhmmss, yyyymmdd) {
      */
 
     /* Creo un nuovo oggetto Date dove imposto gia' anno-mese-giorno */
-    let today = new Date(yyyymmdd);
+    let dateTime = new Date(yyyymmdd);
     let splittedTime = hhmmss.split(":");
-    today.setHours(splittedTime[0]);
-    today.setMinutes(splittedTime[1]);
-    today.setSeconds(splittedTime[2]);
+    dateTime.setHours(splittedTime[0]);
+    dateTime.setMinutes(splittedTime[1]);
+    dateTime.setSeconds(splittedTime[2]);
 
-    return today;
+    return dateTime;
 }
 
 function removeProductFromShowcase(idProduct) {
