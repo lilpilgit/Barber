@@ -72,8 +72,8 @@
                 for (ExtendedProduct ep : cart) {%>
             <tr>
                 <td class="align-middle">
-                    <input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>"
-                           value="<%=ep.getId()%>" onchange="modifyTotalPriceAndSaving('productsToBuy')">
+                    <span class="px-1"><input type="checkbox" name="productsToBuy" id="btn_checkbox_<%=index_checkbox++%>"
+                           value="<%=ep.getId()%>" onchange="modifyTotalPriceAndSaving('productsToBuy')"></span>
                 </td>
                 <td>
                     <div class="media">

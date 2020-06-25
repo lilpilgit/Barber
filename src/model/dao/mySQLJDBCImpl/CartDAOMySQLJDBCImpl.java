@@ -38,9 +38,23 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         /* Seleziono i prodotti presenti nel carrello dell'utente passato come parametro */
         query =
 
-                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY,DESIRED_QTY, IF(EXISTS (SELECT W.ID_PRODUCT FROM WISHLIST W WHERE W.ID_PRODUCT = C.ID_PRODUCT),TRUE,FALSE) IN_WISHLIST "
-                        + "FROM (CART C INNER JOIN PRODUCT P ON C.ID_PRODUCT = P.ID) "
-                        + "WHERE C.ID_CUSTOMER = ? AND P.DELETED = 0";
+                "SELECT ID," +
+                        "       PRODUCER," +
+                        "       PRICE," +
+                        "       DISCOUNT," +
+                        "       NAME," +
+                        "       PIC_NAME," +
+                        "       DESCRIPTION," +
+                        "       MAX_ORDER_QTY," +
+                        "       CATEGORY," +
+                        "       DESIRED_QTY," +
+                        "       IF(EXISTS(SELECT W.ID_PRODUCT" +
+                        "                 FROM WISHLIST W" +
+                        "                 WHERE W.ID_CUSTOMER = C.ID_CUSTOMER AND W.ID_PRODUCT = C.ID_PRODUCT), TRUE, FALSE) IN_WISHLIST " +
+                        "FROM (CART C" +
+                        "         INNER JOIN PRODUCT P ON C.ID_PRODUCT = P.ID) " +
+                        "WHERE C.ID_CUSTOMER = ?" +
+                        "  AND P.DELETED = 0;";
 
         try {
             int i = 1;
@@ -246,12 +260,12 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile modificare la quantità desiderata del prodotto con id{" + idProduct + "} nel carrello dell'utente con id{" + user.getId() + "} in quanto non è cliente.");
 
-        if(operation) {
+        if (operation) {
             query =
                     "UPDATE CART "
                             + "SET DESIRED_QTY = DESIRED_QTY + ? "
                             + "WHERE ID_CUSTOMER = ? AND ID_PRODUCT = ?;";
-        }else{
+        } else {
             query =
                     "UPDATE CART "
                             + "SET DESIRED_QTY = DESIRED_QTY - ? "

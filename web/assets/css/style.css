@@ -556,7 +556,7 @@ img {
 }
 
 .cart-img img {
-    max-width: 100%;
+    max-width: 75px;
     -webkit-animation-name: opacity;
     animation-name: opacity;
     -webkit-animation-duration: .3s;
