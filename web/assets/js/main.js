@@ -232,9 +232,7 @@ function modifyTotalPriceAndSaving(nameGroup) {
 }
 
 function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, nameGroup) {
-
-    /**
-     * Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
+    /** Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
      * loggedUser and product with ID = idProduct
      *
      * Parameters required by the controller: operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
@@ -257,7 +255,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     } else if (operation === 'decrease' && qta_field_value !== 1) {
         allowAJAX = true;
     } else {
-        // showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!");
+        /* showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!"); */
         allowAJAX = false;
     }
     if (allowAJAX) {

@@ -177,10 +177,8 @@
         <%} else {%>
         <!-- Non ci sono prodotti nel carrello -->
         <div class="text-center">
-
             <h2>There are no products in your cart :(</h2>
             <div class="container justify-content-center">
-
                 <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
                      width="300">
             </div>
@@ -207,7 +205,6 @@
 <script type="text/javascript">
     window.addEventListener("load", () => {
         modifyTotalPriceAndSaving('productsToBuy');
-
     });
 </script>
 </body>
