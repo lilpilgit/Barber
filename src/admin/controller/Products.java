@@ -346,7 +346,7 @@ public class Products {
 
             if (showcase) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato aggiornato correttamente .*/
-                applicationMessage = "The product was " + ((status) ? "added to" : "removed from") + " the showcase SUCCESSFULLY!";
+                applicationMessage = "The product was " + ((status) ? "removed from" : "added to") + " the showcase SUCCESSFULLY!";
             }
 
         } catch (Exception e) {

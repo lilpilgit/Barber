@@ -8,14 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    Boolean loggedOn = false;
+    boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
     User loggedUser = null;
-    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+    if (loggedOn && request.getAttribute("loggedUser") != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
@@ -32,10 +32,12 @@
         products = (ArrayList<Product>) request.getAttribute("showcase");
     }
 
-    /* Prendo il parametro per decidere cosa fare nel caso in cui la registrazione sia andata a buon fine */
-    Boolean result = null;
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del prodotto nel carrello/wishlist è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
     if (request.getAttribute("result") != null) {
-        result = (Boolean) request.getAttribute("result");
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
