@@ -53,7 +53,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <img src="img/checkout/result_checkout_success_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                    <img src="img/checkout/result_checkout_success_once.gif" alt="checkout success" class="rounded mx-auto d-block"
                          width="300px">
                     close_door_one.gif
 

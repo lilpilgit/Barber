@@ -43,7 +43,6 @@ public class Products {
         Integer maxOrderQuantity = null;
         String category = null;
         String submit; /*mi aspetto che il value sia "add_new_product"*/
-        String basePicName = "product_"; /* file di name che funge come base */
         String pictureName = null; /* nome del file da calcolare a runtime */
 
 
@@ -139,7 +138,7 @@ public class Products {
 
             /* Effettuo l'inserimento del nuovo prodotto */
             try {
-                productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, basePicName, fileExtension, description, maxOrderQuantity, category, structure);
+                productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, Configuration.BASE_PIC_NAME, fileExtension, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
                 System.err.println("CHIAMATO NELLA PRODUCTS");
@@ -162,7 +161,7 @@ public class Products {
 
                 /* Procedo al salvataggio dell'immagine sul disco */
 
-                pictureName = basePicName + productInserted.getId() + "." + fileExtension; /* product_100.jpg */
+                pictureName = Configuration.BASE_PIC_NAME + productInserted.getId() + "." + fileExtension; /* product_100.jpg */
                 String uploadedFilePath = imagePath + "/" + pictureName;
                 File uploadedFile = new File(uploadedFilePath);
                 imgField.write(uploadedFile);/* scrivo sul file appena creato il contenuto binario del file passato dalla form */
@@ -848,6 +847,8 @@ public class Products {
         DAOFactory daoFactory = null;
         ProductDAO productDAO = null; /* DAO Necessario per poter effettuare la cancellazione */
         Product product = null;
+        String pictureName;
+        String imagePath = request.getServletContext().getRealPath(Configuration.PRODUCTS_IMAGE_WEB_PATH);
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean deleted = false;
 
@@ -900,6 +901,17 @@ public class Products {
             if (deleted) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto sia stato cancellato correttamente .*/
                 applicationMessage = "Product deleted SUCCESSFULLY.";
+
+                /* Procedo all'eliminazione dell'immagine sul disco */
+
+                pictureName = product.getPictureName(); /* prendo il nome della foto del prodotto da eliminare */
+                String toDeleteFilePath = imagePath + "/" + pictureName;
+                File toDeleteFile = new File(toDeleteFilePath);
+                if(toDeleteFile.delete()){
+                    System.out.println("File immagine {" + pictureName + " del prodotto con ID {" + product.getId() + "} cancellato correttamente.");
+                }else{
+                    System.err.println("ERRORE durante la cancellazione del file immagine {" + pictureName + " per il prodotto con ID {" + product.getId() + "}.");
+                }
             }
 
 

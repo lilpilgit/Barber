@@ -73,7 +73,7 @@
         <h2>Oops! The product you were looking for doesn't exist</h2>
         <div class="container justify-content-center">
 
-            <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
+            <img src="img/error/product_not_found_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
                  width="300">
         </div>
         <h4 class="text-muted font-italic" style="padding-top: 10px">You can try another search or go back to our home

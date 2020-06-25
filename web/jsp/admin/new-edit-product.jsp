@@ -144,7 +144,7 @@
                 <div class="custom-file">
                     <input type="file" name="picture" class="custom-file-input form-control"
                            id="Picture" <%=(action.equals("modify")) ? "" : "required"%>>
-                    <label class="custom-file-label" for="Picture">Choose image</label>
+                    <label class="custom-file-label" for="Picture"><%=(action.equals("modify")) ? "Change image" : "Choose image"%></label>
                 </div>
                 </div>
             </div>

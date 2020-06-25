@@ -46,7 +46,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <img src="img/error/close_door_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                    <img src="img/error/close_door_once.gif" alt="an error occurred" class="rounded mx-auto d-block"
                          width="300px">
                 </div>
             </div>

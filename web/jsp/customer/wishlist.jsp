@@ -127,7 +127,7 @@
         <div class="text-center">
             <h2>There are no products in your wishlist</h2>
             <div class="container justify-content-center">
-                <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                <img src="img/error/product_not_found_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
                      width="300">
             </div>
             <h4 class="text-muted font-italic" style="padding-top: 10px">Go to shop and add the products you want to buy!</h4>
