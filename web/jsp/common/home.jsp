@@ -1,11 +1,11 @@
-<%@page import="model.mo.Product" %>
+<%@ page import="model.mo.Product" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     boolean loggedOn = false;

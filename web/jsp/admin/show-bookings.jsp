@@ -25,7 +25,7 @@
     }
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    Boolean loggedOn = false;
+    boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
@@ -40,7 +40,7 @@
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
     User loggedUser = null;
-    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+    if (loggedOn && request.getAttribute("loggedUser") != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
@@ -103,24 +103,25 @@
                              * Di default lo metto su N che sta per 'da NESSUNO'
                              */
                             char isDeletedBy = 'N';
-                            Boolean deletedStatus = b.isDeleted();
+                            boolean deletedStatus = b.isDeleted();
                             String class_color_row = ""; /* di default nessun colore */
                             String tr = "<tr>"; /* di default è una semplice riga */
                             String title = "";
-                            if (deletedStatus != null) {
-                                /* è stato cancellato da qualcuno...da chi? */
-                                if (!deletedStatus) /* è false, cancellato dall'admin */ {
-                                    isDeletedBy = 'A';
-                                    class_color_row = "table-danger";
-                                    title = "Posted by you";
-                                } else /* è true, cancellato dal CLIENTE */ {
-                                    isDeletedBy = 'C';
-                                    class_color_row = "table-warning";
-                                    title = "Posted by the customer";
-                                }
+
+                            if (!deletedStatus) /* è false, cancellato dall'admin */ {
+                                isDeletedBy = 'A';
+                                class_color_row = "table-danger";
+                                title = "Posted by you";
+                                /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
+                            } else /* è true, cancellato dal CLIENTE */ {
+                                isDeletedBy = 'C';
+                                class_color_row = "table-warning";
+                                title = "Posted by the customer";
                                 /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
                                 tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
                             }
+
 
                     %>
 
@@ -182,7 +183,8 @@
                 You are attempting to delete a booking.<br><br>Please provide a deleted reason to be shown to the
                 customer
                 <form method="post" id="deleteBooking">
-                    <textarea style="width: 100%;resize: none" rows="5" required placeholder="Because..." name="deletedReason"></textarea>
+                    <textarea style="width: 100%;resize: none" rows="5" required placeholder="Because..."
+                              name="deletedReason"></textarea>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -209,7 +211,7 @@
         });
 
         /* refresh della pagina chiamando il form della sidebar */
-        window.setTimeout("setControllerAction('admin.Bookings.showBookings')",240000); /* timeout in millisecondi */
+        window.setTimeout("setControllerAction('admin.Bookings.showBookings')", 240000); /* timeout in millisecondi */
 
     })
 

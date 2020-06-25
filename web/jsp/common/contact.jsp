@@ -5,20 +5,20 @@
 <%
 
     /* Prendo il parametro "contacted" che mi consente di sapere se l'email è stata inviata o meno */
-    Boolean contacted = null;
+    boolean contacted = false;
     if (request.getAttribute("contacted") != null) {
         contacted = (Boolean) request.getAttribute("contacted");
     }
 
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    Boolean loggedOn = false;
+    boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual è l'utente attualmente loggato */
     User loggedUser = null;
-    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+    if (loggedOn && request.getAttribute("loggedUser") != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
@@ -57,12 +57,12 @@
     <img src="img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
     <div class="text">CONTACT US!</div>
 </div>
-<%if (contacted != null && contacted == true) {%>
+<%if (contacted) {%>
 <div class="alert alert-success alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Sent! </strong><%="\n" + applicationMessage%>
 </div>
-<%} else if (contacted != null && contacted == false) {%>
+<%} else if( applicationMessage != null ) {%>
 <div class="alert alert-danger alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error! </strong><%="\n" + applicationMessage%>
@@ -94,7 +94,8 @@
 
                 <div class="form-group">
                     <label for="contact_text">Message:</label>
-                    <textarea class="form-control" id="contact_text" name="contact_message" rows="3" placeholder="I'd love to..."
+                    <textarea class="form-control" id="contact_text" name="contact_message" rows="3"
+                              placeholder="I'd love to..."
                               required></textarea>
                 </div>
                 <div class="pt-2">

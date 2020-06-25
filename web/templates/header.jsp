@@ -1,3 +1,9 @@
+<%
+    boolean loggedAdmin = loggedOn && loggedUser.getType() == 'A';
+    boolean loggedCustomer = loggedOn && loggedUser.getType() == 'C';
+    boolean loggedEmployee = loggedOn && loggedUser.getType() == 'E';
+
+%>
 <!-------------------------------------------------- Navigation in Header ------------------------------------------------------->
 <header>
     <div class="container-fluid sticky-top">
@@ -12,7 +18,8 @@
                     </button>
                     <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
 
-                    <% if (loggedOn && loggedUser != null && loggedUser.getType() == 'A') { %>
+                    <!--  && loggedUser != null  -->
+                    <% if (loggedAdmin) { %>
                     <div class="dropdown">
                         <button class="logged dropdown-toggle" type="button" id='showAdminOptions'
                                 data-toggle="dropdown">
@@ -33,15 +40,17 @@
                             </li>
                         </ul>
                     </div>
+                    <%}%>
                     <%
-                    } else {
-                        if (loggedOn) {
+                        if (loggedCustomer) {
                     %>
+
                     <button class="btn btnheader" type="button" id='showBook'
                             onclick=setNavFormHome('home.Book.showBook')>
                         Book!
                     </button>
                     <%}%>
+                    <%if (loggedCustomer || !loggedOn) {%>
                     <button class="btn btnheader" type="button" id='showShop'
                             onclick=setNavFormHome('home.Shop.showShop')>
                         Shop
@@ -50,7 +59,8 @@
                             onclick=setNavFormHome('home.Contact.showContactForm')>
                         Contact
                     </button>
-                    <% if (loggedOn) {%>
+                    <%}%>
+                    <% if (loggedCustomer) {%>
                     <button class="logged" type="button" id='showCart' title="Cart"
                             onclick=setNavFormHome('home.Cart.showCart')>
                         <i class="fas fa-shopping-basket"></i>
@@ -93,15 +103,18 @@
                             </li>
                         </ul>
                     </div>
-                    <%} else {%>
+                    <%}%>
+                    <%
+                        if (!loggedOn) {
+                    %>
                     <button class="logged" type="button" id='showModal'
                             data-target="#loginModal"
                             data-toggle="modal">
                         <i class="fas fa-user"></i>
                     </button>
                     <%
-                            }
                         }
+
                     %>
                 </div>
             </div>
@@ -146,7 +159,7 @@
                     </tr>
                     </tbody>
                 </table>
-<%--   TEXT AREA DELETED REASON         --%>
+                <%--   TEXT AREA DELETED REASON         --%>
                 <div id="booking-text-area"></div>
                 <input type="hidden" id="booking-id" value="">
                 <div class="py-4 align-middle" id="not-booked-yet">
@@ -409,10 +422,11 @@
 </div>
 
 <!---------------------------------------- END MODAL FOR APPLICATION MESSAGE ------------------------------------------>
-<%if(!loggedOn)
-/* solo se non è loggato devo settare la data corrente così da mostrare il "work day" nel caso in cui provi a loggarsi il dipendente */{%>
+<%
+    if (!loggedOn)/* solo se non è loggato devo settare la data corrente così da mostrare il "work day" nel caso in cui provi a loggarsi il dipendente */ {
+%>
 <script>
-    window.addEventListener("load",()=>{
+    window.addEventListener("load", () => {
         setCurrentDate('currentDate');
     });
 </script>

@@ -152,10 +152,10 @@ public class Contact {
 
             userDAO = daoFactory.getUserDAO();
 
-            customer = userDAO.findById(loggedUser.getId());
 
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
+                customer = userDAO.findById(loggedUser.getId());
                 /* c'è un utente loggato */
                 if (!sessionUserDAO.isValid(customer)) {
                     /* utente non autorizzato, invalido il cookie */

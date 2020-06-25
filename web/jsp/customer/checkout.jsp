@@ -7,14 +7,14 @@
 <%@ page session="false" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    Boolean loggedOn = false;
+    boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
     User loggedUser = null;
-    if (request.getAttribute("loggedUser") != null && loggedOn != null) {
+    if (loggedOn && request.getAttribute("loggedUser") != null) {
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
