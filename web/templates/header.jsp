@@ -245,9 +245,7 @@
 
                         <!--Footer-->
                         <div class="modal-footer">
-                            <div class="options text-center text-md-right mt-1">
-                                <p>Forgot <a href="#" class="blue-text"> Password?</a></p>
-                            </div>
+
                             <button type="button" class="btn btn-outline-info waves-effect ml-auto"
                                     data-dismiss="modal">Close
                             </button>

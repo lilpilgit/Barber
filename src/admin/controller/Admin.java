@@ -156,8 +156,8 @@ public class Admin {
                 edited = userDAO.update(adminToEdit);/* Se non viene sollevata l'eccezione, l'admin è stato modificato correttamente*/
 
             } catch (DuplicatedObjectException e) {
-                applicationMessage = e.getMessage();
-                e.printStackTrace();
+                System.out.println("ADMIN.JAVA ==> Errore durante l'update.");
+                applicationMessage = "Email or fiscal code already registered";
             }
 
             /* Commit fittizio */
@@ -166,11 +166,12 @@ public class Admin {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
+            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+
             if (edited) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che l'admin sia stato modificato correttamente .*/
                 applicationMessage = "Your data has been modified SUCCESSFULLY.";
             }
-            System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
             try {

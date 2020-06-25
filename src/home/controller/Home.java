@@ -395,10 +395,10 @@ public class Home {
         /* 3) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (registered) {
             /* SUCCESS */
-            request.setAttribute("result", true);
+            request.setAttribute("result", "success");
         } else {
             /* FAIL */
-            request.setAttribute("result", false);
+            request.setAttribute("result", "fail");
         }
         /* 4) il booleano per sapere se è loggato o meno ( dopo la registrazione non posso essere loggato ) */
         request.setAttribute("loggedOn", false);

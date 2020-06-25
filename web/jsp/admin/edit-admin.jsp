@@ -11,7 +11,6 @@
         resultPresent = true;
     }
 
-
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di modifica ( se è andata a buon fine o meno) */
     String applicationMessage = null;
@@ -31,12 +30,6 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
-    /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "Profile";
-
-    /* Parametro per aggiungere la classe che lo mantiene attivo al bottone della pagina in cui si trova */
-    String idBtnAttivo = "";
-
     /* Prendo il parametro "adminToModify" che è l'oggetto admin che mi permette di ottenere i campi da settare
      * e dunque modificare a volontà all'interno della pagina */
     User adminToEdit = null;
@@ -53,6 +46,11 @@
         splittedAddressLength = splittedAddress.length;
     }
 
+    /* Parametro per settare di volta in volta dove ci si trova nel title */
+    String menuActiveLink = "Profile";
+
+    /* Parametro per aggiungere la classe che lo mantiene attivo al bottone della pagina in cui si trova */
+    String idBtnAttivo = null;
 %>
 <!doctype html>
 <html lang="en">
