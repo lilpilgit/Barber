@@ -86,7 +86,7 @@
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="fixedheight">
                     <%
                         int i = 1; /* contatore per il numero di ordini */
                         String popoverSellDate = "";
