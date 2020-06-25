@@ -44,6 +44,8 @@
 
 <div class="container py-4">
     <div class="cart-box">
+        <!-- Se ci sono prodotti nella wishlist -->
+        <%if (!wishlist.isEmpty()) {%>
         <div class="row justify-content-center pb-4">
             <span class="logged"><i class="fas fa-star"></i></span>
             <h3>Welcome to your wishlist</h3>
@@ -64,8 +66,8 @@
                 <td>
                     <div class="media">
                         <div class="cart-img text-center">
-                        <div class="img-wrap"><img src="img/products/<%=p.getPictureName()%>"
-                                                   class="img-thumbnail img-sm"></div></div>
+                            <div class="img-wrap"><img src="img/products/<%=p.getPictureName()%>"
+                                                       class="img-thumbnail img-sm"></div></div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=p.getName()%>
                             </h6>
@@ -120,9 +122,20 @@
             <button class="btngeneric"
                     onclick=setNavFormHome('home.Cart.showCart')>Go to shopping Cart!</button>
         </div>
+        <%} else {%>
+        <!-- Non ci sono prodotti nella wishlist -->
+        <div class="text-center">
+            <h2>There are no products in your wishlist</h2>
+            <div class="container justify-content-center">
+                <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                     width="300">
+            </div>
+            <h4 class="text-muted font-italic" style="padding-top: 10px">Go to shop and add the products you want to buy!</h4>
+        </div>
+        <%}%>
     </div> <!-- card.// -->
 </div>
-</div>
+
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">

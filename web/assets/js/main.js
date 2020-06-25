@@ -207,11 +207,12 @@ function modifyTotalPriceAndSaving(nameGroup) {
     })
 
     /* per ogni checkbox checkata sommo il prezzo singolo moltiplicandolo per l'attuale quantità */
-    checkboxes_checked.forEach(function (item) {
-        eachFinalPrice = document.getElementById('eachFinalPrice_' + item.value).value;
-        eachOriginalPrice = document.getElementById('eachOriginalPrice_' + item.value).value;
-        desiredQuantity = document.getElementById('quantity_' + item.value).value;
-        eachDiscount = document.getElementById('eachDiscount_' + item.value).value;
+    checkboxes_checked.forEach(function (checkbox) {
+        /* checkbox.value rappresenta l'id del prodotto checkato, eachFinalPrice_IDPRODOTTO */
+        eachFinalPrice = document.getElementById('eachFinalPrice_' + checkbox.value).value;
+        eachOriginalPrice = document.getElementById('eachOriginalPrice_' + checkbox.value).value;
+        desiredQuantity = document.getElementById('quantity_' + checkbox.value).value;
+        eachDiscount = document.getElementById('eachDiscount_' + checkbox.value).value;
 
         /* calcolo il prezzo totale */
         totalPrice += parseFloat(eachFinalPrice) * parseInt(desiredQuantity);

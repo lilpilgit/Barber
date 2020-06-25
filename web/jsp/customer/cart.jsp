@@ -1,10 +1,9 @@
-<%@page import="model.mo.ExtendedProduct" %>
+<%@ page import="model.mo.ExtendedProduct" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
@@ -49,6 +48,8 @@
 
 <div class="container py-4">
     <div class="cart-box">
+        <!-- Se ci sono prodotti nel carrello -->
+        <%if (!cart.isEmpty()) {%>
         <div class="row justify-content-center pb-4">
             <span class="logged"><i class="fas fa-shopping-basket"></i></span>
             <h3>Welcome to your shopping cart</h3>
@@ -173,9 +174,22 @@
         <div class="text-center pt-1">
             <button class="btngeneric" onclick=goToCheckout('productsToBuy')>Checkout</button>
         </div>
+        <%} else {%>
+        <!-- Non ci sono prodotti nel carrello -->
+        <div class="text-center">
+
+            <h2>There are no products in your cart :(</h2>
+            <div class="container justify-content-center">
+
+                <img src="img/error/product_not_found.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                     width="300">
+            </div>
+            <h4 class="text-muted font-italic" style="padding-top: 10px">Go to shop and add the products you want to buy!</h4>
+        </div>
+        <%}%>
     </div> <!-- card.// -->
 </div>
-</div>
+
 <form method="post" id="action_product">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idProduct" value="">
@@ -186,7 +200,6 @@
     <input type="hidden" name="controllerAction" value="home.Checkout.showCheckout">
     <input type="hidden" value="" name="checkoutInfo" id="checkoutInfo">
 </form>
-
 
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
 
