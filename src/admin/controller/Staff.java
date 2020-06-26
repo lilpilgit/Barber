@@ -37,11 +37,7 @@ public class Staff {
         String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -136,11 +132,7 @@ public class Staff {
         boolean inserted = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -259,11 +251,7 @@ public class Staff {
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -331,11 +319,7 @@ public class Staff {
         boolean deleted = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -448,11 +432,7 @@ public class Staff {
         String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -544,11 +524,7 @@ public class Staff {
         boolean edited = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -688,11 +664,7 @@ public class Staff {
         Structure structure = null;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -753,7 +725,7 @@ public class Staff {
         /* 3) Quale jsp mostrare */
         request.setAttribute("viewUrl", "admin/show-employees");
         /* 4) Stringa usata nella ricerca da ri-mostrare all'utente */
-        request.setAttribute("searchedString",searchString);
+        request.setAttribute("searchedString", searchString);
         /* 5) Lista degli impiegati trovati sulla base della query string */
         request.setAttribute("employees", foundEmployees);
         /* 6) Struttura di riferimento */
@@ -781,4 +753,14 @@ public class Staff {
         request.setAttribute("structure", structure);
 
     }
+
+    private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {
+        /* Inizializzo il cookie di sessione */
+        HashMap sessionFactoryParameters = new HashMap<String, Object>();
+        sessionFactoryParameters.put("request", request);
+        sessionFactoryParameters.put("response", response);
+        return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+    }
+
 }

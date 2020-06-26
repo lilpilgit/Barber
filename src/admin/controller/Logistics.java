@@ -29,11 +29,7 @@ public class Logistics {
         User loggedUser = null;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -110,11 +106,7 @@ public class Logistics {
         boolean modified = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -233,4 +225,15 @@ public class Logistics {
         /* 6) Ritorno indietro il numero di pagina che si è scelto di visualizzare */
         request.setAttribute("currentPage",pageToShow); /* la pageToShow ovvero la pagina che si è scelta di visualizzare diventa la pagina corrente */
     }
+
+    private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {
+        /* Inizializzo il cookie di sessione */
+        HashMap sessionFactoryParameters = new HashMap<String, Object>();
+        sessionFactoryParameters.put("request", request);
+        sessionFactoryParameters.put("response", response);
+        return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+    }
+
+
 }

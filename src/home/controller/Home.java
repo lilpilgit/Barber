@@ -24,21 +24,18 @@ public class Home {
          * Check if user is logged then call the common/home.jsp
          * */
         DAOFactory sessionDAOFactory = null; //per i cookie
-        UserDAO sessionUserDAO = null;
         DAOFactory daoFactory = null; //per il db
+        UserDAO sessionUserDAO = null;
         UserDAO userDAO = null;
         User loggedUser = null;
         boolean cookieValid = true;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory = initializeCookie(request, response);
+
             sessionDAOFactory.beginTransaction();
 
             sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
@@ -125,12 +122,8 @@ public class Home {
         boolean viewEmployee = false; /* viene settato a true solo se si logga il dipendente */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
+            sessionDAOFactory = initializeCookie(request, response);
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
             sessionDAOFactory.beginTransaction();
@@ -255,11 +248,7 @@ public class Home {
 
         try {
 
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request,response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -425,6 +414,15 @@ public class Home {
 
         /* Setto i prodotti della vetrina come parametro della request */
         request.setAttribute("showcase", showcase);
+
+    }
+
+    private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {
+        /* Inizializzo il cookie di sessione */
+        HashMap sessionFactoryParameters = new HashMap<String, Object>();
+        sessionFactoryParameters.put("request", request);
+        sessionFactoryParameters.put("response", response);
+        return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
     }
 

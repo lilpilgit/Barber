@@ -4,6 +4,7 @@ import model.dao.CookieImpl.CookieDAOFactory;
 import model.dao.mySQLJDBCImpl.MySQLJDBCDAOFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class DAOFactory {
     /*
@@ -41,7 +42,7 @@ public abstract class DAOFactory {
 
     public abstract StatisticsDAO getStatisticsDAO();
 
-    public static DAOFactory getDAOFactory(String whichFactory, HashMap factoryParameters) {
+    public static DAOFactory getDAOFactory(String whichFactory, Map factoryParameters) {
         /* ritorna oggetti che rappresentano le istanze delle classi concrete che consentono di accedere effettivamente al DB, ai cookie ...*/
         if (whichFactory.equals(MYSQLJDBCIMPL)) {
             return new MySQLJDBCDAOFactory(factoryParameters);

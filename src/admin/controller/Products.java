@@ -59,11 +59,7 @@ public class Products {
         boolean inserted = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Dato che è previsto il caricamento dell'immagine, prendo l'attributo attributesMultipart */
             List<FileItem> items = (List<FileItem>) request.getAttribute("attributesMultipart");
@@ -219,11 +215,8 @@ public class Products {
         User loggedUser = null;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
+
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -294,11 +287,7 @@ public class Products {
         boolean showcase = false; /* Showcase indica se il prodotto e' o no in vetrina nella home */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -407,11 +396,7 @@ public class Products {
         String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -496,11 +481,7 @@ public class Products {
         String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -612,11 +593,7 @@ public class Products {
 //        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_product"*/
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Dato che è previsto il caricamento dell'immagine, prendo l'attributo attributesMultipart */
             List<FileItem> items = (List<FileItem>) request.getAttribute("attributesMultipart");
@@ -838,11 +815,7 @@ public class Products {
         boolean deleted = false;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -955,11 +928,7 @@ public class Products {
         ArrayList<Product> foundProducts = null;
 
         try {
-            /* Inizializzo il cookie di sessione */
-            HashMap sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request", request);
-            sessionFactoryParameters.put("response", response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -1032,6 +1001,15 @@ public class Products {
         products = productDAO.fetchAllProducts();
 
         request.setAttribute("products", products);
+    }
+
+    private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {
+        /* Inizializzo il cookie di sessione */
+        HashMap sessionFactoryParameters = new HashMap<String, Object>();
+        sessionFactoryParameters.put("request", request);
+        sessionFactoryParameters.put("response", response);
+        return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
     }
 
 }
