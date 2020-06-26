@@ -9,13 +9,11 @@ import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Work {
-
 
     public static void showBookings(HttpServletRequest request, HttpServletResponse response) {
         /**
@@ -50,8 +48,6 @@ public class Work {
             System.err.println("CURRENT DATA ===> " + request.getParameter("currentDate"));
 
             currentDate = LocalDate.parse(request.getParameter("currentDate"));
-
-            System.out.println("OOOOOOOOOOOO "+ currentDate);
 
             commonView(daoFactory,currentDate,request); /* setto l'attributo "bookings" */
 

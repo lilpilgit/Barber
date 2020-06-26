@@ -6,12 +6,7 @@ public class StaticFunc {
 
     private StaticFunc() {
     }
-//                                    <%--0 = nothing-new--%>
-//                                <%--25 = processing--%>
-//                                <%--50 = sent--%>
-//                                <%--75 = delivering--%>
-//                                <%--100 = delivered--%>
-//                                <%-- canceled --%>
+
     public static final String NOTHING_NEW = "Nothing new yet..."; //0
     public static final String PROCESSING = "Your order is being processed..."; //25
     public static final String SENT = "Your order has been shipped..."; //50
