@@ -117,6 +117,8 @@
                     <%}%>
                     <br>
                     <% if (loggedOn && loggedUser.getType() == 'C') {%>
+
+                    <%if (!inCart) { /* solo se non è nel carrello mostro il contatore */%>
                     <!--COUNTER OF QUANTITY-->
                     <div class="main text-center" id="counter_qta" style="height: 73px;">
                         <button id="minus_button" class='down-count btn btn-info' title='Down'><i
@@ -130,6 +132,7 @@
                         </button>
                     </div>
                     <!----------------------->
+                    <%}%>
                     <div class="action text-center">
                         <button class="add-to-cart btn <%=(inCart) ? "btn-gold-active" : "btn-outline-gold"%>"
                                 type="button" title="<%=(inCart) ? "Remove from cart" : "Add to cart"%>"
