@@ -165,17 +165,17 @@ public class Home {
                     case 'A':
                         /* ADMIN */
                         /* ulteriori operazioni */
-                        loggedUser = sessionUserDAO.insert(user.getId(), null, null,null, null, null, null, null, null, null, user.getType());
+                        loggedUser = sessionUserDAO.insert(user.getId(), null, null, null, null, null, null, null, null, null, user.getType());
                         break;
                     case 'E':
                         /* EMPLOYEE */
-                        loggedUser = sessionUserDAO.insert(user.getId(), null, null,null, null, null, null, null, null, null, user.getType());
+                        loggedUser = sessionUserDAO.insert(user.getId(), null, null, null, null, null, null, null, null, null, user.getType());
                         viewEmployee = true;
                         break;
                     case 'C':
                         /* CUSTOMER */
+                        /* email e password corretta, utente non cancellato, è un cliente e verifico se è BLOCCATO */
                         if (user.getId() != null && user.isBlocked()) { /* mettendo solo user != null va in errore */
-                            /* email e password corretta, utente non cancellato, è un cliente e verifico se è BLOCCATO */
                             sessionUserDAO.delete(null); /* crea un cookie vuoto */
                             applicationMessage = "Your account has been blocked. Contact us for further information.";
                             loggedUser = null;
@@ -225,7 +225,7 @@ public class Home {
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
         System.err.println("loggedUser=> " + loggedUser);
-        /* 3) Application messagge da mostrare all'utente */
+        /* 3) Application message da mostrare all'utente */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (loggedUser != null) {
@@ -238,8 +238,8 @@ public class Home {
         /* 5) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "common/home");
         /* Chiamo il metodo del controller che si occupa di settare i dati necessari a visualizzare la giornata lavorativa dell'impiegato */
-        if(viewEmployee){
-            employee.controller.Work.showBookings(request,response);
+        if (viewEmployee) {
+            employee.controller.Work.showBookings(request, response);
         }
 
     }

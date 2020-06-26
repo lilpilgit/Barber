@@ -19,6 +19,14 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del prodotto nel carrello/wishlist è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di login/logout ( se è andata a buon fine o meno) */
     String applicationMessage = null;
@@ -30,14 +38,6 @@
     ArrayList<Product> products = null;
     if (request.getAttribute("showcase") != null) {
         products = (ArrayList<Product>) request.getAttribute("showcase");
-    }
-
-    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento del prodotto nel carrello/wishlist è andato a buon fine o meno*/
-    String result = null;
-    boolean resultPresent = false;
-    if (request.getAttribute("result") != null) {
-        result = (String) request.getAttribute("result");
-        resultPresent = true;
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
@@ -252,8 +252,7 @@
     <%}%>
 </form>
 <%@ include file="/templates/footer.html" %>
-</body>
-</html>
+
 <!-- redirect all'area riservata dell'impiegato -->
 <%if (loggedOn && loggedUser.getType() == 'E') {%>
 <form method="post" id="redirectEmployeeArea">
@@ -267,3 +266,7 @@
     });
 </script>
 <%}%>
+
+</body>
+</html>
+
