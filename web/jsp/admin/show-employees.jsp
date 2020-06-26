@@ -183,7 +183,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ultimateBtnDel" class="btn btn-primary"
                         style="background-color: rgba(255,5,3,0.66)"
-                        onclick="deleteById(document.getElementById('tmpId').value, '<%=subject%>','<%=controller%>')">
+                        onclick="deleteById(document.getElementById('tmpIdDel').value, '<%=subject%>','<%=controller%>')">
                     Delete
                     <%=subject%>
                 </button>
