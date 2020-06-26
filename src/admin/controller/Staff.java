@@ -2,11 +2,9 @@ package admin.controller;
 
 import functions.StaticFunc;
 import model.dao.DAOFactory;
-import model.dao.ProductDAO;
 import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
-import model.mo.Product;
 import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
@@ -63,7 +61,6 @@ public class Staff {
             structureDAO = daoFactory.getStructureDAO();
             structure = structureDAO.fetchStructure();
 
-
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -71,7 +68,6 @@ public class Staff {
             sessionDAOFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
 
         } catch (Exception e) {
             try {
@@ -167,14 +163,13 @@ public class Staff {
             house_number = request.getParameter("house_number");/*not required*/
             phone = request.getParameter("phone");/*required*/
             /*   CREAZIONE DELLA PASSWORD SUPER SICURA!!!  */
-            password = "password";
+            password = "1";
             /*In this case string is in ISO_LOCAL_DATE format, then we can parse the String directly without DateTimeFormatter
              * The ISO date formatter that formats or parses a date without an offset, such as '2011-12-03'.
              * */
             birth_date = LocalDate.parse(request.getParameter("birth_date"));/*required*/
             fiscal_code = request.getParameter("fiscal_code");/*required*/
             submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_employee"*/
-
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -210,7 +205,6 @@ public class Staff {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato inserito correttamente .*/
                 applicationMessage = "Employee inserted SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -295,7 +289,6 @@ public class Staff {
             sessionDAOFactory.commitTransaction();
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -336,7 +329,6 @@ public class Staff {
         User user = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean deleted = false;
-
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -382,7 +374,6 @@ public class Staff {
              * la viewUrl alla pagina show-employee.jsp */
             commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
 
-
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -395,7 +386,6 @@ public class Staff {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato cancellato correttamente .*/
                 applicationMessage = "Employee deleted SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -494,7 +484,6 @@ public class Staff {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -554,8 +543,6 @@ public class Staff {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
 
-//        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_employee"*/
-
         try {
             /* Inizializzo il cookie di sessione */
             HashMap sessionFactoryParameters = new HashMap<String, Object>();
@@ -572,21 +559,15 @@ public class Staff {
             /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
             loggedUser = sessionUserDAO.findLoggedUser();
 
-            /* Fetching dei parametri provenienti dal form di inserimento e salvataggio nelle variabili locali */
-
-
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
 
-
             employeeDAO = daoFactory.getUserDAO();
 
             structureDAO = daoFactory.getStructureDAO();
-
 
             /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo update() su employeeDAO ) */
             structure = structureDAO.fetchStructure();
@@ -639,7 +620,6 @@ public class Staff {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il dipendente sia stato modificato correttamente .*/
                 applicationMessage = "Employee modified SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -695,9 +675,8 @@ public class Staff {
     }
 
     public static void searchStaff(HttpServletRequest request, HttpServletResponse response){
-
         /**
-         * Instantiates an ProductsDAO to be able to show filtered Employees in Database on a search string.
+         * Instantiates an UserDAO to be able to search Staff in Database on a search string.
          */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
@@ -707,7 +686,6 @@ public class Staff {
         ArrayList<User> foundEmployees = null;
         StructureDAO structureDAO = null;
         Structure structure = null;
-
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -749,7 +727,6 @@ public class Staff {
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -781,7 +758,6 @@ public class Staff {
         request.setAttribute("employees", foundEmployees);
         /* 6) Struttura di riferimento */
         request.setAttribute("structure", structure);
-
 
     }
 

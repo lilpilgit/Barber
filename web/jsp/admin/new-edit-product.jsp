@@ -125,7 +125,7 @@
             <%if (action.equals("modify")) {%>
             <div class="form-row justify-content-center">
                 <div class="col-md-6">
-                    <div class="card-shop"><!-- da modificare eventualmente-->
+                    <div class="card-shop">
                         <div class="text-center ">
                             <div class="tab-content-shop"><img src="img/products/<%=productToEdit.getPictureName()%>"
                                                                alt="<%=productToEdit.getPictureName()%>"></div>

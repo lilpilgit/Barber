@@ -18,12 +18,11 @@ import java.util.HashMap;
 public class Logistics {
 
     private Logistics() {
-
     }
 
     public static void showLogistics(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * .
+         * Instantiates a OrdersDAO to be able to show ALL orders in Database.
          */
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
@@ -66,7 +65,6 @@ public class Logistics {
             sessionDAOFactory.commitTransaction();
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -92,7 +90,6 @@ public class Logistics {
         request.setAttribute("loggedUser", loggedUser);
         /* 3) Setto gli attributi della request che verranno processati dalla show-logistics.jsp */
         request.setAttribute("viewUrl", "admin/show-logistics");
-
 
     }
 
@@ -175,7 +172,6 @@ public class Logistics {
                 applicationMessage = "Status order modified SUCCESSFULLY.";
             }
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
@@ -224,11 +220,9 @@ public class Logistics {
 
         OrdersDAO ordersDAO = daoFactory.getOrdersDAO();
         Long offset = (pageToShow - 1) * Configuration.TOT_REC_TO_SHOW_LOGISTICS;
-        int adjacents = 2;
 
         Long totalRecords = ordersDAO.countOrdersForLogistics();
         Long totalNumberOfPages = (long) (Math.ceil(totalRecords.doubleValue() / Configuration.TOT_REC_TO_SHOW_LOGISTICS.doubleValue()));
-        Long secondLast = totalNumberOfPages - 1; /* total pages minus 1 */
 
         ArrayList<Order> logisticOrders = ordersDAO.fetchRangeOfOrdersForLogistics(offset);
 

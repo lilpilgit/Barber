@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 public class Bookings {
 
-
     public static void showBookings(HttpServletRequest request, HttpServletResponse response) {
         /**
          * Instantiates a DAOFactory to be able to show ALL employees in Database with call to commonView.
@@ -49,8 +48,6 @@ public class Bookings {
 
             currentDate = LocalDate.parse(request.getParameter("currentDate"));
 
-            System.out.println("OOOOOOOOOOOO "+ currentDate);
-
             commonView(daoFactory,currentDate,request); /* setto l'attributo "bookings" */
 
             /* Commit della transazione sul db */
@@ -59,7 +56,6 @@ public class Bookings {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
 
         } catch (Exception e) {
             try {
@@ -147,7 +143,6 @@ public class Bookings {
             deleted = bookingDAO.deleteBooking(bookingToDelete); /* Se non viene sollevata l'eccezione, l'appuntamento è stato cancellato correttamente*/
 
             commonView(daoFactory,currentDate, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
-
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();

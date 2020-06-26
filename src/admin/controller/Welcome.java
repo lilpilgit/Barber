@@ -33,8 +33,6 @@ public class Welcome {
         StatisticsDAO statisticsDAO = null;
         StatisticsEarnings statisticsEarnings = null;
         TreeMap<Time,Integer> totalAppointmentGroupByHourStart = null;
-        boolean cookieValid = true;
-
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -49,7 +47,6 @@ public class Welcome {
 
             sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
             loggedUser = sessionUserDAO.findLoggedUser();
-
 
             /* Acquisisco un DAOFactory per poter lavorare sul DB*/
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -94,10 +91,8 @@ public class Welcome {
 
         /* 1) Attributo che indica se è loggato oppure no */
         request.setAttribute("loggedOn", loggedUser != null);
-        System.err.println("loggedOn==> " + loggedUser != null);
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
-        System.err.println("loggedUser=> " + loggedUser);
         /* 3) Application messagge da mostrare all'utente */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) Setto quale view devo mostrare */

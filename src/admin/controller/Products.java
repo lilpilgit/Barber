@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class Products {
                     } else if (fieldName.equals("insert_date")) {
                         insertDate = LocalDate.parse(item.getString());/*not required*/
                     } else if (fieldName.equals("submit")) {
-                        submit = item.getString();/* required*/
+                        submit = item.getString();/*required*/
                     }
 
                 } else {
@@ -112,7 +111,6 @@ public class Products {
                     fileExtension = FilenameUtils.getExtension(imgField.getName()); /* recupero l'estensione del file */
                 }
             }
-
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -167,7 +165,6 @@ public class Products {
                 imgField.write(uploadedFile);/* scrivo sul file appena creato il contenuto binario del file passato dalla form */
             }
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback della transazione sul db */
@@ -211,7 +208,6 @@ public class Products {
         }
         request.setAttribute("structure", structure);
 
-
     }
 
     public static void showProducts(HttpServletRequest request, HttpServletResponse response) {
@@ -252,7 +248,6 @@ public class Products {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
 
         } catch (Exception e) {
             try {
@@ -297,7 +292,6 @@ public class Products {
         Product product = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean showcase = false; /* Showcase indica se il prodotto e' o no in vetrina nella home */
-
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -410,7 +404,6 @@ public class Products {
         StructureDAO structureDAO = null;
         Structure structure = null;
 
-
         String applicationMessage = null; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
 
         try {
@@ -446,7 +439,6 @@ public class Products {
             sessionDAOFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
 
         } catch (Exception e) {
             try {
@@ -521,7 +513,6 @@ public class Products {
 
             /* Fetching dei parametri provenienti dal form di modifica e salvataggio nelle variabili locali */
             idToEdit = Long.valueOf(request.getParameter("ProductID"));
-
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -615,7 +606,6 @@ public class Products {
         String fileExtension = null;
         boolean changeImage = false;
 
-
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
 
@@ -670,7 +660,7 @@ public class Products {
 
                 } else {
                     if (item.getSize() != 0) {
-                        System.out.println("DIMENZIONE INVIATA " + item.getSize());
+                        System.out.println("DIMENSIONE INVIATA " + item.getSize());
                         /* È STATO PASSATO ANCHE UN FILE DUNQUE SIGNIFICA CHE VA SOVRASCRITTO */
                         /* altrimenti non si tratta di un campo della form ma di un file binario */
                         /* Dato che salverò il file immagine nel filesystem con il nome con tale pattern : product_<id_del_prodotto>
@@ -686,8 +676,6 @@ public class Products {
                     }
                 }
             }
-
-
 
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
@@ -711,7 +699,6 @@ public class Products {
 
             /* Scarico dal DB l'UNICA struttura ( che passo poco sotto al metodo update() su productDAO ) */
             structure = structureDAO.fetchStructure();
-            System.err.println(structure);
 
             /* In caso di modifica, il form contiene un campo hidden con name="productId" che mi viene
              * passato dalla JSP e consente di poter scaricare dal DB l'impiegato con quel determinato ID */
@@ -740,7 +727,6 @@ public class Products {
             productToEdit.setDeleted(false);
             productToEdit.setShowcase(inShowcase);
             productToEdit.setStructure(structure);
-
 
             /* Effettuo la modifica */
             try {
@@ -783,7 +769,6 @@ public class Products {
                 applicationMessage = "Product modified SUCCESSFULLY.";
                 System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             }
-
 
         } catch (Exception e) {
             try {
@@ -871,7 +856,6 @@ public class Products {
             /* Fetching dell'id da cancellare proveniente dal form hidden dentro la pagina show-product.jsp */
             idToDelete = Long.valueOf(request.getParameter("ProductID"));
 
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -883,7 +867,6 @@ public class Products {
 
             /* trovo il prodotto da flaggare come cancellato */
             product = productDAO.findProductById(idToDelete);
-
 
             deleted = productDAO.delete(product);
 
@@ -913,7 +896,6 @@ public class Products {
                     System.err.println("ERRORE durante la cancellazione del file immagine {" + pictureName + " per il prodotto con ID {" + product.getId() + "}.");
                 }
             }
-
 
         } catch (Exception e) {
             try {
@@ -1037,7 +1019,6 @@ public class Products {
         request.setAttribute("searchedString",searchString);
         /* 5) Lista dei prodotti trovati sulla base della query string */
         request.setAttribute("products", foundProducts);
-
 
     }
 

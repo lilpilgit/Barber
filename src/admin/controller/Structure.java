@@ -93,7 +93,6 @@ public class Structure {
          * Instantiates an StructureDAO to be able to edit the existing structure in Database.
          */
 
-//        String submit; /*mi aspetto che il value sia "edit_structure"*/
         DAOFactory daoFactory = null; //per il db
         DAOFactory sessionDAOFactory = null; //per i cookie
         User loggedUser = null;
@@ -102,8 +101,6 @@ public class Structure {
         model.mo.Structure originalStructure = null; /* l'oggetto intatto ancora con i campi non modificati */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
-
-//        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_structure"*/
 
         try {
             /* Inizializzo il cookie di sessione */
@@ -148,8 +145,6 @@ public class Structure {
             structureToEdit.setSlot(Time.valueOf(request.getParameter("slot")));
             structureToEdit.setAddress(StaticFunc.formatFinalAddress(request.getParameter("state"), request.getParameter("region"), request.getParameter("city"), request.getParameter("street"), request.getParameter("cap"), request.getParameter("house_number")));
 
-
-
             /* Effettuo la modifica della struttura */
             edited = structureDAO.update(structureToEdit);/* Se non viene sollevata l'eccezione, la struttura è stato modificata correttamente*/
 
@@ -164,9 +159,7 @@ public class Structure {
             if (edited) {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che la struttura sia stata modificata correttamente .*/
                 applicationMessage = "Structure modified SUCCESSFULLY.";
-
             }
-
 
         } catch (Exception e) {
             try {
@@ -217,7 +210,6 @@ public class Structure {
             /* FAIL */
             request.setAttribute("structureToModify", originalStructure);
         }
-
     }
 
     private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {

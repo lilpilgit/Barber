@@ -82,7 +82,6 @@ public class Customers {
         /* Setto gli attributi della request che verranno processati dalla show-customers.jsp */
         request.setAttribute("viewUrl", "admin/show-customers");
 
-
     }
 
     public static void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -117,7 +116,6 @@ public class Customers {
             /* Fetching dell'id del cliente da cancellare proveniente dal form hidden dentro la pagina show-customer.jsp */
             idToDelete = Long.valueOf(request.getParameter("CustomerID"));
 
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -142,7 +140,6 @@ public class Customers {
              * la viewUrl alla pagina show-customer.jsp */
             commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
 
-
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -155,7 +152,6 @@ public class Customers {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che il cliente sia stato cancellato correttamente .*/
                 applicationMessage = "Customer deleted SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -189,7 +185,7 @@ public class Customers {
         /* 3) il messaggio da visualizzare nella pagina di elenco solo se non è null */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione ==> viene visualizzata nuovamente
-         *     la show-employee.jsp per consentire altre cancellazioni */
+         *     la show-customer.jsp per consentire altre cancellazioni */
         request.setAttribute("viewUrl", "admin/show-customers");
         /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
         if (deleted) {
@@ -199,7 +195,6 @@ public class Customers {
             /* FAIL */
             request.setAttribute("result", "fail");
         }
-
     }
 
     public static void blockedCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -235,14 +230,11 @@ public class Customers {
             /* Fetching dell'id da bloccare proveniente dal form hidden dentro la pagina show-customer.jsp */
             idToBlock = Long.valueOf(request.getParameter("CustomerID"));
 
-
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
-
 
             /* è necessario prendersi solo lo userDAO per poter settare su uno specifico utente il flag DELETED */
             customerDAO = daoFactory.getUserDAO();
@@ -252,12 +244,10 @@ public class Customers {
 
             blocked = customerDAO.blockCustomer(customer); /* Se non viene sollevata l'eccezione è stato bloccato correttamente*/
 
-        /* Chiamo la commonView in modo da far vedere il risultato aggiornato che si presentera' come un cambiamento
-        a livello grafico (cambio colore scritte o icone)
-         */
-
+             /* Chiamo la commonView in modo da far vedere il risultato aggiornato che si presentera' come un cambiamento
+             a livello grafico (cambio colore scritte o icone)
+            */
             commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
-
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -271,7 +261,6 @@ public class Customers {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che sia stato bloccato correttamente .*/
                 applicationMessage = "Customer blocked SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -298,7 +287,6 @@ public class Customers {
             }
         }
 
-
         /* Setto gli attributi della request che verranno processati dalla show-customer.jsp */
         /* 1) Attributo che indica se è loggato oppure no */
         request.setAttribute("loggedOn", loggedUser != null);
@@ -317,7 +305,6 @@ public class Customers {
             /* FAIL */
             request.setAttribute("result", "fail");
         }
-
 
     }
 
@@ -367,12 +354,11 @@ public class Customers {
 
             unBlocked = customerDAO.unBlockCustomer(customer); /* Se non viene sollevata l'eccezione, sbloccato correttamente*/
 
-        /* Chiamo la commonView in modo da far vedere il risultato aggiornato che si presentera' come un cambiamento
-        a livello grafico (cambio colore scritte o icone)
-         */
+            /* Chiamo la commonView in modo da far vedere il risultato aggiornato che si presentera' come un cambiamento
+            a livello grafico (cambio colore scritte o icone)
+            */
 
             commonView(daoFactory, request); /* !!! ATTENZIONE A CHIAMARLA PRIMA DI CHIUDERE LA CONNESSIONE CON IL DATABASE */
-
 
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
@@ -386,7 +372,6 @@ public class Customers {
                 /* Solo se viene committata la transazione senza errori siamo sicuri che e' stato sbloccato correttamente .*/
                 applicationMessage = "Customer unblocked SUCCESSFULLY.";
             }
-
 
         } catch (Exception e) {
             try {
@@ -412,7 +397,6 @@ public class Customers {
             } catch (Throwable t) {
             }
         }
-
 
         /* Setto gli attributi della request che verranno processati dalla show-customer.jsp */
         /* 1) Attributo che indica se è loggato oppure no */
