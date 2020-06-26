@@ -1,9 +1,6 @@
 package home.controller;
 
-import model.dao.DAOFactory;
-import model.dao.ProductDAO;
-import model.dao.UserDAO;
-import model.dao.WishlistDAO;
+import model.dao.*;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -128,8 +125,10 @@ public class Product {
 
         ProductDAO productDAO = daoFactory.getProductDAO(); /* per fetchare il prodotto */
         WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
+        CartDAO cartDAO = daoFactory.getCartDAO();
         model.mo.Product product = null; /* prodotto fetchato dal db da mostrare nella pagina product.jsp */
         boolean inWishlist = false; /* flag per sapere se il prodotto è nella wishlist dell'utente loggato */
+        boolean inCart = false; /* flag per sapere se il prodotto e' nel carrello dell'utente loggato */
 
         product = productDAO.findProductById(id);
 
@@ -138,11 +137,15 @@ public class Product {
         if (loggedUser != null) {
             /* controllo necessario altrimenti va in errore se non si è utenti loggati e si prova a visualizzare la pagina product */
             inWishlist = wishlistDAO.inWishlist(loggedUser, id);
+            inCart = cartDAO.inCart(loggedUser, id);
         }
 
         /* 5) Setto il prodotto da mostrare */
         request.setAttribute("product", product);
         /* 6) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */
         request.setAttribute("inWishlist", inWishlist);
+        /* 7) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */
+        request.setAttribute("inCart", inCart);
+
     }
 }

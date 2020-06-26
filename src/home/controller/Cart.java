@@ -122,7 +122,7 @@ public class Cart {
         UserDAO userDAO = null;
         CartDAO cartDAO = null;
         User user = null;
-        Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
+        Long idProductToRemove = null; /* il del prodotto da aggiungere al carrello */
         Integer desiredQty = 1; /* quantità desiderata da essere aggiunta al carrello : di default a 1 se viene aggiunto al carrello dalla pagina wishlist.jsp */
         String from = null; /* da quale jsp viene chiamato il metodo */
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
@@ -175,7 +175,7 @@ public class Cart {
                 user = userDAO.findById(loggedUser.getId());
 
                 /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
-                idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+                idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
 
                 cartDAO = daoFactory.getCartDAO();
 
@@ -187,15 +187,15 @@ public class Cart {
                         /* CHIAMATO DALLA PAGINA product.jsp */
                         /* prendo la quantità scelta da aggiungere al carrello */
                         desiredQty = Integer.parseInt(request.getParameter("desiredQty"));
-                        added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                        added = cartDAO.addProductToCart(user, idProductToRemove, desiredQty);
                         /* 6) setto gli attributi "product" e "inWishlist" da mostrare nuovamente nella pagina product.jsp*/
-                        Product.commonView(daoFactory, loggedUser, idProductToAdd, request);
+                        Product.commonView(daoFactory, loggedUser, idProductToRemove, request);
                         System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO product.jsp");
 
                     } else if (from.equals("wishlist")) {
                         /* CHIAMATO DALLA PAGINA wishlist.jsp */
                         /* aggiunto il prodotto al carrello da dentro la pagina wishlist dunque quantità di default = 1*/
-                        added = cartDAO.addProductToCart(user, idProductToAdd, desiredQty);
+                        added = cartDAO.addProductToCart(user, idProductToRemove, desiredQty);
                         /* aggiunge la wishlist come ArrayList alla request*/
                         Wishlist.commonView(daoFactory, loggedUser, request);
                         System.err.println("AGGIUNTO PRODOTTO AL CARRELLO DA DENTRO wishlist.jsp");
@@ -287,8 +287,9 @@ public class Cart {
         User loggedUser = null;
         UserDAO userDAO = null;
         CartDAO cartDAO = null;
+        String from = null; /* da quale jsp viene chiamato il metodo */
         User user = null;
-        Long idProductToAdd = null; /* il del prodotto da aggiungere al carrello */
+        Long idProductToRemove = null; /* il del prodotto da rimuovere dal carrello */
         ArrayList<ExtendedProduct> cart = null; //il carrello da passare alla jsp
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean removed = false;
@@ -340,14 +341,34 @@ public class Cart {
                 /* Eseguo la logica di business */
 
                 /* setto l'id del prodotto da aggiungere al carrello sulla base dell'id ricevuto */
-                idProductToAdd = Long.valueOf(request.getParameter("idProduct"));
+                idProductToRemove = Long.valueOf(request.getParameter("idProduct"));
 
                 cartDAO = daoFactory.getCartDAO();
 
-                removed = cartDAO.removeProductFromCart(user, idProductToAdd);
+                removed = cartDAO.removeProductFromCart(user, idProductToRemove);
 
-                commonView(daoFactory, loggedUser, request); /* setto l'attributo "cart" all'interno della request */
+                /* tale metodo può essere chiamato da diverse pagine, posso capire la jsp dalla quale è stato chiamato sulla
+                 *  base del parametro "from" */
+                from = request.getParameter("from");
+                if (from != null) {
+                    if (from.equals("cart")) {
+                        /* è stato tolto il prodotto cliccando la stellina dentro la pagina cart.jsp */
+                        commonView(daoFactory, loggedUser, request); /* aggiungo l'oggetto "cart" che è un ArrayList alla cart.jsp */
+                        System.err.println("RIMOSSO PRODOTTO DALLA CARRELLO DA DENTRO cart.jsp");
 
+                    } else if (from.equals("wishlist")) {
+                        Wishlist.commonView(daoFactory, loggedUser, request); /* setto l'attributo "wishlist" all'interno della request */
+                        System.err.println("RIMOSSO PRODOTTO DALLA CARRELLO DA DENTRO wishlist.jsp");
+                    } else if (from.equals("product")) {
+                        /* aggiungo l'oggetto "product" e "inWishlist" al'interno della request per sapere quale oggetto visualizzare e se è già nella wishlist */
+                        home.controller.Product.commonView(daoFactory, loggedUser, idProductToRemove, request);
+                        System.err.println("RIMOSSO PRODOTTO DALLA CARRELLO DA DENTRO product.jsp");
+                    }
+                }
+                if (removed) {
+                    /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
+                    applicationMessage = "Product removed from cart SUCCESSFULLY.";
+                }
             }
 
             /* Commit fittizio */
@@ -357,11 +378,6 @@ public class Cart {
             daoFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
-            if (removed) {
-                /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato rimosso dal carrello dell'utente */
-                applicationMessage = "Product removed from cart SUCCESSFULLY.";
-            }
 
         } catch (Exception e) {
             try {
@@ -395,9 +411,17 @@ public class Cart {
             request.setAttribute("loggedUser", loggedUser);
             /* 3) il messaggio da visualizzare nella pagina di inserimento solo se non è null */
             request.setAttribute("applicationMessage", applicationMessage);
-            /* 4) l'url della pagina da visualizzare dopo aver effettuato l'inserimento ==> viene visualizzato nuovamente il
-             *     form per consentire ulteriori modifiche sul medesimo impiegato */
-            request.setAttribute("viewUrl", "customer/cart");
+            /* 4) l'url della pagina da visualizzare dopo aver effettuato la cancellazione dal carrello*/
+            if (from != null) {
+                if (from.equals("cart")) {
+                    /* decido di rimanere nella pagina cart.jsp*/
+                    request.setAttribute("viewUrl", "customer/cart");
+                } else if (from.equals("wishlist")) {
+                    request.setAttribute("viewUrl", "customer/wishlist");
+                } else if (from.equals("product")) {
+                    request.setAttribute("viewUrl", "common/product");
+                }
+            }
             /* 5) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
             if (removed) {
                 /* SUCCESS */

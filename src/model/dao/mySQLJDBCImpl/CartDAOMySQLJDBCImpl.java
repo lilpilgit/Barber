@@ -297,6 +297,69 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         return true;
     }
 
+    public boolean inCart(User user,Long idProduct) throws UnsupportedOperationException{
+        /**
+         * Verify if product is in the cart of user passed as parameter.
+         *
+         * @params User user : a user with type {C}
+         *         Long idProduct : id of product to search
+         * @return Return true if there is in logged user's wishlist otherwise return false or raise an exception.
+         * */
+
+        /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
+        if (user.getType() != 'C')
+            throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile verificare se un prodotto è nel" +
+                    " carrello di un utente che non è cliente. Errore con l'utente con id{" + user.getId() + "}.");
+
+        boolean inCart = false;
+        /* Seleziono i prodotti presenti nella wishlist dell'utente passato come parametro */
+        query =
+                "SELECT C.ID_PRODUCT " +
+                        "FROM CART C " +
+                        "WHERE C.ID_CUSTOMER = ? " +
+                        "  AND C.ID_PRODUCT = ?;";
+        try {
+            int i = 1;
+            ps = connection.prepareStatement(query);
+            ps.setLong(i++, user.getId());
+            ps.setLong(i++, idProduct);
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps = connection.prepareStatement(query)");
+            throw new RuntimeException(e);
+        }
+        try {
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs = ps.executeQuery()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            if (rs.next()) { /* Esiste tale prodotto nella wishlist dell'utente */
+                inCart = true;
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nella if (rs.next()){inCart = true;};");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella rs.close()");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Errore nella ps.close()");
+            throw new RuntimeException(e);
+        }
+
+        return inCart;
+    }
+
     private ExtendedProduct readCart(ResultSet rs) {
         /**
          * Read an ExtendedProduct attributes
@@ -377,6 +440,5 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
 
         return extendedProduct;
     }
-
 
 }

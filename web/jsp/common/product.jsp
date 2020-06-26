@@ -44,6 +44,12 @@
         inWishlist = (Boolean) request.getAttribute("inWishlist");
     }
 
+    /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
+    boolean inCart = false;
+    if (request.getAttribute("inCart") != null) {
+        inCart = (Boolean) request.getAttribute("inCart");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Shop";
 
@@ -125,9 +131,10 @@
                     </div>
                     <!----------------------->
                     <div class="action text-center">
-                        <button class="add-to-cart btn btn-outline-gold" type="button"
-                                onclick="addProductToCart(<%=product.getId()%>)"><span
-                                class="fas fa-shopping-basket"></span></button>
+                        <button class="add-to-cart btn <%=(inCart) ? "btn-gold-active" : "btn-outline-gold"%>"
+                                type="button" title="<%=(inCart) ? "Remove from cart" : "Add to cart"%>"
+                                onclick="<%=(inCart) ? "removeProductFromCart(" : "addProductToCart("%><%=product.getId() + ");"%>">
+                            <span class="fas fa-shopping-basket"></span></button>
                         <button class="btn like <%=(inWishlist) ? "btn-gold-active" : "btn-outline-gold"%>"
                                 type="button" title="<%=(inWishlist) ? "Remove from wishlist" : "Add to wishlist"%>"
                                 onclick="<%=(inWishlist) ? "removeProductFromWishlist(" : "addProductToWishlist("%><%=product.getId() + ");"%>">

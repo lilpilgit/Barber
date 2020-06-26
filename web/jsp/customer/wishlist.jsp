@@ -28,6 +28,12 @@
         wishlist = (ArrayList<Product>) request.getAttribute("wishlist");
     }
 
+    /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
+    boolean inCart = false;
+    if (request.getAttribute("inCart") != null) {
+        inCart = (Boolean) request.getAttribute("inCart");
+    }
+
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Wishlist";
 
@@ -108,7 +114,8 @@
                 <td class="text-right">
                     <button class="btn btn-outline-gold" title="Add to cart"
                             data-toggle="tooltip"
-                            data-original-title="Save to Cart" onclick="addProductToCart(<%=p.getId()%>)">
+                            data-original-title="Save to Cart"
+                            onclick="addProductToCart(<%=p.getId()%>)">
                         <i class="fas fa-shopping-basket"></i></button>
                     <button class="btn btn-outline-danger" onclick="removeProductFromWishlist(<%=p.getId()%>)"> × Remove
                     </button>

@@ -1,12 +1,8 @@
 package model.dao;
 
-import model.exception.DuplicatedObjectException;
 import model.mo.ExtendedProduct;
-import model.mo.Product;
-import model.mo.Structure;
 import model.mo.User;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface CartDAO {
@@ -18,4 +14,6 @@ public interface CartDAO {
     boolean removeProductFromCart(User user, Long idProduct) throws UnsupportedOperationException;
 
     boolean changeDesiredQuantity(User user, Long idProduct, boolean increase, Integer desiredQuantity) throws UnsupportedOperationException;
+
+    boolean inCart(User user,Long idProduct) throws UnsupportedOperationException;
 }
