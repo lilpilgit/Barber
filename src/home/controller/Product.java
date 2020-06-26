@@ -1,6 +1,7 @@
 package home.controller;
 
 import model.dao.*;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -123,6 +124,8 @@ public class Product {
         WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
         CartDAO cartDAO = daoFactory.getCartDAO();
         model.mo.Product product = null; /* prodotto fetchato dal db da mostrare nella pagina product.jsp */
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
         boolean inWishlist = false; /* flag per sapere se il prodotto è nella wishlist dell'utente loggato */
         boolean inCart = false; /* flag per sapere se il prodotto e' nel carrello dell'utente loggato */
 
@@ -136,12 +139,17 @@ public class Product {
             inCart = cartDAO.inCart(loggedUser, id);
         }
 
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
         /* 5) Setto il prodotto da mostrare */
         request.setAttribute("product", product);
         /* 6) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */
         request.setAttribute("inWishlist", inWishlist);
         /* 7) Setto il flag per sapere se il prodotto è in wishlist già per l'utente loggato */
         request.setAttribute("inCart", inCart);
+        /* 8) Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
 
     }
 

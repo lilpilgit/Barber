@@ -118,7 +118,7 @@
     </div>
 </div>
 
-<%@ include file="/templates/footer.html" %>
+<%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
     });

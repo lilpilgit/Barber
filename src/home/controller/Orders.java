@@ -3,8 +3,10 @@ package home.controller;
 import functions.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.OrdersDAO;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.mo.Order;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -30,7 +32,7 @@ public class Orders {
 
 
         try {
-            sessionDAOFactory = initializeCookie(request,response);
+            sessionDAOFactory = initializeCookie(request, response);
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -126,7 +128,7 @@ public class Orders {
 
 
         try {
-            sessionDAOFactory = initializeCookie(request,response);
+            sessionDAOFactory = initializeCookie(request, response);
 
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
@@ -157,7 +159,8 @@ public class Orders {
             } else {
                 System.out.println("ACCESSO AD AREA RISERVATA DA PARTE DI UN UTENTE NON LOGGATO. ACCESSO VIETATO. ");
                 cookieValid = false;
-                request.setAttribute("viewUrl", "error/404");            }
+                request.setAttribute("viewUrl", "error/404");
+            }
 
             /* verifico se devo eseguire la logica di business o meno */
             if (cookieValid) {
@@ -235,7 +238,11 @@ public class Orders {
     }
 
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
+
         OrdersDAO ordersDAO = daoFactory.getOrdersDAO();
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
+
 
         /* Prendo TUTTI gli ordini del cliente loggato */
         ArrayList<Order> orders = ordersDAO.fetchOrdersByCustomerId(loggedUser.getId());
@@ -245,8 +252,14 @@ public class Orders {
             order.setItemList(ordersDAO.listOrderedProducts(order.getId()));
         }
 
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
         /* 4) Setto l'ArrayList di ordini da mostrare in base a quale utente è loggato */
         request.setAttribute("orders", orders);
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
 
     }
 

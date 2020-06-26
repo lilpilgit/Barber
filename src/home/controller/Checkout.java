@@ -4,6 +4,7 @@ import functions.StaticFunc;
 import model.dao.*;
 import model.mo.ExtendedProduct;
 import model.mo.Product;
+import model.mo.Structure;
 import model.mo.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -104,6 +105,9 @@ public class Checkout {
                     checkoutProducts.add(productToShow); /* aggiungo all'array list dei prodotti da mostrare nel riepilogo */
                 }
                 System.out.println("totalPrice:" + totalPrice + " | totalSaved:" + totalSaved);
+
+                commonView(daoFactory, request);
+
             }
 
             /* Commit fittizio */
@@ -255,6 +259,8 @@ public class Checkout {
                         removedFromCart = removedFromCart && cartDAO.removeProductFromCart(loggedUser, boughtItem.getId());
                     }
                 }
+
+                commonView(daoFactory, request);
             }
 
             /* Commit fittizio */
@@ -309,6 +315,19 @@ public class Checkout {
             }
 
         }
+    }
+
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
+
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
+
     }
 
     private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {

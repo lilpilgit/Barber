@@ -307,7 +307,7 @@
 </div>
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
-<%@ include file="/templates/footer.html" %>
+<%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
     let addressDB;
     // Example starter JavaScript for disabling form submissions if there are invalid fields

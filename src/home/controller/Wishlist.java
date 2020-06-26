@@ -1,10 +1,12 @@
 package home.controller;
 
 import model.dao.DAOFactory;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.dao.WishlistDAO;
 import model.mo.ExtendedProduct;
 import model.mo.Product;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -434,14 +436,22 @@ public class Wishlist {
         UserDAO userDAO = daoFactory.getUserDAO();
         WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
         User user = null;
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
 
         user = userDAO.findById(loggedUser.getId());
 
         /* setto l'oggetto wishlist all'interno dell'oggetto utente */
         wishlist = wishlistDAO.fetchWishlist(user);
 
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
         /* Setto la wishlist da mostrare nella pagina della wishlist dell'utente loggato */
         request.setAttribute("wishlist", wishlist);
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
     }
 
     private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {

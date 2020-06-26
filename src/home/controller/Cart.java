@@ -2,8 +2,10 @@ package home.controller;
 
 import model.dao.CartDAO;
 import model.dao.DAOFactory;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.mo.ExtendedProduct;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -430,6 +432,8 @@ public class Cart {
         CartDAO cartDAO = daoFactory.getCartDAO();
         UserDAO userDAO = daoFactory.getUserDAO();
         User user = null;
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
 
         user = userDAO.findById(loggedUser.getId());
 
@@ -439,6 +443,12 @@ public class Cart {
 
         /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
         request.setAttribute("cart", cart);
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
 
     }
 

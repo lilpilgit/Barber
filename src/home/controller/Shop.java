@@ -2,8 +2,10 @@ package home.controller;
 
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.mo.Product;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -107,6 +109,8 @@ public class Shop {
                     products = productDAO.findFilteredProducts((categoryToFilter.equals("All")) ? "%" : categoryToFilter, (brandToFilter.equals("All")) ? "%" : brandToFilter);
 
                 }
+
+                commonView(daoFactory,request);
             }
 
             /* Commit della transazione sul db */
@@ -161,6 +165,20 @@ public class Shop {
         }
 
     }
+
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
+
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
+
+    }
+
 
     private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {
         /* Inizializzo il cookie di sessione */

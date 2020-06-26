@@ -3,9 +3,11 @@ package home.controller;
 import functions.StaticFunc;
 import model.dao.DAOFactory;
 import model.dao.ProductDAO;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
 import model.mo.Product;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -408,12 +410,20 @@ public class Home {
 
         ArrayList<Product> showcase = null;
         ProductDAO productDAO = daoFactory.getProductDAO();
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
 
         /* Scarico dal DB la lista dei prodotti da mostrare in vetrina */
         showcase = productDAO.findShowcaseProduct();
 
         /* Setto i prodotti della vetrina come parametro della request */
         request.setAttribute("showcase", showcase);
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
 
     }
 

@@ -430,11 +430,17 @@ public class Book {
                 bookedStatus = true;
         }
 
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
         /* 3) Attributo che indica quale struttura e' selezionata (Nel nostro caso solo una) */
         request.setAttribute("structure", structure);
 
         /* 4) Attributo che indica se un cliente ha gia' effettuato un appuntamento futuro */
         request.setAttribute("bookedStatus", bookedStatus);
+
+        /* 5) Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
 
     }
 

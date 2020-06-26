@@ -1,7 +1,9 @@
 package home.controller;
 
 import model.dao.DAOFactory;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -63,6 +65,9 @@ public class Contact {
                 if (loggedUser != null) {
                     customer = userDAO.findById(loggedUser.getId());
                 }
+
+                commonView(daoFactory, request);
+
             }
 
 
@@ -172,6 +177,8 @@ public class Contact {
                 System.out.println("Invio dell'email da parte di " + name + "----" + email + "----" + text);
                 applicationMessage = "Message sent correctly. We will contact you as soon as possible.";
 
+                commonView(daoFactory, request);
+
             }
 
             /* Commit sul db */
@@ -216,8 +223,8 @@ public class Contact {
             /* 5) oggetto corrispondente al risultato dell'operazione */
             request.setAttribute("contacted", contacted);
             /* 6) Oggetto contenente le informazioni dell'utente loggato */
-            if(loggedUser != null){
-                request.setAttribute("customer",customer);
+            if (loggedUser != null) {
+                request.setAttribute("customer", customer);
             }
             /* 7) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
             if (contacted) {
@@ -228,6 +235,19 @@ public class Contact {
                 request.setAttribute("result", "fail");
             }
         }
+    }
+
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
+
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
+
     }
 
     private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {

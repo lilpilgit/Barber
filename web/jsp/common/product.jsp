@@ -169,7 +169,7 @@
     <input type="hidden" name="idProduct" value="">
     <input type="hidden" name="from" value="product">
 </form>
-<%@include file="/templates/footer.html" %>
+<%@include file="/templates/footer.jsp" %>
 <script type="text/javascript">
 
     window.addEventListener("load", () => {

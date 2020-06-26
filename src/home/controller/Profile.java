@@ -2,8 +2,10 @@ package home.controller;
 
 import functions.StaticFunc;
 import model.dao.DAOFactory;
+import model.dao.StructureDAO;
 import model.dao.UserDAO;
 import model.exception.DuplicatedObjectException;
+import model.mo.Structure;
 import model.mo.User;
 import services.config.Configuration;
 
@@ -66,8 +68,8 @@ public class Profile {
 
             /* verifico se devo eseguire la logica di business o meno */
             if (cookieValid) {
-                /* Nessuna logica di business in questo caso */
-
+                /* Chiamo la commonView */
+                commonView(daoFactory, request);
             }
 
             /* Commit fittizio */
@@ -191,6 +193,8 @@ public class Profile {
                     e.printStackTrace();
                 }
 
+                commonView(daoFactory, request);
+
             }
 
 
@@ -259,6 +263,20 @@ public class Profile {
                 request.setAttribute("customer", originalUser);
             }
         }
+    }
+
+    private static void commonView(DAOFactory daoFactory, HttpServletRequest request) {
+
+        StructureDAO structureDAO = daoFactory.getStructureDAO();
+        Structure structure = null;
+
+
+        /* Scarico dal DB l'unica struttura */
+        structure = structureDAO.fetchStructure();
+
+        /* Setto l'oggetto struttura da mostrare in ogni footer dell'area customer */
+        request.setAttribute("structure", structure);
+
     }
 
     private static DAOFactory initializeCookie(HttpServletRequest request, HttpServletResponse response) {

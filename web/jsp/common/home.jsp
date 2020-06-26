@@ -251,7 +251,7 @@
     <input type="hidden" name="idProduct" value="">
     <%}%>
 </form>
-<%@ include file="/templates/footer.html" %>
+<%@ include file="/templates/footer.jsp" %>
 
 <!-- redirect all'area riservata dell'impiegato -->
 <%if (loggedOn && loggedUser.getType() == 'E') {%>
