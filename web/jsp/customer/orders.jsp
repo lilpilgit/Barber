@@ -55,6 +55,7 @@
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container my-4" style="background-color: #f1e7cb; border-radius: 25px; min-height: 500px;">
+    <%if(!orders.isEmpty()) {%>
     <span class="text-center"><h2><br>HERE YOU CAN FIND YOUR ORDERS</h2></span>
 
     <!-- RICORDARSI DI INCREMENTARE GLI ID PER OGNI CARD -->
@@ -217,8 +218,19 @@
         <%
                 numberCollapse++;
             }/* fine del ciclo for per quanto riguarda ciascun ordine*/%>
-
     </div>
+
+    <%} else {%>
+    <!-- Non ci sono prodotti nel carrello -->
+    <div class="container text-center" style="padding-top: 55px">
+        <h2>There are no orders :(</h2>
+        <div class="container justify-content-center">
+            <img src="img/error/product_not_found_once.gif" alt="product_not_found" class="rounded mx-auto d-block"
+                 width="300">
+        </div>
+        <h4 class="text-muted font-italic" style="padding-top: 10px">After you place an order you can check the status in this section!</h4>
+    </div>
+    <%}%>
 </div>
 
 <input type="hidden" id="tmpIdDel" value="">
