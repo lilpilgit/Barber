@@ -367,7 +367,7 @@
                                     </div>
                                     <div class="md-form form-sm col-5 text-center">
                                         <input type="number" class="form-control" name="house_number" id="House-number"
-                                               min="0" max="99999">
+                                               min="0" max="9999999">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
                                             <i class="fas fa-map-marker-alt"></i> House Number
                                         </label>

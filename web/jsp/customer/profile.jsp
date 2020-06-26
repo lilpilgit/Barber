@@ -144,7 +144,7 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-2">
                     <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="9999"
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="999999"
                            value="<%=splittedAddress[3]%>">
                 </div>
                 <div class="col-md-3 mb-2">
@@ -155,7 +155,7 @@
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0" max="9999"
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0" max="999999"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
