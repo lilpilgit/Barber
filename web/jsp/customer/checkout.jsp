@@ -18,6 +18,14 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* Prendo il parametro "result" che si occupa di informarmi del risultato delle possibili operazioni previste */
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");

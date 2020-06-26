@@ -24,6 +24,14 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento della prenotazione è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di login/logout ( se è andata a buon fine o meno) */
     String applicationMessage = null;

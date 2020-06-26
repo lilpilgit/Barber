@@ -28,7 +28,6 @@ public class Wishlist {
         User loggedUser = null;
         UserDAO userDAO = null;
         ArrayList<Product> wishlist = null; //la wishlist da passare alla jsp
-        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean cookieValid = true;
 
 

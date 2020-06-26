@@ -21,10 +21,12 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    /* prendo il parametro result così da scegliere in modo più semplice i colori del frontend per mostrare il messaggio */
-    String result = null; /* "success" or "fail"*/
+    /* Prendo il parametro "result" per conoscere l'esito delle operazioni di modifica dei dati */
+    String result = null;
+    boolean resultPresent = false;
     if (request.getAttribute("result") != null) {
         result = (String) request.getAttribute("result");
+        resultPresent = true;
     }
 
     /* Prendo il parametro "customer" che indica i dati del cliente da mostrare nella form  */

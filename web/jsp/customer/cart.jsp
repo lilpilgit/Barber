@@ -18,6 +18,14 @@
         loggedUser = (User) request.getAttribute("loggedUser");
     }
 
+    /* Prendo il parametro "result" per conoscere il risultato delle operazioni possibili nella pagina del carrello */
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");

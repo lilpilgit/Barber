@@ -26,7 +26,6 @@ public class Cart {
         DAOFactory daoFactory = null; //per il db
         UserDAO userDAO = null;
         User loggedUser = null;
-        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean cookieValid = true;
 
         try {

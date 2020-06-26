@@ -227,7 +227,15 @@ public class Home {
         System.err.println("loggedUser=> " + loggedUser);
         /* 3) Application messagge da mostrare all'utente */
         request.setAttribute("applicationMessage", applicationMessage);
-        /* 4) Setto quale view devo mostrare */
+        /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+        if (loggedUser != null) {
+            /* SUCCESS */
+            request.setAttribute("result", "success");
+        } else {
+            /* FAIL */
+            request.setAttribute("result", "fail");
+        }
+        /* 5) Setto quale view devo mostrare */
         request.setAttribute("viewUrl", "common/home");
         /* Chiamo il metodo del controller che si occupa di settare i dati necessari a visualizzare la giornata lavorativa dell'impiegato */
         if(viewEmployee){

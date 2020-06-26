@@ -27,7 +27,6 @@ public class Shop {
         UserDAO userDAO = null;
         User loggedUser = null;
         ArrayList<Product> products = null; /* prodotti fetchati dal db da mostrare nella pagina shop */
-        String applicationMessage = null;
         ArrayList<String> categories = null; /*categorie da mostrare nel dropdown del filtro */
         ArrayList<String> brands = null; /*produttori da mostrare nel dropdown del filtro */
         String categoryToFilter = "All"; /* voce predefinita nel filtro delle categorie */
@@ -127,7 +126,6 @@ public class Shop {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
-                applicationMessage = "Error during load shop.";
 
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
@@ -152,19 +150,17 @@ public class Shop {
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             System.err.println("loggedUser=> " + loggedUser);
-            /* 3) Application message da mostrare all'utente */
-            request.setAttribute("applicationMessage", applicationMessage);
-            /* 4) Setto quale view devo mostrare */
+            /* 3) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "common/shop");
-            /* 5) Setto la lista dei prodotti da mostrare */
+            /* 4) Setto la lista dei prodotti da mostrare */
             request.setAttribute("products", products);
-            /* 6) Setto la lista delle categorie completa */
+            /* 5) Setto la lista delle categorie completa */
             request.setAttribute("categories", categories);
-            /* 7) Setto la lista dei brand completa */
+            /* 6) Setto la lista dei brand completa */
             request.setAttribute("brands", brands);
-            /* 8) Setto il brand che era stato selezionato per poterlo mostrare nella pagina filtrata all'interno del dropdown */
+            /* 7) Setto il brand che era stato selezionato per poterlo mostrare nella pagina filtrata all'interno del dropdown */
             request.setAttribute("brandFiltered", brandToFilter);
-            /* 9) Setto la categoria che era stata selezionata per poterla mostrare nella pagina filtrata all'interno del dropdown */
+            /* 8) Setto la categoria che era stata selezionata per poterla mostrare nella pagina filtrata all'interno del dropdown */
             request.setAttribute("categoryFiltered", categoryToFilter);
         }
 

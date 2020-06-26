@@ -16,6 +16,23 @@ function showMessage(msg) {
     $('#appMessage').modal("show");
 }
 
+function showResult(result, message) {
+    /**
+     * show modal with message returned from server
+     */
+    if (result === 'success') {
+        document.getElementById("applicationMessage").style.backgroundColor = "rgba(43,226,125,0.48)";
+        document.getElementById("spanMessage").innerHTML = "";
+        document.getElementById('spanMessage').innerHTML = message;
+        $('#appMessage').modal("show");
+    } else if (result === 'fail') {
+        document.getElementById("applicationMessage").style.backgroundColor = "rgba(232,91,91,0.48)";
+        document.getElementById("spanMessage").innerHTML = "";
+        document.getElementById('spanMessage').innerHTML = message;
+        $('#appMessage').modal("show");
+    }
+}
+
 function toUpperCase(element) {
     /**
      * set the value of input selected  by ID to upperCase
@@ -101,16 +118,16 @@ function setSelectedAttribute(id_select, valueFromDb, deselect = false) {
     }
 }
 
-function showResult(result, message) {
-    /**
-     * show alert with message returned from server
-     */
-    if (result === 'success')
-        alert(message);
-    else if (result === 'fail')
-        alert(message)
-
-}
+// function showResult(result, message) {
+//     /**
+//      * show alert with message returned from server
+//      */
+//     if (result === 'success')
+//         alert(message);
+//     else if (result === 'fail')
+//         alert(message)
+//
+// }
 
 function addProductToCart(id) {
     /**

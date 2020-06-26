@@ -30,7 +30,7 @@
         <%}%>
         setCurrentDate('currentDate');
         <%if(resultPresent){%>
-        showResult("<%=result%>", "<%=applicationMessage%>");
+        showResult('<%=result%>', '<%=applicationMessage%>');
         <%}%>
     });
 </script>

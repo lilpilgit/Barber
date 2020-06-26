@@ -32,7 +32,6 @@ public class Checkout {
         ArrayList<ExtendedProduct> checkoutProducts = new ArrayList<>(); /* prodotti da mostrare nella pagina di checkout */
         BigDecimal totalPrice = null;
         BigDecimal totalSaved = null;
-        String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean cookieValid = true;
 
         try {

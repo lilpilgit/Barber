@@ -29,6 +29,14 @@
             customer = (User) request.getAttribute("customer");
         }
     }
+    /* Prendo il parametro "result" che si occupa di indicarmi se l'invio del messaggio è andato a buon fine o meno*/
+    String result = null;
+    boolean resultPresent = false;
+    if (request.getAttribute("result") != null) {
+        result = (String) request.getAttribute("result");
+        resultPresent = true;
+    }
+
 
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di invio messaggio ( se è andata a buon fine o meno) */
@@ -57,12 +65,12 @@
     <img src="img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
     <div class="text">CONTACT US!</div>
 </div>
-<%if (contacted) {%>
+<%if (resultPresent && result.equals("success")) {%>
 <div class="alert alert-success alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Sent! </strong><%="\n" + applicationMessage%>
 </div>
-<%} else if( applicationMessage != null ) {%>
+<%} else if (resultPresent && result.equals("fail")) {%>
 <div class="alert alert-danger alert-dismissible my-alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error! </strong><%="\n" + applicationMessage%>

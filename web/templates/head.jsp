@@ -28,7 +28,7 @@
         setButtonActive("<%=idBtnAttivo%>");
         <%}%>
         <%if(applicationMessage != null) {%>
-        showMessage('<%=applicationMessage%>');
+        showResult('<%=result%>','<%=applicationMessage%>');
         <%}%>
     }
 </script>

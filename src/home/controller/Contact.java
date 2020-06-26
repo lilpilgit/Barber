@@ -227,6 +227,14 @@ public class Contact {
             if(loggedUser != null){
                 request.setAttribute("customer",customer);
             }
+            /* 7) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
+            if (contacted) {
+                /* SUCCESS */
+                request.setAttribute("result", "success");
+            } else {
+                /* FAIL */
+                request.setAttribute("result", "fail");
+            }
         }
     }
 
