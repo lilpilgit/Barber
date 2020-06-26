@@ -3,6 +3,7 @@ package model.mo;
 public class ExtendedProduct extends Product {
     private Integer requiredQuantity;
     private boolean inWishlist;
+    private boolean inCart;
 
     public ExtendedProduct(Product product){
         this.setName(product.getName());
@@ -29,6 +30,7 @@ public class ExtendedProduct extends Product {
         return "ExtendedProduct{" +
                 "requiredQuantity=" + requiredQuantity +
                 ", inWishlist=" + inWishlist +
+                ", inCart=" + inCart +
                 "} " + super.toString();
     }
 
@@ -42,6 +44,10 @@ public class ExtendedProduct extends Product {
 
     public boolean isInWishlist() {
         return inWishlist;
+    }
+
+    public boolean isInCart() {
+        return isInCart();
     }
 
     public void setInWishlist(boolean inWishlist) {
