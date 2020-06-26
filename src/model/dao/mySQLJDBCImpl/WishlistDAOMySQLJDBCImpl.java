@@ -1,7 +1,7 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.WishlistDAO;
-import model.mo.Product;
+import model.mo.ExtendedProduct;
 import model.mo.User;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
     }
 
     @Override
-    public ArrayList<Product> fetchWishlist(User user) throws UnsupportedOperationException {
+    public ArrayList<ExtendedProduct> fetchWishlist(User user) throws UnsupportedOperationException {
         /**
          * Fetch ArrayList<Product> that is Wishlist of user passed as parameter.
          *
@@ -35,12 +35,26 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
         if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile caricare la wishlist di un utente che non è cliente. Errore con l'utente con id{" + user.getId() + "}.");
 
-        ArrayList<Product> wishlist = new ArrayList<>();
-        /* Seleziono i prodotti presenti nella wishlist dell'utente passato come parametro */
+        ArrayList<ExtendedProduct> wishlist = new ArrayList<>();
+        /* Seleziono i prodotti presenti nella wishlist dell'utente passato come parametro e verifico se questi sono o meno presenti nel carrello */
         query =
-                "SELECT ID, PRODUCER, PRICE, DISCOUNT, NAME, PIC_NAME, DESCRIPTION, MAX_ORDER_QTY, CATEGORY "
-                        + "FROM WISHLIST W INNER JOIN PRODUCT P ON W.ID_PRODUCT = P.ID "
-                        + "WHERE W.ID_CUSTOMER = ? AND P.DELETED = 0;";
+                "SELECT ID," +
+                        "       PRODUCER," +
+                        "       PRICE," +
+                        "       DISCOUNT," +
+                        "       NAME," +
+                        "       PIC_NAME," +
+                        "       DESCRIPTION," +
+                        "       MAX_ORDER_QTY," +
+                        "       CATEGORY," +
+                        "       IF(EXISTS(SELECT C.ID_PRODUCT" +
+                        "                 FROM CART C" +
+                        "                 WHERE C.ID_CUSTOMER = W.ID_CUSTOMER" +
+                        "                   AND C.ID_PRODUCT = W.ID_PRODUCT), TRUE, FALSE) IN_CART " +
+                        "FROM WISHLIST W" +
+                        "         INNER JOIN PRODUCT P ON W.ID_PRODUCT = P.ID " +
+                        "WHERE W.ID_CUSTOMER = ?" +
+                        "  AND P.DELETED = 0;";
         try {
             int i = 1;
             ps = connection.prepareStatement(query);
@@ -235,74 +249,79 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
 
     }
 
-    private Product readWishlist(ResultSet rs) {
+    private ExtendedProduct readWishlist(ResultSet rs) {
         /**
-         * Read a Product attributes
+         * Read a ExtendedProduct attributes for wishlist
          *
-         * @return Product object read from result set.
+         * @return ExtendedProduct object read from result set.
          */
 
-        Product product = new Product();
+        ExtendedProduct extendedProduct = new ExtendedProduct();
 
         try {
-            product.setId(rs.getLong("ID"));
+            extendedProduct.setId(rs.getLong("ID"));
         } catch (
                 SQLException e) {
-            System.err.println("Errore nella product.setId(rs.getLong(\"ID\"));");
+            System.err.println("Errore nella extendedProduct.setId(rs.getLong(\"ID\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setProducer(rs.getString("PRODUCER"));
+            extendedProduct.setProducer(rs.getString("PRODUCER"));
         } catch (
                 SQLException e) {
-            System.err.println("Errore nella product.setProducer(rs.getString(\"PRODUCER\"));");
+            System.err.println("Errore nella extendedProduct.setProducer(rs.getString(\"PRODUCER\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setPrice(rs.getBigDecimal("PRICE"));
+            extendedProduct.setPrice(rs.getBigDecimal("PRICE"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setPrice(rs.getBigDecimal(\"PRICE\"));");
+            System.err.println("Errore nella extendedProduct.setPrice(rs.getBigDecimal(\"PRICE\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setDiscount(rs.getInt("DISCOUNT"));
+            extendedProduct.setDiscount(rs.getInt("DISCOUNT"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setDiscount(rs.getInt(\"DISCOUNT\"));");
+            System.err.println("Errore nella extendedProduct.setDiscount(rs.getInt(\"DISCOUNT\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setName(rs.getString("NAME"));
+            extendedProduct.setName(rs.getString("NAME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setName(rs.getString(\"NAME\"));");
+            System.err.println("Errore nella extendedProduct.setName(rs.getString(\"NAME\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setPictureName(rs.getString("PIC_NAME"));
+            extendedProduct.setPictureName(rs.getString("PIC_NAME"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setPictureName(rs.getString(\"PIC_NAME\"));");
+            System.err.println("Errore nella extendedProduct.setPictureName(rs.getString(\"PIC_NAME\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setDescription(rs.getString("DESCRIPTION"));
+            extendedProduct.setDescription(rs.getString("DESCRIPTION"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setDescription(rs.getString(\"DESCRIPTION\"));");
+            System.err.println("Errore nella extendedProduct.setDescription(rs.getString(\"DESCRIPTION\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setCategory(rs.getString("CATEGORY"));
+            extendedProduct.setCategory(rs.getString("CATEGORY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setCategory(rs.getString(\"CATEGORY\"));");
+            System.err.println("Errore nella extendedProduct.setCategory(rs.getString(\"CATEGORY\"));");
             throw new RuntimeException(e);
         }
         try {
-            product.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
+            extendedProduct.setMaxOrderQuantity(rs.getInt("MAX_ORDER_QTY"));
         } catch (SQLException e) {
-            System.err.println("Errore nella product.setMaxOrderQuantity(rs.getInt(\"MAX_ORDER_QTY\"));");
+            System.err.println("Errore nella extendedProduct.setMaxOrderQuantity(rs.getInt(\"MAX_ORDER_QTY\"));");
+            throw new RuntimeException(e);
+        }
+        try {
+            extendedProduct.setInCart(rs.getBoolean("IN_CART"));
+        } catch (SQLException e) {
+            System.err.println("Errore nella extendedProduct.setInCart(rs.getBoolean(\"IN_CART\"));");
             throw new RuntimeException(e);
         }
 
-
-        return product;
+        return extendedProduct;
     }
 
 

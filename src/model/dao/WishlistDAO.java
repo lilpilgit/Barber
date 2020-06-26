@@ -1,14 +1,13 @@
 package model.dao;
 
 import model.mo.ExtendedProduct;
-import model.mo.Product;
 import model.mo.User;
 
 import java.util.ArrayList;
 
 public interface WishlistDAO {
 
-    ArrayList<Product> fetchWishlist(User user);
+    ArrayList<ExtendedProduct> fetchWishlist(User user);
 
     boolean inWishlist(User user,Long idProduct) throws UnsupportedOperationException;
 

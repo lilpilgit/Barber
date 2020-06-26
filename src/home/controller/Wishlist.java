@@ -3,6 +3,7 @@ package home.controller;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
 import model.dao.WishlistDAO;
+import model.mo.ExtendedProduct;
 import model.mo.Product;
 import model.mo.User;
 import services.config.Configuration;
@@ -442,7 +443,7 @@ public class Wishlist {
 
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 
-        ArrayList<Product> wishlist = null; //il carrello da passare alla jsp
+        ArrayList<ExtendedProduct> wishlist = null; //il carrello da passare alla jsp
         UserDAO userDAO = daoFactory.getUserDAO();
         WishlistDAO wishlistDAO = daoFactory.getWishlistDAO();
         User user = null;
@@ -451,6 +452,8 @@ public class Wishlist {
 
         /* setto l'oggetto wishlist all'interno dell'oggetto utente */
         wishlist = wishlistDAO.fetchWishlist(user);
+
+        System.err.println("WISHLISTTTTTTTTTTTTTTT " + wishlist);
 
         /* Setto la wishlist da mostrare nella pagina della wishlist dell'utente loggato */
         request.setAttribute("wishlist", wishlist);

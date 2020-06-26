@@ -47,7 +47,7 @@ public class ExtendedProduct extends Product {
     }
 
     public boolean isInCart() {
-        return isInCart();
+        return inCart;
     }
 
     public void setInWishlist(boolean inWishlist) {

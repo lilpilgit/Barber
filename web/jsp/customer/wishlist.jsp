@@ -2,6 +2,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
+<%@ page import="model.mo.ExtendedProduct" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -23,9 +24,9 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    ArrayList<Product> wishlist = null;
+    ArrayList<ExtendedProduct> wishlist = null;
     if (request.getAttribute("wishlist") != null) {
-        wishlist = (ArrayList<Product>) request.getAttribute("wishlist");
+        wishlist = (ArrayList<ExtendedProduct>) request.getAttribute("wishlist");
     }
 
     /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
@@ -67,25 +68,25 @@
             </thead>
             <tbody>
             <%
-                for (Product p : wishlist) {%>
+                for (ExtendedProduct ep: wishlist) {%>
             <tr>
                 <td>
                     <div class="media">
                         <div class="cart-img text-center">
-                            <div class="img-wrap"><img src="img/products/<%=p.getPictureName()%>"
+                            <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
                                                        class="img-thumbnail img-sm"></div></div>
                         <figcaption class="media-body">
-                            <h6 class="title text-truncate"><%=p.getName()%>
+                            <h6 class="title text-truncate"><%=ep.getName()%>
                             </h6>
                             <dl class="param param-inline small">
                                 <dt>Producer:</dt>
-                                <dd><%=p.getProducer()%>
+                                <dd><%=ep.getProducer()%>
                                 </dd>
                             </dl>
-                            <%if (p.getDiscount() != null && p.getDiscount() != 0) {%>
+                            <%if (ep.getDiscount() != null && ep.getDiscount() != 0) {%>
                             <dl class="param param-inline small">
                                 <dt>Discount:</dt>
-                                <dd><%=p.getDiscount()%>%<i class="fas fa-piggy-bank"></i></dd>
+                                <dd><%=ep.getDiscount()%>%<i class="fas fa-piggy-bank"></i></dd>
                             </dl>
                             <%}%>
                         </figcaption>
@@ -93,9 +94,9 @@
                 </td>
                 <td>
                     <%
-                        if (p.getDiscount() != null && p.getDiscount() != 0) {
-                            BigDecimal saved = p.getPrice().multiply(BigDecimal.valueOf(p.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
-                            BigDecimal discountedPrice = p.getPrice().subtract(saved);
+                        if (ep.getDiscount() != null && ep.getDiscount() != 0) {
+                            BigDecimal saved = ep.getPrice().multiply(BigDecimal.valueOf(ep.getDiscount()).divide((BigDecimal.valueOf(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
+                            BigDecimal discountedPrice = ep.getPrice().subtract(saved);
                     %>
                     <div class="price-wrap">
                         <var class="price"><%=discountedPrice%>
@@ -105,19 +106,20 @@
                     <%
                     } else {%>
                     <div class="price-wrap">
-                        <var class="price"><%=p.getPrice()%>
+                        <var class="price"><%=ep.getPrice()%>
                         </var>
                         <small class="text-muted">(each)</small>
                     </div> <!-- price-wrap .// -->
                     <%}%>
                 </td>
                 <td class="text-right">
-                    <button class="btn btn-outline-gold" title="Add to cart"
+                    <button class="btn <%=(ep.isInCart()) ? "btn-gold-active" : "btn-outline-gold"%>"
+                            title="<%=(ep.isInCart()) ? "Remove from cart" : "Add to cart"%>"
                             data-toggle="tooltip"
                             data-original-title="Save to Cart"
-                            onclick="addProductToCart(<%=p.getId()%>)">
+                            onclick="<%=(ep.isInCart()) ? "removeProductFromCart(" : "addProductToCart("%><%=ep.getId() + ");"%>">
                         <i class="fas fa-shopping-basket"></i></button>
-                    <button class="btn btn-outline-danger" onclick="removeProductFromWishlist(<%=p.getId()%>)"> × Remove
+                    <button class="btn btn-outline-danger" onclick="removeProductFromWishlist(<%=ep.getId()%>)"> × Remove
                     </button>
                 </td>
             </tr>
