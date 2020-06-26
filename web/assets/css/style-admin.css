@@ -726,7 +726,8 @@ button.button6:active {
 }
 
 .table td, .table th {
-    vertical-align: middle; !important;
+    vertical-align: middle;
+    padding: 0.4rem !important;
 }
 
 
