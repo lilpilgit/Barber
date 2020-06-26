@@ -343,14 +343,14 @@
 
                                 <div class="row justify-content-center">
                                     <div class="md-form form-sm col-5 text-center">
-                                        <input type="text" class="form-control" name="city" id="City" required
+                                        <input type="text" class="form-control" name="city" id="City" maxlength="30" required
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> City
                                         </label>
                                     </div>
                                     <div class="md-form form-sm col-5 text-center">
-                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                                        <input type="number" class="form-control" name="cap" id="Cap" maxlength="8" required min="0"
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
                                             <i class="fas fa-map-marker-alt"></i> Postal Code
@@ -359,7 +359,7 @@
                                 </div>
                                 <div class="row justify-content-center">
                                     <div class="md-form form-sm col-5 text-center">
-                                        <input type="text" class="form-control" name="street" id="Street" required
+                                        <input type="text" class="form-control" name="street" id="Street" maxlength="30" required
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">
                                             <i class="fas fa-map-marker-alt"></i> Street
@@ -367,7 +367,7 @@
                                     </div>
                                     <div class="md-form form-sm col-5 text-center">
                                         <input type="number" class="form-control" name="house_number" id="House-number"
-                                               min="0">
+                                               min="0" max="99999">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
                                             <i class="fas fa-map-marker-alt"></i> House Number
                                         </label>
