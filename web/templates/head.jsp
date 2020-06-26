@@ -25,10 +25,9 @@
 <script>
     window.onload = function f() {
         <%if(idBtnAttivo != null) {%>
-        setButtonActive("<%=idBtnAttivo%>");
+        setButtonActive('<%=idBtnAttivo%>');
         <%}%>
         <%if(resultPresent && applicationMessage != null) {%>
-        console.log("RESULT PRESENT ==> " + <%=resultPresent%>)
         showResult('<%=result%>','<%=applicationMessage%>');
         <%}%>
     }

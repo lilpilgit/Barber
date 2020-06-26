@@ -6,16 +6,6 @@ function setButtonActive(id) {
     button2active.classList.add("active2");
 }
 
-function showMessage(msg) {
-    /**
-     * Show message with simple modal
-     */
-    /* Before print, I clean! */
-    document.getElementById("spanMessage").innerHTML = "";
-    document.getElementById('spanMessage').innerHTML = msg;
-    $('#appMessage').modal("show");
-}
-
 function showResult(result, message) {
     /**
      * show modal with message returned from server
@@ -263,7 +253,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     max_qta = parseInt(max_qta);
     let qta_field = document.getElementById(id_qta);
     let qta_field_value = parseInt(qta_field.value);
-    let result = "fail";
+    let result = 'fail';
     let allowAJAX = false; /* mi consente di sapere se posso usare AJAX */
     let xhttp = new XMLHttpRequest();
 
@@ -272,7 +262,6 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     } else if (operation === 'decrease' && qta_field_value !== 1) {
         allowAJAX = true;
     } else {
-        /* showMessage("CHIAMATO SENZA PARAMETRO operation OPPURE non rispetti i range!!"); */
         allowAJAX = false;
     }
     if (allowAJAX) {
@@ -290,10 +279,10 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                     }
                     /* devo ricalcolare prezzo totale e risparmio totale solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
-                } else if (result === "fail") {
-                    showMessage("The quantity could not be changed!");
+                } else if (result === 'fail') {
+                    showResult('fail',"The quantity could not be changed!");
                 } else {
-                    showMessage("ERROR ON BACKEND!");
+                    showResult('fail',"ERROR ON BACKEND!");
                 }
             }
 
@@ -351,9 +340,9 @@ function findSlot(idStructure, pickedDate) {
                 if (obj.availableTimes.length === 0)
                     addOption("Change date :(");
 
-            } else if (obj.result === "fail") {
-                showMessage("ERRORE NEL BACKEND!!");
-            } else showMessage("Valore di result sconosciuto nel JSON");
+            } else if (obj.result === 'fail') {
+                showResult('fail',"ERRORE NEL BACKEND!!");
+            } else showResult('fail',"Valore di result sconosciuto nel JSON");
         }
     };
 
@@ -371,7 +360,7 @@ function findBooking(idCustomer) {
      * @type {string}
      */
 
-    let result = "fail";
+    let result = 'fail';
     let obj = null;
     let time = null;
     let deletedReason = "";
@@ -429,9 +418,9 @@ function findBooking(idCustomer) {
                         bookTableResult.remove();
                     }
                 }
-            } else if (obj.result === "fail") {
-                showMessage("ERRORE NEL BACKEND!!");
-            } else showMessage("Valore di result sconosciuto nel JSON");
+            } else if (obj.result === 'fail') {
+                showResult('fail',"ERRORE NEL BACKEND!!");
+            } else showResult('fail',"Valore di result sconosciuto nel JSON");
         }
     };
 
@@ -464,13 +453,13 @@ function bookNow(loggedUserId, selectedTime, selectedDate) {
             form.submit();
         } else {
             /* Nel caso l'ora per cui si vuole prenotare sia gia' opa */
-            showMessage("The time you chose has already passed!\n" +
+            showResult('fail',"The time you chose has already passed!\n" +
                 "The page will be reloaded automatically with the new updated data.");
-            window.setTimeout("setNavFormHome('home.Book.showBook')", 3000);
+            window.setTimeout("setNavFormHome('home.Book.showBook')", 3000); /* necessario per evitare il refresh veloce della pagina */
         }
     } else if (time === "Change date :(") {
         /* Qualora venisse cliccato su Book now! e non ci fossero orari disponibili, mando un alert */
-        showMessage("There are no appointments available on this date :(\n" + "Please try to change the date.");
+        showResult('fail',"There are no appointments available on this date :(\n" + "Please try to change the date.");
     }
 }
 
@@ -531,7 +520,7 @@ function goToCheckout(nameGroup) {
         }
     })
     if (atLeastOne === false) {
-        showMessage("Select at least one product for checkout.");
+        showResult('fail',"Select at least one product for checkout.");
     } else {
         /* posso procedere al checkout */
         console.log(JSON.stringify(checkOutJson));
