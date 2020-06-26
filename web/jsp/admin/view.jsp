@@ -79,13 +79,13 @@
             <h5>Some statistics about your business ...</h5>
             <hr>
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
             <br><br>
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <canvas id="pieChart"></canvas>
                 </div>
             </div>
