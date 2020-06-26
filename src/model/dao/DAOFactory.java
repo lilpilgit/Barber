@@ -3,7 +3,6 @@ package model.dao;
 import model.dao.CookieImpl.CookieDAOFactory;
 import model.dao.mySQLJDBCImpl.MySQLJDBCDAOFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DAOFactory {
