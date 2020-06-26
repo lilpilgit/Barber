@@ -97,8 +97,11 @@
         drawChartEarnings(<%=StaticFunc.round(statisticsEarnings.getTotEarningsWithoutDiscount(),2)%>, <%=StaticFunc.round(statisticsEarnings.getTotEarningsWithDiscount(),2)%>, <%=StaticFunc.round(statisticsEarnings.getLostGain(),2)%>);
         let labelsHourStart = [
             <%
-                for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {%>
-            "<%=entry.getKey()%>",
+                String[] splittedTime;
+                for (Map.Entry<Time, Integer> entry : totalAppointmentGroupByHourStart.entrySet()) {
+                    splittedTime = entry.getKey().toString().split(":");
+                %>
+            "<%=splittedTime[0] + ":" + splittedTime[1]%>",
             <%}%>
         ];
 
