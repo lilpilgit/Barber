@@ -72,19 +72,19 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-2 mb-1">
                     <label for="Name">Name</label>
-                    <input type="text" name="name" id="Name" required
+                    <input type="text" name="name" id="Name" maxlength="50" required
                            value="<%=(action.equals("modify")) ? productToEdit.getName() : ""%>"
                            class="form-control">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label for="Producer">Producer</label>
-                    <input type="text" name="producer" id="Producer" placeholder="Garnier" required
+                    <input type="text" name="producer" id="Producer" maxlength="30" required
                            value="<%=(action.equals("modify")) ? productToEdit.getProducer() : ""%>"
                            class="form-control">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label for="Category">Category</label>
-                    <input type="text" name="category" id="Category" required
+                    <input type="text" name="category" id="Category" maxlength="50" required
                            value="<%=(action.equals("modify")) ? productToEdit.getCategory() : ""%>"
                            class="form-control">
                 </div>

@@ -65,12 +65,12 @@
             <div class="form-row justify-content-center">
                 <div class="col-sm-2 mb-3">
                     <label for="Name">First name</label>
-                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
+                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" maxlength="30" required
                            value="<%=adminToEdit.getName()%>">
                 </div>
                 <div class="col-sm-2 mb-3">
                     <label for="Surname">Last name</label>
-                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
+                    <input type="text" class="form-control" name="surname" id="Surname" maxlength="30" placeholder="Rossi" required
                            value="<%=adminToEdit.getSurname()%>">
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <div class="col-sm-2">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=adminToEdit.getEmail()%>"
+                           value="<%=adminToEdit.getEmail()%>" maxlength="50"
                            required>
                 </div>
                 <div class="col-sm-2">
@@ -100,7 +100,7 @@
                 <div class="col-sm-2 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
                     <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
-                           required value="<%=adminToEdit.getFiscalCode()%>"
+                           required value="<%=adminToEdit.getFiscalCode()%>" maxlength="16"
                            oninput="toUpperCase(this)">
                 </div>
             </div>
@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-sm-2 mb-3">
                     <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required
+                    <input type="text" class="form-control" name="city" id="City" maxlength="30" required
                            value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
@@ -147,18 +147,18 @@
             <div class="form-row justify-content-center">
                 <div class="col-sm-2 mb-3">
                     <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="8"
                            value="<%=splittedAddress[3]%>">
                 </div>
                 <div class="col-sm-2 mb-3">
                     <label for="Street">Street</label>
-                    <input type="text" class="form-control" name="street" id="Street" required
+                    <input type="text" class="form-control" name="street" id="Street" maxlength="30" required
                            value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-sm-2 mb-3">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
+                    <input type="number" class="form-control" name="house_number" id="House-number"  min="0" max="9999"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>

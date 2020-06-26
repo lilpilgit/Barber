@@ -67,7 +67,7 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-2 mb-3">
                     <label for="Name">Name</label>
-                    <input type="text" name="name" id="Name" required
+                    <input type="text" name="name" id="Name" maxlength="30" required
                            value="<%=structureToEdit.getName()%>"
                            class="form-control">
                 </div>
@@ -138,7 +138,7 @@
                 </div>
                 <div class="col-md-2 mb-3">
                     <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required
+                    <input type="text" class="form-control" name="city" id="City" maxlength="30" required
                            value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
@@ -146,18 +146,18 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-2 mb-3">
                     <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="9999"
                            value="<%=splittedAddress[3]%>">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label for="Street">Street</label>
-                    <input type="text" class="form-control"  name="street" id="Street" required
+                    <input type="text" class="form-control"  name="street" id="Street" maxlength="30" required
                            value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0" max="9999"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>

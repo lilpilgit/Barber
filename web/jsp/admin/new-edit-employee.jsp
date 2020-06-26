@@ -86,19 +86,19 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <label for="Name">Name</label>
-                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required
+                    <input type="text" class="form-control" name="name" id="Name" placeholder="Mario" required maxlength="30"
                            value="<%=(action.equals("modify")) ? employeeToEdit.getName() : ""%>">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Surname">Surname</label>
-                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required
+                    <input type="text" class="form-control" name="surname" id="Surname" placeholder="Rossi" required maxlength="30"
                            value="<%=(action.equals("modify")) ? employeeToEdit.getSurname() : ""%>">
                 </div>
             </div>
             <div class="form-row justify-content-center">
                 <div class="col-md-3">
                     <label for="Email">Email address</label>
-                    <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
+                    <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp" maxlength="50"
                            value="<%=(action.equals("modify")) ? employeeToEdit.getEmail() : ""%>"
                            required>
                     <%if (!action.equals("modify")) {%><small id="emailHelp" class="form-text text-muted">A random
@@ -123,7 +123,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Fiscal-Code">Fiscal Code</label>
-                    <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code"
+                    <input type="text" pattern="[A-Z0-9]{16}" class="form-control" name="fiscal_code" id="Fiscal-Code" maxlength="16"
                            required value="<%=(action.equals("modify")) ? employeeToEdit.getFiscalCode() : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
@@ -163,7 +163,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required
+                    <input type="text" class="form-control" name="city" id="City" maxlength="30" required
                            value="<%=(action.equals("modify")) ? splittedAddress[2] : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
@@ -171,18 +171,18 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="9999"
                            value="<%=(action.equals("modify")) ? splittedAddress[3] : ""%>">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="Street">Street</label>
-                    <input type="text" class="form-control" name="street" id="Street" required
+                    <input type="text" class="form-control" name="street" id="Street" maxlength="30" required
                            value="<%=(action.equals("modify")) ? splittedAddress[4] : ""%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0" max="9999"
                            value="<%=(action.equals("modify") && splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>

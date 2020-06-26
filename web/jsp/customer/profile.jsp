@@ -74,13 +74,12 @@
                 <div class="col-md-3 mb-2">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" name="name" id="Name"
-                           autocapitalize="on"
-                           placeholder="Mario" required
+                           placeholder="Mario" maxlength="30" required
                            value="<%=customer.getName()%>">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Surname">Surname</label>
-                    <input type="text" class="form-control" name="surname" id="Surname"
+                    <input type="text" class="form-control" name="surname" id="Surname" maxlength="30"
                            style="text-transform: capitalize;" placeholder="Rossi" required
                            value="<%=customer.getSurname()%>">
                 </div>
@@ -89,7 +88,7 @@
                 <div class="col-md-3">
                     <label for="Email">Email address</label>
                     <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                           value="<%=customer.getEmail()%>" style="text-transform: lowercase;"
+                           maxlength="50" value="<%=customer.getEmail()%>" style="text-transform: lowercase;"
                            required>
                 </div>
                 <div class="col-md-3">
@@ -137,7 +136,7 @@
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="City">City</label>
-                    <input type="text" class="form-control" name="city" id="City" required
+                    <input type="text" class="form-control" name="city" id="City" required maxlength="30"
                            value="<%=splittedAddress[2]%>"
                            oninput="toUpperCase(this)">
                 </div>
@@ -145,18 +144,18 @@
             <div class="form-row justify-content-center">
                 <div class="col-md-3 mb-2">
                     <label for="Cap">CAP</label>
-                    <input type="number" class="form-control" name="cap" id="Cap" required min="0"
+                    <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="9999"
                            value="<%=splittedAddress[3]%>">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="Street">Street</label>
-                    <input type="text" class="form-control" name="street" id="Street" required
+                    <input type="text" class="form-control" name="street" id="Street" required maxlength="30"
                            value="<%=splittedAddress[4]%>"
                            oninput="toUpperCase(this)">
                 </div>
                 <div class="col-md-3 mb-2">
                     <label for="House-number">House number</label>
-                    <input type="number" class="form-control" name="house_number" id="House-number" min="0"
+                    <input type="number" class="form-control" name="house_number" id="House-number" min="0" max="9999"
                            value="<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>">
                 </div>
             </div>
