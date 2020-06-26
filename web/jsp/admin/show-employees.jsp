@@ -94,59 +94,61 @@
 
         <div class="row justify-content-center">
             <div class="col-auto">
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Surname</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        int i = 1; /* contatore per il numero di impiegati */
-
-                        for (User e : employees) {
-                    %>
-                    <tr>
-                        <th scope="row"><%=i++%>
-                        </th>
-                        <td><%=e.getId()%>
-                        </td>
-                        <td><%=e.getSurname()%>
-                        </td>
-                        <td><%=e.getName()%>
-                        </td>
-                        <td><%=e.getPhone()%>
-                        </td>
-                        <td><%=e.getEmail()%>
-                        </td>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         <%
-                            String employeeAddressFormatted = e.getAddress().replace('|', ',');
-                            employeeAddressFormatted = employeeAddressFormatted.substring(0, employeeAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                            int i = 1; /* contatore per il numero di impiegati */
+
+                            for (User e : employees) {
                         %>
-                        <td><%=employeeAddressFormatted%>
-                        </td>
-                        <td>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
-                                    onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
-                            </button>
-                            <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=subject%>"
-                                    data-toggle="modal"
-                                    onclick="setTmpId(<%=e.getId()%>,'tmpIdDel');">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+                        <tr>
+                            <th scope="row"><%=i++%>
+                            </th>
+                            <td><%=e.getId()%>
+                            </td>
+                            <td><%=e.getSurname()%>
+                            </td>
+                            <td><%=e.getName()%>
+                            </td>
+                            <td><%=e.getPhone()%>
+                            </td>
+                            <td><%=e.getEmail()%>
+                            </td>
+                            <%
+                                String employeeAddressFormatted = e.getAddress().replace('|', ',');
+                                employeeAddressFormatted = employeeAddressFormatted.substring(0, employeeAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                            %>
+                            <td><%=employeeAddressFormatted%>
+                            </td>
+                            <td>
+                                <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
+                                        onclick="editEmployee(<%=e.getId()%>)"><i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button type="button" class="trashbutton" title="Delete"
+                                        data-target="#alert<%=subject%>"
+                                        data-toggle="modal"
+                                        onclick="setTmpId(<%=e.getId()%>,'tmpIdDel');">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
                 <%} else {%>
                 <div class="row justify-content-center">
                     <h1>No employee to show.</h1>

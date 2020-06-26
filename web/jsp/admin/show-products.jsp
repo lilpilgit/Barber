@@ -93,66 +93,68 @@
 
         <div class="row justify-content-center">
             <div class="col-auto">
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col" title="Maximum Order Quantity for each Order">M.O.Q</th>
-                        <th scope="col">Producer</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Discount</th>
-                        <th scope="col">Insert Date</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        int i = 1; /* contatore per il numero di prodotti */
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col" title="Maximum Order Quantity for each Order">M.O.Q</th>
+                            <th scope="col">Producer</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">Insert Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            int i = 1; /* contatore per il numero di prodotti */
 
-                        for (Product p : products) {
-                    %>
-                    <tr>
-                        <th scope="row"><%=i++%>
-                        </th>
-                        <td><%=p.getId()%>
-                        </td>
-                        <td><%=p.getName()%>
-                        </td>
-                        <td><%=p.getMaxOrderQuantity()%>
-                        </td>
-                        <td><%=p.getProducer()%>
-                        </td>
-                        <td><%=p.getCategory()%>
-                        </td>
-                        <td><%=p.getPrice()%>
-                        </td>
-                        <td><%=p.getDiscount()%>
-                        </td>
-                        <td><%=p.getInsertDate()%>
-                        </td>
-                        <td>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
-                                    title="<%=(p.inShowcase()) ? "Remove from showcase" : "Put in the showcase" %>"
-                                    onclick=showcaseById(<%=p.getId()%>,<%=p.inShowcase()%>)>
-                                <i class="<%=(p.inShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
-                            </button>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
-                                    title="edit product"
-                                    onclick=editProduct(<%=p.getId()%>)>
-                                <i class="fas fa-pencil-alt"></i></button>
-                            <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=subject%>"
-                                    data-toggle="modal"
-                                    onclick=setTmpId(<%=p.getId()%>,'tmpId')>
-                                <i class="far fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+                            for (Product p : products) {
+                        %>
+                        <tr>
+                            <th scope="row"><%=i++%>
+                            </th>
+                            <td><%=p.getId()%>
+                            </td>
+                            <td><%=p.getName()%>
+                            </td>
+                            <td><%=p.getMaxOrderQuantity()%>
+                            </td>
+                            <td><%=p.getProducer()%>
+                            </td>
+                            <td><%=p.getCategory()%>
+                            </td>
+                            <td><%=p.getPrice()%>
+                            </td>
+                            <td><%=p.getDiscount()%>
+                            </td>
+                            <td><%=p.getInsertDate()%>
+                            </td>
+                            <td>
+                                <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                                        title="<%=(p.inShowcase()) ? "Remove from showcase" : "Put in the showcase" %>"
+                                        onclick=showcaseById(<%=p.getId()%>,<%=p.inShowcase()%>)>
+                                    <i class="<%=(p.inShowcase()) ? "far fa-eye checked" : "fas fa-eye-slash unchecked"%>"></i>
+                                </button>
+                                <button type="button" class="tablebutton" style="color: #1ae2dd;" title="Modify"
+                                        title="edit product"
+                                        onclick=editProduct(<%=p.getId()%>)>
+                                    <i class="fas fa-pencil-alt"></i></button>
+                                <button type="button" class="trashbutton" title="Delete"
+                                        data-target="#alert<%=subject%>"
+                                        data-toggle="modal"
+                                        onclick=setTmpId(<%=p.getId()%>,'tmpId')>
+                                    <i class="far fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
                 <%} else {%>
                 <div class="row justify-content-center">
                     <h1>There are no products :(</h1>

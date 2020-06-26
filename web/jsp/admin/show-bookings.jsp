@@ -81,80 +81,82 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <%if (areBookings) {%>
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">Hour Start</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody class="fixedheight">
-                    <%
-                        int i = 1; /* contatore per il numero di impiegati */
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Hour Start</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="fixedheight">
+                        <%
+                            int i = 1; /* contatore per il numero di impiegati */
 
-                        for (Booking b : bookings) {
-                            /*
-                             * flag char per sapere se è stato cancellato dall'admin ==> DELETED 0/FALSE
-                             * o se è stato cancellato dal cliente ==> DELETED 1/TRUE
-                             * Di default lo metto su N che sta per 'da NESSUNO'
-                             */
-                            char isDeletedBy = 'N';
+                            for (Booking b : bookings) {
+                                /*
+                                 * flag char per sapere se è stato cancellato dall'admin ==> DELETED 0/FALSE
+                                 * o se è stato cancellato dal cliente ==> DELETED 1/TRUE
+                                 * Di default lo metto su N che sta per 'da NESSUNO'
+                                 */
+                                char isDeletedBy = 'N';
 
-                            Boolean deletedStatus = b.isDeleted();
-                            String class_color_row = ""; /* di default nessun colore */
-                            String tr = "<tr>"; /* di default è una semplice riga */
-                            String title = "";
+                                Boolean deletedStatus = b.isDeleted();
+                                String class_color_row = ""; /* di default nessun colore */
+                                String tr = "<tr>"; /* di default è una semplice riga */
+                                String title = "";
 
-                            if (deletedStatus != null) {
-                                if (!deletedStatus) /* è false, cancellato dall'admin */ {
-                                    isDeletedBy = 'A';
-                                    class_color_row = "table-danger";
-                                    title = "Posted by you";
-                                    /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
-                                } else /* è true, cancellato dal CLIENTE */ {
-                                    isDeletedBy = 'C';
-                                    class_color_row = "table-warning";
-                                    title = "Posted by the customer";
-                                    /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                if (deletedStatus != null) {
+                                    if (!deletedStatus) /* è false, cancellato dall'admin */ {
+                                        isDeletedBy = 'A';
+                                        class_color_row = "table-danger";
+                                        title = "Posted by you";
+                                        /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                    } else /* è true, cancellato dal CLIENTE */ {
+                                        isDeletedBy = 'C';
+                                        class_color_row = "table-warning";
+                                        title = "Posted by the customer";
+                                        /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
+                                    }
+                                    tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
+
                                 }
-                                tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
 
-                            }
-
-                    %>
-                    <%=tr%>
-                    <th scope="row"><%=i++%>
-                    </th>
-                    <%String[] splittedTime = b.getHourStart().toString().split(":");%>
-                    <td><%=splittedTime[0] + ":" + splittedTime[1]%>
-                    </td>
-                    <td><%=b.getCustomer().getName()%> , <%=b.getCustomer().getSurname()%>
-                    </td>
-                    <td><%=b.getCustomer().getEmail()%>
-                    </td>
-                    <td><%=b.getCustomer().getPhone()%>
-                    </td>
-                    <td>
-                        <%if (isDeletedBy == 'N') {%>
-                        <button type="button" class="trashbutton" title="Delete"
-                                data-target="#alert<%=user%>Delete"
-                                data-toggle="modal"
-                                onclick=setTmpId(<%=b.getId()%>,'tmpIdDel')>
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                        <%} else /* è stato cancellato da qualcuno dunque mostro la deleted reason */ {%>
-                        <i class="far fa-calendar-times"></i>
+                        %>
+                        <%=tr%>
+                        <th scope="row"><%=i++%>
+                        </th>
+                        <%String[] splittedTime = b.getHourStart().toString().split(":");%>
+                        <td><%=splittedTime[0] + ":" + splittedTime[1]%>
+                        </td>
+                        <td><%=b.getCustomer().getName()%> , <%=b.getCustomer().getSurname()%>
+                        </td>
+                        <td><%=b.getCustomer().getEmail()%>
+                        </td>
+                        <td><%=b.getCustomer().getPhone()%>
+                        </td>
+                        <td>
+                            <%if (isDeletedBy == 'N') {%>
+                            <button type="button" class="trashbutton" title="Delete"
+                                    data-target="#alert<%=user%>Delete"
+                                    data-toggle="modal"
+                                    onclick=setTmpId(<%=b.getId()%>,'tmpIdDel')>
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                            <%} else /* è stato cancellato da qualcuno dunque mostro la deleted reason */ {%>
+                            <i class="far fa-calendar-times"></i>
+                            <%}%>
+                            <%--                            <i class="fas fa-info-circle"></i>--%>
+                        </td>
+                        </tr>
                         <%}%>
-                        <%--                            <i class="fas fa-info-circle"></i>--%>
-                    </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
                 <%} else {%>
                 <h1>There are no bookings :(</h1>
                 <%}%>

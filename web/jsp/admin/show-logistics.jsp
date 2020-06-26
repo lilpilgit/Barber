@@ -74,75 +74,77 @@
         <div class="row justify-content-center">
             <% if (areOrders) { %>
             <div class="col-auto">
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Customer Email</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Customer Phone</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody class="fixedheight">
-                    <%
-                        int i = 1; /* contatore per il numero di ordini */
-                        String popoverSellDate = "";
-                        /*if (areOrders) {*/
-                        for (Order l : logisticOrders) {
-                            int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
-                            boolean canceled = false; /* flag per sapere se è cancellato */
-                            boolean delivered = false; /* flag per sapere se è stato consegnato dunque ordine completato */
-                            if (l.getStatus().equals(StaticFunc.NOTHING_NEW)) {
-                                valueStatus = 0;
-                            } else if (l.getStatus().equals(StaticFunc.PROCESSING)) {
-                                valueStatus = 25;
-                            } else if (l.getStatus().equals(StaticFunc.SENT)) {
-                                valueStatus = 50;
-                            } else if (l.getStatus().equals(StaticFunc.DELIVERING)) {
-                                valueStatus = 75;
-                            } else if (l.getStatus().equals(StaticFunc.DELIVERED)) {
-                                valueStatus = 100;
-                                delivered = true;
-                                System.out.println("l.getSellDate() ==> " + l.getSellDate());
-                                popoverSellDate = "data-toggle='popover' data-trigger='hover' title='Sell Date' data-content='" + l.getSellDate() + "'";
-                            } else if (l.getStatus().equals(StaticFunc.CANCELED)) {
-                                valueStatus = -1;
-                                canceled = true;
-                            }
-                    %>
-                    <tr class="<%=(canceled) ? "table-danger" : (delivered) ? "table-success" : ""%>" <%=(delivered) ? popoverSellDate : ""%>>
-                        <th scope="row"><%=i++%>
-                        </th>
-                        <td><%=l.getId()%>
-                        </td>
-                        <td><%=l.getCustomer().getEmail()%>
-                        </td>
-                        <td><%=l.getCustomer().getName()%> , <%=l.getCustomer().getSurname()%>
-                        </td>
-                        <td><%=l.getCustomer().getPhone()%>
-                        </td>
-                        <td><%=l.getStatus()%>
-                        </td>
-                        <td><%if (canceled) {%>
-                            <i class="fas fa-times-circle" title="Order deleted"></i>
-                            <%} else if (delivered) {%>
-                            <i class="fas fa-clipboard-check" title="Order delivered"></i>
-                            <%} else {%>
-                            <button type="button" class="tablebutton" style="color: #1ae2dd;"
-                                    data-target="#alertSetStatusOrder"
-                                    data-toggle="modal"
-                                    onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');setRadiosStatusOrder(<%=valueStatus%>)">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                            <%}%>
-                        </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Customer Email</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer Phone</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="fixedheight">
+                        <%
+                            int i = 1; /* contatore per il numero di ordini */
+                            String popoverSellDate = "";
+                            /*if (areOrders) {*/
+                            for (Order l : logisticOrders) {
+                                int valueStatus = 0; /* valore intero corrispondente all'attuale status tra i valori 0/25/50/75/100/-1*/
+                                boolean canceled = false; /* flag per sapere se è cancellato */
+                                boolean delivered = false; /* flag per sapere se è stato consegnato dunque ordine completato */
+                                if (l.getStatus().equals(StaticFunc.NOTHING_NEW)) {
+                                    valueStatus = 0;
+                                } else if (l.getStatus().equals(StaticFunc.PROCESSING)) {
+                                    valueStatus = 25;
+                                } else if (l.getStatus().equals(StaticFunc.SENT)) {
+                                    valueStatus = 50;
+                                } else if (l.getStatus().equals(StaticFunc.DELIVERING)) {
+                                    valueStatus = 75;
+                                } else if (l.getStatus().equals(StaticFunc.DELIVERED)) {
+                                    valueStatus = 100;
+                                    delivered = true;
+                                    System.out.println("l.getSellDate() ==> " + l.getSellDate());
+                                    popoverSellDate = "data-toggle='popover' data-trigger='hover' title='Sell Date' data-content='" + l.getSellDate() + "'";
+                                } else if (l.getStatus().equals(StaticFunc.CANCELED)) {
+                                    valueStatus = -1;
+                                    canceled = true;
+                                }
+                        %>
+                        <tr class="<%=(canceled) ? "table-danger" : (delivered) ? "table-success" : ""%>" <%=(delivered) ? popoverSellDate : ""%>>
+                            <th scope="row"><%=i++%>
+                            </th>
+                            <td><%=l.getId()%>
+                            </td>
+                            <td><%=l.getCustomer().getEmail()%>
+                            </td>
+                            <td><%=l.getCustomer().getName()%> , <%=l.getCustomer().getSurname()%>
+                            </td>
+                            <td><%=l.getCustomer().getPhone()%>
+                            </td>
+                            <td><%=l.getStatus()%>
+                            </td>
+                            <td><%if (canceled) {%>
+                                <i class="fas fa-times-circle" title="Order deleted"></i>
+                                <%} else if (delivered) {%>
+                                <i class="fas fa-clipboard-check" title="Order delivered"></i>
+                                <%} else {%>
+                                <button type="button" class="tablebutton" style="color: #1ae2dd;"
+                                        data-target="#alertSetStatusOrder"
+                                        data-toggle="modal"
+                                        onclick="setTmpId(<%=l.getId()%>,'tmpIdStatus');setRadiosStatusOrder(<%=valueStatus%>)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <%}%>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="container text-center">
@@ -151,11 +153,14 @@
             <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',1);">First Page</a>
             <%}%>
             <%if (currentPage > 1) {%>
-            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=previousPage%>);"><i class="fas fa-arrow-left"></i></a>
+            <a class="btn btn-dark" href="#" role="button"
+               onclick="showParticularPage('page_action',<%=previousPage%>);"><i class="fas fa-arrow-left"></i></a>
             <%}%>
             <%if (currentPage < totalNumberOfPages) {%>
-            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=nextPage%>);"><i class="fas fa-arrow-right"></i></a>
-            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=totalNumberOfPages%>)">Last&rsaquo;&rsaquo;</a>
+            <a class="btn btn-dark" href="#" role="button" onclick="showParticularPage('page_action',<%=nextPage%>);"><i
+                    class="fas fa-arrow-right"></i></a>
+            <a class="btn btn-dark" href="#" role="button"
+               onclick="showParticularPage('page_action',<%=totalNumberOfPages%>)">Last&rsaquo;&rsaquo;</a>
             <%}%>
         </div>
         <%

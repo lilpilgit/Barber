@@ -60,63 +60,65 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <%if (areCustomers) {%>
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">Id</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        int i = 1; /* contatore per il numero di impiegati */
-
-                        for (User c : customers) {
-                            boolean blockedStatus = c.isBlocked();
-                    %>
-                    <tr class="<%=blockedStatus ? "table-danger" : ""%>">
-                        <th scope="row"><%=i++%>
-                        </th>
-                        <td><%=c.getId()%>
-                        </td>
-                        <td><%=c.getEmail()%>
-                        </td>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         <%
-                            String customerAddressFormatted = c.getAddress().replace('|', ',');
-                            customerAddressFormatted = customerAddressFormatted.substring(0, customerAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                            int i = 1; /* contatore per il numero di impiegati */
+
+                            for (User c : customers) {
+                                boolean blockedStatus = c.isBlocked();
                         %>
-                        <td><%=customerAddressFormatted%>
-                        </td>
-                        <td><%=c.getPhone()%>
-                        </td>
-                        <td>
-                            <button type="button" class="tablebutton"
-                                    style="color: <%=blockedStatus ? "green" : "red"%>;"
-                                    title="<%=blockedStatus ? "Unblock" : "Block"%>"
-                                    data-target="#alertBanCust"
-                                    data-toggle="modal"
-                                    onclick=<% if(blockedStatus) { %>
-                                            "unBlockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
-                                <% } else { %>
-                                "blockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
-                                <%}%>
-                                <i class="fas <%=c.isBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
-                            </button>
-                            <button type="button" class="trashbutton" title="Delete"
-                                    data-target="#alert<%=subject%>"
-                                    data-toggle="modal"
-                                    onclick=setTmpId(<%=c.getId()%>,'tmpId')>
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+                        <tr class="<%=blockedStatus ? "table-danger" : ""%>">
+                            <th scope="row"><%=i++%>
+                            </th>
+                            <td><%=c.getId()%>
+                            </td>
+                            <td><%=c.getEmail()%>
+                            </td>
+                            <%
+                                String customerAddressFormatted = c.getAddress().replace('|', ',');
+                                customerAddressFormatted = customerAddressFormatted.substring(0, customerAddressFormatted.length() - 1); /* tolgo l'ultila virgola */
+                            %>
+                            <td><%=customerAddressFormatted%>
+                            </td>
+                            <td><%=c.getPhone()%>
+                            </td>
+                            <td>
+                                <button type="button" class="tablebutton"
+                                        style="color: <%=blockedStatus ? "green" : "red"%>;"
+                                        title="<%=blockedStatus ? "Unblock" : "Block"%>"
+                                        data-target="#alertBanCust"
+                                        data-toggle="modal"
+                                        onclick=<% if(blockedStatus) { %>
+                                                "unBlockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
+                                    <% } else { %>
+                                    "blockById(<%=c.getId()%>, '<%=subject%>','<%=controller%>')">
+                                    <%}%>
+                                    <i class="fas <%=c.isBlocked() ? "fa-unlock-alt" : "fa-ban"%>"></i>
+                                </button>
+                                <button type="button" class="trashbutton" title="Delete"
+                                        data-target="#alert<%=subject%>"
+                                        data-toggle="modal"
+                                        onclick=setTmpId(<%=c.getId()%>,'tmpId')>
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
                 <%} else {%>
                 <h1>There are no customers :(</h1>
                 <%}%>
