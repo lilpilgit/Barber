@@ -53,4 +53,8 @@ public class ExtendedProduct extends Product {
     public void setInWishlist(boolean inWishlist) {
         this.inWishlist = inWishlist;
     }
+
+    public void setInCart(boolean inCart) {
+        this.inCart = inCart;
+    }
 }
