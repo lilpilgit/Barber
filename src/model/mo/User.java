@@ -28,14 +28,6 @@ public class User {
     /* 1:N Order */
     private ArrayList<Order> orders;
 
-//    public User(){
-//        this.structure = new Structure();
-//        this.booking = new Booking();
-//        this.cart = new ArrayList<>();
-//        this.wishlist = new ArrayList<>();
-//        this.orders = new ArrayList<>();
-//    }
-
     @Override
     public String toString() {
         return "User{" +
