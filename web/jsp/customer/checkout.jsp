@@ -2,6 +2,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="model.mo.Structure" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -29,6 +30,12 @@
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
+    }
+
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
     }
 
     ArrayList<ExtendedProduct> checkoutProducts = null;

@@ -1,6 +1,7 @@
 <%@page import="model.mo.Product" %>
 <%@page import="model.mo.User" %>
 <%@page import="java.util.ArrayList" %>
+<%@ page import="model.mo.Structure" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@page errorPage="../error/404.jsp" %>
 <%@page session="false" %>
@@ -63,6 +64,12 @@
         all_producers = (ArrayList<String>) request.getAttribute("brands");
     } else {
         throw new RuntimeException("PARAMETRO all_producers NULL");
+    }
+
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */

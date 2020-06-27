@@ -1,12 +1,5 @@
-<%@ page import="model.mo.Structure" %>
 <!--------------------------------------------------- Footer ---------------------------------------------------------->
 <%
-    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
-    Structure structure = null;
-    if(request.getAttribute("structure") != null){
-        structure = (Structure) request.getAttribute("structure");
-    }
-
     String[] splittedAddressStructure = null;
     int splittedAddressStructureLength = 0;
 
@@ -38,9 +31,9 @@
                 </p>
                 <p><%=structure.getName()%>
                 </p>
-                <p><%=splittedAddressStructure[0] + "," + splittedAddressStructure[1] + "," + splittedAddressStructure[2]%>
+                <p><%=splittedAddressStructure[0] + " , " + splittedAddressStructure[1] + " , " + splittedAddressStructure[2]%>
                 </p>
-                <p><%=splittedAddressStructure[4] + ((splittedAddressStructureLength == 6) ? ",N &deg; " + splittedAddressStructure[5] : ",") + splittedAddressStructure[3]%>
+                <p><%=splittedAddressStructure[4] + ((splittedAddressStructureLength == 6) ? " ,N &deg; " + splittedAddressStructure[5] : " , ") + splittedAddressStructure[3]%>
                 </p>
             </div>
             <div class="col-md-4">

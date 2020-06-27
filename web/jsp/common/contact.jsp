@@ -1,4 +1,5 @@
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Structure" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -37,6 +38,11 @@
         resultPresent = true;
     }
 
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
+    }
 
     /* Prendo il parametro "applicationMessage" che è il messaggio proveniente dal controller sul Server relativo all'operazione
      * di invio messaggio ( se è andata a buon fine o meno) */

@@ -3,6 +3,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="model.mo.ExtendedProduct" %>
+<%@ page import="model.mo.Structure" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -37,10 +38,10 @@
         wishlist = (ArrayList<ExtendedProduct>) request.getAttribute("wishlist");
     }
 
-    /* Prendo il parametro "inWishlist" che mi consente di sapere se il prodotto in questione si trova nella wishlist dell'utente loggato */
-    boolean inCart = false;
-    if (request.getAttribute("inCart") != null) {
-        inCart = (Boolean) request.getAttribute("inCart");
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */

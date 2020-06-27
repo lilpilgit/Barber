@@ -1,4 +1,5 @@
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Structure" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -33,6 +34,12 @@
     User customer = null;
     if (request.getAttribute("customer") != null) {
         customer = (User) request.getAttribute("customer");
+    }
+
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
     }
 
     /* Faccio lo split dell'address per poterlo mostrare all'interno dei vari campi */

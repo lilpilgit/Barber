@@ -2,6 +2,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="model.mo.Structure" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
@@ -39,6 +40,13 @@
     if (request.getAttribute("showcase") != null) {
         products = (ArrayList<Product>) request.getAttribute("showcase");
     }
+
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
+    }
+
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Home";

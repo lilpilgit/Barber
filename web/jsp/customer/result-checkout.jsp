@@ -1,4 +1,5 @@
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Structure" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -29,6 +30,12 @@
             /* Mostro il messaggio solo se è andato in errore l'ordine */
             applicationMessage = (String) request.getAttribute("applicationMessage");
         }
+    }
+
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
     }
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */

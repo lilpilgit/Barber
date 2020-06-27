@@ -35,9 +35,9 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
     Structure structure = null;
-    if (request.getAttribute("structure") != null) {
-        /* SE MI È STATO PASSATO L'ATTRIBUTO structure */
+    if(request.getAttribute("structure") != null){
         structure = (Structure) request.getAttribute("structure");
     }
 
