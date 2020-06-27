@@ -600,6 +600,13 @@ img {
     border-radius: 15px;
 }
 
+.tab-content-shop .coccarda {
+   top: -270px;
+   right: -295px;
+   z-index: 1;
+   height: 300px;
+}
+
 .card2 {
     background: #eee;
     padding: 3em;

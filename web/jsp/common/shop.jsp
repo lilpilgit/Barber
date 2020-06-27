@@ -166,8 +166,12 @@
         <div class="col-md-4">
             <div class="card-shop">
                 <div class="text-center ">
-                    <div class="tab-content-shop"><img src="img/products/<%=product.getPictureName()%>"
-                                                       alt="<%=product.getPictureName()%>"></div>
+                    <div class="tab-content-shop">
+                        <img src="img/products/<%=product.getPictureName()%>" alt="<%=product.getPictureName()%>">
+                        <%if (product.inShowcase()) {%>
+                        <img class="coccarda" src="img/shop/coccarda.png" alt="lost_img" title="Product in showcase">
+                        <%}%>
+                    </div>
                 </div>
                 <div class="card-body toBottom text-center">
                     <h4 class="card-title"><%=product.getName()%>
