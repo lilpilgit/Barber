@@ -172,8 +172,7 @@
                         <img class="coccarda" src="img/shop/coccarda.png" alt="lost_img" title="Product in showcase">
                         <%}%>
                     </div>
-                </div>
-                <div class="card-body toBottom text-center">
+                </div><div class="card-body toBottom text-center">
                     <h4 class="card-title"><%=product.getName()%>
                     </h4>
                     <p class="card-text">&euro;<%=product.getPrice()%>
