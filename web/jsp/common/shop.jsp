@@ -40,28 +40,28 @@
     }
 
     /* Prendo l'ArrayList<Product> di tutti i prodotti dal parametro showcase */
-    ArrayList<Product> products_to_show = null;
+    ArrayList<Product> productsToShow = null;
     if (request.getAttribute("products") != null) {
-        products_to_show = (ArrayList<Product>) request.getAttribute("products");
+        productsToShow = (ArrayList<Product>) request.getAttribute("products");
     } else {
-        throw new RuntimeException("PARAMETRO products_to_show NULL");
+        throw new RuntimeException("PARAMETRO productsToShow NULL");
     }
 
     /* Prendo l'ArrayList<String> di tutte le categorie */
-    ArrayList<String> all_categories = null;
+    ArrayList<String> allCategories = null;
 
     if (request.getAttribute("categories") != null) {
-        all_categories = (ArrayList<String>) request.getAttribute("categories");
+        allCategories = (ArrayList<String>) request.getAttribute("categories");
     } else {
-        throw new RuntimeException("PARAMETRO all_categories NULL");
+        throw new RuntimeException("PARAMETRO allCategories NULL");
     }
 
     /* Prendo l'ArrayList<String> di tutti i brands */
-    ArrayList<String> all_producers = null;
+    ArrayList<String> allProducers = null;
     if (request.getAttribute("brands") != null) {
-        all_producers = (ArrayList<String>) request.getAttribute("brands");
+        allProducers = (ArrayList<String>) request.getAttribute("brands");
     } else {
-        throw new RuntimeException("PARAMETRO all_producers NULL");
+        throw new RuntimeException("PARAMETRO allProducers NULL");
     }
 
     /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
@@ -104,7 +104,7 @@
             <%int num_cat = 0;%>
             <option id="category_<%=num_cat%>" value="All">All</option>
             <%
-                for (String cat : all_categories) {
+                for (String cat : allCategories) {
                     boolean selected = false;
                     if (cat.equals(categoryFiltered)) {
                         selected = true;
@@ -121,7 +121,7 @@
             <%int num_brand = 0;%>
             <option id="brand_<%=num_brand%>" value="All">All</option>
             <%
-                for (String producer : all_producers) {
+                for (String producer : allProducers) {
                     boolean selected = false;
                     if (producer.equals(brandFiltered)) {
                         selected = true;
@@ -148,7 +148,7 @@
 <div class="container py-2">
     <div class="row padding">
         <%
-            if (products_to_show != null && products_to_show.isEmpty()) {
+            if (productsToShow != null && productsToShow.isEmpty()) {
                 /*there is no product to display*/
         %>
         <div class="no-products-container">
@@ -161,7 +161,7 @@
 
         <%
         } else {
-            for (Product product : products_to_show) {
+            for (Product product : productsToShow) {
         %>
         <div class="col-md-4">
             <div class="card-shop">
