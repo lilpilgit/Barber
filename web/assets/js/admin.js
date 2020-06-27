@@ -312,7 +312,6 @@ function drawChartAppointments(labelsHourStart, dataHourStart, backgroundColor) 
             datasets: [{
                 data: dataHourStart,
                 backgroundColor: backgroundColor,
-                // hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
             }]
         },
         options: {

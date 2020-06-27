@@ -26,14 +26,11 @@
     Structure structure = null;
     StructureDAO structureDAO = null;
     BookingDAO bookingDAO = null;
-    User loggedUser = null;
-    UserDAO userDAO = null;
     ArrayList<Booking> bookings = null;
     String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
     ArrayList<LocalTime> freeSlots = null;
     int i = 0;
 
-    Long idStructure = null; /* parametro che indica la struttura in cui si sta eseguendo la prenotazione */
     LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
     LocalTime closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
     LocalTime currentTime = null; /* parametro che rappresenta l'ora attuale */
@@ -56,9 +53,6 @@
 
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
 
-        /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
-        loggedUser = sessionUserDAO.findLoggedUser();
-
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
 
@@ -66,11 +60,6 @@
 
         bookingDAO = daoFactory.getBookingDAO();
         structureDAO = daoFactory.getStructureDAO();
-        userDAO = daoFactory.getUserDAO();
-
-
-        /* setto l'id della struttura sulla base dell'id ricevuto */
-        idStructure = Long.valueOf(request.getParameter("idStructure"));
 
         structure = structureDAO.fetchStructure();
         openingTime = structure.getOpeningTime().toLocalTime();
@@ -88,8 +77,6 @@
 
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
-
-
 
         /* Commit fittizio */
         sessionDAOFactory.commitTransaction();

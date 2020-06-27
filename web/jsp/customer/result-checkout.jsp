@@ -78,7 +78,6 @@
     <%}%>
 </div>
 
-
 <%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {

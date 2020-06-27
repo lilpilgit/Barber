@@ -1,10 +1,8 @@
 <%@ page import="model.mo.User" %>
-<%@ page import="home.controller.Book" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page isErrorPage="true" %>
 <%@ page session="false" %>
 <%
-
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     boolean loggedOn = false;
     if (request.getAttribute("loggedOn") != null) {

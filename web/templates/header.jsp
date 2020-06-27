@@ -17,8 +17,6 @@
                         Home
                     </button>
                     <!-- SE ADMIN SI E' LOGGATO, MOSTRO QUESTO PULSANTE -->
-
-                    <!--  && loggedUser != null  -->
                     <% if (loggedAdmin) { %>
                     <div class="dropdown">
                         <button class="logged dropdown-toggle" type="button" id='showAdminOptions'
@@ -114,7 +112,6 @@
                     </button>
                     <%
                         }
-
                     %>
                 </div>
             </div>
@@ -178,8 +175,6 @@
 </div>
 
 <!---------------------------------------- END OF MODAL BOOKINGS -------------------------------------------->
-
-<!--PRESO DA https://mdbootstrap.com/docs/jquery/modals/forms/-->
 
 <% if (!loggedOn) {%>
 <!--Modal: Login / Register Form-->

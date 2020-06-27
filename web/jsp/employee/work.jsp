@@ -17,7 +17,6 @@
     }
 
     /* Prendo la data da mostrare nel calendario al dipendente */
-
     LocalDate dataToShow = null;
     if (request.getAttribute("currentDate") != null) {
         dataToShow = (LocalDate) request.getAttribute("currentDate");

@@ -105,8 +105,6 @@
 
     result = "success";
 
-
-
 %>
 
     {

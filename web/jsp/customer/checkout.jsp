@@ -59,7 +59,6 @@
         totalSaved = (BigDecimal) request.getAttribute("totalSaved");
     }
 
-
     User customer = null;
     if (request.getAttribute("customer") != null) {
         customer = (User) request.getAttribute("customer");
@@ -117,7 +116,6 @@
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
                         <h6 class="my-0">Total saved</h6>
-                        <%--                        <small>EXAMPLECODE</small>--%>
                     </div>
                     <span class="text-success">-<%=totalSaved%></span>
                 </li>
@@ -129,11 +127,9 @@
                            readonly>
                 </li>
             </ul>
-
         </div>
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Shipping address</h4>
-
 
             <form class="needs-validation" id="buyForm" method="post">
                 <hr class="mb-4">
@@ -244,14 +240,9 @@
                             Please provide a valid House Number for shipping.
                         </div>
                     </div>
-
-
                 </div>
-
                 <hr class="mb-4">
-
                 <h4 class="mb-3">Payment</h4>
-
                 <div class="d-block my-3">
                     <div class="custom-control custom-radio">
                         <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked

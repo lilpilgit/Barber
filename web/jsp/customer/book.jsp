@@ -2,7 +2,6 @@
 <%@ page import="model.mo.Structure" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     /* Prendo il parametro "result" che si occupa di indicarmi se l'inserimento della prenotazione è andato a buon fine o meno*/

@@ -150,7 +150,6 @@
                             <%} else /* è stato cancellato da qualcuno dunque mostro la deleted reason */ {%>
                             <i class="far fa-calendar-times"></i>
                             <%}%>
-                            <%--                            <i class="fas fa-info-circle"></i>--%>
                         </td>
                         </tr>
                         <%}%>
@@ -202,7 +201,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
 

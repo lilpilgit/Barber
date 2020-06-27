@@ -47,7 +47,6 @@
         structure = (Structure) request.getAttribute("structure");
     }
 
-
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Home";
 
@@ -62,7 +61,7 @@
 <body>
 <%@ include file="/templates/header.jsp" %>
 
-<!------------------------------------------- SHOWCASE --- ---------------------------------------------------------->
+<!------------------------------------------- SHOWCASE -------------------------------------------------------------->
 
 <% if (products.size() != 0) { %>
 

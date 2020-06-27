@@ -71,17 +71,7 @@
     <img src="img/contact/shop_facade.jpeg" class="img-fluid rounded mx-auto d-block" alt="Shop Facade">
     <div class="text">CONTACT US!</div>
 </div>
-<%if (resultPresent && result.equals("success")) {%>
-<div class="alert alert-success alert-dismissible my-alert">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Sent! </strong><%="\n" + applicationMessage%>
-</div>
-<%} else if (resultPresent && result.equals("fail")) {%>
-<div class="alert alert-danger alert-dismissible my-alert">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error! </strong><%="\n" + applicationMessage%>
-</div>
-<%}%>
+
 <div class="container py-4">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-10 col-md-8 col-lg-6 back-form-contact">

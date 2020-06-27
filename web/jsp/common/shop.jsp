@@ -6,7 +6,6 @@
 <%@page errorPage="../error/404.jsp" %>
 <%@page session="false" %>
 <%
-
     /* Prendo il parametro "categoryFiltered" per settare il dropdown dopo il refresh della pagina */
     String categoryFiltered = (request.getAttribute("categoryFiltered") != null) ? (String) request.getAttribute("categoryFiltered") : "All";
 
@@ -56,7 +55,6 @@
     } else {
         throw new RuntimeException("PARAMETRO all_categories NULL");
     }
-
 
     /* Prendo l'ArrayList<String> di tutti i brands */
     ArrayList<String> all_producers = null;

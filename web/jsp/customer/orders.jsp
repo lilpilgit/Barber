@@ -28,7 +28,6 @@
         resultPresent = true;
     }
 
-
     String applicationMessage = null;
     if (request.getAttribute("applicationMessage") != null) {
         applicationMessage = (String) request.getAttribute("applicationMessage");
@@ -45,7 +44,6 @@
     if(request.getAttribute("structure") != null){
         structure = (Structure) request.getAttribute("structure");
     }
-
 
     /* Parametro per settare di volta in volta dove ci si trova nel title */
     String menuActiveLink = "Orders";
@@ -285,7 +283,6 @@
         /* refresh della pagina chiamando il form della navbar */
         window.setTimeout("setNavFormHome('home.Orders.showOrders')",240000); /* timeout in millisecondi */
     });
-
 
 </script>
 </body>

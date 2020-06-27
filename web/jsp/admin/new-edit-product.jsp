@@ -121,7 +121,7 @@
                            class="form-control">
                 </div>
             </div>
-            <!--https://plugins.krajee.com/file-avatar-upload-demo snippet per modifica e caricamento immagine -->
+
             <%if (action.equals("modify")) {%>
             <div class="form-row justify-content-center">
                 <div class="col-md-6">
