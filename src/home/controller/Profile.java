@@ -29,7 +29,6 @@ public class Profile {
         User user = null;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -127,7 +126,6 @@ public class Profile {
         boolean edited = false;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -172,7 +170,6 @@ public class Profile {
 
                 userToUpdate = userDAO.findById(loggedUser.getId());
 
-
                 /* Setto gli attributi che possono essere stati modificati nel form... ( non sappiamo quali sono
                  * stati modificati a priori pertanto dobbiamo settarli tutti indifferentemente */
 
@@ -197,7 +194,6 @@ public class Profile {
 
             }
 
-
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
@@ -220,7 +216,6 @@ public class Profile {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -270,7 +265,6 @@ public class Profile {
         StructureDAO structureDAO = daoFactory.getStructureDAO();
         Structure structure = null;
 
-
         /* Scarico dal DB l'unica struttura */
         structure = structureDAO.fetchStructure();
 
@@ -287,6 +281,5 @@ public class Profile {
         return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
     }
-
 
 }

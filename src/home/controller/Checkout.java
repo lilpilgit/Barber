@@ -235,7 +235,6 @@ public class Checkout {
                 /* aggiungo le informazioni riguardanti la spedizione */
                 customer.setAddress(StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number));
 
-
                 for (int i = 0; i < ids.length; i++) {
                     System.out.println("ID " + i + " ==> " + ids[i] + " | quantities ==> " + quantities[i]);
                     /* per ogni id presente nell'array String[] lo converto in Long e ricerco il prodotto nel DB tramite tale ID */
@@ -247,9 +246,7 @@ public class Checkout {
                     items.add(extendedProduct);
                 }
 
-
                 /* Effettuo l'inserimento del nuovo ordine nella tabella degli ordini */
-
                 ordersDAO.insert(customer, totalPrice, items);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
 
@@ -283,7 +280,6 @@ public class Checkout {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -313,7 +309,6 @@ public class Checkout {
                 /* FAIL */
                 request.setAttribute("result", "fail");
             }
-
         }
     }
 

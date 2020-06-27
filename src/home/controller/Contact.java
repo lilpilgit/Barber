@@ -70,7 +70,6 @@ public class Contact {
 
             }
 
-
             /* Commit sul db */
             daoFactory.commitTransaction();
 
@@ -149,7 +148,6 @@ public class Contact {
 
             userDAO = daoFactory.getUserDAO();
 
-
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
                 customer = userDAO.findById(loggedUser.getId());
@@ -216,9 +214,9 @@ public class Contact {
             request.setAttribute("applicationMessage", applicationMessage);
             /* 2) l'url della pagina da visualizzare dopo aver effettuato la registrazione */
             request.setAttribute("viewUrl", "common/contact");
-            /* 1) Attributo che indica se è loggato oppure no */
+            /* 3) Attributo che indica se è loggato oppure no */
             request.setAttribute("loggedOn", loggedUser != null);
-            /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
+            /* 4) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
             /* 5) oggetto corrispondente al risultato dell'operazione */
             request.setAttribute("contacted", contacted);

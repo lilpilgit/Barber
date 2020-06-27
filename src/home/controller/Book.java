@@ -32,7 +32,6 @@ public class Book {
         User loggedUser = null;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -80,7 +79,6 @@ public class Book {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
@@ -88,7 +86,6 @@ public class Book {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -126,7 +123,6 @@ public class Book {
         User user = null;
         BookingDAO bookingDAO = null;
         StructureDAO structureDAO = null; /* DAO Necessario per poter effettuare l'inserimento */
-        Booking bookInserted = null; /* serve per conoscere l'id del prodotto appena aggiunto */
         Structure structure = null;
 
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
@@ -153,7 +149,6 @@ public class Book {
 
             userDAO = daoFactory.getUserDAO();
 
-
             /* controllo lo stato dell'utente */
             if (loggedUser != null) {
                 /* c'è un utente loggato */
@@ -177,7 +172,6 @@ public class Book {
                 bookingDAO = daoFactory.getBookingDAO();
 
                 /* Prendo l'unica struttura */
-
                 structureDAO = daoFactory.getStructureDAO();
 
                 structure = structureDAO.fetchStructure();
@@ -200,7 +194,6 @@ public class Book {
 
                 /* Setto l'attributo alreadyBooked */
                 commonView(daoFactory, loggedUser, request);
-
             }
 
             /* Commit della transazione sul db */
@@ -215,7 +208,6 @@ public class Book {
                 /* Solo se viene committata la transazione senza errori siamo sicuri l'appuntamento e' stato inserito correttamente .*/
                 applicationMessage = "You successfully created your booking!";
             }
-
 
         } catch (Exception e) {
             try {
@@ -277,11 +269,9 @@ public class Book {
         BookingDAO bookingDAO = null; /* DAO Necessario per poter effettuare la cancellazione del booking */
         Booking bookingToDelete = null;
         String deletedReason = null;
-        LocalDate currentDate = null;
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean deleted = false;
         boolean cookieValid = true;
-
 
         try {
             sessionDAOFactory = initializeCookie(request, response);
@@ -342,7 +332,6 @@ public class Book {
 
                 /* Setto l'attributo alreadyBooked */
                 commonView(daoFactory, loggedUser, request);
-
             }
 
             /* Commit della transazione sul db */
@@ -352,7 +341,6 @@ public class Book {
             sessionDAOFactory.commitTransaction();
 
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
-
 
             if (deleted) {
                 applicationMessage = "Booking deleted SUCCESSFULLY. We are sorry that you had to cancel your appointment.";
@@ -414,7 +402,6 @@ public class Book {
         BookingDAO bookingDAO = null;
         Booking booking = null;
         boolean bookedStatus = false;
-
 
         /* Faccio il fetch della struttura */
         structureDAO = daoFactory.getStructureDAO();

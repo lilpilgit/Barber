@@ -126,7 +126,6 @@ public class Cart {
         boolean added = false;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -199,7 +198,6 @@ public class Cart {
                 }
             }
 
-
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
@@ -222,7 +220,6 @@ public class Cart {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -235,7 +232,6 @@ public class Cart {
             } catch (Throwable t) {
             }
         }
-
 
         if (cookieValid) {
             /* Setto gli attributi della request che verranno processati dalla profile.jsp */
@@ -267,7 +263,6 @@ public class Cart {
                 request.setAttribute("viewUrl", "common/home");
             }
         }
-
     }
 
     public static void removeFromCart(HttpServletRequest request, HttpServletResponse response) {
@@ -287,7 +282,6 @@ public class Cart {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean removed = false;
         boolean cookieValid = true;
-
 
         try {
             sessionDAOFactory = initializeCookie(request, response);
@@ -377,7 +371,6 @@ public class Cart {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -420,7 +413,6 @@ public class Cart {
                 request.setAttribute("result", "fail");
             }
         }
-
     }
 
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
@@ -439,7 +431,6 @@ public class Cart {
 
         /* setto l'oggetto carrello all'interno dell'oggetto utente */
         cart = cartDAO.fetchCart(user);
-
 
         /* Setto il carrello da mostrare nella pagina del carrello dell'utente loggato */
         request.setAttribute("cart", cart);

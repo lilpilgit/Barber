@@ -42,15 +42,12 @@ public class Shop {
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
             sessionDAOFactory.beginTransaction();
 
-
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();/* Ritorna: new UserDAOCookieImpl(request, response);*/
 
             loggedUser = sessionUserDAO.findLoggedUser();
 
-
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
-
 
             /* Inizio la transazione sul Database*/
             daoFactory.beginTransaction();
@@ -78,18 +75,6 @@ public class Shop {
 
                 /* Prendo tutti i produttori dal database */
                 brands = productDAO.findAllProducers();
-
-//                /* Fetching dei parametri  */
-//                String toFilter = request.getParameter("filter");
-//                System.err.println("toFilter ==>" + toFilter);
-
-//                int filter = 0; /* ipotizzo che non venga richiesto il filtraggio dei prodotti */
-
-//                if (toFilter != null) { /* NON È LA PRIMA VOLTA CHE ARRIVO SULLA PAGINA SHOP.JSP OPPURE NON VOGLIO FILTRARE */
-//                    /* posso provare a parsarlo per evitare NullPointerException*/
-//                    filter = Integer.parseInt(toFilter);
-//                }
-//                System.err.println("filter:" + filter);
 
                 if (request.getParameter("brand") != null) {
                     brandToFilter = request.getParameter("brand");
@@ -119,7 +104,6 @@ public class Shop {
             /* Commit fittizio */
             sessionDAOFactory.commitTransaction();
 
-
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -130,7 +114,6 @@ public class Shop {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -146,10 +129,8 @@ public class Shop {
         if (cookieValid) {
             /* 1) Attributo che indica se è loggato oppure no */
             request.setAttribute("loggedOn", loggedUser != null);
-            System.err.println("loggedOn==>" + loggedUser != null);
             /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
             request.setAttribute("loggedUser", loggedUser);
-            System.err.println("loggedUser=> " + loggedUser);
             /* 3) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "common/shop");
             /* 4) Setto la lista dei prodotti da mostrare */

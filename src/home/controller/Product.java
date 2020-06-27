@@ -25,7 +25,6 @@ public class Product {
         User loggedUser = null;
         boolean cookieValid = true;
 
-
         String applicationMessage = null;
 
         try {
@@ -71,7 +70,7 @@ public class Product {
                     /* posso provare a parsarlo per evitare NullPointerException*/
                     id = Long.parseLong(idProduct);
                 }
-                System.err.println("id:" + id);
+                System.err.println("id: " + id);
 
                 commonView(daoFactory, loggedUser, id, request);
             }
@@ -161,6 +160,5 @@ public class Product {
         return DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
 
     }
-
 
 }

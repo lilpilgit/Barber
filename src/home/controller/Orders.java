@@ -30,7 +30,6 @@ public class Orders {
         User loggedUser = null;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -106,7 +105,6 @@ public class Orders {
             request.setAttribute("loggedUser", loggedUser);
             /* 3) Setto quale view devo mostrare */
             request.setAttribute("viewUrl", "customer/orders");
-
         }
     }
 
@@ -114,7 +112,6 @@ public class Orders {
         /**
          * Fetch user logged then CANCEL order.
          */
-
 
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
@@ -126,10 +123,8 @@ public class Orders {
         boolean canceled = false;
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
-
 
             /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
              *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
@@ -189,7 +184,6 @@ public class Orders {
                 applicationMessage = "Order canceled SUCCESSFULLY.";
             }
 
-
         } catch (Exception e) {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
@@ -242,7 +236,6 @@ public class Orders {
         OrdersDAO ordersDAO = daoFactory.getOrdersDAO();
         StructureDAO structureDAO = daoFactory.getStructureDAO();
         Structure structure = null;
-
 
         /* Prendo TUTTI gli ordini del cliente loggato */
         ArrayList<Order> orders = ordersDAO.fetchOrdersByCustomerId(loggedUser.getId());

@@ -180,9 +180,8 @@ public class Home {
                         break;
                     default:
                         /* ERROR!!!! */
-                        System.err.println("ERRORE NELLO SWITCH CASE!!!!!");
+                        System.err.println("ERRORE NELLO SWITCH CASE!");
                 }
-
 
             }
             if (!viewEmployee) {
@@ -216,10 +215,8 @@ public class Home {
 
         /* 1) Attributo che indica se è loggato oppure no */
         request.setAttribute("loggedOn", loggedUser != null);
-        System.err.println("loggedOn==> " + loggedUser != null);
         /* 2) Attributo che indica quale utente è loggato ( da leggere solo se loggedOn = true */
         request.setAttribute("loggedUser", loggedUser);
-        System.err.println("loggedUser=> " + loggedUser);
         /* 3) Application message da mostrare all'utente */
         request.setAttribute("applicationMessage", applicationMessage);
         /* 4) l'attributo booleano result così da facilitare la scelta dei colori nel frontend JSP ( rosso ==> errore, verde ==> successo per esempio )*/
@@ -323,7 +320,6 @@ public class Home {
 
         String applicationMessage = "It was not possible to register!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean registered = false;
-
 
         try {
 

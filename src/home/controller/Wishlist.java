@@ -32,7 +32,6 @@ public class Wishlist {
         ArrayList<Product> wishlist = null; //la wishlist da passare alla jsp
         boolean cookieValid = true;
 
-
         try {
             sessionDAOFactory = initializeCookie(request, response);
 
@@ -88,7 +87,6 @@ public class Wishlist {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -197,7 +195,6 @@ public class Wishlist {
                     throw new RuntimeException("Wishlist.java ==> non è stato passato alcun parametro 'from'");
                 }
 
-
                 if (added) {
                     /* Solo se viene committata la transazione senza errori siamo sicuri che il prodotto è stato aggiunto alla wishlist dell'utente */
                     applicationMessage = "Product added to wishlist SUCCESSFULLY.";
@@ -211,7 +208,6 @@ public class Wishlist {
             /* Commit sul db */
             daoFactory.commitTransaction();
 
-
             System.err.println("COMMIT DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
 
         } catch (Exception e) {
@@ -223,7 +219,6 @@ public class Wishlist {
                 System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
             } catch (Throwable t) {
                 System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
-
             }
             throw new RuntimeException(e);
 
@@ -273,7 +268,6 @@ public class Wishlist {
             }
         }
 
-
     }
 
     public static void removeFromWishlist(HttpServletRequest request, HttpServletResponse response) {
@@ -292,7 +286,6 @@ public class Wishlist {
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean removed = false;
         boolean cookieValid = true;
-
 
         try {
             sessionDAOFactory = initializeCookie(request, response);
