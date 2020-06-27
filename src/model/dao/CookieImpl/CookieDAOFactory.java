@@ -65,7 +65,6 @@ public class CookieDAOFactory extends DAOFactory {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
     @Override
     public CartDAO getCartDAO() {
         throw new UnsupportedOperationException("Not supported yet.");

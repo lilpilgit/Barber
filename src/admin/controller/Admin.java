@@ -92,8 +92,6 @@ public class Admin {
          * Instantiates a UserDAO to be able to edit the existing admin in Database.
          */
 
-//        String submit; /*mi aspetto che il value sia "edit_admin"*/
-
         DAOFactory sessionDAOFactory = null; //per i cookie
         DAOFactory daoFactory = null; //per il db
         User loggedUser = null;

@@ -41,7 +41,6 @@ public class Products {
         String description = null;
         Integer maxOrderQuantity = null;
         String category = null;
-        String submit; /*mi aspetto che il value sia "add_new_product"*/
         String pictureName = null; /* nome del file da calcolare a runtime */
 
 
@@ -93,8 +92,6 @@ public class Products {
                         maxOrderQuantity = Integer.parseInt(item.getString());/*required*/
                     } else if (fieldName.equals("insert_date")) {
                         insertDate = LocalDate.parse(item.getString());/*not required*/
-                    } else if (fieldName.equals("submit")) {
-                        submit = item.getString();/*required*/
                     }
 
                 } else {
@@ -570,7 +567,6 @@ public class Products {
         String description = null;
         Integer maxOrderQuantity = null;
         String category = null;
-        String submit; /*mi aspetto che il value sia "edit_product"*/
         String basePicName = "product_"; /* file di name che funge come base */
         String picture_name_stored = null; /* il nome attuale del file immagine */
         Boolean inShowcase = null; /* per sapere se il prodotto da modificare è nello showcase o meno */
@@ -589,8 +585,6 @@ public class Products {
 
         String applicationMessage = "An error occurred!"; /* messaggio da mostrare a livello applicativo ritornato dai DAO */
         boolean edited = false;
-
-//        submit = request.getParameter("submit"); /*mi aspetto che il value sia "edit_product"*/
 
         try {
             sessionDAOFactory = initializeCookie(request, response);
@@ -631,8 +625,6 @@ public class Products {
                         insertDate = LocalDate.parse(item.getString());/*not required*/
                     } else if (fieldName.equals("showcase")) {
                         inShowcase = Boolean.parseBoolean(item.getString());
-                    } else if (fieldName.equals("submit")) {
-                        submit = item.getString();/*required*/
                     }
 
                 } else {

@@ -118,7 +118,6 @@ public class Staff {
         String street;
         String house_number;
         String cap;
-        String submit; /*mi aspetto che il value sia "add_new_employee"*/
         String password; /*password generata nel controller e NON proveniente dal form*/
 
         DAOFactory sessionDAOFactory = null; //per i cookie
@@ -161,7 +160,6 @@ public class Staff {
              * */
             birth_date = LocalDate.parse(request.getParameter("birth_date"));/*required*/
             fiscal_code = request.getParameter("fiscal_code");/*required*/
-            submit = request.getParameter("submit"); /*mi aspetto che il value sia "add_new_employee"*/
 
             /* DAOFactory per manipolare i dati sul DB */
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -508,8 +506,6 @@ public class Staff {
         /**
          * Instantiates an EmployeeDAO to be able to edit the existing employee in Database.
          */
-
-        String submit; /*mi aspetto che il value sia "edit_employee"*/
 
         DAOFactory daoFactory = null; //per il db
         UserDAO employeeDAO = null; /* DAO Necessario per poter effettuare la modifica del dipendente */
