@@ -2,12 +2,9 @@ package model.dao.mySQLJDBCImpl;
 
 import model.dao.StatisticsDAO;
 import model.mo.StatisticsEarnings;
-import model.mo.StatisticsEarnings;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
@@ -91,7 +88,6 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
                     throw new RuntimeException(e);
                 }
             }
-
         } catch (SQLException e) {
             System.err.println("Errore nella while (rs.next())");
             throw new RuntimeException(e);
@@ -104,7 +100,6 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
             throw new RuntimeException(e);
 
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -156,7 +151,6 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
                     throw new RuntimeException(e);
                 }
             }
-
         } catch (SQLException e) {
             System.err.println("Errore nella while (rs.next())");
             throw new RuntimeException(e);
@@ -167,9 +161,7 @@ public class StatisticsDAOMySQLJDBCImpl implements StatisticsDAO {
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close();");
             throw new RuntimeException(e);
-
         }
-
         try {
             ps.close();
         } catch (SQLException e) {

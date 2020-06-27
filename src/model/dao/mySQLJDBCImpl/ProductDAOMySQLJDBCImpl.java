@@ -99,7 +99,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
                 + " WHERE"
                 + "  ID = ?;";
 
-
         try {
             ps = connection.prepareStatement(query);
             int i = 1;
@@ -247,7 +246,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         System.err.println("PRICE =>>" + product.getPrice());
         System.err.println("DISCOUNT =>>" + product.getDiscount());
         System.err.println("MAX_ORDER_QTY =>>" + product.getMaxOrderQuantity());
-
 
         try {
             ps = connection.prepareStatement(query);
@@ -397,7 +395,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
          * appena inserito
          * */
 
-
         return product;
     }
 
@@ -505,7 +502,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella ps.executeQuery()");
             throw new RuntimeException(e);
         }
-
         try {
             while (rs.next()) {
                 listProduct.add(readProduct(rs));
@@ -514,14 +510,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -530,8 +524,6 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
         }
         return listProduct;
     }
-
-    /* FUNZIONE AGGIORNATA CON METODO MVC */
 
     @Override
     public ArrayList<Product> fetchAllProducts() {
@@ -563,14 +555,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -606,14 +596,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -648,14 +636,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -698,14 +684,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -751,14 +735,12 @@ public class ProductDAOMySQLJDBCImpl implements ProductDAO {
             System.err.println("Errore nella rs.next()");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {

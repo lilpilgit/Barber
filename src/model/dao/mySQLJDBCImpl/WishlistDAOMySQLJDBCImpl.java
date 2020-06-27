@@ -236,7 +236,6 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -244,7 +243,6 @@ public class WishlistDAOMySQLJDBCImpl implements WishlistDAO {
             throw new RuntimeException(e);
         }
 
-        System.err.println("inWishlist NEL DAO " + inWishlist);
         return inWishlist;
 
     }

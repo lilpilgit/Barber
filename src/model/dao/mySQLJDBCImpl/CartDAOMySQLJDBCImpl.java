@@ -64,6 +64,7 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
             System.err.println("Errore nella ps = connection.prepareStatement(query)");
             throw new RuntimeException(e);
         }
+
         try {
             rs = ps.executeQuery();
         } catch (SQLException e) {
@@ -108,12 +109,9 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
          * @return true if product is successfully added to cart otherwise raise an exception.
          * */
 
-        ExtendedProduct productInCart = null; /* mappa la tupla del prodotto già esistente nel carrello dell'utente */
-
         /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
         if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile aggiungere il prodotto con id{" + idProduct + "} al carrello dell'utente con id{" + user.getId() + "} in quanto non è cliente.");
-
 
         query =
                 "SELECT * "
@@ -215,7 +213,6 @@ public class CartDAOMySQLJDBCImpl implements CartDAO {
         /* Controllo se l'utente che mi è stato passato ha l'attributo type = 'C' */
         if (user.getType() != 'C')
             throw new UnsupportedOperationException("UserDAOMySQLJDBCImpl: Impossibile aggiungere il prodotto con id{" + idProduct + "} al carrello dell'utente con id{" + user.getId() + "} in quanto non è cliente.");
-
 
         query = "DELETE FROM CART WHERE ID_CUSTOMER = ? AND ID_PRODUCT = ?;";
 

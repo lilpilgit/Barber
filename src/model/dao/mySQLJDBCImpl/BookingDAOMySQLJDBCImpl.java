@@ -38,7 +38,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
         booking.setStructure(structure);
         Long newId = null;
 
-
         /* CON TALE QUERY CONTROLLO SE ESISTE GIA' UN APPUNTAMENTO PER LA STESSA DATA E LA STESSA ORA */
 
         query = "SELECT * FROM BOOKING WHERE DATE = ? AND HOUR_START = ? AND DELETED IS NULL;";
@@ -409,7 +408,6 @@ public class BookingDAOMySQLJDBCImpl implements BookingDAO {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {

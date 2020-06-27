@@ -127,7 +127,6 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
         /* L'unico campo che rimane da settare è l'ID. */
         order.setId(newId);
 
-
         query = "INSERT INTO ORDERS(ID, SELL_DATE, ORDER_DATE, STATUS, TOT_PRICE, SHIPPING_ADDR, DELETED, ID_CUSTOMER) VALUES(?,?,?,?,?,?,?,?);";
         try {
             int i = 1;
@@ -183,7 +182,6 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
          * Se non è stata sollevata alcuna eccezione fin qui, ritorno correttamente l'oggetto di classe Order
          * appena inserito
          * */
-
 
         return order;
     }
@@ -613,8 +611,8 @@ public class OrdersDAOMySQLJDBCImpl implements OrdersDAO {
             System.err.println("Errore nella order.setStatus(rs.getString(\"STATUS\"));");
             throw new RuntimeException(e);
         }
-        /* Setto gli attributi aggiuntivi provenienti da Customer */
 
+        /* Setto gli attributi aggiuntivi provenienti da Customer */
         try {
             order.getCustomer().setEmail(rs.getString("EMAIL"));
         } catch (SQLException e) {

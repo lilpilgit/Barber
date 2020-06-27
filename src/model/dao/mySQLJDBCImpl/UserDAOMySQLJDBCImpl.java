@@ -47,8 +47,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         Long newId = null;
         boolean yesAdditionalQuery = false;
 
-
-
         /*CON TALE QUERY CONTROLLO SE LO USER ESISTE GIÀ ALL'INTERNO DEL DB
          * 2 UTENTI CON LA STESSA EMAIL NON POSSONO ESISTERE PERTANTO CONTROLLO IL CAMPO MAIL*/
 
@@ -545,7 +543,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -600,7 +597,6 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {

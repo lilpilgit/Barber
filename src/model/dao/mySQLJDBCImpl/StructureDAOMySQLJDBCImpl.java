@@ -17,7 +17,6 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
     private String query;
     private ResultSet rs;
 
-
     public StructureDAOMySQLJDBCImpl(Connection connection) {
         this.connection = connection;
     }
@@ -51,14 +50,12 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
             System.err.println("Errore nella structure = readStructure(rs);");
             throw new RuntimeException(e);
         }
-
         try {
             rs.close();
         } catch (SQLException e) {
             System.err.println("Errore nella rs.close()");
             throw new RuntimeException(e);
         }
-
         try {
             ps.close();
         } catch (SQLException e) {
@@ -89,7 +86,6 @@ public class StructureDAOMySQLJDBCImpl implements StructureDAO {
                 + "  PHONE = ?"
                 + " WHERE"
                 + "  S.ID = ?;";
-
 
         try {
             ps = connection.prepareStatement(query);
