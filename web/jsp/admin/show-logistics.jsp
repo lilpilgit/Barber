@@ -2,6 +2,7 @@
 <%@ page import="model.mo.Order" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="static services.config.Configuration.TOT_REC_TO_SHOW_LOGISTICS" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
@@ -89,7 +90,7 @@
                         </thead>
                         <tbody class="fixedheight">
                         <%
-                            int i = 1; /* contatore per il numero di ordini */
+                            int i = (int) (((currentPage - 1) * TOT_REC_TO_SHOW_LOGISTICS) + 1); /* contatore per il numero di ordini */
                             String popoverSellDate = "";
                             /*if (areOrders) {*/
                             for (Order l : logisticOrders) {
