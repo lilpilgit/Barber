@@ -75,7 +75,6 @@
         <div class="row justify-content-center">
             <% if (areOrders) { %>
             <div class="col-auto">
-                <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead class="thead-dark">
                         <tr>
@@ -145,7 +144,6 @@
                         <%}%>
                         </tbody>
                     </table>
-                </div>
             </div>
         </div>
         <div class="container text-center">

@@ -1,4 +1,5 @@
 <%@ page import="model.mo.User" %>
+<%@ page import="model.mo.Structure" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page isErrorPage="true" %>
 <%@ page session="false" %>
@@ -8,6 +9,10 @@
     if (request.getAttribute("loggedOn") != null) {
         loggedOn = (Boolean) request.getAttribute("loggedOn");
     }
+
+
+
+    out.print("loggedOn == " + loggedOn);
 
     /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
     User loggedUser = null;
@@ -28,10 +33,16 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
+    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
+    Structure structure = null;
+    if(request.getAttribute("structure") != null){
+        structure = (Structure) request.getAttribute("structure");
+    }
+
     /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
     String idBtnAttivo = null;
     /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "404 | Page Not Found";
+    String menuActiveLink = "! Error !";
 %>
 <html lang="en">
 <%@include file="/templates/head.jsp" %>

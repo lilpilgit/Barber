@@ -81,7 +81,6 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <%if (areBookings) {%>
-                <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead class="thead-dark">
                         <tr>
@@ -164,7 +163,6 @@
                     <input type="hidden" name="<%=user%>ID" value="">
                 </form>
             </div>
-        </div>
     </main>
 </div>
 
