@@ -116,7 +116,6 @@ function setSelectedAttribute(id_select, valueFromDb) {
             select[option].selected = true;
             break;
         }
-
     }
 }
 
