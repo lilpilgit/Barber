@@ -4,7 +4,6 @@
 <%@ page import="model.dao.UserDAO"%>
 <%@ page import="model.mo.Booking"%>
 <%@ page import="model.mo.Structure"%>
-<%@ page import="model.mo.User"%>
 <%@ page import="services.config.Configuration"%>
 <%@ page import="java.time.LocalDate"%>
 <%@ page import="java.time.LocalTime"%>
@@ -41,17 +40,6 @@
     boolean isToday = false;
 
     try {
-        /* Inizializzo il cookie di sessione */
-        HashMap sessionFactoryParameters = new HashMap<String, Object>();
-        sessionFactoryParameters.put("request", request);
-        sessionFactoryParameters.put("response", response);
-        sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
-
-        /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
-         *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
-        sessionDAOFactory.beginTransaction();
-
-        UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
 
         /* Acquisisco un DAOFactory per poter lavorare sul DB*/
         daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
@@ -78,8 +66,6 @@
         /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
         bookings = bookingDAO.findBookingsByDate(pickedDate);
 
-        /* Commit fittizio */
-        sessionDAOFactory.commitTransaction();
 
         /* Commit sul db */
         daoFactory.commitTransaction();
@@ -87,7 +73,7 @@
     } catch (Exception e) {
         try {
             if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
-            if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+
             /* Se viene fatto il rollback della transazione il prodotto non è stato modificato .*/
             System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
         } catch (Throwable t) {
@@ -98,7 +84,6 @@
         try {
             /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
             if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
-            if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
             System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
         } catch (Throwable t) {
         }

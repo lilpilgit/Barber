@@ -128,7 +128,6 @@ public class Dispatcher extends HttpServlet {
             if (errorPage) { /* deve essere mostrata la pagina di errore... è successo qualcosa di brutto sicuramente... */
 
                 errorPage = false; /* altrimenti rimane sempre a true anche se il problema che ha scatenato l'errore viene fixato si continua a vedere la pagina sbagliata*/
-
                 forward(request, response, "jsp/error/404.jsp");
 
             } else if (viewUrl != null) { /* passata con il controller */

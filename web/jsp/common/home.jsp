@@ -1,9 +1,9 @@
 <%@ page import="model.mo.Product" %>
+<%@ page import="model.mo.Structure" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.mo.Structure" %>
-<%@ page errorPage="../error/404.jsp"  %>
+<%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%
@@ -42,7 +42,7 @@
 
     /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
     Structure structure = null;
-    if(request.getAttribute("structure") != null){
+    if (request.getAttribute("structure") != null) {
         structure = (Structure) request.getAttribute("structure");
     }
 
@@ -251,27 +251,12 @@
     <input type="hidden" name="ProductID" value="">
     <input type="hidden" name="ProductStatus" value="">
     <input type="hidden" name="fromHome" value="">
-    <%} else {%>
+    <%} else if (loggedOn && loggedUser.getType() == 'C') {%>
     <input type="hidden" name="controllerAction" value="home.Product.showProduct">
     <input type="hidden" name="idProduct" value="">
     <%}%>
 </form>
 <%@ include file="/templates/footer.jsp" %>
-
-<!-- redirect all'area riservata dell'impiegato -->
-<%if (loggedOn && loggedUser.getType() == 'E') {%>
-<form method="post" id="redirectEmployeeArea">
-    <input type="hidden" name="controllerAction" value="employee.Work.showBookings"/>
-    <input type="hidden" class="form-control" value="" name="currentDate" id="currentDateRedirectEmployee">
-</form>
-
-<script>
-    window.addEventListener("load", () => {
-        setCurrentDate('currentDateRedirectEmployee');
-        document.getElementById('redirectEmployeeArea').submit();
-    });
-</script>
-<%}%>
 </body>
 </html>
 

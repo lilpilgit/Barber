@@ -436,3 +436,20 @@
 <form name="navForm" id="navForm" method="post">
     <input type="hidden" name="controllerAction" value="">
 </form>
+
+
+
+<!-- redirect all'area riservata dell'impiegato -->
+<%if (loggedEmployee) {%>
+<form method="post" id="redirectEmployeeArea">
+    <input type="hidden" name="controllerAction" value="employee.Work.showBookings"/>
+    <input type="hidden" class="form-control" value="" name="currentDate" id="currentDateRedirectEmployee">
+</form>
+
+<script>
+    window.addEventListener("load", () => {
+        setCurrentDate('currentDateRedirectEmployee');
+        document.getElementById('redirectEmployeeArea').submit();
+    });
+</script>
+<%}%>

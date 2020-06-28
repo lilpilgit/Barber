@@ -1,25 +1,7 @@
-<%@ page import="model.mo.User" %>
-<%@ page import="model.mo.Structure" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page isErrorPage="true" %>
 <%@ page session="false" %>
 <%
-    /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
-    boolean loggedOn = false;
-    if (request.getAttribute("loggedOn") != null) {
-        loggedOn = (Boolean) request.getAttribute("loggedOn");
-    }
-
-
-
-    out.print("loggedOn == " + loggedOn);
-
-    /* Prendo il parametro "loggedUser" che mi consente di sapere qual'è l'utente attualmente loggato */
-    User loggedUser = null;
-    if (loggedOn && request.getAttribute("loggedUser") != null) {
-        loggedUser = (User) request.getAttribute("loggedUser");
-    }
-
     /* Prendo il parametro "result" che si occupa di indicarmi se la modifica dei dati è andata a buon fine o meno*/
     String result = null;
     boolean resultPresent = false;
@@ -33,22 +15,13 @@
         applicationMessage = (String) request.getAttribute("applicationMessage");
     }
 
-    /* Prendo l'oggetto struttura per conoscere le informazioni da mostrare nel footer */
-    Structure structure = null;
-    if(request.getAttribute("structure") != null){
-        structure = (Structure) request.getAttribute("structure");
-    }
-
     /* Parametro per aggiungere la classe active2 al bottone della pagina in cui si trova */
     String idBtnAttivo = null;
     /* Parametro per settare di volta in volta dove ci si trova nel title */
-    String menuActiveLink = "! Error !";
+    String menuActiveLink = "Error";
 %>
 <html lang="en">
 <%@include file="/templates/head.jsp" %>
-<body>
-<%@include file="/templates/header.jsp" %>
-
 <body>
 <div class="row padding">
     <div class="result-checkout-container">
@@ -62,11 +35,18 @@
             </div>
             <p>There was probably a problem if you are here ... Try again later, we are already working on it
                 ...<br><br></p>
+            <div class="justify-content-center">
+                <form method="post">
+                    <button class="btn btnheader active2" type="submit" id='showHome'>
+                        Home
+                    </button>
+                    <input type="hidden" name="controllerAction" value="home.Home.view">
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
-
-<%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
 

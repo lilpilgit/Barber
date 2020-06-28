@@ -104,6 +104,5 @@
             {"result":"success"}
         <%} else {
             /* FAIL */%>
-
             {"result":"fail"}
         <%}%>
