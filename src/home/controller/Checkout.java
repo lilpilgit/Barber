@@ -83,7 +83,11 @@ public class Checkout {
                 totalPrice = new BigDecimal((String) mainObj.get("totalPrice"));
                 totalSaved = new BigDecimal((String) mainObj.get("totalSaved"));
 
-                /* array di prodotti da acquistare del tipo ==> "productsToBuy":[{"ID":"1","desiredQty":"1"},{"ID":"4","desiredQty":"4"},{"ID":"5","desiredQty":"2"}] */
+                /* array di prodotti da acquistare del tipo ==>
+                "productsToBuy":[{"ID":"1","desiredQty":"1","name":"Avaha","eachFinalPrice":"10"},
+                                 {"ID":"4","desiredQty":"4","name":"Shavette","eachFinalPrice":"50"},
+                                 {"ID":"5","desiredQty":"2","name":"Shaving milk","eachFinalPrice":"20"}]
+                */
 
                 JSONArray productsToBuyArray = (JSONArray) mainObj.get("productsToBuy");
 
