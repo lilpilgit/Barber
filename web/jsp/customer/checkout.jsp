@@ -307,8 +307,9 @@
 
 <%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
+
     let addressDB;
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
+
     window.addEventListener('load', () => {
         /* creo un array con le informazioni di fatturazione prese dal db */
         addressDB = ["<%=splittedAddress[0]%>", "<%=splittedAddress[1]%>", "<%=splittedAddress[2]%>", "<%=splittedAddress[3]%>", "<%=splittedAddress[4]%>", "<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>"];
