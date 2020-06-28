@@ -37,7 +37,7 @@
 <%@include file="/templates/head.jsp" %>
 <body>
 <%@include file="/templates/header.jsp" %>
-<html>
+
 <body>
 <div class="row padding">
     <div class="result-checkout-container">
@@ -54,11 +54,13 @@
         </div>
     </div>
 </div>
+
 <%@ include file="/templates/footer.jsp" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
 
     });
 </script>
+
 </body>
 </html>

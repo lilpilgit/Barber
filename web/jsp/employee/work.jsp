@@ -2,7 +2,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
@@ -148,8 +148,8 @@
             </div>
         </div>
     </div>
-
 </main>
+
 <form id="refreshWorkForm" method="post">
     <input type="hidden" name="controllerAction" value="employee.Work.showBookings">
     <input type="hidden" value="<%=dataToShow%>" name="currentDate" id="currentDateRefresh">
