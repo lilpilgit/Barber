@@ -39,14 +39,10 @@ function handlerCounterQtaProduct(id_minus, id_qta, id_plus, max_qta) {
      */
     let error_present = false;
     max_qta = parseInt(max_qta);
-    // let div_father = document.getElementById(id_father);
+
     let minus_btn = document.getElementById(id_minus);
     let qta_field = document.getElementById(id_qta);
     let plus_btn = document.getElementById(id_plus);
-    // let div_max_qta = document.createElement("div");
-    // div_max_qta.classList.add("max-qta-reached");
-    // div_max_qta.innerHTML = "<p><strong>Warning!</strong>Maximum quantity reached.</p>";
-
 
     minus_btn.addEventListener("click", () => {
         if (error_present) {
@@ -59,7 +55,6 @@ function handlerCounterQtaProduct(id_minus, id_qta, id_plus, max_qta) {
         }
     });
 
-
     plus_btn.addEventListener("click", () => {
         if (parseInt(qta_field.value) !== max_qta) {
             /*i can increase the quantity*/
@@ -70,8 +65,6 @@ function handlerCounterQtaProduct(id_minus, id_qta, id_plus, max_qta) {
             // div_father.appendChild(div_max_qta);
         }
     });
-
-
 }
 
 function setProductForm(idProduct) {
@@ -85,7 +78,6 @@ function setProductForm(idProduct) {
     productForm.elements['idProduct'].value = idProduct;
 
     /*submit della form verso il dispatcher*/
-
     productForm.submit();
 }
 
@@ -103,7 +95,6 @@ function setSelectedAttribute(id_select, valueFromDb, deselect = false) {
                 select[option].selected = true;
                 break;
             }
-
         }
     }
 }
@@ -178,7 +169,6 @@ function checkUncheckAll(ele, nameGroup) {
 
     /* sono state modificate le checkbox devo rifare il calcolo del totale */
     modifyTotalPriceAndSaving(nameGroup);
-
 }
 
 function modifyTotalPriceAndSaving(nameGroup) {
@@ -274,7 +264,6 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                     showResult('fail',"ERROR ON BACKEND!");
                 }
             }
-
         };
 
         xhttp.open("POST", "app", true);
@@ -284,7 +273,6 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     } else {
         console.log("NON SI PUÒ MODIFICARE SEI FUORI RANGE!");
     }
-
 }
 
 function findSlot(idStructure, pickedDate) {
@@ -383,8 +371,8 @@ function findBooking(idCustomer) {
                 } else if (obj.alreadyBooked === "false" && obj.deletedReason !== undefined) {
                     /* CASO "CANCELLATO DALL'ADMIN"
                     Se e' presente la deletedReason, significa che l'admin ha cancellato l'appuntamento
-                     e quindi visualizzo la deletedReason al cliente. AlreadyBooked rimane a false perche' il cliente
-                      ha la possibilita' di prenotare un nuovo appuntamento. */
+                    e quindi visualizzo la deletedReason al cliente. AlreadyBooked rimane a false perche' il cliente
+                    ha la possibilita' di prenotare un nuovo appuntamento. */
                     document.getElementById("ModalLabelBook").innerHTML = '<span ' +
                         'class="text-danger">BOOKING REJECTED BY THE ADMINISTRATOR</span>';
                     bookedDate.innerText = obj.date;
@@ -582,7 +570,6 @@ function autoFillShippingAddress(checkbox, addressDB) {
     if (statusCheckbox === true) {
         setSelectedAttribute("State", addressDB[0]);
         setSelectedAttribute("Region", addressDB[1]);
-        // let isReadOnly = $("#MyCheckbox").prop("checked");
     } else {
         setSelectedAttribute("State", "", true);
         setSelectedAttribute("Region", "", true);
@@ -634,7 +621,7 @@ function getCurrentTime() {
 
 function setCurrentDate(id) {
     /**
-     * Return current date in format gg-mm-aaaa
+     * Return current date in format gg-mm-aaaa and set it on a specific elementID
      * */
 
     let today = new Date();
@@ -655,6 +642,23 @@ function setCurrentDate(id) {
     document.getElementById(id).value = today;
 }
 
+function getDateTimeObj(hhmmss, yyyymmdd) {
+    /**
+     * Transform a string format HH:MM:SS and a string format YYYY-MM-DD into a Date format
+     *
+     * @type {Date}
+     */
+
+    /* Creo un nuovo oggetto Date dove imposto gia' anno-mese-giorno */
+    let dateTime = new Date(yyyymmdd);
+    let splittedTime = hhmmss.split(":");
+    dateTime.setHours(splittedTime[0]);
+    dateTime.setMinutes(splittedTime[1]);
+    dateTime.setSeconds(splittedTime[2]);
+
+    return dateTime;
+}
+
 function getCurrentDate() {
     let today = new Date();
     let currentDate;
@@ -673,23 +677,6 @@ function getCurrentDate() {
 
     currentDate = yyyy + '-' + mm + '-' + dd;
     return currentDate;
-}
-
-function getDateTimeObj(hhmmss, yyyymmdd) {
-    /**
-     * Transform a string format HH:MM:SS and a string format YYYY-MM-DD into a Date format
-     *
-     * @type {Date}
-     */
-
-    /* Creo un nuovo oggetto Date dove imposto gia' anno-mese-giorno */
-    let dateTime = new Date(yyyymmdd);
-    let splittedTime = hhmmss.split(":");
-    dateTime.setHours(splittedTime[0]);
-    dateTime.setMinutes(splittedTime[1]);
-    dateTime.setSeconds(splittedTime[2]);
-
-    return dateTime;
 }
 
 function removeProductFromShowcase(idProduct) {
