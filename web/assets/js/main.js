@@ -601,6 +601,10 @@ function autoFillShippingAddress(checkbox, addressDB) {
 }
 
 function getCurrentTime() {
+    /**
+     * Return String currentTime in the format HH:MM
+     * @type {Date}
+     */
     let today = new Date();
     let currentTime;
     let HH = today.getHours();
@@ -660,6 +664,10 @@ function getDateTimeObj(hhmmss, yyyymmdd) {
 }
 
 function getCurrentDate() {
+    /**
+     * Return String currentDate in the format YYYY-MM-DD
+     * @type {Date}
+     */
     let today = new Date();
     let currentDate;
     let dd = today.getDate();
