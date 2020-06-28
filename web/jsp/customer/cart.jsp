@@ -51,15 +51,11 @@
 %>
 <!doctype html>
 <html lang="en">
-
 <%@include file="/templates/head.jsp" %>
-
 <body>
-
 <%@include file="/templates/header.jsp" %>
-<!------------------------------------------------ Shopping Cart ----------------------------------------------------->
 
-<!-- PRESO DA https://bootsnipp.com/snippets/O5mM8 -->
+<!------------------------------------------------ Shopping Cart ----------------------------------------------------->
 
 <div class="container py-4">
     <div class="cart-box">

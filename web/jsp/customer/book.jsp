@@ -48,12 +48,10 @@
 %>
 <!doctype html>
 <html lang="en">
-
 <%@include file="/templates/head.jsp"%>
-
 <body>
-
 <%@include file="/templates/header.jsp"%>
+
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container text-center my-4" style="background-color: #f1e7cb; border-radius: 25px;">
@@ -83,12 +81,14 @@
         </div>
     </div>
 </div>
+
 <form method="post" id="action_book">
     <input type="hidden" name="controllerAction" value="">
     <input type="hidden" name="idCustomer" value="">
     <input type="hidden" name="selected_date" value="">
     <input type="hidden" name="selected_time" value="">
 </form>
+
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
 <%@ include file="/templates/footer.jsp"%>

@@ -84,12 +84,10 @@
 %>
 <!doctype html>
 <html lang="en">
-
 <%@include file="/templates/head.jsp" %>
-
 <body>
-
 <%@include file="/templates/header.jsp" %>
+
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
 <div class="container pt-4">
@@ -300,6 +298,7 @@
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout
                 </button>
             </form>
+
         </div>
     </div>
 </div>
@@ -309,7 +308,6 @@
 <script type="text/javascript">
 
     let addressDB;
-
     window.addEventListener('load', () => {
         /* creo un array con le informazioni di fatturazione prese dal db */
         addressDB = ["<%=splittedAddress[0]%>", "<%=splittedAddress[1]%>", "<%=splittedAddress[2]%>", "<%=splittedAddress[3]%>", "<%=splittedAddress[4]%>", "<%=(splittedAddressLength == 6) ? splittedAddress[5] : ""%>"];
@@ -317,6 +315,5 @@
     });
 
 </script>
-
 </body>
 </html>
