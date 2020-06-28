@@ -3,7 +3,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="static services.config.Configuration.TOT_REC_TO_SHOW_LOGISTICS" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
@@ -232,11 +232,10 @@
     <input type="hidden" name="pageToShow" value="">
 </form>
 
-
 <script>
     window.addEventListener("load", () => {
-        /* necessario per il popover  */
 
+        /* necessario per il popover  */
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover({})
         });

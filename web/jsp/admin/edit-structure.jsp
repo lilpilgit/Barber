@@ -1,6 +1,6 @@
 <%@ page import="model.mo.Structure" %>
 <%@ page import="model.mo.User" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
@@ -176,7 +176,6 @@
 
 <script>
     window.addEventListener("load",() =>{
-        /*addOnClickListenerBtnSidebar();*/
         /* Setto come selected tra le option di state e region quella uguale al valore della struttura da modificare */
         setSelectedAttribute("State", "<%=splittedAddress[0]%>");
         setSelectedAttribute("Region", "<%=splittedAddress[1]%>")

@@ -1,7 +1,7 @@
 <%@ page import="model.mo.Product" %>
 <%@ page import="model.mo.User" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%

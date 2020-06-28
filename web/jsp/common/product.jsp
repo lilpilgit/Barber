@@ -70,7 +70,6 @@
 <body>
 <%@include file="/templates/header.jsp" %>
 
-
 <!--------------------------------------------- Product view ------------------------------------------------------->
 <div class="container pt-5 text-center">
     <button type="submit" class="btn btnheader active2" id="showShop" form="goBackShop">

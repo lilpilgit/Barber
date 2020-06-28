@@ -1,6 +1,6 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="model.mo.Structure" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
@@ -62,7 +62,6 @@
 <html lang="en">
 <%@include file="/templates/head.jsp" %>
 <body>
-
 <%@include file="/templates/header.jsp" %>
 
 <!---------------------------------------------- IMAGE CONTACT  ------------------------------------------------------->
@@ -108,8 +107,8 @@
                 <input type="hidden" name="controllerAction" value="home.Contact.contact">
 
             </form>
-
             <!-- Form end -->
+
         </div>
     </div>
 </div>

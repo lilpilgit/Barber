@@ -2,7 +2,7 @@
 <%@ page import="model.mo.User" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%
@@ -122,7 +122,7 @@
                                         title = "Posted by the customer";
                                         /* ho dovuto adottare il replace altrimenti l'html si interrompe al primo " o ' */
                                     }
-                                    tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
+                                    tr = "<tr class='" + class_color_row + "' data-toggle='popover' data-trigger='hover' data-placement='left' title='" + title + "' data-content='" + b.getDeletedReason().replace("'", "&apos;").replace("\"", "&quot;") + "'>";
 
                                 }
 

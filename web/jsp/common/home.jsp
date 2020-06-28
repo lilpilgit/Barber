@@ -6,7 +6,6 @@
 <%@ page errorPage="../error/404.jsp" %>
 <%@ page session="false" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-
 <%
     /* Prendo il parametro "loggedOn" che mi consente di sapere se l'utente attuale è loggato o meno */
     boolean loggedOn = false;
@@ -57,7 +56,6 @@
 <!doctype html>
 <html lang="en">
 <%@ include file="/templates/head.jsp" %>
-
 <body>
 <%@ include file="/templates/header.jsp" %>
 
@@ -266,6 +264,7 @@
     <input type="hidden" name="controllerAction" value="employee.Work.showBookings"/>
     <input type="hidden" class="form-control" value="" name="currentDate" id="currentDateRedirectEmployee">
 </form>
+
 <script>
     window.addEventListener("load", () => {
         setCurrentDate('currentDateRedirectEmployee');
@@ -273,7 +272,6 @@
     });
 </script>
 <%}%>
-
 </body>
 </html>
 
