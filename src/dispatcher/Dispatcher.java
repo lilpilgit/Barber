@@ -68,34 +68,13 @@ public class Dispatcher extends HttpServlet {
                     System.err.println("DISPATCHER ==> isAjax yes multipart : " + isAjax);
                 }
             }
-        }//fine ELSE
-
-//        /* chiamate AJAX */
-//        if (controllerAction != null && controllerAction.equals("home.Cart.changeDesiredQuantity")) {
-//
-////            forward(request, response, "jsp/customer/ajax-change-desired-qty.jsp");
-//
-//            invokeController(request,response);
-//
-//        } else if (controllerAction != null && controllerAction.equals("home.Book.reservedSlot")) {
-//
-//            forward(request, response, "jsp/customer/ajax-times-searcher.jsp");
-//
-//        } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
-//
-//            forward(request, response, "jsp/customer/ajax-get-booking.jsp");
-//
-//        }
-
+        } //fine ELSE
 
         if (controllerAction == null) {
             controllerAction = "home.Home.view";
         }
 
-        /*
-            Invoco il metodo del controller indipendentemente se si tratta di una HTTP AJAX o meno.
-         */
-
+        /* Invoco il metodo del controller indipendentemente se si tratta di una HTTP AJAX o meno. */
         invokeController(request, response);
 
         /* chiamate normali ( NON AJAX ) */
@@ -158,7 +137,6 @@ public class Dispatcher extends HttpServlet {
             e.printStackTrace();
             errorPage = true;
         }
-
     }
 
     protected void forward(HttpServletRequest request, HttpServletResponse response, String relativePathJSP) {

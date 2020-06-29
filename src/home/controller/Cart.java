@@ -504,7 +504,7 @@ public class Cart {
             }
         }
 
-//        response.setContentType("text/plain");
+        response.setContentType("application/json");
         try {
             if (changed) {
                 response.getWriter().write("{\"result\":\"success\"}");
@@ -521,7 +521,6 @@ public class Cart {
             e.printStackTrace();
         }
     }
-
 
     public static void commonView(DAOFactory daoFactory, User loggedUser, HttpServletRequest request) {
 

@@ -12,8 +12,11 @@ import services.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Book {
@@ -254,6 +257,259 @@ public class Book {
                 /* FAIL */
                 request.setAttribute("result", "fail");
             }
+        }
+    }
+
+    public static void getBooking(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Fetch the last booked appointment of a specific customer.
+         *
+         * WARNING! This method is compatible only with AJAX request.
+         */
+
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
+        Structure structure = null;
+        StructureDAO structureDAO = null;
+        User loggedUser = null;
+        BookingDAO bookingDAO = null;
+        Booking booking = null;
+
+        String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
+
+        boolean alreadyBooked = false;
+        boolean deletedByAdmin = false;
+
+        try {
+            /* Inizializzo il cookie di sessione */
+            HashMap sessionFactoryParameters = new HashMap<String, Object>();
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
+
+            /* Come in una sorta di connessione al DB, la beginTransaction() per i cookie setta
+             *  nel costruttore di CookieDAOFactory la request e la response presenti in sessionFactoryParameters*/
+            sessionDAOFactory.beginTransaction();
+
+            UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO(); /* Ritorna: new UserDAOCookieImpl(request, response);*/
+
+            /* Controllo se è presente un cookie di sessione tra quelli passati dal browser */
+            loggedUser = sessionUserDAO.findLoggedUser();
+
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            daoFactory.beginTransaction();
+
+            bookingDAO = daoFactory.getBookingDAO();
+
+            structureDAO = daoFactory.getStructureDAO();
+
+            /* Faccio il fetch dell'unica struttura che ho nel db */
+            structure = structureDAO.fetchStructure();
+
+            /* Creo l'oggetto booking che conterra' tutte le informazioni riferite allo status dell'ultimo appuntamento */
+            booking = bookingDAO.getLastBooking(loggedUser.getId(), structure.getId());
+
+            /* Commit fittizio */
+            sessionDAOFactory.commitTransaction();
+
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();/* Rollback fittizio */
+                /* Se viene fatto il rollback della transazione il prodotto non è stato modificato .*/
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
+            }
+        } finally {
+            try {
+                /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();/* Close fittizia */
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+        }
+
+
+    /* Nel caso in cui la bookingDAO.getLastBooking(idCustomer, structure.getId()); ritorni un oggetto diverso da null
+       significa che c'e' una prenotazione nel db riferita a quell'utente.
+       A questo punto se il valore di DELETED nel db e' null, significa che c'e' una prenotazione che non e' stata
+       cancellata ne' dall'amministratore, ne' dal cliente. Quindi setto alreadyBooked a true per impedire al cliente
+       di effettuare una nuova prenotazione.
+     */
+
+        if (booking != null) {
+            if (booking.isDeleted() == null)
+                alreadyBooked = true;
+            else if (!booking.isDeleted())
+                deletedByAdmin = true;
+        }
+
+        result = "success";
+
+        response.setContentType("application/json");
+        /* Scrivo il json sulla response */
+        try {
+            response.getWriter().write("{");
+            response.getWriter().append("\"result\":\"").append(result).append("\"");
+            response.getWriter().append(",");
+            response.getWriter().append("\"alreadyBooked\":\"").append(String.valueOf(alreadyBooked)).append("\"");
+            if (alreadyBooked || deletedByAdmin) {
+                response.getWriter().append(",");
+                response.getWriter().append("\"idBooking\":\"").append(String.valueOf(booking.getId())).append("\"");
+                response.getWriter().append(",");
+                response.getWriter().append("\"deleted\":\"").append(String.valueOf(booking.isDeleted())).append("\"");
+                response.getWriter().append(",");
+                response.getWriter().append("\"deletedReason\":\"").append(booking.getDeletedReason()).append("\"");
+                response.getWriter().append(",");
+                response.getWriter().append("\"date\":\"").append(String.valueOf(booking.getDate())).append("\"");
+                response.getWriter().append(",");
+                response.getWriter().append("\"hourStart\":\"").append(String.valueOf(booking.getHourStart())).append("\"");
+            }
+            response.getWriter().append("}");
+        } catch (IOException e) {
+            System.out.println("Errore nella response.getWriter().write()");
+            e.printStackTrace();
+        }
+        try {
+            response.getWriter().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void reservedSlot(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Fetch arraylist of booking time for a specific date.
+         *
+         * WARNING! This method is compatible only with AJAX request.
+         */
+
+        DAOFactory sessionDAOFactory = null; //per i cookie
+        DAOFactory daoFactory = null; //per il db
+        Structure structure = null;
+        StructureDAO structureDAO = null;
+        BookingDAO bookingDAO = null;
+        ArrayList<Booking> bookings = null;
+        String result = "fail"; /* Se tutto va a buon fine, poi diventera' success */
+        ArrayList<LocalTime> freeSlots = null;
+        int i = 0;
+
+        LocalTime openingTime = null; /* parametro che rappresenta l'ora di apertura della struttura */
+        LocalTime closingTime = null; /* parametro che rappresenta l'ora di chiusura della struttura */
+        LocalTime currentTime = null; /* parametro che rappresenta l'ora attuale */
+        LocalTime slot = null; /* parametro che serve per fare lo scanning degli appuntamenti in una giornata */
+        LocalDate pickedDate = null; /* parametro che rappresenta l'ora selezionata dall'utente */
+        LocalDate currentDate = null; /* parametro che rappresenta la data attuale */
+
+        boolean isToday = false;
+
+        try {
+
+            /* Acquisisco un DAOFactory per poter lavorare sul DB*/
+            daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL, null);
+
+            daoFactory.beginTransaction();
+
+            bookingDAO = daoFactory.getBookingDAO();
+            structureDAO = daoFactory.getStructureDAO();
+
+            structure = structureDAO.fetchStructure();
+            openingTime = structure.getOpeningTime().toLocalTime();
+            closingTime = structure.getClosingTime().toLocalTime();
+            /* setto l'ora attuale ricevuta dal client */
+            currentTime = LocalTime.parse(request.getParameter("currentTime"));
+
+            slot = structure.getSlot().toLocalTime();
+
+            /* setto la data selezionata dall'utente */
+            pickedDate = LocalDate.parse(request.getParameter("pickedDate"));
+
+            /* setto la data attuale fornita dal client */
+            currentDate = LocalDate.parse(request.getParameter("currentDate"));
+
+            /* importo l'array di prenotazioni riferite alla data selezionata dall'utente */
+            bookings = bookingDAO.findBookingsByDate(pickedDate);
+
+            /* Commit sul db */
+            daoFactory.commitTransaction();
+
+        } catch (Exception e) {
+            try {
+                if (daoFactory != null) daoFactory.rollbackTransaction(); /* Rollback sul db*/
+
+                /* Se viene fatto il rollback della transazione il prodotto non è stato modificato .*/
+                System.err.println("ROLLBACK DELLA TRANSAZIONE AVVENUTO CON SUCCESSO");
+            } catch (Throwable t) {
+                System.err.println("ERRORE NEL COMMIT/ROLLBACK DELLA TRANSAZIONE");
+
+            }
+        } finally {
+            try {
+                /* Sia in caso di commit che in caso di rollback chiudo la transazione*/
+                if (daoFactory != null) daoFactory.closeTransaction(); /* Close sul db*/
+                System.err.println("CHIUSURA DELLA TRANSAZIONE AVVENUTA CON SUCCESSO");
+            } catch (Throwable t) {
+            }
+        }
+
+        LocalTime indexTime = null; /* Uso un indice per scandire tutti gli intervalli temporanei definiti dallo slot */
+        /* verifico se la data di prenotazione e' uguale alla data attuale del client */
+        isToday = pickedDate.isEqual(currentDate);
+
+        freeSlots = new ArrayList<LocalTime>();
+
+
+        for (indexTime = LocalTime.of(openingTime.getHour(), openingTime.getMinute(), openingTime.getSecond());
+             !indexTime.equals(closingTime); indexTime = indexTime.plusMinutes(slot.getMinute())) {
+
+            if (i < bookings.size() && indexTime.equals(bookings.get(i).getHourStart().toLocalTime())) {
+                System.err.println("Trovato appuntamento alle: " + bookings.get(i).getHourStart());
+                i++;
+            } else {
+                /* se non si sta prenotando per la data odierna, salvo tutti gli slot liberi */
+                if (!isToday || (isToday && (indexTime.compareTo(currentTime) > 0))) {
+                    freeSlots.add(indexTime);
+                    /* altrimenti se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
+                }
+            }
+        }
+
+        result = "success";
+
+        response.setContentType("application/json");
+        /* Scrivo il json sulla response */
+        try {
+            response.getWriter().write("{");
+            response.getWriter().append("\"result\":\"").append(result).append("\"");
+            response.getWriter().append(",");
+            response.getWriter().append("\"availableTimes\":");
+            response.getWriter().append("[");
+            for (i = 0; i < freeSlots.size(); i++) {
+                response.getWriter().append("\"").append(String.valueOf(freeSlots.get(i))).append("\"");
+                if (i != (freeSlots.size() - 1)) {
+                    response.getWriter().append(",");
+                } else {
+                    response.getWriter().append("]");
+                }
+            }
+            response.getWriter().append("}");
+        } catch (IOException e) {
+            System.out.println("Errore nella response.getWriter().write()");
+            e.printStackTrace();
+        }
+        try {
+            response.getWriter().close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
