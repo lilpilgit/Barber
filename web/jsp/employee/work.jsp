@@ -53,7 +53,7 @@
     String menuActiveLink = "Bookings";
 
     /* Parametro per aggiungere la classe che lo mantiene attivo al bottone della pagina in cui si trova */
-    String idBtnAttivo = "showBookings";
+    String idBtnAttivo = null;
 %>
 <!doctype html>
 <html lang="en">
