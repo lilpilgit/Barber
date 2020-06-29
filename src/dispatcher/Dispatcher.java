@@ -20,6 +20,7 @@ import java.util.List;
 public class Dispatcher extends HttpServlet {
     String controllerAction = null;
     Method controllerMethod = null;
+    boolean isAjax = false;
     boolean errorPage = false;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,13 +32,15 @@ public class Dispatcher extends HttpServlet {
     }
 
     protected void commonOperations(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
+
+        response.setContentType("text/html;charset=UTF-8"); /* se AJAX verrà sovrascritto successivamente */
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request); /* true se è stato submittato un form di tipo multipart/form-data*/
 
         if (!isMultipart) {
             /* se non è una multipart tratto tale chiamata HTTP come tutte quelle trattate fin ora */
             controllerAction = request.getParameter("controllerAction");
+            isAjax = Boolean.parseBoolean(request.getParameter("isAjax")); /* capisco se si tratta di una chiamata ajax o meno */
             System.err.println("DISPATCHER ==> controllerAction nel caso NO MULTIPART : " + controllerAction);
         } else {
             DiskFileItemFactory factory = new DiskFileItemFactory(); /* serve a creare tutti i gestori per i file che arrivano in upload */
@@ -60,65 +63,43 @@ public class Dispatcher extends HttpServlet {
                 if (item.isFormField() && item.getFieldName().equals("controllerAction")) {
                     controllerAction = item.getString(); /*riempio controllerAction solo dopo aver trovato il formField il cui nome è controllerAction*/
                     System.err.println("DISPATCHER ==> controllerAction yes multipart : " + controllerAction);
+                } else if (item.isFormField() && item.getFieldName().equals("isAjax")) {
+                    isAjax = Boolean.parseBoolean(request.getParameter("isAjax")); /* capisco se si tratta di una chiamata ajax o meno */
+                    System.err.println("DISPATCHER ==> isAjax yes multipart : " + isAjax);
                 }
             }
         }//fine ELSE
 
-        /* chiamate AJAX */
-        if (controllerAction != null && controllerAction.equals("home.Cart.changeDesiredQuantity")) {
+//        /* chiamate AJAX */
+//        if (controllerAction != null && controllerAction.equals("home.Cart.changeDesiredQuantity")) {
+//
+////            forward(request, response, "jsp/customer/ajax-change-desired-qty.jsp");
+//
+//            invokeController(request,response);
+//
+//        } else if (controllerAction != null && controllerAction.equals("home.Book.reservedSlot")) {
+//
+//            forward(request, response, "jsp/customer/ajax-times-searcher.jsp");
+//
+//        } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
+//
+//            forward(request, response, "jsp/customer/ajax-get-booking.jsp");
+//
+//        }
 
-            forward(request, response, "jsp/customer/ajax-change-desired-qty.jsp");
 
-        } else if (controllerAction != null && controllerAction.equals("home.Book.reservedSlot")) {
-
-            forward(request, response, "jsp/customer/ajax-times-searcher.jsp");
-
-        } else if (controllerAction != null && controllerAction.equals("home.Book.getBooking")) {
-
-            forward(request, response, "jsp/customer/ajax-get-booking.jsp");
-
+        if (controllerAction == null) {
+            controllerAction = "home.Home.view";
         }
+
+        /*
+            Invoco il metodo del controller indipendentemente se si tratta di una HTTP AJAX o meno.
+         */
+
+        invokeController(request, response);
+
         /* chiamate normali ( NON AJAX ) */
-        else {
-
-            if (controllerAction == null) {
-                controllerAction = "home.Home.view";
-            }
-            /* CARICO LA CLASSE DA CUI RICHIAMARE IL METODO */
-            String[] splittedAction = controllerAction.split("\\.");
-            Class<?> controllerClass = null;
-            try {
-                controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
-                System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
-                //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
-            } catch (ClassNotFoundException e) {
-                System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
-
-            /* INVOCO IL METODO */
-
-            try {
-                controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
-                System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
-            } catch (NoSuchMethodException e) {
-                System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
-
-            try {
-                controllerMethod.invoke(null, request, response);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                errorPage = true;
-            } catch (InvocationTargetException e) {
-                System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
-                e.printStackTrace();
-                errorPage = true;
-            }
-
+        if (!isAjax) {
             /*Dopo aver invocato il metodo corrispondente per ogni HTTP request e aver comunicato
              * al DispatcherAdmin quale JSP mostrare tramite l'attributo viewUrl, recepisco i dati settati*/
 
@@ -139,6 +120,45 @@ public class Dispatcher extends HttpServlet {
                 forward(request, response, "jsp/home.jsp");
             }
         }
+
+    }
+
+    protected void invokeController(HttpServletRequest request, HttpServletResponse response) {
+        /* CARICO LA CLASSE DA CUI RICHIAMARE IL METODO */
+        String[] splittedAction = controllerAction.split("\\.");
+        Class<?> controllerClass = null;
+        try {
+            controllerClass = Class.forName(splittedAction[0] + ".controller." + splittedAction[1]);
+            System.err.println("DISPATCHER  ==> controllerClass :" + controllerClass.getName());
+            //  aggiungo il nome del package ^^^^^^^^^^^^^^^^
+        } catch (ClassNotFoundException e) {
+            System.err.println("Class not found Exception ==> CARICAMENTO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            e.printStackTrace();
+            errorPage = true;
+        }
+
+        /* INVOCO IL METODO */
+
+        try {
+            controllerMethod = controllerClass.getMethod(splittedAction[2], HttpServletRequest.class, HttpServletResponse.class);
+            System.err.println("DISPATCHER  ==> controllerMethod :" + controllerMethod.getName());
+        } catch (NoSuchMethodException e) {
+            System.err.println("No Such Method Exception ==> CARICAMENTO DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            e.printStackTrace();
+            errorPage = true;
+        }
+
+        try {
+            controllerMethod.invoke(null, request, response); /* parametro null in quanto sono metodi statici */
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            errorPage = true;
+        } catch (InvocationTargetException e) {
+            System.err.println("Invocation Target Exception ==> INVOCAZIONE DEL METODO DELLA CONTROLLER CLASS NEL DISPATCHER");
+            e.printStackTrace();
+            errorPage = true;
+        }
+
     }
 
     protected void forward(HttpServletRequest request, HttpServletResponse response, String relativePathJSP) {

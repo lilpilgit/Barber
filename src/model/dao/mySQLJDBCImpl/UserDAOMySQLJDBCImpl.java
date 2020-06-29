@@ -24,11 +24,7 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
     @Override
     public User insert(Long id, Structure structure, String email, String name, String surname, String address,
                        String phone, String password, LocalDate birthDate, String fiscalCode, char type) throws DuplicatedObjectException {
-        /**
-         * This method allows you to indifferently insert a user of type Admin, Customer or Employee.
-         * @params id parameter is DUMMY for DB insert but it's necessary when cookie is created ( in fact the method signature is the same)
-         * @return Returns the user inserted correctly in the DB otherwise raises an exception
-         * */
+
 
         /*Setto l'oggetto di cui andrò a verificarne l'esistenza prima di inserirlo nel DB*/
         User user = new User();
@@ -223,13 +219,15 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         return user;
     }
 
+    /**
+     * Update data about a user.
+     *
+     * @param user : user to update
+     * @return Return true if the object was updated correctly in the DB otherwise raise an exception.
+     * */
     @Override
     public boolean update(User user) throws DuplicatedObjectException {
-        /**
-         * Update data about a user.
-         *
-         * @return Return the object updated correctly in the DB otherwise raise an exception.
-         * */
+
 
         boolean exist; /* flag per sapere se esiste già un'utente con gli stessi dati */
         /* CON TALE QUERY CONTROLLO SE L'UTENTE ESISTE GIÀ CON LO STESSA EMAIL O CON LO STESSO CODICE FISCALE O ENTRAMBI */

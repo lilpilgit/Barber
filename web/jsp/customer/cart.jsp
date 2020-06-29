@@ -60,7 +60,7 @@
 <div class="container py-4">
     <div class="cart-box">
         <!-- Se ci sono prodotti nel carrello -->
-        <%if (!cart.isEmpty()) {%>
+        <%if (cart != null && !cart.isEmpty()) {%>
         <div class="row justify-content-center pb-4">
             <span class="logged"><i class="fas fa-shopping-basket"></i></span>
             <h3>Welcome to your shopping cart</h3>
@@ -90,7 +90,7 @@
                     <div class="media">
                         <div class="cart-img text-center">
                             <div class="img-wrap"><img src="img/products/<%=ep.getPictureName()%>"
-                                                       class="img-thumbnail img-sm"></div>
+                                                       class="img-thumbnail img-sm" alt="product_picture"></div>
                         </div>
                         <figcaption class="media-body">
                             <h6 class="title text-truncate"><%=ep.getName()%>

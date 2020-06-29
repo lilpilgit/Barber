@@ -217,18 +217,18 @@ function modifyTotalPriceAndSaving(nameGroup) {
 
 }
 
+/** Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
+ * loggedUser and product with ID = idProduct
+ *
+ * @param  operation : string {"increase" increase desired quantity, "decrease" decrease desired quantity}
+ * @param id_qta : string {id of quantity field}
+ * @param max_qta : number {quantity reachable for this product}
+ * @param idProduct : string {id of product that is being edited}
+ * @param nameGroup : string {name of checkbox group in order to change the total price and savings}
+ * @type {XMLHttpRequest}
+ */
 function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, nameGroup) {
-    /** Send AJAX request with POST method to controller to increase the desired quantity into CART table for specified
-     * loggedUser and product with ID = idProduct
-     *
-     * Parameters required by the controller: operation ==> {"increase" increase desired quantity, "decrease" decrease desired quantity, }
-     *                                        id_qta : id of quantity field
-     *                                        max_qta : max quantity reachable for this product
-     *                                        idProduct : id of product that is being edited
-     *                                        nameGroup : name of checkbox group in order to change the total price and savings
-     *
-     * @type {XMLHttpRequest}
-     */
+
     max_qta = parseInt(max_qta);
     let qta_field = document.getElementById(id_qta);
     let qta_field_value = parseInt(qta_field.value);
@@ -236,9 +236,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
     let allowAJAX = false; /* mi consente di sapere se posso usare AJAX */
     let xhttp = new XMLHttpRequest();
 
-    if (operation === 'increase' && qta_field_value !== max_qta) {
-        allowAJAX = true;
-    } else if (operation === 'decrease' && qta_field_value !== 1) {
+    if ((operation === 'increase' && qta_field_value !== max_qta) || (operation === 'decrease' && qta_field_value !== 1)) {
         allowAJAX = true;
     } else {
         allowAJAX = false;
@@ -254,7 +252,7 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
                         qta_field.value = qta_field_value + 1;
                     } else if (operation === 'decrease') {
                         /*i can decrease the quantity*/
-                        qta_field.value -= 1;
+                        qta_field.value -= 1; /* non esiste un operazione di '-' tra stringhe... */
                     }
                     /* devo ricalcolare prezzo totale e risparmio totale solo dopo aver modificato i text field relativi alla quantità  */
                     modifyTotalPriceAndSaving(nameGroup);
@@ -268,20 +266,20 @@ function changeQuantityProductInCart(operation, id_qta, max_qta, idProduct, name
 
         xhttp.open("POST", "app", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation);
+        xhttp.send("controllerAction=home.Cart.changeDesiredQuantity&idProduct=" + idProduct + "&operation=" + operation + "&isAjax=true");
 
     } else {
         console.log("NON SI PUÒ MODIFICARE SEI FUORI RANGE!");
     }
 }
 
+/**
+ * Send AJAX request with POST method to controller to find the reserved time for a specific selectedDate
+ *
+ *
+ * @type {string}
+ */
 function findSlot(idStructure, pickedDate) {
-    /**
-     * Send AJAX request with POST method to controller to find the reserved time for a specific selectedDate
-     *
-     *
-     * @type {string}
-     */
 
     let currentTime = getCurrentTime();
     let currentDate = getCurrentDate();
