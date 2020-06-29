@@ -265,7 +265,7 @@ function drawChartEarnings(totalWithoutDiscount, totalWithDiscount, lostGain) {
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Total earnings without applying discounts", "Total earnings by applying discounts", "Lost profit"],
+            labels: ["Total earnings without applying discounts (€)", "Total earnings by applying discounts (€)", "Lost profit (€)"],
             datasets: [{
                 label: 'Earnings',
                 data: [totalWithoutDiscount, totalWithDiscount, lostGain],
