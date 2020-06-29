@@ -323,7 +323,7 @@ function findSlot(idStructure, pickedDate) {
 
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate + "&currentTime=" + currentTime + "&currentDate=" + currentDate);
+    xhttp.send("controllerAction=home.Book.reservedSlot&idStructure=" + idStructure + "&pickedDate=" + pickedDate + "&currentTime=" + currentTime + "&currentDate=" + currentDate + "&isAjax=true");
     console.log("Customer selected date:" + pickedDate);
 }
 
@@ -401,7 +401,7 @@ function findBooking(idCustomer) {
 
     xhttp.open("POST", "app", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer);
+    xhttp.send("controllerAction=home.Book.getBooking&idCustomer=" + idCustomer + "&isAjax=true");
 }
 
 function bookNow(loggedUserId, selectedTime, selectedDate) {
