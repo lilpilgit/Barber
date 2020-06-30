@@ -476,9 +476,9 @@ public class Book {
                 i++;
             } else {
                 /* se non si sta prenotando per la data odierna, salvo tutti gli slot liberi */
+                /* se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
                 if (!isToday || (isToday && (indexTime.compareTo(currentTime) > 0))) {
                     freeSlots.add(indexTime);
-                    /* altrimenti se si sta prenotando per la data odierna, inserisco in freeSlots solo gli orari successivi a quello attuale */
                 }
             }
         }
