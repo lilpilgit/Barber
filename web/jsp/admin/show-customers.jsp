@@ -51,9 +51,9 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@include file="/templates/admin-head.jsp" %>
+<%@include file="/templates/admin-head.inc" %>
 <body>
-<%@include file="../../templates/admin-sidebar.jsp" %>
+<%@include file="../../templates/admin-sidebar.inc" %>
 <div class="page-wrapper chiller-theme toggled">
     <!--Main content of the page-->
     <main class="page-content">

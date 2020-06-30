@@ -57,7 +57,7 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@include file="/templates/admin-head.jsp" %>
+<%@include file="/templates/admin-head.inc" %>
 <body>
 <!--Main content of the page-->
 <main class="page-content">
