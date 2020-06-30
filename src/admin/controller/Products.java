@@ -789,6 +789,9 @@ public class Products {
         }
         /* 7) l'UNICA struttura da mostrare readonly */
         request.setAttribute("structure", structure);
+
+        /* per forzare la pagina del prodotto a ricaricare la nuova immagine */
+        response.setHeader("Cache-control","no-store");
     }
 
     public static void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
