@@ -497,10 +497,9 @@ public class Book {
                 response.getWriter().append("\"").append(String.valueOf(freeSlots.get(i))).append("\"");
                 if (i != (freeSlots.size() - 1)) {
                     response.getWriter().append(",");
-                } else {
-                    response.getWriter().append("]");
                 }
             }
+            response.getWriter().append("]");
             response.getWriter().append("}");
         } catch (IOException e) {
             System.out.println("Errore nella response.getWriter().write()");
