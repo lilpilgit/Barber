@@ -61,7 +61,7 @@
 
 <!------------------------------------------- SHOWCASE -------------------------------------------------------------->
 
-<% if (products.size() != 0) { %>
+<% if (products != null && products.size() != 0) { %>
 
 <div class="container-fluid ">
     <div class="row welcome text-center">
