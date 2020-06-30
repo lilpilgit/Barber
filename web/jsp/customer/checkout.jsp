@@ -86,7 +86,7 @@
 <html lang="en">
 <%@include file="/templates/head.inc" %>
 <body>
-<%@include file="/templates/header.jsp" %>
+<%@include file="/templates/header.inc" %>
 
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
@@ -304,7 +304,7 @@
 </div>
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
-<%@ include file="/templates/footer.jsp" %>
+<%@ include file="/templates/footer.inc" %>
 <script type="text/javascript">
 
     let addressDB;

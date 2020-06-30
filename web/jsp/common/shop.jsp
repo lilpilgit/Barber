@@ -81,7 +81,7 @@
 <html lang="en">
 <%@ include file="/templates/head.inc" %>
 <body>
-<%@ include file="/templates/header.jsp" %>
+<%@ include file="/templates/header.inc" %>
 
 <!-------------------------------------------- Welcome Our Store --------------------------------------------------------->
 
@@ -188,7 +188,7 @@
         %>
     </div>
 </div>
-<%@ include file="/templates/footer.jsp" %>
+<%@ include file="/templates/footer.inc" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
 

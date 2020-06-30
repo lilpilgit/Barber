@@ -53,7 +53,7 @@
 <html lang="en">
 <%@include file="/templates/head.inc" %>
 <body>
-<%@include file="/templates/header.jsp" %>
+<%@include file="/templates/header.inc" %>
 
 <!------------------------------------------------ Shopping Cart ----------------------------------------------------->
 
@@ -212,7 +212,7 @@
 
 <!---------------------------------------------- End of Shopping Chart ------------------------------------------------>
 
-<%@ include file="/templates/footer.jsp" %>
+<%@ include file="/templates/footer.inc" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
         modifyTotalPriceAndSaving('productsToBuy');

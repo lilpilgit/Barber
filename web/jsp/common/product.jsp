@@ -68,7 +68,7 @@
 <html lang="en">
 <%@include file="/templates/head.inc" %>
 <body>
-<%@include file="/templates/header.jsp" %>
+<%@include file="/templates/header.inc" %>
 
 <!--------------------------------------------- Product view ------------------------------------------------------->
 <div class="container pt-5 text-center">
@@ -175,7 +175,7 @@
     <input type="hidden" name="idProduct" value="">
     <input type="hidden" name="from" value="product">
 </form>
-<%@include file="/templates/footer.jsp" %>
+<%@include file="/templates/footer.inc" %>
 <script type="text/javascript">
 
     window.addEventListener("load", () => {

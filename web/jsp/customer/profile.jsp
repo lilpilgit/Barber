@@ -63,7 +63,7 @@
 <html lang="en">
 <%@include file="/templates/head.inc" %>
 <body>
-<%@include file="/templates/header.jsp" %>
+<%@include file="/templates/header.inc" %>
 
 <!------------------------------------------------ Book section ----------------------------------------------------->
 
@@ -174,7 +174,7 @@
 
 <!---------------------------------------------- End of Book section ------------------------------------------------>
 
-<%@ include file="/templates/footer.jsp" %>
+<%@ include file="/templates/footer.inc" %>
 <script type="text/javascript">
     window.addEventListener("load", () => {
         setSelectedAttribute("State", "<%=splittedAddress[0]%>");
