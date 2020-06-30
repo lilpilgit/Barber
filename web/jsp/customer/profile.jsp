@@ -61,7 +61,7 @@
 %>
 <!doctype html>
 <html lang="en">
-<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/head.inc" %>
 <body>
 <%@include file="/templates/header.jsp" %>
 

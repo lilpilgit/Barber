@@ -21,7 +21,7 @@
     String menuActiveLink = "Error";
 %>
 <html lang="en">
-<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/head.inc" %>
 <body>
 <div class="row padding">
     <div class="result-checkout-container">
