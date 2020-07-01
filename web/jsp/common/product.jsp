@@ -179,8 +179,10 @@
 <script type="text/javascript">
 
     window.addEventListener("load", () => {
-        <%if (product != null && loggedOn) {%>
-        handlerCounterQtaProduct("minus_button", "maxOrderQuantity", "plus_button", <%=product.getMaxOrderQuantity()%>);
+        <%if(!inCart) {%>
+             <%if (product != null && loggedOn) {%>
+               handlerCounterQtaProduct("minus_button", "maxOrderQuantity", "plus_button", <%=product.getMaxOrderQuantity()%>);
+             <%}%>
         <%}%>
     });
 
