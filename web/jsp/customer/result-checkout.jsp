@@ -64,15 +64,14 @@
                          width="300px">
                 </div>
             </div>
-            <p>Order received correctly. Check the status in your order section.</p>
+            <p><strong>Order received correctly. Check the status in your order section.</strong></p>
         </div>
     </div>
     <%} else {%>
     <div class="result-checkout-container">
         <h3 class="result-checkout">Error in your order...</h3>
         <div class="container">
-            <h3><%=applicationMessage%>
-            </h3>
+            <h3><%=applicationMessage%></h3>
         </div>
     </div>
     <%}%>
