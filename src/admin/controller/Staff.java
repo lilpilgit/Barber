@@ -179,7 +179,7 @@ public class Staff {
                 employeeDAO.insert(null, structure, email, name, surname, StaticFunc.formatFinalAddress(state, region, city, street, cap, house_number), phone, password, birth_date, fiscal_code, 'E');
                 inserted = true; /* Se non viene sollevata l'eccezione, l'impiegato è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
-                applicationMessage = e.getMessage();
+                applicationMessage = "Error: employee data could not be inserted. The email or fiscal code entered already exists.";
                 e.printStackTrace();
             }
 

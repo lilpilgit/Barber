@@ -132,12 +132,10 @@ public class Products {
                 productInserted = productDAO.insert(null, producer, price, discount, name, insertDate, Configuration.BASE_PIC_NAME, fileExtension, description, maxOrderQuantity, category, structure);
                 inserted = true; /* Se non viene sollevata l'eccezione, è stato inserito correttamente*/
             } catch (DuplicatedObjectException e) {
-                System.err.println("CHIAMATO NELLA PRODUCTS");
-                applicationMessage = e.getMessage();
+                applicationMessage = "Error: the product could not be added. The name for this product already exists.";
                 e.printStackTrace();
             }
 
-            System.err.println("DOPO IL CATCH DI DUPLICATED");
             /* Commit della transazione sul db */
             daoFactory.commitTransaction();
 
@@ -702,7 +700,7 @@ public class Products {
                 edited = productDAO.update(productToEdit);/* Se non viene sollevata l'eccezione, è stato modificato correttamente*/
 
             } catch (DuplicatedObjectException e) {
-                applicationMessage = e.getMessage();
+                applicationMessage = "Error: the product could not be updated. The name for this product already exists.";
                 e.printStackTrace();
             }
 

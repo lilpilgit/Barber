@@ -191,7 +191,7 @@ public class Book {
                     bookingDAO.insert(date, time, user, structure);
                     inserted = true; /* Se non viene sollevata l'eccezione, l'appuntamento è stato inserito correttamente*/
                 } catch (DuplicatedObjectException e) {
-                    applicationMessage = e.getMessage();
+                    applicationMessage = "The selected date and time are already busy.";
                     e.printStackTrace();
                 }
 
