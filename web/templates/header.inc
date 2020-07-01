@@ -345,7 +345,7 @@
                                         </label>
                                     </div>
                                     <div class="md-form form-sm col-5 text-center">
-                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="8"
+                                        <input type="number" class="form-control" name="cap" id="Cap" required min="0" max="999999"
                                                oninput="this.value=this.value.toUpperCase();">
                                         <label data-error="wrong" data-success="right" for="modalLRInput15">
                                             <i class="fas fa-map-marker-alt"></i> Postal Code

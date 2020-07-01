@@ -214,9 +214,11 @@
 
 <%@ include file="/templates/footer.inc" %>
 <script type="text/javascript">
+    <%if (cart != null && !cart.isEmpty()) {%>
     window.addEventListener("load", () => {
         modifyTotalPriceAndSaving('productsToBuy');
     });
+    <%}%>
 </script>
 </body>
 </html>
