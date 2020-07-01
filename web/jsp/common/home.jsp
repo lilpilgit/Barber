@@ -251,7 +251,7 @@
     <input type="hidden" name="ProductID" value="">
     <input type="hidden" name="ProductStatus" value="">
     <input type="hidden" name="fromHome" value="">
-    <%} else if (loggedOn && loggedUser.getType() == 'C') {%>
+    <%} else{%>
     <input type="hidden" name="controllerAction" value="home.Product.showProduct">
     <input type="hidden" name="idProduct" value="">
     <%}%>
@@ -259,4 +259,3 @@
 <%@ include file="/templates/footer.inc" %>
 </body>
 </html>
-
