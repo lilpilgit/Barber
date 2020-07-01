@@ -104,7 +104,7 @@ public class Staff {
 
     public static void addEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /**
-         * Instantiates an EmployeeDAO to be able to enter the new employee in Database.
+         * Instantiates an UserDAO to be able to enter the new employee in Database.
          */
         String name;
         String surname;
@@ -504,7 +504,7 @@ public class Staff {
 
     public static void editEmployee(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Instantiates an EmployeeDAO to be able to edit the existing employee in Database.
+         * Instantiates a UserDAO to be able to edit the existing employee in Database.
          */
 
         DAOFactory daoFactory = null; //per il db
@@ -576,7 +576,7 @@ public class Staff {
                 edited = employeeDAO.update(employeeToEdit);/* Se non viene sollevata l'eccezione, l'impiegato è stato modificato correttamente*/
 
             } catch (DuplicatedObjectException e) {
-                applicationMessage = e.getMessage();
+                applicationMessage = "Error: employee data could not be updated. The email or fiscal code entered already exists.";
                 e.printStackTrace();
             }
 
